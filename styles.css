@@ -171,6 +171,7 @@ button {
   display: flex;
   align-items: center;
   gap: 1rem;
+  justify-self: center;
 }
 
 .hidden-h1 {
