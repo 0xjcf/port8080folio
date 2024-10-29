@@ -17,7 +17,7 @@ body {
 }
 
 section {
-
+  padding: 0 3rem;
   margin: 6rem auto;
   max-width: 1200px;
 }
@@ -35,7 +35,7 @@ a:hover {
 }
 
 .summary .name span {
-  font-size:7rem;
+  font-size: 7rem;
   font-family: var(--oswald);
   display: block;
 }
@@ -61,13 +61,13 @@ a:hover {
 
 #intro img {
   width: 300px;
-  height: 400px;
-  border-radius: 5%;
+  height: 300px;
+  border-radius: 50%;
   object-fit: cover;
+  object-position: top;
   margin: auto 0;
   display: block;
 }
-
 
 #about-me h3 {
   font-family: var(--lora);
@@ -87,16 +87,36 @@ a:hover {
 }
 
 nav {
+  display: grid;
   max-width: 1200px;
-  margin: 3rem auto;
+  margin: 1rem auto;
+  padding: 0 3rem;
+  grid-template-rows: 1fr;
+  grid-template-columns: 60px 1fr;
+  align-items: center;
+}
+
+nav a {
+  justify-self: center;
+}
+
+.menu {
+  display: none;
+  cursor: pointer;
+  color: var(--teagreen);
+  background-color: var(--indigodye);
+}
+
+#menu-close-button {
+  background: none;
 }
 
 .navlist {
   list-style-type: none;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0;
+  justify-content: end;
+  grid-gap: 6rem;
 }
 
 .nav-item {
@@ -113,22 +133,27 @@ nav {
   color: var(--jasper);
 }
 
-button {
-  border: none;
-  color: var(--indigodye);
-  background-color: var(--teagreen);
-  border-radius: 5px;
-  padding: 0.5rem;
-  font-family: var(--oswald);
-  font-style: bold;
-  font-optical-sizing: auto;
-  font-size: min(18.67px, 1.5em);
+.close {
+  cursor: pointer;
+  display: none;
 }
 
-button:hover {
+.close .line {
+  stroke: var(--teagreen);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke 0.3s ease;
+}
+
+.close:hover .line {
+  stroke: var(--jasper);
+}
+
+button {
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem;
   cursor: pointer;
-  color: var(--ghostwhite);
-  background-color: var(--jasper);
 }
 
 .brand-icon svg {
@@ -136,17 +161,16 @@ button:hover {
   height: 48px;
   fill: var(--teagreen);
   transition: fill 0.3s ease;
-  margin-left: 10px;
 }
 
 .brand-icon svg:hover {
-  fill: var(--jasper); /* Change color on hover */
+  fill: var(--jasper);
 }
 
 .brand-icon {
   display: flex;
   align-items: center;
-  gap: 10px; /* Adjust spacing between icon and text */
+  gap: 1rem;
 }
 
 .hidden-h1 {
@@ -161,24 +185,87 @@ button:hover {
 }
 
 .gradient-line {
+  border: none;
   margin: 0 auto;
   max-width: 1200px;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    rgba(200, 70, 48, 1) 0%,
-    rgba(221, 229, 182, 1) 35%
-  );
+  background: linear-gradient(90deg, var(--jasper) 0%, var(--teagreen) 35%);
 }
 
 /* Optional: Responsive design */
 @media (max-width: 850px) {
+  .body--no-scroll {
+    overflow: hidden;
+  }
+
   nav {
     max-width: 1200px;
+    height: 5rem;
     margin: 0 auto;
   }
 
   .navlist {
-    flex-flow: row wrap;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 5.25rem;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-evenly;
+    background-color: var(--indigodye);
+    color: var(--teagreen);
+    height: 100vh;
+    width: 100%;
+    left: -100%;
+    transition: left 0.3s ease;
+    border-right: 1px dotted var(--teagreen);
+  }
+
+  .navlist--visible {
+    left: 0;
+  }
+
+  .nav-item {
+    font-size: 6rem;
+  }
+
+  .menu {
+    display: block;
+    grid-area: menu;
+  }
+
+  .menu .line {
+    fill: var(--teagreen);
+    transition: fill 0.3s ease;
+  }
+
+  .menu:hover .line {
+    fill: var(--jasper);
+  }
+
+  .menu--hide {
+    display: none;
+  }
+
+  header nav {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 60px 1fr 60px;
+    grid-template-areas: "icon nav-list menu";
+  }
+
+  .brand-icon {
+    grid-area: icon;
+  }
+
+  .close--visible {
+    display: block;
+    grid-area: menu;
+  }
+}
+
+@media (max-width: 1200px) {
+  #intro img {
+    display: none;
   }
 }
