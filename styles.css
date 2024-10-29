@@ -208,7 +208,7 @@ button {
     padding: 0;
     margin: 0;
     position: absolute;
-    top: 5.25rem;
+    top: 5rem;
     display: flex;
     flex-flow: column;
     justify-content: space-evenly;
@@ -218,15 +218,16 @@ button {
     width: 100%;
     left: -100%;
     transition: left 0.3s ease;
-    border-right: 1px dotted var(--teagreen);
+    gap: .25rem;
   }
-
+  
   .navlist--visible {
+    border-right: 1px dotted var(--teagreen);
     left: 0;
   }
 
   .nav-item {
-    font-size: 6rem;
+    font-size: 3rem;
   }
 
   .menu {
@@ -261,6 +262,23 @@ button {
   .close--visible {
     display: block;
     grid-area: menu;
+  }
+
+  section {
+    margin: 2rem;
+    padding: 0;
+  }
+
+  .summary .name span {
+    font-size: 5rem;
+  }
+
+  .summary h2 {
+    font-size: 2rem;
+  }
+
+  body {
+    font-size: 1.25rem;
   }
 }
 
