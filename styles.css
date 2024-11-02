@@ -32,7 +32,7 @@ a {
     "hr3"
     "footer";
 
-  grid-template-rows: 0.15fr 2px .85fr 2px 1fr 2px 0.5fr;
+  grid-template-rows: 8rem 2px .85fr 2px 1fr 2px 0.5fr;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 3rem;
@@ -229,7 +229,7 @@ button {
   }
 
   .grid-container {
-    grid-template-rows: .25fr 2px .75fr 2px .75fr 2px .25fr;
+    grid-template-rows: 8rem 2px auto 2px auto 2px auto;
   }
 }
 
