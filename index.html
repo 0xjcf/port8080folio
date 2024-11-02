@@ -13,7 +13,7 @@
     <title>Jose Flores</title>
   </head>
   <body>
-    <header>
+    <div class="grid-container">
       <nav aria-labelledby="site-navigation">
         <span class="brand-icon">
           <svg
@@ -88,68 +88,70 @@
           </svg>
         </button>
       </nav>
-    </header>
 
-    <hr class="gradient-line" />
+      <hr class="gradient-line" id="hr1" />
 
-    <section id="intro">
-      <div class="summary">
-        <p class="name">Hi, my name is <span>José Flores.</span></p>
-        <h2>I'm a software engineer.</h2>
+      <header id="intro">
+        <div class="summary">
+          <p class="name">Hi, my name is <span>José Flores.</span></p>
+          <h2>I'm a software engineer.</h2>
+          <p>
+            I enjoy working with React, XState, TypeScript, Java and Node.
+            <br />I also dabble in Pine Script v5 and explore investment and day
+            trading strategies in my spare time.
+          </p>
+        </div>
+        <img src="./me.jpeg" alt="Jose Flores" width="300" height="300" />
+      </header>
+
+      <hr class="gradient-line" id="hr2" />
+
+      <main>
+        <section id="about-me">
+          <h2>About Me</h2>
+          <h3>Here are a few things I've done so far:</h3>
+          <ul>
+            <li>
+              At Availity, I led the modernization of the front end by upgrading
+              the React and MobX codebases to align with the latest React
+              standards. This improved navigation of the code and enhanced my
+              team’s efficiency.
+            </li>
+            <li>
+              At Availity, I also worked on a dynamic configuration-based UI
+              component project that made adjusting the interface more flexible.
+              The project cut down development time by allowing UI updates to be
+              controlled by a backend configuration. This improved scalability
+              in our projects, ensuring the apps could handle growing users
+              without slowing down.
+            </li>
+            <li>
+              At Get More Math, I helped migrate the backend infrastructure from
+              Ruby on Rails to Quarkus, boosting system performance and making
+              the application much more scalable. I also developed features that
+              improved student engagement, making the application more
+              straightforward and contributing to better learning outcomes.
+            </li>
+            <li>
+              At Southwest Search, I built reporting tools for management, which
+              gave them quicker access to data and helped improve
+              decision-making with real-time reports.
+            </li>
+          </ul>
+        </section>
+      </main>
+
+      <hr class="gradient-line" id="hr3" />
+
+      <footer id="contact">
+        <h2>Contact me</h2>
         <p>
-          I enjoy working with React, XState, TypeScript, Java and Node. I also
-          dabble in Pine Script v5 and explore investment and day trading
-          strategies in my spare time.
+          I'm developing a mobile application for health and fitness.
+          <br />I'd love to chat if you're looking for someone to collaborate
+          with or explore new opportunities.
         </p>
-      </div>
-      <img src="./me.jpeg" alt="Jose Flores" width="300" height="300" />
-    </section>
-
-    <hr class="gradient-line" />
-
-    <section id="about-me">
-      <h2>About Me</h2>
-      <h3>Here are a few things I've done so far:</h3>
-      <ul>
-        <li>
-          At Availity, I led the modernization of the front end by upgrading the
-          React and MobX codebases to align with the latest React standards.
-          This improved navigation of the code and enhanced my team’s
-          efficiency.
-        </li>
-        <li>
-          At Availity, I also worked on a dynamic configuration-based UI
-          component project that made adjusting the interface more flexible. The
-          project cut down development time by allowing UI updates to be
-          controlled by a backend configuration. This improved scalability in
-          our projects, ensuring the apps could handle growing users without
-          slowing down.
-        </li>
-        <li>
-          At Get More Math, I helped migrate the backend infrastructure from
-          Ruby on Rails to Quarkus, boosting system performance and making the
-          application much more scalable. I also developed features that
-          improved student engagement, making the application more
-          straightforward and contributing to better learning outcomes.
-        </li>
-        <li>
-          At Southwest Search, I built reporting tools for management, which
-          gave them quicker access to data and helped improve decision-making
-          with real-time reports.
-        </li>
-      </ul>
-    </section>
-
-    <hr class="gradient-line" />
-
-    <section id="contact">
-      <h2>Contact me</h2>
-      <p>
-        I'm developing a mobile application for health and fitness. <br />I'd
-        love to chat if you're looking for someone to collaborate with or
-        explore new opportunities.
-      </p>
-    </section>
+      </footer>
+    </div>
 
     <script src="./index.js"></script>
   </body>
