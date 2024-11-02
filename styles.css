@@ -239,7 +239,7 @@ button {
   }
 
   .grid-container {
-    grid-template-rows: 0.125fr 2px .55fr 2px .75fr 2px 0.25fr;
+    grid-template-rows: 8rem 2px auto 2px auto 2px auto;
     margin: 0 auto;
     padding: 0 3rem;
     align-items: center;
@@ -330,7 +330,7 @@ button {
     font-size: 2rem;
   }
 
-  p {
+  p, li {
     font-size: 1.25rem;
   }
 }
