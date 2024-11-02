@@ -255,7 +255,7 @@ button {
     padding: 0;
     margin: 0;
     position: absolute;
-    top: 8rem;
+    top: 9rem;
     display: flex;
     flex-flow: column;
     justify-content: space-evenly;
