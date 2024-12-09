@@ -7,10 +7,11 @@
   --hindmadurai: "Hind Madurai", sans-serif;
 }
 
+/* Reduced base font size for better balance */
 body {
   background-color: var(--indigodye);
   font-family: var(--oswald);
-  font-size: 1.5rem;
+  font-size: 1.25rem; /* Reduced from 1.5rem */
   font-optical-sizing: auto;
   color: var(--teagreen);
   margin: 0;
@@ -28,11 +29,13 @@ a {
     "hr1"
     "header"
     "hr2"
-    "main"
+    "signup"
     "hr3"
+    "main"
+    "hr4"
     "footer";
 
-  grid-template-rows: 8rem 2px .85fr 2px 1fr 2px 0.5fr;
+  grid-template-rows: 8rem 2px auto 2px auto 2px 1fr 2px 0.5fr;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 3rem;
@@ -45,14 +48,11 @@ nav {
   display: grid;
   grid-template-columns: 60px 1fr;
   align-content: center;
-
-  display: grid;
   grid-template-areas: "icon menu";
 }
 
 header {
   grid-area: header;
-
   display: grid;
   grid-template-areas: "summary image";
   align-items: center;
@@ -73,6 +73,10 @@ main {
 
 #hr3 {
   grid-area: hr3;
+}
+
+#hr4 {
+  grid-area: hr4;
 }
 
 footer {
@@ -110,6 +114,16 @@ footer {
 
 #about-me {
   grid-area: about;
+}
+
+#about-me a {
+  color: var(--jasper); /* Use your existing color variable or a new color */
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+#about-me a:hover {
+  color: #fff; /* Brighten on hover for contrast */
 }
 
 #about-me h3 {
@@ -221,8 +235,89 @@ button {
   background: linear-gradient(90deg, var(--jasper) 0%, var(--teagreen) 35%);
 }
 
-/* Optional: Responsive design */
+.cta {
+  background-color: rgba(255, 255, 255, 0.1); /* a subtle overlay */
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--teagreen);
+}
 
+/* Optional: Adjust text styles inside the cta if needed */
+.cta h3 {
+  margin-top: 0;
+  color: var(--teagreen);
+}
+
+.cta p {
+  margin-bottom: 0;
+  color: var(--teagreen);
+}
+
+
+#newsletter-signup {
+  grid-area: signup;
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+#newsletter-signup h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-family: var(--oswald);
+  color: var(--teagreen);
+}
+
+#newsletter-signup p {
+  font-family: var(--hindmadurai);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  color: var(--teagreen);
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.newsletter-label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-family: var(--hindmadurai);
+  font-size: 1rem;
+}
+
+.newsletter-input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: var(--hindmadurai);
+  color: #000;
+  background-color: var(--teagreen);
+}
+
+.newsletter-button {
+  background-color: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--oswald);
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.newsletter-button:hover {
+  background-color: var(--jasper);
+}
+
+/* Responsive design adjustments */
 @media (max-width: 1200px) {
   #intro img {
     display: none;
@@ -236,6 +331,11 @@ button {
 @media (max-width: 850px) {
   .body--no-scroll {
     overflow: hidden;
+  }
+
+  /* Slightly reduce font size on smaller screens */
+  html {
+    font-size: 1.125rem;
   }
 
   .grid-container {
@@ -298,7 +398,6 @@ button {
 
   header {
     grid-column: 1 / -1;
-
     display: grid;
   }
 
@@ -318,7 +417,7 @@ button {
     grid-area: menu;
   }
 
-  section {
+  #about-me {
     margin: 2rem;
     padding: 0;
   }
@@ -331,7 +430,8 @@ button {
     font-size: 2rem;
   }
 
-  p, li {
+  p,
+  li {
     font-size: 1rem;
   }
 
