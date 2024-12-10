@@ -130,8 +130,13 @@ footer {
   font-family: var(--lora);
 }
 
+#about-me ul {
+  padding: 0
+}
+
 #about-me li {
-  padding: 1rem;
+  list-style: none;
+  margin-bottom: 1rem;
   font-family: var(--hindmadurai);
 }
 
@@ -263,7 +268,6 @@ button {
 }
 
 #newsletter-signup h2 {
-  font-size: 1.5rem;
   margin-bottom: 1rem;
   font-family: var(--oswald);
   color: var(--teagreen);
@@ -271,7 +275,6 @@ button {
 
 #newsletter-signup p {
   font-family: var(--hindmadurai);
-  font-size: 1rem;
   line-height: 1.5;
   margin-bottom: 1rem;
   color: var(--teagreen);
@@ -424,13 +427,9 @@ button {
     grid-area: menu;
   }
 
-  #about-me {
-    margin: 2rem;
-    padding: 0;
-  }
 
   .summary .name span {
-    font-size: 5rem;
+    font-size: 4rem;
   }
 
   .summary h2 {
