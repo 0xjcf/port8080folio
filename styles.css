@@ -255,7 +255,6 @@ button {
   color: var(--teagreen);
 }
 
-
 #newsletter-signup {
   grid-area: signup;
   max-width: 750px;
@@ -317,8 +316,16 @@ button {
   background-color: var(--jasper);
 }
 
+#mc_embed_signup_scroll {
+  display: grid;
+}
+
 /* Responsive design adjustments */
 @media (max-width: 1200px) {
+  #intro {
+    justify-content: center;
+  }
+
   #intro img {
     display: none;
   }
