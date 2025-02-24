@@ -3,11 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+    
     <!-- Privacy-aware Analytics Loading -->
     <script>
-      // Check for Do Not Track setting
-      if (navigator.doNotTrack !== "1" && !localStorage.getItem('ga_declined')) {
-        // Load GA only if DNT is not enabled and user hasn't declined
+      // Check for Do Not Track setting and consent
+      if (navigator.doNotTrack !== "1" && localStorage.getItem('analytics_consent') === 'accepted') {
+        // Load GA only if DNT is not enabled and analytics are accepted
         const gtagScript = document.createElement('script');
         gtagScript.async = true;
         gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-5TR1LWNXXY";
@@ -20,27 +23,10 @@
         gtag('js', new Date());
         gtag('config', 'G-5TR1LWNXXY', {
           page_path: window.location.pathname,
-          anonymize_ip: true, // GDPR compliance
-          allow_google_signals: false // Additional privacy
+          anonymize_ip: true,
+          allow_google_signals: false,
+          debug_mode: false
         });
-      }
-
-      // Cookie consent handler
-      function handleCookieConsent(accepted) {
-        const banner = document.getElementById('cookie-banner');
-        banner.style.display = 'none';
-        
-        if (accepted) {
-          localStorage.setItem('cookie_consent', 'accepted');
-          // Reload to enable analytics if they were previously disabled
-          if (!window.gtag) {
-            location.reload();
-          }
-        } else {
-          localStorage.setItem('ga_declined', 'true');
-          // Disable existing analytics if present
-          window['ga-disable-G-5TR1LWNXXY'] = true;
-        }
       }
     </script>
 
@@ -51,36 +37,78 @@
         left: 0;
         right: 0;
         background: var(--secondary-bg);
-        padding: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
+        padding: 2rem;
+        display: none;
+        flex-direction: column;
+        gap: 1.5rem;
         z-index: 1000;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+      }
+      #cookie-banner .content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
       }
       #cookie-banner p {
         margin: 0;
         color: var(--teagreen);
+        line-height: 1.5;
+      }
+      #cookie-banner .options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .cookie-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .cookie-option input[type="checkbox"] {
+        accent-color: var(--jasper);
+      }
+      .cookie-option label {
+        color: var(--teagreen);
+        font-size: 0.9rem;
+      }
+      .cookie-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
       }
       .cookie-btn {
-        padding: 0.5rem 1rem;
+        padding: 0.75rem 1.5rem;
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        font-weight: 500;
         background: var(--jasper);
         color: white;
         transition: all 0.3s ease;
       }
       .cookie-btn:hover {
         background: var(--jasper-light);
+        transform: translateY(-1px);
       }
-      .cookie-btn.decline {
+      .cookie-btn.secondary {
         background: transparent;
         border: 1px solid var(--jasper);
       }
-      .cookie-btn.decline:hover {
+      .cookie-btn.secondary:hover {
         background: rgba(13, 153, 255, 0.1);
+      }
+      @media (max-width: 850px) {
+        #cookie-banner {
+          padding: 1.5rem;
+        }
+        .cookie-buttons {
+          flex-direction: column;
+        }
+        .cookie-btn {
+          width: 100%;
+          text-align: center;
+        }
       }
     </style>
 
@@ -97,18 +125,72 @@
     <title>Jose Flores</title>
   </head>
   <body>
-    <!-- Cookie Consent Banner -->
-    <div id="cookie-banner" style="display: none;">
-      <p>We use cookies to improve your experience and analyze site usage.</p>
-      <button onclick="handleCookieConsent(true)" class="cookie-btn">Accept</button>
-      <button onclick="handleCookieConsent(false)" class="cookie-btn decline">Decline</button>
+    <!-- Enhanced Cookie Consent Banner -->
+    <div id="cookie-banner" role="dialog" aria-labelledby="cookie-title">
+      <div class="content">
+        <h4 id="cookie-title" style="color: var(--heading-color); margin: 0;">Cookie Preferences</h4>
+        <p>I use cookies to improve your experience and understand how you interact with my website. Please choose your preferences below:</p>
+        <div class="options">
+          <div class="cookie-option">
+            <input type="checkbox" id="essential-cookies" checked disabled>
+            <label for="essential-cookies">Essential cookies - Required for basic site functionality</label>
+          </div>
+          <div class="cookie-option">
+            <input type="checkbox" id="analytics-cookies">
+            <label for="analytics-cookies">Analytics cookies - Help me understand how visitors use my site</label>
+          </div>
+        </div>
+        <p style="font-size: 0.9rem;">You can change your preferences anytime. For more details, please read my <a href="/privacy-policy" style="color: var(--jasper);">Privacy Policy</a>.</p>
+      </div>
+      <div class="cookie-buttons">
+        <button onclick="handleCookiePreferences(false)" class="cookie-btn secondary">Decline All</button>
+        <button onclick="handleCookiePreferences(true)" class="cookie-btn">Accept Selected</button>
+      </div>
     </div>
 
     <script>
-      // Show cookie banner if consent hasn't been given
-      if (!localStorage.getItem('cookie_consent') && !localStorage.getItem('ga_declined')) {
+      // Check consent expiry and show banner if needed
+      function checkConsentExpiry() {
+        const consentDate = localStorage.getItem('consent_date');
+        if (consentDate) {
+          const expiryDate = new Date(consentDate);
+          expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+          if (new Date() > expiryDate) {
+            resetConsent();
+          }
+        }
+        if (!localStorage.getItem('consent_date')) {
+          document.getElementById('cookie-banner').style.display = 'flex';
+        }
+      }
+
+      function resetConsent() {
+        localStorage.removeItem('analytics_consent');
+        localStorage.removeItem('consent_date');
         document.getElementById('cookie-banner').style.display = 'flex';
       }
+
+      function handleCookiePreferences(savePreferences) {
+        const banner = document.getElementById('cookie-banner');
+        banner.style.display = 'none';
+        
+        if (savePreferences) {
+          const analyticsAccepted = document.getElementById('analytics-cookies').checked;
+          localStorage.setItem('analytics_consent', analyticsAccepted ? 'accepted' : 'declined');
+          localStorage.setItem('consent_date', new Date().toISOString());
+          
+          if (analyticsAccepted && !window.gtag) {
+            location.reload();
+          }
+        } else {
+          localStorage.setItem('analytics_consent', 'declined');
+          localStorage.setItem('consent_date', new Date().toISOString());
+          window['ga-disable-G-5TR1LWNXXY'] = true;
+        }
+      }
+
+      // Initialize consent check
+      checkConsentExpiry();
     </script>
 
     <div class="grid-container">
