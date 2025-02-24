@@ -3,6 +3,87 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Privacy-aware Analytics Loading -->
+    <script>
+      // Check for Do Not Track setting
+      if (navigator.doNotTrack !== "1" && !localStorage.getItem('ga_declined')) {
+        // Load GA only if DNT is not enabled and user hasn't declined
+        const gtagScript = document.createElement('script');
+        gtagScript.async = true;
+        gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-5TR1LWNXXY";
+        document.head.appendChild(gtagScript);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-5TR1LWNXXY', {
+          page_path: window.location.pathname,
+          anonymize_ip: true, // GDPR compliance
+          allow_google_signals: false // Additional privacy
+        });
+      }
+
+      // Cookie consent handler
+      function handleCookieConsent(accepted) {
+        const banner = document.getElementById('cookie-banner');
+        banner.style.display = 'none';
+        
+        if (accepted) {
+          localStorage.setItem('cookie_consent', 'accepted');
+          // Reload to enable analytics if they were previously disabled
+          if (!window.gtag) {
+            location.reload();
+          }
+        } else {
+          localStorage.setItem('ga_declined', 'true');
+          // Disable existing analytics if present
+          window['ga-disable-G-5TR1LWNXXY'] = true;
+        }
+      }
+    </script>
+
+    <style>
+      #cookie-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--secondary-bg);
+        padding: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        z-index: 1000;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      #cookie-banner p {
+        margin: 0;
+        color: var(--teagreen);
+      }
+      .cookie-btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background: var(--jasper);
+        color: white;
+        transition: all 0.3s ease;
+      }
+      .cookie-btn:hover {
+        background: var(--jasper-light);
+      }
+      .cookie-btn.decline {
+        background: transparent;
+        border: 1px solid var(--jasper);
+      }
+      .cookie-btn.decline:hover {
+        background: rgba(13, 153, 255, 0.1);
+      }
+    </style>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,21 +96,21 @@
 
     <title>Jose Flores</title>
   </head>
-  <!-- Google tag (gtag.js) -->
-  <script
-    async
-    src="https://www.googletagmanager.com/gtag/js?id=G-5TR1LWNXXY"
-  ></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-
-    gtag("config", "G-5TR1LWNXXY");
-  </script>
   <body>
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" style="display: none;">
+      <p>We use cookies to improve your experience and analyze site usage.</p>
+      <button onclick="handleCookieConsent(true)" class="cookie-btn">Accept</button>
+      <button onclick="handleCookieConsent(false)" class="cookie-btn decline">Decline</button>
+    </div>
+
+    <script>
+      // Show cookie banner if consent hasn't been given
+      if (!localStorage.getItem('cookie_consent') && !localStorage.getItem('ga_declined')) {
+        document.getElementById('cookie-banner').style.display = 'flex';
+      }
+    </script>
+
     <div class="grid-container">
       <nav aria-labelledby="site-navigation">
         <!-- Visually hidden heading to label the navigation -->
