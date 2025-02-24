@@ -3,6 +3,7 @@ const close = document.querySelector(".close");
 const navlist = document.querySelector(".navlist");
 const body = document.querySelector("body");
 const cta = document.querySelector(".cta");
+const name = document.querySelector(".name");
 const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
 
 menu.addEventListener("click", () => {
@@ -21,26 +22,23 @@ close.addEventListener("click", () => {
   body.style.paddingRight = "0px";
 });
 
-// Intersection Observer for CTA animation
+// Intersection Observer for CTA animation based on name visibility
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      // When CTA is 75% out of view, activate the style
+      // When name is not visible, activate CTA style
       if (!entry.isIntersecting) {
-        entry.target.classList.add("scroll-active");
+        cta.classList.add("scroll-active");
       } else {
-        // Only remove if it's fully visible again
-        if (entry.intersectionRatio > 0.75) {
-          entry.target.classList.remove("scroll-active");
-        }
+        cta.classList.remove("scroll-active");
       }
     });
   },
   {
-    threshold: [0, 0.75], // Track when element is hidden (0) and mostly visible (0.75)
-    rootMargin: "-25% 0px" // Trigger slightly before the element leaves viewport
+    threshold: 0.2, // Trigger when name is 20% visible
+    rootMargin: "0px"
   }
 );
 
-// Observe the CTA element itself
-observer.observe(cta);
+// Observe the name element
+observer.observe(name);
