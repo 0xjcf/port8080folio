@@ -112,6 +112,7 @@ nav {
   align-items: center;
   grid-template-areas: "icon menu";
   height: 100%;
+  margin-top: 1rem;
 }
 
 header {
@@ -634,6 +635,7 @@ footer.fade-in { animation-delay: 0.8s; }
   nav {
     grid-template-columns: auto auto;
     justify-content: space-between;
+    margin-top: 1rem;
   }
   .navlist {
     display: grid;
@@ -790,4 +792,30 @@ footer.fade-in { animation-delay: 0.8s; }
 /* Remove the text shadow since we're using gradient text */
 .cta:hover {
   transform: translate(-4px, -4px);
+}
+
+.cta.scroll-active {
+  color: var(--jasper);
+  transform: translate(-4px, -4px);
+}
+
+.cta.scroll-active::before {
+  transform: translate(8px, 8px);
+}
+
+.cta.scroll-active::after {
+  transform: translate(4px, 4px);
+}
+
+.cta.scroll-active h3,
+.cta.scroll-active p {
+  background: linear-gradient(
+    45deg,
+    var(--jasper-light) 0%,
+    var(--heading-color) 50%,
+    var(--jasper) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
