@@ -21,34 +21,26 @@ close.addEventListener("click", () => {
   body.style.paddingRight = "0px";
 });
 
-// Add scroll-triggered animation for CTA
-let isAnimating = false;
-const triggerAnimation = (shouldActivate) => {
-  if (shouldActivate && !cta.classList.contains("scroll-active")) {
-    cta.classList.add("scroll-active");
-  } else if (!shouldActivate && cta.classList.contains("scroll-active")) {
-    cta.classList.remove("scroll-active");
+// Intersection Observer for CTA animation
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      // When CTA is 75% out of view, activate the style
+      if (!entry.isIntersecting) {
+        entry.target.classList.add("scroll-active");
+      } else {
+        // Only remove if it's fully visible again
+        if (entry.intersectionRatio > 0.75) {
+          entry.target.classList.remove("scroll-active");
+        }
+      }
+    });
+  },
+  {
+    threshold: [0, 0.75], // Track when element is hidden (0) and mostly visible (0.75)
+    rootMargin: "-25% 0px" // Trigger slightly before the element leaves viewport
   }
-};
+);
 
-// Debounce function to limit scroll event firing
-const debounce = (func, wait) => {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-};
-
-// Add scroll event listener with debouncing
-window.addEventListener("scroll", debounce(() => {
-  const scrollPosition = window.scrollY;
-  const windowHeight = window.innerHeight;
-  
-  // Activate when scrolled down 25%, deactivate when scrolled back up
-  triggerAnimation(scrollPosition > windowHeight * 0.25);
-}, 150)); // Debounce wait time in milliseconds
+// Observe the CTA element itself
+observer.observe(cta);
