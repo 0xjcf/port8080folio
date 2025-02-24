@@ -9,6 +9,7 @@
       href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&family=Lora:ital@1&family=Oswald:wght@700&display=swap"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="./styles.css" rel="stylesheet" type="text/css" />
     <script src="./index.js" defer></script>
 
@@ -110,33 +111,37 @@
 
       <hr class="gradient-line" id="hr1" />
 
-      <header id="intro">
+      <header id="intro" class="fade-in">
         <div class="summary">
           <h1 class="name">Hi, my name is <span>José Flores.</span></h1>
-          <h2>I'm a software engineer.</h2>
-          <p>I enjoy working with React, XState, TypeScript, Java, and Node.</p>
-          <div class="cta">
+          <h2>I'm a software engineer with a passion for technology and finance.</h2>
+          <p>Over the years, I've worked on various projects that blend my love for coding with my interest in trading. I enjoy working with React, XState, TypeScript, Java, Pine Script, and Node to create innovative solutions.</p>
+          <a href="#contact" class="cta">
             <h3 id="call-to-action">
-              Get Early Access to the Copy Trader Beta
+              Let's Connect
             </h3>
             <p>
-              Sign up below to join the beta and start exploring advanced
-              trading strategies.
+              Whether you're looking to join Pivot Scout, need assistance with a software project, or want to discuss potential collaborations, I'm here to help.
             </p>
-          </div>
+          </a>
         </div>
-        <img src="./me.jpeg" alt="Jose Flores" width="300" height="300" />
+        <div class="profile-image-container">
+          <picture>
+            <source srcset="./wftmb.avif" type="image/avif">
+            <img src="./wftmb.avif" alt="Jose Flores X Profile" class="primary-image" width="300" height="300" loading="eager">
+          </picture>
+          <picture>
+            <img src="./me.jpeg" alt="Jose Flores" class="secondary-image" width="300" height="300" loading="eager">
+          </picture>
+        </div>
       </header>
 
       <hr class="gradient-line" id="hr2" />
 
-      <section id="newsletter-signup">
-        <h2>Sign Up for Beta Access</h2>
-        <p>
-          Be the first to know when the Copy Trader application goes live! Enter
-          your email below to receive early access and updates.
-        </p>
-        <p>Your email is safe. No spam, ever.</p>
+      <section id="newsletter-signup" class="fade-in">
+        <h2>Get in Touch</h2>
+        <p>Looking to connect with a software engineer who has a passion for both code and trading? I'd love to hear from you. Whether you have a project in mind, need some advice, or just want to say hi, please feel free to drop your email below. I'll get back to you as soon as possible.</p>
+        <p>Your email will be kept confidential and used only for direct communication.</p>
 
         <!-- Mailchimp-Integrated Form -->
         <div id="mc_embed_shell">
@@ -233,17 +238,17 @@
 
       <hr class="gradient-line" id="hr3" />
 
-      <main>
+      <main class="fade-in">
         <section id="about-me">
           <h2>About Me</h2>
-          <h3>Here are some of my projects that I'm proud of</h3>
+          <p>Here are some projects I've worked on that reflect my passion and expertise:</p>
 
           <ul>
             <li>
               <strong>DMI Delta by 0xjcf:</strong> A TradingView indicator that
               unites the DMI, ADX, and volume data to help traders identify
-              divergence-based signals. It’s designed for those who care about
-              understanding the market’s direction on a deeper level. <br /><a
+              divergence-based signals. It's designed for those who care about
+              understanding the market's direction on a deeper level. <br /><a
                 href="https://www.tradingview.com/script/eM7UEK3P-DMI-Delta-by-0xjcf"
                 target="_blank"
                 rel="noopener"
@@ -282,16 +287,17 @@
 
       <hr class="gradient-line" id="hr4" />
 
-      <footer id="contact">
+      <section id="contact">
         <h2>Contact Me</h2>
-        <p>
-          I'm currently developing a Copy Trader application designed to give
-          everyday users access to advanced trading strategies and insights.
-          <br />If you’re interested in collaborating, discussing potential
-          partnerships, or exploring new opportunities in the trading and
-          fintech space, I’d love to connect.
-        </p>
-      </footer>
+        <p>I'm currently running Pivot Scout, a premium trading community where I help traders and developers master harmonic patterns, divergence trading, and custom indicator development. Through Pivot Scout, I offer:</p>
+        <ul>
+          <li>Custom TradingView indicator development</li>
+          <li>One-on-one Pine Script consultations</li>
+          <li>Trading strategy guidance</li>
+          <li>Technical architecture consulting</li>
+        </ul>
+        <p>Whether you're interested in joining Pivot Scout, need custom development work, or want to discuss potential collaborations in the fintech space, I'm excited to connect with you. Please reach out via email or visit Pivot Scout directly at <a href="https://whop.com/pivot-scout/" target="_blank" rel="noopener noreferrer">Whop</a>.</p>
+      </section>
     </div>
   </body>
 </html>
