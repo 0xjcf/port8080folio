@@ -6,6 +6,9 @@
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="preconnect" href="https://www.google-analytics.com" />
     
+    <!-- Web Vitals library for performance monitoring -->
+    <script async src="https://unpkg.com/web-vitals@3/dist/web-vitals.iife.js"></script>
+    
     <!-- Privacy-aware Analytics Loading -->
     <script>
       // Check for Do Not Track setting and consent
@@ -25,7 +28,8 @@
           page_path: window.location.pathname,
           anonymize_ip: true,
           allow_google_signals: false,
-          debug_mode: false
+          transport_type: 'beacon',
+          send_page_view: true
         });
       }
     </script>
