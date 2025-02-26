@@ -5,31 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="preconnect" href="https://www.google-analytics.com" />
-    
+
     <!-- Web Vitals library for performance monitoring -->
-    <script async src="https://unpkg.com/web-vitals@3/dist/web-vitals.iife.js"></script>
-    
+    <script
+      async
+      src="https://unpkg.com/web-vitals@3/dist/web-vitals.iife.js"
+    ></script>
+
     <!-- Privacy-aware Analytics Loading -->
     <script>
       // Check for Do Not Track setting and consent
-      if (navigator.doNotTrack !== "1" && localStorage.getItem('analytics_consent') === 'accepted') {
+      if (
+        navigator.doNotTrack !== "1" &&
+        localStorage.getItem("analytics_consent") === "accepted"
+      ) {
         // Load GA only if DNT is not enabled and analytics are accepted
-        const gtagScript = document.createElement('script');
+        const gtagScript = document.createElement("script");
         gtagScript.async = true;
-        gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-5TR1LWNXXY";
+        gtagScript.src =
+          "https://www.googletagmanager.com/gtag/js?id=G-5TR1LWNXXY";
         document.head.appendChild(gtagScript);
 
         window.dataLayer = window.dataLayer || [];
         function gtag() {
           dataLayer.push(arguments);
         }
-        gtag('js', new Date());
-        gtag('config', 'G-5TR1LWNXXY', {
+        gtag("js", new Date());
+        gtag("config", "G-5TR1LWNXXY", {
           page_path: window.location.pathname,
           anonymize_ip: true,
           allow_google_signals: false,
-          transport_type: 'beacon',
-          send_page_view: true
+          transport_type: "beacon",
+          send_page_view: true,
         });
       }
     </script>
@@ -122,7 +129,10 @@
       href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&family=Lora:ital@1&family=Oswald:wght@700&display=swap"
       rel="stylesheet"
     />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="./styles.css" rel="stylesheet" type="text/css" />
     <script src="./index.js" defer></script>
 
@@ -132,30 +142,53 @@
     <!-- Enhanced Cookie Consent Banner -->
     <div id="cookie-banner" role="dialog" aria-labelledby="cookie-title">
       <div class="content">
-        <h4 id="cookie-title" style="color: var(--heading-color); margin: 0;">Cookie Preferences</h4>
-        <p>I use cookies to improve your experience and understand how you interact with my website. Please choose your preferences below:</p>
+        <h4 id="cookie-title" style="color: var(--heading-color); margin: 0">
+          Cookie Preferences
+        </h4>
+        <p>
+          I use cookies to improve your experience and understand how you
+          interact with my website. Please choose your preferences below:
+        </p>
         <div class="options">
           <div class="cookie-option">
-            <input type="checkbox" id="essential-cookies" checked disabled>
-            <label for="essential-cookies">Essential cookies - Required for basic site functionality</label>
+            <input type="checkbox" id="essential-cookies" checked disabled />
+            <label for="essential-cookies"
+              >Essential cookies - Required for basic site functionality</label
+            >
           </div>
           <div class="cookie-option">
-            <input type="checkbox" id="analytics-cookies">
-            <label for="analytics-cookies">Analytics cookies - Help me understand how visitors use my site</label>
+            <input type="checkbox" id="analytics-cookies" />
+            <label for="analytics-cookies"
+              >Analytics cookies - Help me understand how visitors use my
+              site</label
+            >
           </div>
         </div>
-        <p style="font-size: 0.9rem;">You can change your preferences anytime. For more details, please read my <a href="/privacy-policy.html" style="color: var(--jasper);">Privacy Policy</a>.</p>
+        <p style="font-size: 0.9rem">
+          You can change your preferences anytime. For more details, please read
+          my
+          <a href="/privacy-policy.html" style="color: var(--jasper)"
+            >Privacy Policy</a
+          >.
+        </p>
       </div>
       <div class="cookie-buttons">
-        <button onclick="handleCookiePreferences(false)" class="cookie-btn secondary">Decline All</button>
-        <button onclick="handleCookiePreferences(true)" class="cookie-btn">Accept Selected</button>
+        <button
+          onclick="handleCookiePreferences(false)"
+          class="cookie-btn secondary"
+        >
+          Decline All
+        </button>
+        <button onclick="handleCookiePreferences(true)" class="cookie-btn">
+          Accept Selected
+        </button>
       </div>
     </div>
 
     <script>
       // Check consent expiry and show banner if needed
       function checkConsentExpiry() {
-        const consentDate = localStorage.getItem('consent_date');
+        const consentDate = localStorage.getItem("consent_date");
         if (consentDate) {
           const expiryDate = new Date(consentDate);
           expiryDate.setFullYear(expiryDate.getFullYear() + 1);
@@ -163,33 +196,37 @@
             resetConsent();
           }
         }
-        if (!localStorage.getItem('consent_date')) {
-          document.getElementById('cookie-banner').style.display = 'flex';
+        if (!localStorage.getItem("consent_date")) {
+          document.getElementById("cookie-banner").style.display = "flex";
         }
       }
 
       function resetConsent() {
-        localStorage.removeItem('analytics_consent');
-        localStorage.removeItem('consent_date');
-        document.getElementById('cookie-banner').style.display = 'flex';
+        localStorage.removeItem("analytics_consent");
+        localStorage.removeItem("consent_date");
+        document.getElementById("cookie-banner").style.display = "flex";
       }
 
       function handleCookiePreferences(savePreferences) {
-        const banner = document.getElementById('cookie-banner');
-        banner.style.display = 'none';
-        
+        const banner = document.getElementById("cookie-banner");
+        banner.style.display = "none";
+
         if (savePreferences) {
-          const analyticsAccepted = document.getElementById('analytics-cookies').checked;
-          localStorage.setItem('analytics_consent', analyticsAccepted ? 'accepted' : 'declined');
-          localStorage.setItem('consent_date', new Date().toISOString());
-          
+          const analyticsAccepted =
+            document.getElementById("analytics-cookies").checked;
+          localStorage.setItem(
+            "analytics_consent",
+            analyticsAccepted ? "accepted" : "declined"
+          );
+          localStorage.setItem("consent_date", new Date().toISOString());
+
           if (analyticsAccepted && !window.gtag) {
             location.reload();
           }
         } else {
-          localStorage.setItem('analytics_consent', 'declined');
-          localStorage.setItem('consent_date', new Date().toISOString());
-          window['ga-disable-G-5TR1LWNXXY'] = true;
+          localStorage.setItem("analytics_consent", "declined");
+          localStorage.setItem("consent_date", new Date().toISOString());
+          window["ga-disable-G-5TR1LWNXXY"] = true;
         }
       }
 
@@ -281,24 +318,45 @@
       <header id="intro" class="fade-in">
         <div class="summary">
           <h1 class="name">Hi, my name is <span>José Flores.</span></h1>
-          <h2>I'm a software engineer with a passion for technology and finance.</h2>
-          <p>Over the years, I've worked on various projects that blend my love for coding with my interest in trading. I enjoy working with React, XState, TypeScript, Java, Pine Script, and Node to create innovative solutions.</p>
+          <h2>
+            I'm a software engineer with a passion for technology and finance.
+          </h2>
+          <p>
+            Over the years, I've worked on various projects that blend my love
+            for coding with my interest in trading. I enjoy working with React,
+            XState, TypeScript, Java, Pine Script, and Node to create innovative
+            solutions.
+          </p>
           <a href="#contact" class="cta">
-            <h3 id="call-to-action">
-              Let's Connect
-            </h3>
+            <h3 id="call-to-action">Let's Connect</h3>
             <p>
-              Whether you're looking to join Pivot Scout, need assistance with a software project, or want to discuss potential collaborations, I'm here to help.
+              Whether you're looking to join Pivot Scout, need assistance with a
+              software project, or want to discuss potential collaborations, I'm
+              here to help.
             </p>
           </a>
         </div>
         <div class="profile-image-container">
           <picture>
-            <source srcset="./wftmb.avif" type="image/avif">
-            <img src="./wftmb.avif" alt="Jose Flores X Profile" class="primary-image" width="300" height="300" loading="eager">
+            <source srcset="./wftmb.avif" type="image/avif" />
+            <img
+              src="./wftmb.avif"
+              alt="Jose Flores X Profile"
+              class="primary-image"
+              width="300"
+              height="300"
+              loading="eager"
+            />
           </picture>
           <picture>
-            <img src="./me.jpeg" alt="Jose Flores" class="secondary-image" width="300" height="300" loading="eager">
+            <img
+              src="./me.jpeg"
+              alt="Jose Flores"
+              class="secondary-image"
+              width="300"
+              height="300"
+              loading="eager"
+            />
           </picture>
         </div>
       </header>
@@ -307,20 +365,29 @@
 
       <section id="newsletter-signup" class="fade-in">
         <h2>Get in Touch</h2>
-        <p>Looking to connect with a software engineer who has a passion for both code and trading? I'd love to hear from you. Whether you have a project in mind, need some advice, or just want to say hi, please feel free to drop your email below. I'll get back to you as soon as possible.</p>
-        <p>Your email will be kept confidential and used only for direct communication.</p>
+        <p>
+          Looking to connect with a software engineer who has a passion for both
+          code and trading? I'd love to hear from you. Whether you have a
+          project in mind, need some advice, or just want to say hi, please feel
+          free to drop your email below. I'll get back to you as soon as
+          possible.
+        </p>
+        <p>
+          Your email will be kept confidential and used only for direct
+          communication.
+        </p>
 
         <!-- Mailchimp-Integrated Form -->
         <div id="mc_embed_shell">
           <div id="mc_embed_signup">
             <form
-              action="https://gmail.us15.list-manage.com/subscribe/post?u=a5d21e2e22f61cf619c8acfb4&amp;id=09a07976e0&amp;f_id=00a49ee1f0"
+              action="https://gmail.us15.list-manage.com/subscribe/post?u=a5d21e2e22f61cf619c8acfb4&amp;id=09a07976e0&amp;f_id=00579ee1f0"
               method="post"
               id="mc-embedded-subscribe-form"
               name="mc-embedded-subscribe-form"
               class="newsletter-form validate"
               target="_blank"
-              novalidate
+              novalidate=""
             >
               <div id="mc_embed_signup_scroll">
                 <label for="mce-EMAIL" class="newsletter-label"
@@ -354,11 +421,11 @@
                   id="mc-embedded-subscribe"
                   class="newsletter-button"
                 >
-                  Subscribe
+                  Connect
                 </button>
 
                 <!-- Response messages -->
-                <div id="mce-responses" style="margin: top 10px;">
+                <div id="mce-responses" style="margin-top: 10px">
                   <div
                     class="response"
                     id="mce-error-response"
@@ -408,8 +475,10 @@
       <main class="fade-in">
         <section id="about-me">
           <h2>About Me</h2>
-          <p>Here are some projects I've worked on that reflect my passion and expertise:</p>
-
+          <p>
+            Here are some projects I've worked on that reflect my passion and
+            expertise:
+          </p>
           <ul>
             <li>
               <strong>DMI Delta by 0xjcf:</strong> A TradingView indicator that
@@ -456,14 +525,30 @@
 
       <section id="contact">
         <h2>Contact Me</h2>
-        <p>I'm currently running Pivot Scout, a premium trading community where I help traders and developers master harmonic patterns, divergence trading, and custom indicator development. Through Pivot Scout, I offer:</p>
+        <p>
+          I'm currently running Pivot Scout, a premium trading community where I
+          help traders and developers master harmonic patterns, divergence
+          trading, and custom indicator development. Through Pivot Scout, I
+          offer:
+        </p>
         <ul>
           <li>Custom TradingView indicator development</li>
           <li>One-on-one Pine Script consultations</li>
           <li>Trading strategy guidance</li>
           <li>Technical architecture consulting</li>
         </ul>
-        <p>Whether you're interested in joining Pivot Scout, need custom development work, or want to discuss potential collaborations in the fintech space, I'm excited to connect with you. Please reach out via email or visit Pivot Scout directly at <a href="https://whop.com/pivot-scout/" target="_blank" rel="noopener noreferrer">Whop</a>.</p>
+        <p>
+          Whether you're interested in joining Pivot Scout, need custom
+          development work, or want to discuss potential collaborations in the
+          fintech space, I'm excited to connect with you. Please reach out via
+          email or visit Pivot Scout directly at
+          <a
+            href="https://whop.com/pivot-scout/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Whop</a
+          >.
+        </p>
       </section>
     </div>
   </body>
