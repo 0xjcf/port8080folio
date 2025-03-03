@@ -24,13 +24,28 @@ function trackEvent(category, action, label, value) {
   }
 }
 
-// Performance tracking
+// Enhanced performance tracking
 window.addEventListener('load', () => {
   setTimeout(() => {
     if (window.performance) {
       const timing = performance.getEntriesByType('navigation')[0];
       if (timing) {
-        trackEvent('performance', 'timing_complete', 'Page Load Time', Math.round(timing.duration));
+        // Track more detailed performance metrics
+        const metrics = {
+          'Page Load Time': Math.round(timing.duration),
+          'DOM Content Loaded': Math.round(timing.domContentLoadedEventEnd - timing.domContentLoadedEventStart),
+          'First Byte': Math.round(timing.responseStart - timing.requestStart),
+          'DNS Lookup': Math.round(timing.domainLookupEnd - timing.domainLookupStart),
+          'TCP Connection': Math.round(timing.connectEnd - timing.connectStart)
+        };
+        
+        // Log metrics for debugging
+        console.debug('Performance metrics:', metrics);
+        
+        // Track in analytics if enabled
+        Object.entries(metrics).forEach(([label, value]) => {
+          trackEvent('performance', 'timing', label, value);
+        });
       }
     }
     
