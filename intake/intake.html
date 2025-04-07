@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    <!-- Web Vitals library for performance monitoring -->
+    <script
+      async
+      src="https://unpkg.com/web-vitals@3/dist/web-vitals.iife.js"
+    ></script>
+
+    <!-- Privacy-aware Analytics Loading -->
+    <script>
+      // Check for Do Not Track setting and consent
+      if (
+        navigator.doNotTrack !== "1" &&
+        localStorage.getItem("analytics_consent") === "accepted"
+      ) {
+        // Load GA only if DNT is not enabled and analytics are accepted
+        const gtagScript = document.createElement("script");
+        gtagScript.async = true;
+        gtagScript.src =
+          "https://www.googletagmanager.com/gtag/js?id=G-5TR1LWNXXY";
+        document.head.appendChild(gtagScript);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-5TR1LWNXXY", {
+          page_path: window.location.pathname,
+          anonymize_ip: true,
+          allow_google_signals: false,
+          transport_type: "beacon",
+          send_page_view: true,
+        });
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&family=Lora:ital@1&family=Oswald:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../styles.css" rel="stylesheet" type="text/css" />
+    <link href="intake.css" rel="stylesheet" type="text/css" />
+    <script src="../index.js" defer></script>
+    <script src="intake.js" defer></script>
+
+    <title>Project Intake Form</title>
+    <meta name="description" content="Universal project intake form for Jose Flores - Software Engineer specializing in React, XState, TypeScript, and Pine Script.">
+    <meta name="robots" content="noindex, nofollow">
+  </head>
+  <body>
+    <!-- Minimal Cookie Notice -->
+    <div id="cookie-banner" role="dialog" aria-labelledby="cookie-title" class="minimal-cookie-banner">
+      <div class="content">
+        <p>
+          This form uses essential cookies for functionality. By using this form, you agree to our
+          <a href="/port8080folio/privacy-policy.html" style="color: var(--jasper)">Privacy Policy</a>.
+        </p>
+      </div>
+    </div>
+
+    <main class="container">
+      <h1>Project Intake Form</h1>
+      <p class="form-intro">
+        Please fill out this comprehensive form to help us plan and deliver your project efficiently.
+        All fields marked with <span class="required" aria-hidden="true">*</span> are required.
+      </p>
+
+      <form id="intakeForm" class="intake-form" aria-label="Project Intake Form">
+        <div class="section" role="region" aria-labelledby="basic-info-heading">
+          <h2 id="basic-info-heading">1. Basic Project Info</h2>
+          <div class="form-group">
+            <label for="projectName">Project Name <span class="required" aria-hidden="true">*</span></label>
+            <input type="text" id="projectName" name="projectName" required aria-required="true" />
+            <small>What should we call this project?</small>
+          </div>
+
+          <div class="form-group">
+            <label for="summary">One-Sentence Summary <span class="required" aria-hidden="true">*</span></label>
+            <textarea id="summary" name="summary" required aria-required="true"></textarea>
+            <small>High-level idea of what this project does.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="stakeholders">Key Stakeholders <span class="required" aria-hidden="true">*</span></label>
+            <textarea id="stakeholders" name="stakeholders" required aria-required="true"></textarea>
+            <small>Who is involved and makes decisions?</small>
+          </div>
+
+          <div class="form-group">
+            <label for="launchDate">Target Launch Date</label>
+            <input type="text" id="launchDate" name="launchDate" />
+            <small>Are there any deadlines we should know?</small>
+          </div>
+        </div>
+
+        <div class="section" role="region" aria-labelledby="purpose-heading">
+          <h2 id="purpose-heading">2. Purpose & Users</h2>
+          <div class="form-group">
+            <label for="mainGoal">Main Goal <span class="required" aria-hidden="true">*</span></label>
+            <textarea id="mainGoal" name="mainGoal" required aria-required="true"></textarea>
+            <small>What is this project trying to solve?</small>
+          </div>
+
+          <div class="form-group">
+            <label for="targetAudience">Target Audience <span class="required" aria-hidden="true">*</span></label>
+            <textarea id="targetAudience" name="targetAudience" required aria-required="true"></textarea>
+            <small>Who will use it?</small>
+          </div>
+
+          <div class="form-group">
+            <label for="successCriteria">Success Criteria <span class="required" aria-hidden="true">*</span></label>
+            <textarea id="successCriteria" name="successCriteria" required aria-required="true"></textarea>
+            <small>How do we know it's working?</small>
+          </div>
+        </div>
+
+        <div class="section" role="region" aria-labelledby="platform-heading">
+          <h2 id="platform-heading">3. Platform & Tech</h2>
+          <div class="form-group">
+            <label for="platform">Platform <span class="required" aria-hidden="true">*</span></label>
+            <input type="text" id="platform" name="platform" required aria-required="true" />
+            <small>Web, Mobile App, Desktop App, Extension, etc.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="techStack">Tech Stack Preferences</label>
+            <input type="text" id="techStack" name="techStack" />
+            <small>If you already have a preferred stack (React, NestJS, etc.)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="aiCapabilities">AI/ML Capabilities?</label>
+            <input type="text" id="aiCapabilities" name="aiCapabilities" />
+            <small>Do you want GPT, embeddings, or ML features?</small>
+          </div>
+
+          <div class="form-group">
+            <label for="realtimeFeatures">Real-Time Features?</label>
+            <input type="text" id="realtimeFeatures" name="realtimeFeatures" />
+            <small>Chat, sync, notifications, sockets, etc.</small>
+          </div>
+        </div>
+
+        <div class="section" role="region" aria-labelledby="content-heading">
+          <h2 id="content-heading">4. Content & Data</h2>
+          <div class="form-group">
+            <label for="knowledgeSources">Knowledge Sources</label>
+            <textarea id="knowledgeSources" name="knowledgeSources"></textarea>
+            <small>Where does this product pull answers/content from?</small>
+          </div>
+
+          <div class="form-group">
+            <label for="integrations">External APIs / Integrations</label>
+            <textarea id="integrations" name="integrations"></textarea>
+            <small>CRM, payment, authentication, analytics, etc.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="privacy">Privacy / Compliance</label>
+            <input type="text" id="privacy" name="privacy" />
+            <small>GDPR, HIPAA, CCPA — any rules?</small>
+          </div>
+        </div>
+
+        <div class="section" role="region" aria-labelledby="ui-heading">
+          <h2 id="ui-heading">5. UI/UX & Branding</h2>
+          <div class="form-group">
+            <label for="designStyle">Design Style</label>
+            <textarea id="designStyle" name="designStyle"></textarea>
+            <small>Provide branding files, fonts, color palettes if available.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="accessibility">Accessibility Goals</label>
+            <textarea id="accessibility" name="accessibility"></textarea>
+            <small>Any standards to meet (WCAG, keyboard nav, etc.)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="responsiveness">Device Responsiveness</label>
+            <input type="text" id="responsiveness" name="responsiveness" />
+            <small>Desktop-first? Mobile-first? PWA?</small>
+          </div>
+        </div>
+
+        <div class="section" role="region" aria-labelledby="admin-heading">
+          <h2 id="admin-heading">6. Admin & Control</h2>
+          <div class="form-group">
+            <label for="contentManagement">Content Management</label>
+            <input type="text" id="contentManagement" name="contentManagement" />
+            <small>Do you need a dashboard to update content?</small>
+          </div>
+
+          <div class="form-group">
+            <label for="userRoles">User Roles / Permissions</label>
+            <input type="text" id="userRoles" name="userRoles" />
+            <small>Different views or access for admin vs. users?</small>
+          </div>
+
+          <div class="form-group">
+            <label for="analytics">Analytics & Monitoring</label>
+            <textarea id="analytics" name="analytics"></textarea>
+            <small>What insights should be tracked?</small>
+          </div>
+        </div>
+
+        <div class="section" role="region" aria-labelledby="budget-heading">
+          <h2 id="budget-heading">7. Budget & Deliverables</h2>
+          <div class="form-group">
+            <label for="budget">Budget Range <span class="required" aria-hidden="true">*</span></label>
+            <select id="budget" name="budget" required aria-required="true">
+              <option value="">Select a budget range</option>
+              <option value="under5k">Under $5,000</option>
+              <option value="5k-10k">$5,000 - $10,000</option>
+              <option value="10k-25k">$10,000 - $25,000</option>
+              <option value="25kplus">$25,000+</option>
+            </select>
+            <small>Rough estimate range to work within?</small>
+          </div>
+
+          <div class="form-group">
+            <label for="deliverables">Expected Deliverables <span class="required" aria-hidden="true">*</span></label>
+            <textarea id="deliverables" name="deliverables" required aria-required="true"></textarea>
+            <small>Prototype? MVP? Production-ready? Ongoing support?</small>
+          </div>
+        </div>
+
+        <div class="section" role="region" aria-labelledby="launch-heading">
+          <h2 id="launch-heading">8. Launch & Marketing Alignment</h2>
+          <div class="form-group">
+            <label for="eventDriven">Event/Date Driven?</label>
+            <input type="text" id="eventDriven" name="eventDriven" />
+            <small>Is there a campaign, release, or launch tied to this?</small>
+          </div>
+
+          <div class="form-group">
+            <label for="marketingNeeds">Marketing Needs</label>
+            <input type="text" id="marketingNeeds" name="marketingNeeds" />
+            <small>Landing page, SEO, lead gen capture?</small>
+          </div>
+        </div>
+
+        <div class="section" role="region" aria-labelledby="notes-heading">
+          <h2 id="notes-heading">Final Notes</h2>
+          <div class="form-group">
+            <label for="otherNotes">Other Notes</label>
+            <textarea id="otherNotes" name="otherNotes"></textarea>
+            <small>Anything not covered you want us to know?</small>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="submit-btn">Submit Form</button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>
