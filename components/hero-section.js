@@ -361,7 +361,7 @@ class HeroSection extends HTMLElement {
             <div class="stat-card" data-stat="complexity">
               <span class="stat-emoji">⚡</span>
               <p class="stat-value">1,700 → 12</p>
-              <p class="stat-label">Files refactored</p>
+              <p class="stat-label">Lines of code reduced</p>
               <p class="stat-detail">Modular state machines</p>
             </div>
             <div class="stat-card" data-stat="performance">
