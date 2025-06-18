@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | Jose Flores</title>
+    <link href="./styles.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error-container {
+            max-width: 600px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .error-code {
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--jasper, #0D99FF);
+            margin: 0;
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(13, 153, 255, 0.3);
+        }
+        
+        .magic-hat {
+            font-size: 4rem;
+            margin: 1rem 0;
+            animation: wobble 2s ease-in-out infinite;
+        }
+        
+        @keyframes wobble {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        
+        h1 {
+            font-size: 2rem;
+            color: var(--heading-color, #FFFFFF);
+            margin: 1rem 0;
+        }
+        
+        .error-message {
+            font-size: 1.25rem;
+            color: var(--teagreen, #F5F5F5);
+            margin: 1rem 0 2rem;
+            line-height: 1.6;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--jasper, #0D99FF), var(--jasper-light, #47B4FF));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13, 153, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--jasper, #0D99FF);
+            border: 2px solid var(--jasper, #0D99FF);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(13, 153, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .suggestions {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(13, 153, 255, 0.2);
+        }
+        
+        .suggestions h2 {
+            font-size: 1.25rem;
+            color: var(--heading-color, #FFFFFF);
+            margin: 0 0 1rem 0;
+        }
+        
+        .suggestions ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .suggestions li {
+            margin: 0.5rem 0;
+        }
+        
+        .suggestions a {
+            color: var(--jasper-light, #47B4FF);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .suggestions a:hover {
+            color: var(--jasper, #0D99FF);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <p class="error-code">404</p>
+        <div class="magic-hat">🎩</div>
+        <h1>Oops! This page pulled a Houdini</h1>
+        <p class="error-message">
+            Maybe it's being lazy loaded? 😅<br>
+            Or perhaps it's stuck in a state machine somewhere...
+        </p>
+        
+        <div class="action-buttons">
+            <a href="/" class="btn btn-primary">
+                Take me home
+            </a>
+            <a href="https://blog.joseflores.io" class="btn btn-secondary" target="_blank" rel="noopener">
+                Check out my blog instead
+            </a>
+        </div>
+        
+        <div class="suggestions">
+            <h2>Looking for something specific?</h2>
+            <ul>
+                <li><a href="/#projects">View my projects</a></li>
+                <li><a href="/#about">Learn about my 1,700-line disaster</a></li>
+                <li><a href="/#contact">Get in touch</a></li>
+                <li><a href="https://github.com/0xjcf" target="_blank" rel="noopener">Browse my GitHub</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Add some fun to the 404 page
+        const hat = document.querySelector('.magic-hat');
+        let clickCount = 0;
+        
+        hat.addEventListener('click', () => {
+            clickCount++;
+            if (clickCount === 3) {
+                hat.textContent = '🐰';
+                setTimeout(() => {
+                    hat.textContent = '🎩';
+                    clickCount = 0;
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+:host {
+  display: block;
+}
+
+.actor-box {
+  background: rgba(15, 17, 21, 0.9);
+  border: 2px solid rgba(13, 153, 255, 0.2);
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.actor-box[data-active="true"] {
+  border-color: var(--jasper);
+  box-shadow: 0 0 20px rgba(0, 136, 255, 0.3);
+}
+
+.actor-name {
+  font-size: 1.2rem;
+  color: var(--jasper);
+  margin-bottom: 10px;
+}
+
+.actor-state {
+  font-size: 1rem;
+  color: var(--teagreen);
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.actor-story {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 10px;
+  line-height: 1.4;
+  padding: 0 10px;
+  max-width: 250px;
+}
+
+.actor-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XState Test</title>
+</head>
+<body>
+    <h1>Testing XState Import</h1>
+    <script type="module">
+        import { createMachine, createActor } from 'https://esm.sh/xstate@5';
+        
+        console.log('XState loaded successfully!');
+        console.log('createMachine:', createMachine);
+        console.log('createActor:', createActor);
+        
+        // Test creating a simple machine
+        const toggleMachine = createMachine({
+            id: 'toggle',
+            initial: 'inactive',
+            states: {
+                inactive: {
+                    on: { TOGGLE: 'active' }
+                },
+                active: {
+                    on: { TOGGLE: 'inactive' }
+                }
+            }
+        });
+        
+        const actor = createActor(toggleMachine).start();
+        console.log('Initial state:', actor.getSnapshot().value);
+        
+        actor.send({ type: 'TOGGLE' });
+        console.log('After toggle:', actor.getSnapshot().value);
+    </script>
+</body>
+</html>
