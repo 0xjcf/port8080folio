@@ -40,7 +40,7 @@ class StateMachineBenefits extends HTMLElement {
           <ul class="results-list">
             <li>📉 <strong>61% smaller bundles</strong> - Removed redundant state management code</li>
             <li>🔧 <strong>1,700 → 200 lines</strong> - Refactored monster components into clean actors</li>
-            <li>⚡ <strong>94 Lighthouse score</strong> - Performance gains from predictable updates</li>
+            <li>⚡ <strong>Faster load times</strong> - Predictable updates and fewer re-renders with state machines</li>
             <li>🎯 <strong>0 race conditions</strong> - Actor model eliminates them by design</li>
           </ul>
         </div>

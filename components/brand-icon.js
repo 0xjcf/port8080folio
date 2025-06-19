@@ -34,6 +34,10 @@ class BrandIcon extends HTMLElement {
           justify-content: center;
           cursor: pointer;
           transition: transform 0.3s ease;
+          overflow: visible;
+          /* Add padding to prevent clipping of visual effects */
+          padding: 8px;
+          margin: -8px;
         }
 
         :host(:hover) {
@@ -47,6 +51,7 @@ class BrandIcon extends HTMLElement {
           display: flex;
           align-items: center;
           justify-content: center;
+          overflow: visible;
         }
 
         .icon-circle {

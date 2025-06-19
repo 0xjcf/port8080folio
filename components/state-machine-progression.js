@@ -19,8 +19,8 @@ class StateMachineProgression extends HTMLElement {
           <div class="timeline-item">
             <div class="timeline-marker">1</div>
             <div class="timeline-content">
-              <h4>useState Chaos</h4>
-              <p>Multiple boolean flags, race conditions, impossible states, useEffect spaghetti</p>
+              <h4>useState & useEffect Chaos</h4>
+              <p>Multiple boolean flags, race conditions, sspaghetti code</p>
             </div>
           </div>
           

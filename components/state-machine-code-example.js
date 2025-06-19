@@ -65,7 +65,7 @@ class StateMachineCodeExample extends HTMLElement {
             No shared state, no race conditions, just clean actor-to-actor communication.
           </p>
           <div style="text-align: center; margin-top: 30px;">
-            <a href="#projects" class="action-button" style="display: inline-block; text-decoration: none;">
+            <a href="#projects" class="action-button">
               See Real World Examples →
             </a>
           </div>

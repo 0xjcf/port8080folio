@@ -147,31 +147,31 @@
     <section id="state-machine-education">
       <!-- Level 1: UNAWARE - Start with the pain -->
       <state-machine-intro></state-machine-intro>
-      
+
       <!-- Level 2: PROBLEM AWARE - Show the problem clearly -->
       <state-machine-concepts></state-machine-concepts>
-      
+
       <!-- Level 3: SOLUTION AWARE - Introduce state machines -->
       <state-machine-diagram></state-machine-diagram>
-      
+
       <!-- Bridge: Why state machines alone aren't enough -->
       <state-machine-evolution></state-machine-evolution>
-      
+
       <!-- Level 4: PRODUCT AWARE - Show actor model (our specific solution) -->
       <actor-architecture-diagram></actor-architecture-diagram>
-      
+
       <!-- Interactive Demo - See it in action -->
       <coffee-shop-app-clean></coffee-shop-app-clean>
-      
+
       <!-- Level 5: MOST AWARE - Implementation details -->
       <state-machine-code-example></state-machine-code-example>
-      
+
       <!-- Results and social proof -->
       <state-machine-benefits></state-machine-benefits>
-      
+
       <!-- The journey -->
       <state-machine-progression></state-machine-progression>
-      
+
       <!-- Call to action -->
       <state-machine-value-prop></state-machine-value-prop>
     </section>
@@ -214,7 +214,7 @@
       </p>
       <p>
         Recent wins include cutting bundle sizes by 61%, transforming 1,700-line state machine
-        monsters into modular architectures, and achieving 94 Lighthouse scores on production apps.
+        monsters into modular architectures, and delivering reliable, high-performance apps with state machines.
       </p>
 
       <h3>How I Can Help</h3>
@@ -253,11 +253,20 @@
 
     <!-- Newsletter Signup - After visitors have seen value -->
     <section id="newsletter-signup" class="fade-in">
-      <h2>Stay Updated on Frontend Architecture Insights</h2>
-      <p>
-        Get exclusive tips on state management, performance optimization, and building 
-        maintainable applications. No spam, just actionable insights from real-world projects.
-      </p>
+      <h2>Get Frontend Architecture Insights That Actually Help</h2>
+      <div class="lead-magnets">
+        <div class="lead-magnet">
+          <h3>Frontend Architecture Audit Checklist</h3>
+          <p>Learn how to identify and fix the most common state management issues before they become problems.</p>
+          <span class="value-prop">Perfect for teams evaluating their current architecture</span>
+        </div>
+
+        <div class="lead-magnet">
+          <h3>5-Day Email Course: Taming Frontend Complexity</h3>
+          <p>Daily actionable tips to improve your state management and code maintainability.</p>
+          <span class="value-prop">Great for developers looking to level up their skills</span>
+        </div>
+      </div>
 
       <!-- Mailchimp-Integrated Form -->
       <div id="mc_embed_shell">
@@ -267,23 +276,43 @@
             method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form"
             class="newsletter-form validate" target="_blank" novalidate="">
             <div id="mc_embed_signup_scroll">
-              <label for="mce-EMAIL" class="newsletter-label">Email Address</label>
-              <input type="email" name="EMAIL" id="mce-EMAIL" class="newsletter-input required email"
-                placeholder="you@example.com" required />
+              <div class="form-group">
+                <label for="mce-EMAIL" class="newsletter-label">Email Address</label>
+                <input type="email" name="EMAIL" id="mce-EMAIL" class="newsletter-input required email"
+                  placeholder="you@example.com" required />
+              </div>
 
-              <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups -->
+              <div class="form-group lead-magnet-selection">
+                <label class="resource-option">
+                  <input type="radio" name="LEADMAGNET" value="audit_checklist" checked>
+                  <span class="radio-custom"></span>
+                  <div class="option-content">
+                    <strong>Frontend Architecture Audit Checklist</strong>
+                    <span>Perfect for teams evaluating their current architecture</span>
+                  </div>
+                </label>
+                <label class="resource-option">
+                  <input type="radio" name="LEADMAGNET" value="email_course">
+                  <span class="radio-custom"></span>
+                  <div class="option-content">
+                    <strong>5-Day Email Course</strong>
+                    <span>Great for developers looking to level up their skills</span>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Mailchimp bot protection -->
               <div aria-hidden="true" style="position: absolute; left: -5000px">
                 <input type="text" name="b_a5d21e2e22f61cf619c8acfb4_09a07976e0" tabindex="-1" value="" />
               </div>
 
-              <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="newsletter-button">
-                Get Architecture Insights
+              <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="newsletter-button action-button">
+                Get Free Resources
               </button>
 
-              <!-- Response messages -->
-              <div id="mce-responses" style="margin-top: 10px">
-                <div class="response" id="mce-error-response" style="display: none"></div>
-                <div class="response" id="mce-success-response" style="display: none"></div>
+              <div id="mce-responses" class="form-responses">
+                <div class="response error" id="mce-error-response" style="display: none"></div>
+                <div class="response success" id="mce-success-response" style="display: none"></div>
               </div>
             </div>
           </form>
@@ -291,27 +320,42 @@
       </div>
 
       <!-- Mailchimp validation script -->
-      <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
       <script type="text/javascript">
-        (function ($) {
-          window.fnames = new Array();
-          window.ftypes = new Array();
-          fnames[0] = "EMAIL";
-          ftypes[0] = "email";
-          fnames[1] = "FNAME";
-          ftypes[1] = "text";
-          fnames[2] = "LNAME";
-          ftypes[2] = "text";
-          fnames[3] = "ADDRESS";
-          ftypes[3] = "address";
-          fnames[4] = "PHONE";
-          ftypes[4] = "phone";
-          fnames[5] = "BIRTHDAY";
-          ftypes[5] = "birthday";
-          fnames[6] = "COMPANY";
-          ftypes[6] = "text";
-        })(jQuery);
-        var $mcj = jQuery.noConflict(true);
+        window.addEventListener('DOMContentLoaded', (event) => {
+          const form = document.getElementById('mc-embedded-subscribe-form');
+          const submitButton = document.getElementById('mc-embedded-subscribe');
+          const errorResponse = document.getElementById('mce-error-response');
+          const successResponse = document.getElementById('mce-success-response');
+
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+
+            try {
+              const formData = new FormData(form);
+              const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+              });
+
+              // Show success message
+              successResponse.textContent = 'Thank you! Check your email for your free resources.';
+              successResponse.style.display = 'block';
+              errorResponse.style.display = 'none';
+              form.reset();
+            } catch (error) {
+              // Show error message
+              errorResponse.textContent = 'Oops! Something went wrong. Please try again.';
+              errorResponse.style.display = 'block';
+              successResponse.style.display = 'none';
+            } finally {
+              submitButton.disabled = false;
+              submitButton.textContent = 'Get Free Resources';
+            }
+          });
+        });
       </script>
     </section>
 
@@ -322,8 +366,8 @@
         <div class="footer-brand">
           <brand-icon size="48" animate="false" icon-type="state-machine" static></brand-icon>
           <p class="philosophy">
-            <em>"I believe in simple solutions to complex problems, automation over documentation,
-              and that every codebase should spark joy (or at least not spark despair)."</em>
+            <em>"Here's what I know: your codebase shouldn't make you cry. State machines shouldn't need a PhD to understand. 
+              And yes, that 1,700-line state machine can absolutely become 12 clean, testable actors. Let's build something that makes sense."</em>
           </p>
         </div>
         <div class="footer-links">

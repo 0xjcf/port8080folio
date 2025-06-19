@@ -2,7 +2,7 @@ class BlogPosts extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    
+
     // Featured blog posts showcasing frontend expertise
     this.posts = [
       {
@@ -281,9 +281,9 @@ class BlogPosts extends HTMLElement {
       card.addEventListener('click', (e) => {
         // Track blog post clicks
         this.dispatchEvent(new CustomEvent('blog-post-clicked', {
-          detail: { 
+          detail: {
             title: card.dataset.postTitle,
-            url: card.href 
+            url: card.href
           },
           bubbles: true,
           composed: true

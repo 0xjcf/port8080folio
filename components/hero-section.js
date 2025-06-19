@@ -107,7 +107,16 @@ class HeroSection extends HTMLElement {
           padding: 0 1rem;
         }
         
-        @media (min-width: 768px) {
+        @media (min-width: 768px) and (max-width: 1024px) {
+          .quick-stats {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            margin: 1.75rem 0;
+            padding: 0;
+          }
+        }
+        
+        @media (min-width: 1024px) {
           .quick-stats {
             grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
@@ -441,10 +450,10 @@ class HeroSection extends HTMLElement {
               <p class="stat-detail">Modular state machines</p>
             </div>
             <div class="stat-card" data-stat="performance">
-              <span class="stat-emoji">🎯</span>
-              <p class="stat-value">94</p>
-              <p class="stat-label">Lighthouse score</p>
-              <p class="stat-detail">4.2s → 1.8s TTI</p>
+              <span class="stat-emoji">📊</span>
+              <p class="stat-value">100%</p>
+              <p class="stat-label">Visual mapping</p>
+              <p class="stat-detail">Every state tracked</p>
             </div>
             <div class="stat-card" data-stat="renders">
               <span class="stat-emoji">🔄</span>
@@ -491,7 +500,7 @@ class HeroSection extends HTMLElement {
     statCards.forEach(card => {
       card.addEventListener('click', () => {
         const stat = card.dataset.stat;
-        this.dispatchEvent(new CustomEvent('stat-clicked', { 
+        this.dispatchEvent(new CustomEvent('stat-clicked', {
           detail: { stat },
           bubbles: true,
           composed: true
@@ -509,7 +518,7 @@ class HeroSection extends HTMLElement {
         }
       }
     });
-    
+
     const learnLink = this.shadowRoot.querySelector('.learn-link');
     if (learnLink) {
       learnLink.addEventListener('click', (e) => {

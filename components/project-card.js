@@ -56,7 +56,15 @@ class ProjectCard extends HTMLElement {
           box-sizing: border-box;
         }
         
-        @media (min-width: 768px) {
+        @media (min-width: 768px) and (max-width: 1024px) {
+          .project-card {
+            border-radius: 10px;
+            padding: 1.5rem;
+            gap: 1.25rem;
+          }
+        }
+        
+        @media (min-width: 1024px) {
           .project-card {
             border-radius: 12px;
             padding: 2rem;
