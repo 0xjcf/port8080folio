@@ -44,16 +44,24 @@ class ProjectCard extends HTMLElement {
         .project-card {
           background: rgba(15, 17, 21, 0.8);
           border: 1px solid rgba(13, 153, 255, 0.2);
-          border-radius: 12px;
-          padding: 2rem;
+          border-radius: 8px;
+          padding: 1.25rem;
           transition: all 0.3s ease;
           display: flex;
           flex-direction: column;
-          gap: 1.5rem;
+          gap: 1rem;
           position: relative;
           overflow: hidden;
           width: 100%;
           box-sizing: border-box;
+        }
+        
+        @media (min-width: 768px) {
+          .project-card {
+            border-radius: 12px;
+            padding: 2rem;
+            gap: 1.5rem;
+          }
         }
         
         .project-card:hover {
@@ -69,16 +77,29 @@ class ProjectCard extends HTMLElement {
         }
         
         .project-emoji {
-          font-size: 2.5rem;
+          font-size: 2rem;
           line-height: 1;
+        }
+        
+        @media (min-width: 768px) {
+          .project-emoji {
+            font-size: 2.5rem;
+          }
         }
         
         h3 {
           margin: 0;
           color: var(--heading-color, #FFFFFF);
-          font-size: 1.5rem;
+          font-size: 1.25rem;
           font-weight: 700;
           flex: 1;
+          line-height: 1.3;
+        }
+        
+        @media (min-width: 768px) {
+          h3 {
+            font-size: 1.5rem;
+          }
         }
         
         .story-points {
@@ -90,11 +111,18 @@ class ProjectCard extends HTMLElement {
         
         .story-point {
           background: rgba(13, 153, 255, 0.05);
-          border-radius: 8px;
-          padding: 1rem;
+          border-radius: 6px;
+          padding: 0.75rem;
           border-left: 3px solid var(--jasper, #0D99FF);
           width: 100%;
           box-sizing: border-box;
+        }
+        
+        @media (min-width: 768px) {
+          .story-point {
+            border-radius: 8px;
+            padding: 1rem;
+          }
         }
         
         .story-point h4 {
@@ -109,9 +137,16 @@ class ProjectCard extends HTMLElement {
         .story-point p {
           margin: 0;
           color: var(--teagreen, #F5F5F5);
-          font-size: 1rem;
-          line-height: 1.5;
+          font-size: 0.9rem;
+          line-height: 1.4;
           word-wrap: break-word;
+        }
+        
+        @media (min-width: 768px) {
+          .story-point p {
+            font-size: 1rem;
+            line-height: 1.5;
+          }
         }
         
         .tech-badges {
@@ -124,11 +159,18 @@ class ProjectCard extends HTMLElement {
         .tech-badge {
           background: rgba(13, 153, 255, 0.1);
           color: var(--jasper-light, #47B4FF);
-          padding: 0.25rem 0.75rem;
+          padding: 0.25rem 0.5rem;
           border-radius: 20px;
-          font-size: 0.875rem;
+          font-size: 0.75rem;
           border: 1px solid rgba(13, 153, 255, 0.3);
           transition: all 0.2s ease;
+        }
+        
+        @media (min-width: 768px) {
+          .tech-badge {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+          }
         }
         
         .tech-badge:hover {
@@ -138,23 +180,42 @@ class ProjectCard extends HTMLElement {
         
         .project-links {
           display: flex;
-          gap: 1rem;
-          margin-top: 1rem;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          margin-top: 0.75rem;
+        }
+        
+        @media (min-width: 768px) {
+          .project-links {
+            gap: 1rem;
+            margin-top: 1rem;
+          }
         }
         
         .project-link {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          padding: 0.5rem 1rem;
+          padding: 0.5rem 0.875rem;
           background: transparent;
           color: var(--jasper, #0D99FF);
           border: 1px solid var(--jasper, #0D99FF);
           border-radius: 6px;
           text-decoration: none;
-          font-size: 0.875rem;
+          font-size: 0.8rem;
           font-weight: 500;
           transition: all 0.3s ease;
+          flex: 1;
+          justify-content: center;
+          min-width: 0;
+        }
+        
+        @media (min-width: 480px) {
+          .project-link {
+            flex: initial;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+          }
         }
         
         .project-link:hover {
@@ -172,18 +233,17 @@ class ProjectCard extends HTMLElement {
           transform: translateX(3px);
         }
         
-        @media (max-width: 850px) {
-          .project-card {
-            padding: 1.5rem;
-          }
-          
-          h3 {
-            font-size: 1.25rem;
-          }
-          
+        /* Additional mobile adjustments */
+        @media (max-width: 480px) {
           .project-header {
             flex-direction: column;
             text-align: center;
+            align-items: center;
+            gap: 0.5rem;
+          }
+          
+          .story-points {
+            gap: 0.75rem;
           }
         }
       </style>

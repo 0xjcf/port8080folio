@@ -13,7 +13,7 @@ class StateMachineIntro extends HTMLElement {
       <link rel="stylesheet" href="./components/state-machine-education.css">
       
       <div class="container">
-        <h2 class="section-title">Your App Works... Until It Doesn't 🤯</h2>
+        <h2 class="section-title">Your App Works...<br class="mobile-break"/> Until It Doesn't 🤯</h2>
         <p class="subtitle">
           You know that feeling when adding "just one more feature" breaks three others? When fixing a bug creates two more? 
           When your code becomes so complex that even you read it and are afraid to touch it?

@@ -56,21 +56,43 @@ class ProjectsSection extends HTMLElement {
         
         .section-header {
           text-align: center;
-          margin-bottom: 3rem;
+          margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+          .section-header {
+            margin-bottom: 3rem;
+          }
         }
         
         h2 {
-          font-size: 2.5rem;
+          font-size: 1.75rem;
           color: var(--heading-color, #FFFFFF);
           margin: 0 0 1rem 0;
           font-weight: 700;
+          line-height: 1.2;
+        }
+        
+        @media (min-width: 768px) {
+          h2 {
+            font-size: 2.5rem;
+          }
         }
         
         .section-subtitle {
-          font-size: 1.25rem;
+          font-size: 1rem;
           color: var(--teagreen, #F5F5F5);
           margin: 0;
-          line-height: 1.6;
+          line-height: 1.5;
+          padding: 0 1rem;
+        }
+        
+        @media (min-width: 768px) {
+          .section-subtitle {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            padding: 0;
+          }
         }
         
         .projects-grid {
@@ -93,15 +115,22 @@ class ProjectsSection extends HTMLElement {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          padding: 1rem 2rem;
+          padding: 0.875rem 1.5rem;
           background: transparent;
           color: var(--jasper, #0D99FF);
           border: 2px solid var(--jasper, #0D99FF);
           border-radius: 8px;
           text-decoration: none;
-          font-size: 1.125rem;
+          font-size: 1rem;
           font-weight: 600;
           transition: all 0.3s ease;
+        }
+        
+        @media (min-width: 768px) {
+          .view-all-link {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+          }
         }
         
         .view-all-link:hover {
@@ -119,16 +148,7 @@ class ProjectsSection extends HTMLElement {
           transform: translateX(4px);
         }
         
-        @media (max-width: 850px) {
-          h2 {
-            font-size: 2rem;
-          }
-          
-          .projects-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-          }
-        }
+        /* Media queries now inline with mobile-first approach */
       </style>
       
       <section class="projects-container">

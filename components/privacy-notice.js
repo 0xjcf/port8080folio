@@ -267,10 +267,31 @@ class PrivacyNotice extends HTMLElement {
             left: 0;
             max-width: none;
             border-radius: 16px 16px 0 0;
+            padding: 1.5rem;
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
           }
           
           .actions {
             flex-direction: column;
+          }
+          
+          .cookie-header {
+            gap: 0.5rem;
+          }
+          
+          .cookie-icon {
+            font-size: 1.5rem;
+          }
+          
+          h3 {
+            font-size: 1.1rem;
+          }
+          
+          .cookie-content {
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
           }
         }
       </style>

@@ -15,6 +15,18 @@
   box-sizing: border-box;
 }
 
+/* Prevent horizontal overflow on mobile */
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
 /* Base styles */
 body {
   background: linear-gradient(
@@ -24,10 +36,18 @@ body {
     #121620 100%
   );
   font-family: var(--primary-font);
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: var(--teagreen);
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Increase base font size for larger screens */
+@media (min-width: 768px) {
+  body {
+    font-size: 1.25rem;
+  }
 }
 
 a {
@@ -55,7 +75,7 @@ h1, h2, h3, h4, h5, h6 {
 button {
   border: none;
   border-radius: 5px;
-  padding: 0.5rem;
+  padding: 0.75rem 1rem;
   cursor: pointer;
   font-family: var(--primary-font);
   font-size: 1rem;
@@ -66,6 +86,8 @@ button {
   );
   color: #FFFFFF;
   transition: all 0.3s ease;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 button:hover {
@@ -107,9 +129,16 @@ button:focus {
   grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
   align-items: start;
-  gap: 2rem;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .grid-container {
+    padding: 0 2rem;
+    gap: 2rem;
+  }
 }
 
 /* Web Components */
@@ -311,9 +340,15 @@ footer { grid-area: footer; }
   backdrop-filter: blur(10px);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  padding: 3rem;
+  padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  #contact {
+    padding: 3rem;
+  }
 }
 
 #contact h2 {
@@ -485,8 +520,8 @@ footer { grid-area: footer; }
 .cta {
   position: relative;
   display: inline-block;
-  padding: 1.5rem 3rem;
-  font-size: 1.25rem;
+  padding: 1rem 2rem;
+  font-size: 1rem;
   font-weight: 600;
   overflow: visible;
   cursor: pointer;
@@ -496,6 +531,13 @@ footer { grid-area: footer; }
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
   text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .cta {
+    padding: 1.5rem 3rem;
+    font-size: 1.25rem;
+  }
 }
 
 .cta::before,
@@ -555,9 +597,15 @@ footer { grid-area: footer; }
   backdrop-filter: blur(10px);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  padding: 3rem;
+  padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  #newsletter-signup {
+    padding: 3rem;
+  }
 }
 
 #newsletter-signup h2 {
@@ -708,6 +756,14 @@ brand-icon {
   margin: 0;
 }
 
+/* Mobile-first typography adjustments */
+@media (max-width: 480px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+  p, li { font-size: 0.95rem; line-height: 1.6; }
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   #intro { justify-content: center; }
@@ -719,11 +775,10 @@ brand-icon {
 
 @media (max-width: 850px) {
   .body--no-scroll { overflow: hidden; }
-  html { font-size: 1.125rem; }
   .grid-container {
     grid-template-rows: auto;
-    padding: 0 1.5rem;
-    gap: 2rem;
+    padding: 0 1rem;
+    gap: 1.5rem;
   }
   nav {
     grid-template-columns: auto auto;
@@ -763,6 +818,7 @@ brand-icon {
     font-size: 2rem;
     opacity: 0.9;
     transition: opacity 0.3s ease;
+    padding: 0.5rem 1rem;
   }
   .nav-item:hover {
     opacity: 1;
@@ -821,8 +877,9 @@ brand-icon {
     margin-bottom: 0;
   }
   #contact {
-    padding: 2rem 1.5rem;
-    margin-bottom: 2rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
   }
   #contact ul {
     padding: 0;
@@ -834,8 +891,9 @@ brand-icon {
     margin-bottom: 0.5rem;
   }
   #newsletter-signup {
-    margin: 1.5rem auto;
-    padding: 2rem;
+    margin: 1rem auto;
+    padding: 1.5rem;
+    border-radius: 8px;
   }
   .newsletter-input {
     margin-bottom: 1.5rem;
