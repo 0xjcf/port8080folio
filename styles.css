@@ -510,6 +510,11 @@ footer { grid-area: footer; }
   overflow: visible;
 }
 
+/* Add padding specifically to the brand icon in the navigation */
+nav .brand-icon {
+  padding: 1rem;
+}
+
 /* Brand icon component now handles all icon styling */
 
 .hidden-h1 {
