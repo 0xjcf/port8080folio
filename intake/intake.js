@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       // For now, just log the form data
-      console.log("Form submitted:", data);
+      // Form submission data processed
 
       // Show success message
       announceMessage(

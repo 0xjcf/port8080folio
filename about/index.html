@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&family=Lora:ital@1&family=Oswald:wght@700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="../src/styles/main.css" rel="stylesheet" type="text/css" />
+    <script src="../src/scripts/main.js" defer></script>
+
+    <!-- Web Components -->
+    <script type="module">
+        import '../src/components/ui/brand-icon.js';
+        import '../src/components/ui/privacy-notice.js';
+        import '../src/components/ui/breadcrumbs.js';
+        import '../src/components/ui/search-component.js';
+        import '../src/components/ui/related-content.js';
+        import '../src/components/sections/about-section.js';
+    </script>
+
+    <!-- SEO Meta Tags -->
+    <title>About - José Flores | Frontend Architect & XState Specialist</title>
+    <meta name="description"
+        content="Learn about José Flores, a frontend architect specializing in XState, React optimization, and building maintainable applications with complex state management.">
+    <meta name="keywords"
+        content="José Flores, frontend architect, XState specialist, React optimization, state machines, frontend consulting, JavaScript architecture, developer biography, team lead">
+    <meta name="author" content="José Flores">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://0xjcf.github.io/port8080folio/about/">
+
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#0D99FF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://0xjcf.github.io/port8080folio/about/">
+    <meta property="og:title" content="About - José Flores | Frontend Architect & XState Specialist">
+    <meta property="og:description"
+        content="Learn about José Flores, a frontend architect specializing in XState, React optimization, and building maintainable applications with complex state management.">
+    <meta property="og:image" content="https://0xjcf.github.io/port8080folio/public/images/me.jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="José Flores - Frontend Architect and XState Specialist">
+    <meta property="og:site_name" content="José Flores Portfolio">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://0xjcf.github.io/port8080folio/about/">
+    <meta name="twitter:title" content="About - José Flores | Frontend Architect & XState Specialist">
+    <meta name="twitter:description"
+        content="Learn about José Flores, a frontend architect specializing in XState, React optimization, and building maintainable applications with complex state management.">
+    <meta name="twitter:image" content="https://0xjcf.github.io/port8080folio/public/images/me.jpeg">
+    <meta name="twitter:image:alt" content="José Flores - Frontend Architect and XState Specialist">
+    <meta name="twitter:creator" content="@0xjcf">
+    <meta name="twitter:site" content="@0xjcf">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": "https://0xjcf.github.io/port8080folio/about/#webpage",
+        "url": "https://0xjcf.github.io/port8080folio/about/",
+        "name": "About José Flores - Frontend Architect & XState Specialist",
+        "description": "Learn about José Flores, a frontend architect specializing in XState, React optimization, and building maintainable applications with complex state management.",
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://0xjcf.github.io/port8080folio/#website"
+        },
+        "about": {
+            "@type": "Person",
+            "@id": "https://0xjcf.github.io/port8080folio/#person"
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2025-06-28",
+        "inLanguage": "en-US"
+    }
+    </script>
+</head>
+
+<body>
+    <privacy-notice></privacy-notice>
+
+    <div class="grid-container subpage">
+        <nav aria-labelledby="site-navigation">
+            <h2 id="site-navigation" class="hidden-h1">Site Navigation</h2>
+
+            <a href="../" class="brand-link">
+                <span class="brand-icon">
+                    <brand-icon size="48" animate="true" icon-type="state-machine"></brand-icon>
+                    <h1 class="hidden-h1">Jose Flores</h1>
+                </span>
+            </a>
+
+            <ul class="navlist">
+                <li class="nav-item">
+                    <a href="../">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../about/" class="active">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../blog/">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../resources/">Resources</a>
+                </li>
+                <li class="nav-item nav-search">
+                    <search-component></search-component>
+                </li>
+                <li class="nav-item">
+                    <a href="https://github.com/0xjcf" target="_blank" rel="noopener">Github</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.linkedin.com/in/joseflores-io/" target="_blank" rel="noopener">LinkedIn</a>
+                </li>
+            </ul>
+
+            <button class="menu" id="menu-open-button" aria-label="Open menu" role="button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="currentColor"
+                    aria-label="Menu icon">
+                    <rect y="4" width="24" height="2" class="line" />
+                    <rect y="11" width="24" height="2" class="line" />
+                    <rect y="18" width="24" height="2" class="line" />
+                </svg>
+            </button>
+            <button class="close" id="menu-close-button" aria-label="Close menu" role="button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40"
+                    aria-label="Close menu icon">
+                    <line x1="3" y1="3" x2="21" y2="21" class="line" />
+                    <line x1="3" y1="21" x2="21" y2="3" class="line" />
+                </svg>
+            </button>
+        </nav>
+
+        <hr class="gradient-line" id="hr1" />
+
+        <!-- Breadcrumbs -->
+        <breadcrumb-nav></breadcrumb-nav>
+
+        <main>
+            <section id="about-hero">
+                <h1>About José Flores</h1>
+                <p class="lead">Frontend Architect & XState Specialist helping companies build maintainable applications
+                    with complex state management.</p>
+            </section>
+
+            <hr class="gradient-line" id="hr2" />
+
+            <section id="about-content">
+                <about-section></about-section>
+            </section>
+
+            <!-- Related Content Suggestions -->
+            <related-content></related-content>
+        </main>
+
+        <hr class="gradient-line" id="hr3" />
+
+        <footer id="footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <brand-icon size="48" animate="false" icon-type="state-machine" static></brand-icon>
+                    <p class="philosophy">
+                        <em>"Here's what I know: your codebase shouldn't make you cry. State machines shouldn't need a
+                            PhD to understand.
+                            And yes, that 1,700-line state machine can absolutely become 12 clean, testable actors.
+                            Let's build something that makes sense."</em>
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/0xjcf" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://www.linkedin.com/in/joseflores-io/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://twitter.com/0xjcf" target="_blank" rel="noopener">Twitter</a>
+                </div>
+                <p class="copyright">© 2024 José Flores. Built with ☕ and XState.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

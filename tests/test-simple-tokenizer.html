@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Tokenizer Test</title>
+  <style>
+    body {
+      background: #0d1117;
+      color: #e1e1e1;
+      font-family: monospace;
+      padding: 20px;
+    }
+    .test { 
+      margin: 20px 0;
+      border: 1px solid #30363d;
+      padding: 10px;
+    }
+    pre {
+      background: #161b22;
+      padding: 10px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simple Tokenizer Test</h1>
+  
+  <div class="test">
+    <h2>Direct Test</h2>
+    <pre id="output"></pre>
+  </div>
+
+  <script type="module">
+    import { Tokenizer } from './components/tokenizer/index.js';
+    
+    const testCode = `// Test code
+const x = 10;
+const y = 20;`;
+    
+    console.log('Original code:', testCode);
+    console.log('Code length:', testCode.length);
+    console.log('Contains newlines:', testCode.includes('\n'));
+    
+    const tokenizer = new Tokenizer({ language: 'javascript' });
+    const highlighted = tokenizer.highlight(testCode);
+    
+    console.log('Highlighted:', highlighted);
+    
+    document.getElementById('output').innerHTML = highlighted;
+  </script>
+</body>
+</html>

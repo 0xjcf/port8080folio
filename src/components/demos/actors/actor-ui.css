@@ -1,0 +1,174 @@
+:host {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.actor-box {
+  background: rgba(15, 17, 21, 0.9);
+  border: 2px solid rgba(13, 153, 255, 0.2);
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  min-height: 280px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.actor-box[data-active="true"] {
+  border-color: var(--jasper);
+  box-shadow: 0 0 20px rgba(0, 136, 255, 0.3);
+}
+
+/* Add subtle animations when active */
+.actor-box[data-active="true"] .actor-icon {
+  transform: scale(1.1);
+  animation: fadeIn 0.3s ease-out, iconBounce 0.5s ease-out;
+}
+
+.actor-box[data-active="true"] .actor-state {
+  color: var(--jasper);
+  transform: translateY(-2px);
+}
+
+/* Icon bounce animation for state changes */
+@keyframes iconBounce {
+  0% {
+    transform: scale(1.1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(-5deg);
+  }
+  50% {
+    transform: scale(1.15) rotate(5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1.1) rotate(0deg);
+  }
+}
+
+.actor-name {
+  font-size: 1.2rem;
+  color: var(--jasper);
+  margin-bottom: 10px;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+}
+
+.actor-state {
+  font-size: 1rem;
+  color: var(--teagreen);
+  margin-bottom: 15px;
+  font-style: italic;
+  flex-shrink: 0;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.actor-story {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: auto;
+  line-height: 1.5;
+  padding: 10px;
+  width: 100%;
+  max-width: 250px;
+  min-height: 60px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  transition: all 0.5s ease;
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Highlight educational content in active states */
+.actor-box[data-active="true"] .actor-story {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.actor-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  transition: all 0.4s ease;
+  transform-origin: center;
+  flex-shrink: 0;
+}
+
+/* Create a content wrapper for better organization */
+.actor-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
+/* Fade in animation for smooth content updates */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply fade in to all content elements */
+.actor-box > * {
+  animation: fadeIn 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+/* Stagger the animations with longer delays for readability */
+.actor-icon {
+  animation-delay: 0s;
+}
+
+.actor-name {
+  animation-delay: 0.1s;
+  animation-fill-mode: both;
+}
+
+.actor-state {
+  animation-delay: 0.2s;
+  animation-fill-mode: both;
+}
+
+.actor-story {
+  animation-delay: 0.3s;
+  animation-fill-mode: both;
+  animation-duration: 0.8s;
+}
+
+/* Special pulse animation for active state */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 20px rgba(0, 136, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 136, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(0, 136, 255, 0.3);
+  }
+}
+
+.actor-box[data-active="true"] {
+  animation: pulse 2s ease-in-out infinite;
+}

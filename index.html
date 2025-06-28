@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
   <link rel="preconnect" href="https://www.googletagmanager.com" />
   <link rel="preconnect" href="https://www.google-analytics.com" />
 
@@ -43,61 +43,195 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://gmail.us15.list-manage.com" />
+
+  <!-- Performance Optimizations - Preload critical resources -->
+  <link rel="preload" href="./src/styles/main.css" as="style" />
+  <link rel="preload" href="./public/images/me.jpeg" as="image" type="image/jpeg" />
+  <link rel="preload" href="./src/components/sections/hero-section-enhanced.js" as="script" />
+
   <link
     href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&family=Lora:ital@1&family=Oswald:wght@700&display=swap"
     rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link href="./styles.css" rel="stylesheet" type="text/css" />
-  <script src="./index.js" defer></script>
+  <link href="./src/styles/main.css" rel="stylesheet" type="text/css" />
+  <script src="./src/scripts/main.js" defer></script>
 
   <!-- Web Components -->
   <script type="module">
-    import './components/hero-section.js';
-    import './components/project-card.js';
-    import './components/projects-section.js';
-    import './components/about-section.js';
-    import './components/blog-posts.js';
-    import './components/loading-state.js';
-    import './components/privacy-notice.js';
-    import './components/brand-icon.js';
-    import './components/state-machine-intro.js';
-    import './components/state-machine-concepts.js';
-    import './components/state-machine-diagram.js';
-    import './components/state-machine-evolution.js';
-    import './components/actor-architecture-diagram.js';
-    import './components/state-machine-progression.js';
-    import './components/coffee-shop-app-clean.js';
-    import './components/state-machine-code-example.js';
-    import './components/state-machine-value-prop.js';
-    import './components/state-machine-benefits.js';
-    import './components/actors/customer/customer-actor-ui.js';
-    import './components/actors/cashier/cashier-actor-ui.js';
-    import './components/actors/barista/barista-actor-ui.js';
+    // Sections
+    import './src/components/sections/hero-section-enhanced.js';
+    import './src/components/sections/projects-section.js';
+
+    // UI Components
+    import './src/components/ui/project-card.js';
+    import './src/components/ui/loading-state.js';
+    import './src/components/ui/privacy-notice.js';
+    import './src/components/ui/brand-icon.js';
+    import './src/components/ui/syntax-highlighter-with-themes.js';
+    import './src/components/ui/breadcrumbs.js';
+    import './src/components/ui/search-component.js';
+    import './src/components/ui/related-content.js';
+
+    // State Machine Components (Core conversion flow only)
+    import './src/components/state-machine/state-machine-intro.js';
+    import './src/components/state-machine/state-machine-value-prop.js';
+
+    // Tokenizer
+    import './src/components/tokenizer/syntax-highlighter-v3.js';
+
+    // Demos
+    import './src/components/demos/coffee-shop-app-clean.js';
+    import './src/components/demos/actor-architecture-diagram.js';
+    import './src/components/demos/actors/customer-actor-ui.js';
+    import './src/components/demos/actors/cashier-actor-ui.js';
+    import './src/components/demos/actors/barista-actor-ui.js';
   </script>
 
-  <title>José Flores - Frontend Architect & XState Specialist</title>
+  <!-- SEO Meta Tags -->
+  <title>José Flores - Frontend Architect & XState Specialist | State Machine Expert</title>
   <meta name="description"
-    content="I help companies build maintainable frontend applications with complex state management. Specializing in XState, React optimization, and education platforms.">
+    content="Expert frontend architect specializing in XState, React performance, and state machine architecture. Transform complex UIs into maintainable systems. 61% bundle size reduction proven results.">
   <meta name="keywords"
-    content="frontend architect, XState specialist, React performance, state management, TypeScript, bundle optimization, education platforms, software engineer">
+    content="frontend architect, XState specialist, state machines, React performance optimization, TypeScript, bundle optimization, actor model, frontend consulting, JavaScript architecture, UI state management">
   <meta name="author" content="José Flores">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://0xjcf.github.io/port8080folio/">
+
+  <!-- Additional SEO Meta Tags -->
+  <meta name="theme-color" content="#0D99FF">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://0xjcf.github.io/port8080folio/">
   <meta property="og:title" content="José Flores - Frontend Architect & XState Specialist">
   <meta property="og:description"
-    content="I help companies build maintainable frontend applications with complex state management. Specializing in XState, React optimization, and education platforms.">
-  <meta property="og:image" content="https://0xjcf.github.io/port8080folio/me.jpeg">
+    content="Expert frontend architect specializing in XState, React performance, and state machine architecture. Transform complex UIs into maintainable systems. 61% bundle size reduction proven results.">
+  <meta property="og:image" content="https://0xjcf.github.io/port8080folio/public/images/me.jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="José Flores - Frontend Architect and XState Specialist">
+  <meta property="og:site_name" content="José Flores Portfolio">
+  <meta property="og:locale" content="en_US">
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://0xjcf.github.io/port8080folio/">
-  <meta property="twitter:title" content="José Flores - Frontend Architect & XState Specialist">
-  <meta property="twitter:description"
-    content="I help companies build maintainable frontend applications with complex state management. Specializing in XState and React optimization.">
-  <meta property="twitter:image" content="https://0xjcf.github.io/port8080folio/me.jpeg">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://0xjcf.github.io/port8080folio/">
+  <meta name="twitter:title" content="José Flores - Frontend Architect & XState Specialist">
+  <meta name="twitter:description"
+    content="Expert frontend architect specializing in XState, React performance, and state machine architecture. Transform complex UIs into maintainable systems.">
+  <meta name="twitter:image" content="https://0xjcf.github.io/port8080folio/public/images/me.jpeg">
+  <meta name="twitter:image:alt" content="José Flores - Frontend Architect and XState Specialist">
+  <meta name="twitter:creator" content="@0xjcf">
+  <meta name="twitter:site" content="@0xjcf">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://0xjcf.github.io/port8080folio/#person",
+        "name": "José C. Flores",
+        "alternateName": "José Flores",
+        "description": "Frontend Architect & XState Specialist helping companies build maintainable applications with complex state management",
+        "url": "https://0xjcf.github.io/port8080folio/",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://0xjcf.github.io/port8080folio/public/images/me.jpeg",
+          "width": 800,
+          "height": 600,
+          "caption": "José Flores - Frontend Architect"
+        },
+        "jobTitle": "Frontend Architect & XState Specialist",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Freelance Consultant"
+        },
+        "knowsAbout": [
+          "State Machines",
+          "XState",
+          "Frontend Architecture",
+          "React Performance Optimization",
+          "TypeScript",
+          "Bundle Optimization",
+          "Actor Model",
+          "JavaScript Architecture",
+          "UI State Management"
+        ],
+        "email": "bluejf.llc@gmail.com",
+        "sameAs": [
+          "https://www.linkedin.com/in/joseflores-io/",
+          "https://github.com/0xjcf",
+          "https://twitter.com/0xjcf"
+        ],
+        "hasOccupation": {
+          "@type": "Occupation",
+          "name": "Frontend Architect",
+          "occupationLocation": {
+            "@type": "Place",
+            "name": "Remote"
+          },
+          "description": "Specializing in XState, React optimization, and building maintainable frontend applications with complex state management"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://0xjcf.github.io/port8080folio/#website",
+        "url": "https://0xjcf.github.io/port8080folio/",
+        "name": "José Flores - Frontend Architect Portfolio",
+        "description": "Expert frontend architect specializing in XState, React performance, and state machine architecture",
+        "publisher": {
+          "@id": "https://0xjcf.github.io/port8080folio/#person"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://0xjcf.github.io/port8080folio/?search={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://0xjcf.github.io/port8080folio/#webpage",
+        "url": "https://0xjcf.github.io/port8080folio/",
+        "name": "José Flores - Frontend Architect & XState Specialist",
+        "description": "Expert frontend architect specializing in XState, React performance, and state machine architecture. Transform complex UIs into maintainable systems.",
+        "isPartOf": {
+          "@id": "https://0xjcf.github.io/port8080folio/#website"
+        },
+        "about": {
+          "@id": "https://0xjcf.github.io/port8080folio/#person"
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2025-06-28",
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://0xjcf.github.io/port8080folio/#service",
+        "name": "Frontend Architecture Consulting",
+        "description": "Expert frontend architecture consulting specializing in XState, React optimization, and state machine implementation",
+        "provider": {
+          "@id": "https://0xjcf.github.io/port8080folio/#person"
+        },
+        "serviceType": [
+          "Frontend Architecture Consulting",
+          "XState Implementation & Optimization", 
+          "Performance Audits & Bundle Optimization",
+          "Education Platform Development",
+          "Code Complexity Reviews"
+        ],
+        "areaServed": "Worldwide",
+        "availableLanguage": "English"
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>
@@ -109,12 +243,29 @@
       <!-- Visually hidden heading to label the navigation -->
       <h2 id="site-navigation" class="hidden-h1">Site Navigation</h2>
 
-      <span class="brand-icon">
-        <brand-icon size="48" animate="true" icon-type="state-machine"></brand-icon>
-        <h1 class="hidden-h1">Jose Flores</h1>
-      </span>
+      <a href="/" class="brand-link">
+        <span class="brand-icon">
+          <brand-icon size="48" animate="true" icon-type="state-machine"></brand-icon>
+          <h1 class="hidden-h1">Jose Flores</h1>
+        </span>
+      </a>
 
       <ul class="navlist">
+        <li class="nav-item">
+          <a href="/" class="active">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="/about/">About</a>
+        </li>
+        <li class="nav-item">
+          <a href="/blog/">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a href="/resources/">Resources</a>
+        </li>
+        <li class="nav-item nav-search">
+          <search-component></search-component>
+        </li>
         <li class="nav-item">
           <a href="https://github.com/0xjcf" target="_blank" rel="noopener">Github</a>
         </li>
@@ -141,68 +292,53 @@
       </button>
     </nav>
 
+    <!-- LEVEL 1: UNAWARE - Hero Section with outcome-focused hook -->
+    <hero-section-enhanced profile-image="./public/images/me.jpeg"></hero-section-enhanced>
+
     <hr class="gradient-line" id="hr1" />
 
-    <!-- State Machine Education Section - Progressive for all 5 awareness levels -->
+    <!-- State Machine Education Section - Optimized awareness progression -->
     <section id="state-machine-education">
-      <!-- Level 1: UNAWARE - Start with the pain -->
+      <!-- LEVEL 2: PROBLEM AWARE - Pain points and struggles -->
       <state-machine-intro></state-machine-intro>
 
-      <!-- Level 2: PROBLEM AWARE - Show the problem clearly -->
-      <state-machine-concepts></state-machine-concepts>
+      <!-- LEVEL 3: SOLUTION AWARE - State machines as the solution -->
+      <div class="solution-bridge">
+        <p class="solution-text">
+          What if there was a way to make your frontend state <em>predictable</em>, <em>visual</em>, and <em>actually
+            enjoyable</em> to work with?
+        </p>
+      </div>
 
-      <!-- Level 3: SOLUTION AWARE - Introduce state machines -->
-      <state-machine-diagram></state-machine-diagram>
-
-      <!-- Bridge: Why state machines alone aren't enough -->
-      <state-machine-evolution></state-machine-evolution>
-
-      <!-- Level 4: PRODUCT AWARE - Show actor model (our specific solution) -->
+      <!-- LEVEL 4: PRODUCT AWARE - Show actor model (our specific solution) -->
       <actor-architecture-diagram></actor-architecture-diagram>
 
       <!-- Interactive Demo - See it in action -->
       <coffee-shop-app-clean></coffee-shop-app-clean>
 
-      <!-- Level 5: MOST AWARE - Implementation details -->
-      <state-machine-code-example></state-machine-code-example>
-
-      <!-- Results and social proof -->
-      <state-machine-benefits></state-machine-benefits>
-
-      <!-- The journey -->
-      <state-machine-progression></state-machine-progression>
-
-      <!-- Call to action -->
+      <!-- LEVEL 5: MOST AWARE - Value prop and CTA -->
       <state-machine-value-prop></state-machine-value-prop>
+
+      <!-- Bridge to deeper learning -->
+      <div class="learning-bridge">
+        <p class="bridge-text">
+          Want to dive deeper into state machines and frontend architecture?
+          <a href="/resources/" class="bridge-link">Explore our comprehensive resources →</a>
+        </p>
+      </div>
     </section>
 
     <hr class="gradient-line" id="hr2" />
-
-    <!-- Hero Section Web Component -->
-    <hero-section profile-image="./me.jpeg"></hero-section>
-
-    <hr class="gradient-line" id="hr3" />
 
     <!-- Projects Section - For PROBLEM AWARE visitors -->
     <section id="projects">
       <projects-section></projects-section>
     </section>
 
-    <hr class="gradient-line" id="hr4" />
+    <!-- Related Content Suggestions -->
+    <related-content></related-content>
 
-    <!-- About Section Web Component - For SOLUTION AWARE visitors -->
-    <section id="about">
-      <about-section></about-section>
-    </section>
-
-    <hr class="gradient-line" id="hr5" />
-
-    <!-- Blog Posts - Additional credibility and education -->
-    <section id="blog">
-      <blog-posts></blog-posts>
-    </section>
-
-    <hr class="gradient-line" id="hr6" />
+    <hr class="gradient-line" id="hr3" />
 
     <!-- Contact Section - Main CTA for SOLUTION AWARE visitors -->
     <section id="contact">
@@ -249,7 +385,7 @@
       </p>
     </section>
 
-    <hr class="gradient-line" id="hr7" />
+    <hr class="gradient-line" id="hr4" />
 
     <!-- Newsletter Signup - After visitors have seen value -->
     <section id="newsletter-signup" class="fade-in">
@@ -359,15 +495,17 @@
       </script>
     </section>
 
-    <hr class="gradient-line" id="hr8" />
+    <hr class="gradient-line" id="hr5" />
 
     <footer id="footer">
       <div class="footer-content">
         <div class="footer-brand">
           <brand-icon size="48" animate="false" icon-type="state-machine" static></brand-icon>
           <p class="philosophy">
-            <em>"Here's what I know: your codebase shouldn't make you cry. State machines shouldn't need a PhD to understand. 
-              And yes, that 1,700-line state machine can absolutely become 12 clean, testable actors. Let's build something that makes sense."</em>
+            <em>"Here's what I know: your codebase shouldn't make you cry. State machines shouldn't need a PhD to
+              understand.
+              And yes, that 1,700-line state machine can absolutely become 12 clean, testable actors. Let's build
+              something that makes sense."</em>
           </p>
         </div>
         <div class="footer-links">
@@ -387,7 +525,7 @@
       "@type": "Person",
       "name": "José Flores",
       "url": "https://0xjcf.github.io/port8080folio/",
-      "image": "https://0xjcf.github.io/port8080folio/me.jpeg",
+      "image": "https://0xjcf.github.io/port8080folio/public/images/me.jpeg",
       "jobTitle": "Frontend Architect & XState Specialist",
       "description": "Frontend architect helping companies build maintainable applications with complex state management. Specializing in XState, React optimization, and education platforms.",
       "address": {

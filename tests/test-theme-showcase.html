@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { 
+      background: #0d1117; 
+      color: white; 
+      padding: 2rem; 
+      font-family: system-ui;
+    }
+    
+    .theme-switcher {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .theme-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid #30363d;
+      background: rgba(13, 153, 255, 0.1);
+      color: #0D99FF;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.875rem;
+    }
+    
+    .theme-btn:hover {
+      background: rgba(13, 153, 255, 0.2);
+      border-color: #0D99FF;
+      transform: translateY(-1px);
+    }
+    
+    .theme-btn.active {
+      background: #0D99FF;
+      color: white;
+      border-color: #0D99FF;
+    }
+    
+    h1 {
+      color: #0D99FF;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .badge {
+      background: linear-gradient(135deg, #0D99FF, #47B4FF);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .theme-container {
+      transition: all 0.3s ease;
+    }
+    
+    /* Port 8080 Brand Theme - matches your website */
+    .port8080-theme syntax-highlighter {
+      --xstate-keyword: #FCD34D;       /* Amber */
+      --context-property: #F472B6;     /* Pink */
+      --event-property: #60A5FA;       /* Blue */
+      --state-name: #C084FC;           /* Purple */
+      --event-name: #34D399;           /* Green */
+      --service-name: #14B8A6;         /* Teal */
+      
+      --keyword: #0D99FF;              /* Jasper blue */
+      --string: #34D399;               /* Green */
+      --number: #FCD34D;               /* Amber */
+      --comment: #6B7280;              /* Gray */
+      --function: #C084FC;             /* Purple */
+      --operator: #9CA3AF;             /* Light gray */
+      --punctuation: #9CA3AF;          /* Light gray */
+      --variable: #60A5FA;             /* Sky blue */
+      --property: #47B4FF;             /* Light jasper */
+      --boolean: #FCD34D;              /* Amber */
+      --null: #C084FC;                 /* Purple */
+      --default: #F5F5F5;              /* Tea green */
+    }
+    
+    /* GitHub Dark Theme */
+    .github-dark-theme syntax-highlighter {
+      --xstate-keyword: #F0DB4F;       /* Yellow */
+      --context-property: #E06C75;     /* Pink */
+      --event-property: #79B8FF;       /* Blue */
+      --state-name: #B392F0;           /* Purple */
+      --event-name: #5ED3F3;           /* Cyan */
+      --service-name: #14B8A6;         /* Teal */
+      
+      --keyword: #FF8579;              /* Red */
+      --string: #9ECB88;               /* Green */
+      --number: #79B8FF;               /* Blue */
+      --comment: #6A737D;              /* Gray */
+      --function: #F97583;             /* Pink */
+      --operator: #8B949E;             /* Gray */
+      --punctuation: #8B949E;          /* Gray */
+      --variable: #B392F0;             /* Purple */
+      --property: #79B8FF;             /* Blue */
+      --boolean: #79B8FF;              /* Blue */
+      --null: #B392F0;                 /* Purple */
+      --default: #E1E4E8;              /* White */
+    }
+    
+    /* Night Owl Theme */
+    .night-owl-theme syntax-highlighter {
+      --xstate-keyword: #FFEB95;       /* Pale yellow */
+      --context-property: #FF6B9D;     /* Hot pink */
+      --event-property: #82AAFF;       /* Periwinkle */
+      --state-name: #C792EA;           /* Lavender */
+      --event-name: #7FDBCA;           /* Aqua */
+      --service-name: #ADDB67;         /* Light green */
+      
+      --keyword: #C792EA;              /* Lavender */
+      --string: #ECC48D;               /* Peach */
+      --number: #F78C6C;               /* Orange */
+      --comment: #637777;              /* Dark gray */
+      --function: #82AAFF;             /* Periwinkle */
+      --operator: #C792EA;             /* Lavender */
+      --punctuation: #D6DEEB;          /* Light gray */
+      --variable: #ADDB67;             /* Light green */
+      --property: #7FDBCA;             /* Aqua */
+      --boolean: #FF6B9D;              /* Hot pink */
+      --null: #C792EA;                 /* Lavender */
+      --default: #D6DEEB;              /* Off white */
+    }
+    
+    /* Monokai Pro Theme */
+    .monokai-theme syntax-highlighter {
+      --xstate-keyword: #FFD866;       /* Yellow */
+      --context-property: #FF6188;     /* Red */
+      --event-property: #78DCE8;       /* Cyan */
+      --state-name: #AB9DF2;           /* Purple */
+      --event-name: #A9DC76;           /* Green */
+      --service-name: #FC9867;         /* Orange */
+      
+      --keyword: #FF6188;              /* Red */
+      --string: #FFD866;               /* Yellow */
+      --number: #AB9DF2;               /* Purple */
+      --comment: #727072;              /* Gray */
+      --function: #A9DC76;             /* Green */
+      --operator: #FF6188;             /* Red */
+      --punctuation: #FCFCFA;          /* White */
+      --variable: #FCFCFA;             /* White */
+      --property: #78DCE8;             /* Cyan */
+      --boolean: #AB9DF2;              /* Purple */
+      --null: #AB9DF2;                 /* Purple */
+      --default: #FCFCFA;              /* White */
+    }
+    
+    /* Tokyo Night Theme */
+    .tokyo-night-theme syntax-highlighter {
+      --xstate-keyword: #E0AF68;       /* Yellow */
+      --context-property: #F7768E;     /* Red */
+      --event-property: #7DCFFF;       /* Cyan */
+      --state-name: #BB9AF7;           /* Purple */
+      --event-name: #9ECE6A;           /* Green */
+      --service-name: #73DACA;         /* Teal */
+      
+      --keyword: #BB9AF7;              /* Purple */
+      --string: #9ECE6A;               /* Green */
+      --number: #FF9E64;               /* Orange */
+      --comment: #565F89;              /* Comment */
+      --function: #7AA2F7;             /* Blue */
+      --operator: #89DDFF;             /* Light blue */
+      --punctuation: #A9B1D6;          /* Foreground */
+      --variable: #C0CAF5;             /* Variable */
+      --property: #7DCFFF;             /* Cyan */
+      --boolean: #FF9E64;              /* Orange */
+      --null: #BB9AF7;                 /* Purple */
+      --default: #A9B1D6;              /* Foreground */
+    }
+    
+    /* Ayu Dark Theme */
+    .ayu-dark-theme syntax-highlighter {
+      --xstate-keyword: #E6B450;       /* Yellow */
+      --context-property: #F07178;     /* Red */
+      --event-property: #39BAE6;       /* Blue */
+      --state-name: #D2A6FF;           /* Purple */
+      --event-name: #AAD94C;           /* Green */
+      --service-name: #95E6CB;         /* Teal */
+      
+      --keyword: #FF8F40;              /* Orange */
+      --string: #AAD94C;               /* Green */
+      --number: #E6B450;               /* Yellow */
+      --comment: #626A73;              /* Gray */
+      --function: #FFB454;             /* Orange */
+      --operator: #F29668;             /* Light orange */
+      --punctuation: #B3B1AD;          /* Light gray */
+      --variable: #CBCCC6;             /* Variable */
+      --property: #39BAE6;             /* Blue */
+      --boolean: #E6B450;              /* Yellow */
+      --null: #D2A6FF;                 /* Purple */
+      --default: #B3B1AD;              /* Default */
+    }
+    
+    /* Nord Theme */
+    .nord-theme syntax-highlighter {
+      --xstate-keyword: #EBCB8B;       /* Yellow */
+      --context-property: #BF616A;     /* Red */
+      --event-property: #88C0D0;       /* Cyan */
+      --state-name: #B48EAD;           /* Purple */
+      --event-name: #A3BE8C;           /* Green */
+      --service-name: #5E81AC;         /* Blue */
+      
+      --keyword: #81A1C1;              /* Blue */
+      --string: #A3BE8C;               /* Green */
+      --number: #B48EAD;               /* Purple */
+      --comment: #616E88;              /* Gray */
+      --function: #88C0D0;             /* Cyan */
+      --operator: #D8DEE9;             /* Light */
+      --punctuation: #ECEFF4;          /* White */
+      --variable: #D8DEE9;             /* Light */
+      --property: #8FBCBB;             /* Teal */
+      --boolean: #D08770;              /* Orange */
+      --null: #B48EAD;                 /* Purple */
+      --default: #ECEFF4;              /* White */
+    }
+    
+    /* Minimal Light Theme (for contrast) */
+    .minimal-light-theme syntax-highlighter {
+      --xstate-keyword: #D97706;       /* Amber */
+      --context-property: #DC2626;     /* Red */
+      --event-property: #2563EB;       /* Blue */
+      --state-name: #7C3AED;           /* Purple */
+      --event-name: #059669;           /* Green */
+      --service-name: #0891B2;         /* Teal */
+      
+      --keyword: #1F2937;              /* Dark gray */
+      --string: #059669;               /* Green */
+      --number: #DC2626;               /* Red */
+      --comment: #9CA3AF;              /* Gray */
+      --function: #2563EB;             /* Blue */
+      --operator: #6B7280;             /* Gray */
+      --punctuation: #6B7280;          /* Gray */
+      --variable: #111827;             /* Almost black */
+      --property: #2563EB;             /* Blue */
+      --boolean: #DC2626;              /* Red */
+      --null: #7C3AED;                 /* Purple */
+      --default: #111827;              /* Almost black */
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    Syntax Highlighter Theme Showcase
+    <span class="badge">8 Themes</span>
+  </h1>
+
+  <div class="theme-switcher">
+    <button class="theme-btn active" data-theme="port8080-theme">Port 8080</button>
+    <button class="theme-btn" data-theme="github-dark-theme">GitHub Dark</button>
+    <button class="theme-btn" data-theme="night-owl-theme">Night Owl</button>
+    <button class="theme-btn" data-theme="monokai-theme">Monokai Pro</button>
+    <button class="theme-btn" data-theme="tokyo-night-theme">Tokyo Night</button>
+    <button class="theme-btn" data-theme="ayu-dark-theme">Ayu Dark</button>
+    <button class="theme-btn" data-theme="nord-theme">Nord</button>
+    <button class="theme-btn" data-theme="minimal-light-theme">Minimal Light</button>
+  </div>
+
+  <div class="theme-container port8080-theme">
+    <syntax-highlighter language="javascript">
+import { setup, assign, enqueueActions, sendTo } from 'xstate';
+
+const coffeeShopMachine = setup({
+  types: {} as {
+    context: {
+      orders: Order[];
+      inventory: Record<string, number>;
+      revenue: number;
+      customerQueue: Customer[];
+    };
+    events:
+      | { type: 'PLACE_ORDER'; items: string[]; customerId: string }
+      | { type: 'CANCEL_ORDER'; orderId: string }
+      | { type: 'PAYMENT_RECEIVED'; amount: number; orderId: string }
+      | { type: 'RESTOCK_INVENTORY'; items: Record<string, number> };
+  },
+  actors: {
+    paymentService: fromPromise(async ({ input }) => {
+      // Process payment through external service
+      return await processPayment(input);
+    }),
+    notificationService: fromCallback(({ sendBack, receive }) => {
+      // Set up real-time notifications
+      const ws = new WebSocket('ws://localhost:8080');
+      ws.onmessage = (event) => sendBack({ type: 'NOTIFICATION', data: event.data });
+      return () => ws.close();
+    })
+  },
+  guards: {
+    hasInventory: ({ context, event }) => {
+      return event.items.every(item => 
+        context.inventory[item] && context.inventory[item] > 0
+      );
+    },
+    isValidPayment: ({ event }) => event.amount > 0,
+    isBusinessHours: () => {
+      const hour = new Date().getHours();
+      return hour >= 6 && hour < 22;
+    }
+  },
+  actions: {
+    processOrder: assign({
+      orders: ({ context, event }) => [
+        ...context.orders,
+        { 
+          id: Date.now().toString(), 
+          items: event.items, 
+          customerId: event.customerId,
+          status: 'pending',
+          timestamp: new Date()
+        }
+      ],
+      inventory: ({ context, event }) => {
+        const updated = { ...context.inventory };
+        event.items.forEach(item => {
+          updated[item] = Math.max(0, updated[item] - 1);
+        });
+        return updated;
+      }
+    }),
+    updateRevenue: assign({
+      revenue: ({ context, event }) => context.revenue + event.amount
+    }),
+    notifyBarista: sendTo('baristaActor', ({ event }) => ({
+      type: 'NEW_ORDER',
+      order: event
+    })),
+    logActivity: enqueueActions(({ enqueue, event, context }) => {
+      enqueue('saveToDatabase');
+      enqueue('updateAnalytics');
+      enqueue('notifyAdmins');
+      
+      if (context.revenue > 1000) {
+        enqueue('celebrateSuccess');
+      }
+    })
+  }
+}).createMachine({
+  id: 'coffeeShop',
+  initial: 'closed',
+  context: {
+    orders: [],
+    inventory: {
+      coffee: 100,
+      milk: 50,
+      sugar: 200,
+      cups: 150
+    },
+    revenue: 0,
+    customerQueue: []
+  },
+  states: {
+    closed: {
+      on: {
+        OPEN_SHOP: {
+          target: 'opening',
+          guard: 'isBusinessHours'
+        }
+      }
+    },
+    opening: {
+      invoke: {
+        src: 'preparationService',
+        onDone: {
+          target: 'open',
+          actions: send('PREPARATION_COMPLETE')
+        },
+        onError: 'maintenanceRequired'
+      }
+    },
+    open: {
+      on: {
+        PLACE_ORDER: {
+          guard: 'hasInventory',
+          actions: ['processOrder', 'notifyBarista'],
+          target: 'processingOrder'
+        },
+        RESTOCK_INVENTORY: {
+          actions: assign({
+            inventory: ({ context, event }) => ({
+              ...context.inventory,
+              ...event.items
+            })
+          })
+        },
+        CLOSE_SHOP: 'closing'
+      }
+    },
+    processingOrder: {
+      invoke: {
+        src: 'paymentService',
+        onDone: {
+          actions: ['updateRevenue', 'logActivity'],
+          target: 'open'
+        },
+        onError: {
+          target: 'paymentFailed',
+          actions: log(({ event }) => `Payment failed: ${event.error}`)
+        }
+      }
+    },
+    paymentFailed: {
+      on: {
+        RETRY_PAYMENT: 'processingOrder',
+        CANCEL_ORDER: {
+          actions: 'restoreInventory',
+          target: 'open'
+        }
+      },
+      after: {
+        30000: 'open' // Timeout after 30 seconds
+      }
+    },
+    closing: {
+      entry: 'finalizeDaily Reports',
+      type: 'final'
+    },
+    maintenanceRequired: {
+      on: {
+        MAINTENANCE_COMPLETE: 'opening'
+      }
+    }
+  }
+});
+
+// Usage
+const coffeeShopActor = createActor(coffeeShopMachine);
+
+coffeeShopActor.subscribe((state) => {
+  console.log(`State: ${state.value}`);
+  console.log(`Revenue: $${state.context.revenue}`);
+  console.log(`Orders in queue: ${state.context.orders.length}`);
+});
+
+coffeeShopActor.start();
+coffeeShopActor.send({ type: 'OPEN_SHOP' });
+    </syntax-highlighter>
+  </div>
+
+  <script type="module">
+    import './components/syntax-highlighter-v2.js';
+    
+    // Theme switcher functionality
+    const container = document.querySelector('.theme-container');
+    const buttons = document.querySelectorAll('.theme-btn');
+    
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active class from all buttons
+        buttons.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        btn.classList.add('active');
+        
+        // Remove all theme classes
+        container.className = 'theme-container';
+        // Add selected theme class
+        container.classList.add(btn.dataset.theme);
+      });
+    });
+  </script>
+</body>
+</html>
