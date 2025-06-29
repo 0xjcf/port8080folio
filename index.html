@@ -47,8 +47,6 @@
 
   <!-- Performance Optimizations - Preload critical resources -->
   <link rel="preload" href="./src/styles/main.css" as="style" />
-  <link rel="preload" href="./public/images/me.jpeg" as="image" type="image/jpeg" />
-  <link rel="preload" href="./src/components/sections/hero-section-enhanced.js" as="script" />
 
   <link
     href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&family=Lora:ital@1&family=Oswald:wght@700&display=swap"
@@ -61,13 +59,13 @@
   <script type="module">
     // Sections
     import './src/components/sections/hero-section-enhanced.js';
-    import './src/components/sections/projects-section.js';
 
     // UI Components
     import './src/components/ui/project-card.js';
     import './src/components/ui/loading-state.js';
     import './src/components/ui/privacy-notice.js';
     import './src/components/ui/brand-icon.js';
+    import './src/components/ui/navbar.js';
     import './src/components/ui/syntax-highlighter-with-themes.js';
     import './src/components/ui/breadcrumbs.js';
     import './src/components/ui/search-component.js';
@@ -100,6 +98,7 @@
 
   <!-- Additional SEO Meta Tags -->
   <meta name="theme-color" content="#0D99FF">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="format-detection" content="telephone=no">
@@ -239,58 +238,7 @@
   <privacy-notice></privacy-notice>
 
   <div class="grid-container">
-    <nav aria-labelledby="site-navigation">
-      <!-- Visually hidden heading to label the navigation -->
-      <h2 id="site-navigation" class="hidden-h1">Site Navigation</h2>
-
-      <a href="/" class="brand-link">
-        <span class="brand-icon">
-          <brand-icon size="48" animate="true" icon-type="state-machine"></brand-icon>
-          <h1 class="hidden-h1">Jose Flores</h1>
-        </span>
-      </a>
-
-      <ul class="navlist">
-        <li class="nav-item">
-          <a href="/" class="active">Home</a>
-        </li>
-        <li class="nav-item">
-          <a href="/about/">About</a>
-        </li>
-        <li class="nav-item">
-          <a href="/blog/">Blog</a>
-        </li>
-        <li class="nav-item">
-          <a href="/resources/">Resources</a>
-        </li>
-        <li class="nav-item nav-search">
-          <search-component></search-component>
-        </li>
-        <li class="nav-item">
-          <a href="https://github.com/0xjcf" target="_blank" rel="noopener">Github</a>
-        </li>
-        <li class="nav-item">
-          <a href="https://www.linkedin.com/in/joseflores-io/" target="_blank" rel="noopener">LinkedIn</a>
-        </li>
-        <li class="nav-item">
-          <a href="https://0xjcf.github.io/resume/" target="_blank" rel="noopener">Resume</a>
-        </li>
-      </ul>
-      <button class="menu" id="menu-open-button" aria-label="Open menu" role="button">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="currentColor"
-          aria-label="Menu icon">
-          <rect y="4" width="24" height="2" class="line" />
-          <rect y="11" width="24" height="2" class="line" />
-          <rect y="18" width="24" height="2" class="line" />
-        </svg>
-      </button>
-      <button class="close" id="menu-close-button" aria-label="Close menu" role="button">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" aria-label="Close menu icon">
-          <line x1="3" y1="3" x2="21" y2="21" class="line" />
-          <line x1="3" y1="21" x2="21" y2="3" class="line" />
-        </svg>
-      </button>
-    </nav>
+    <nav-bar current-page="home" base-path="/"></nav-bar>
 
     <!-- LEVEL 1: UNAWARE - Hero Section with outcome-focused hook -->
     <hero-section-enhanced profile-image="./public/images/me.jpeg"></hero-section-enhanced>
@@ -323,17 +271,12 @@
       <div class="learning-bridge">
         <p class="bridge-text">
           Want to dive deeper into state machines and frontend architecture?
-          <a href="/resources/" class="bridge-link">Explore our comprehensive resources →</a>
+          <a href="resources/" class="bridge-link">Explore our comprehensive resources →</a>
         </p>
       </div>
     </section>
 
     <hr class="gradient-line" id="hr2" />
-
-    <!-- Projects Section - For PROBLEM AWARE visitors -->
-    <section id="projects">
-      <projects-section></projects-section>
-    </section>
 
     <!-- Related Content Suggestions -->
     <related-content></related-content>
@@ -376,12 +319,6 @@
       <p>
         Drop me a line at <a href="mailto:bluejf.llc@gmail.com">bluejf.llc@gmail.com</a> or connect on
         <a href="https://www.linkedin.com/in/joseflores-io/" target="_blank" rel="noopener">LinkedIn</a>.
-      </p>
-
-      <p class="ps-note">
-        P.S. Still into trading? Check out my
-        <a href="https://whop.com/pivot-scout/" target="_blank" rel="noopener noreferrer">Pivot Scout</a>
-        community where I help traders with Pine Script and technical analysis →
       </p>
     </section>
 

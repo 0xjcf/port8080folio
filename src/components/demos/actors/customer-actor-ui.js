@@ -1,4 +1,5 @@
 import { ActorComponent } from '../actor-component.js';
+import '../../ui/loading-indicator.js';
 
 export class CustomerActorUI extends ActorComponent {
 
@@ -6,48 +7,12 @@ export class CustomerActorUI extends ActorComponent {
     if (!this.snapshot) {
       this.shadowRoot.innerHTML = `
         <link rel="stylesheet" href="/src/components/demos/actors/actor-ui.css">
-        <style>
-          .actor-box {
-            background: rgba(15, 17, 21, 0.9);
-            border: 2px solid rgba(13, 153, 255, 0.2);
-            border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
-            min-height: 280px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            box-sizing: border-box;
-          }
-          .actor-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-          }
-          .actor-name {
-            font-size: 1.2rem;
-            color: #0D99FF;
-            margin-bottom: 10px;
-          }
-          .actor-state {
-            font-size: 1rem;
-            color: #47B4FF;
-            margin-bottom: 15px;
-            font-style: italic;
-          }
-          .actor-story {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.5;
-            text-align: center;
-            font-style: italic;
-          }
-        </style>
+        
         <div class="actor-box">
           <div class="actor-icon">🚶</div>
           <div class="actor-name">Customer</div>
-          <div class="actor-state">Ready to browse</div>
-          <div class="actor-story">A coffee enthusiast walks in, drawn by the aroma of freshly ground beans...</div>
+          <div class="actor-state">Entering coffee shop</div>
+          <div class="actor-story">Walking in, attracted by the rich aroma of freshly brewed coffee...</div>
         </div>
       `;
       return;
@@ -55,52 +20,70 @@ export class CustomerActorUI extends ActorComponent {
 
     const state = this.snapshot.value;
     const context = this.snapshot.context;
-    
+
     const stateMapping = {
-      'browsing': { 
-        text: 'browsing menu', 
-        icon: '🚶', 
-        active: false,
-        story: context.hasCompletedOrder 
-          ? 'That was perfect! Already thinking about the next cup...' 
-          : 'A coffee enthusiast walks in, drawn by the aroma of freshly ground beans...'
-      },
-      'ordering': { 
-        text: 'placing order', 
-        icon: '🗣️', 
+      'browsing': {
+        text: 'browsing menu',
+        icon: '📋',
         active: true,
-        story: 'Actors communicate through messages - just like ordering coffee!'
+        story: context.hasCompletedOrder
+          ? 'Perfect coffee! Looking at the menu again...'
+          : 'Reading the menu, deciding what sounds good today...',
+        education: context.hasCompletedOrder
+          ? 'Actors retain state between interactions, enabling personalized experiences'
+          : 'Each actor instance has isolated state - no global variables or shared memory'
       },
-      'paying': { 
-        text: 'making payment', 
-        icon: '💳', 
+      'ordering': {
+        text: 'speaking to cashier →',
+        icon: '🗣️',
         active: true,
-        story: 'Each actor processes messages in order - no race conditions!'
+        story: '"I\'d like a cappuccino please!"',
+        education: 'Actors send messages to orchestrator, which routes them - no direct coupling'
       },
-      'waiting': { 
-        text: 'waiting patiently', 
-        icon: '🧍', 
+      'paying': {
+        text: 'handing payment →',
+        icon: '💳',
         active: true,
-        story: 'In the actor model, each actor maintains its own state independently'
+        loading: true, // This state has a 5s delay
+        story: '*Hands over $5*',
+        education: 'Asynchronous messaging means actors can work independently at their own pace'
       },
-      'enjoying': { 
-        text: 'savoring coffee', 
-        icon: '😌', 
+      'waiting': {
+        text: 'waiting for coffee',
+        icon: '⏰',
         active: true,
-        story: 'Mission complete! Actors process one message at a time, ensuring order'
+        story: 'Patiently waiting while barista works...',
+        education: 'Actors use event-driven architecture - they sleep until a message arrives'
+      },
+      'enjoying': {
+        text: 'enjoying coffee',
+        icon: '☕',
+        active: true,
+        loading: true, // This state has a 5s delay before returning to browsing
+        story: 'Savoring the perfect cappuccino',
+        education: 'Actor mailboxes queue messages, ensuring reliable delivery and processing'
       }
     };
 
     const stateInfo = stateMapping[state] || { text: state, icon: '🚶', active: false };
 
+    // Handle loading state
+    const isLoading = stateInfo.loading || false;
+
     this.shadowRoot.innerHTML = `
       <link rel="stylesheet" href="/src/components/demos/actors/actor-ui.css">
       
-      <div class="actor-box" data-state="${state}" data-active="${stateInfo.active}">
-        <div class="actor-icon">${stateInfo.icon}</div>
+      <div class="actor-box actor-card ${isLoading ? 'is-loading' : ''}" data-state="${state}" data-active="${stateInfo.active}">
+        <div class="actor-icon state-icon">${stateInfo.icon}</div>
         <div class="actor-name">Customer</div>
-        <div class="actor-state">${stateInfo.text}</div>
-        <div class="actor-story">${stateInfo.story || ''}</div>
+        <div class="actor-state state-text">${stateInfo.text}</div>
+        <div class="actor-story story-text">${stateInfo.story || ''}</div>
+        <div class="actor-education">${stateInfo.education || ''}</div>
+        
+        ${isLoading ? `
+          <loading-indicator>
+          </loading-indicator>
+        ` : ''}
       </div>
     `;
   }

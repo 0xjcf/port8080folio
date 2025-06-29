@@ -1,52 +1,18 @@
 import { ActorComponent } from '../actor-component.js';
+import '../../ui/loading-indicator.js';
 
 export class BaristaActorUI extends ActorComponent {
 
   render() {
     if (!this.snapshot) {
       this.shadowRoot.innerHTML = `
-        <style>
-          .actor-box {
-            background: rgba(15, 17, 21, 0.9);
-            border: 2px solid rgba(13, 153, 255, 0.2);
-            border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
-            min-height: 280px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            box-sizing: border-box;
-          }
-          .actor-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-          }
-          .actor-name {
-            font-size: 1.2rem;
-            color: #0D99FF;
-            margin-bottom: 10px;
-          }
-          .actor-state {
-            font-size: 1rem;
-            color: #47B4FF;
-            margin-bottom: 15px;
-            font-style: italic;
-          }
-          .actor-story {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.5;
-            text-align: center;
-            font-style: italic;
-          }
-        </style>
+        <link rel="stylesheet" href="/src/components/demos/actors/actor-ui.css">
+        
         <div class="actor-box">
           <div class="actor-icon">🧽</div>
           <div class="actor-name">Barista</div>
           <div class="actor-state">Station ready</div>
-          <div class="actor-story">A coffee artisan who treats every cup as a masterpiece, waiting for the next creation...</div>
+          <div class="actor-story">Expert barista maintaining the coffee station, ready to craft the perfect cup...</div>
         </div>
       `;
       return;
@@ -54,40 +20,80 @@ export class BaristaActorUI extends ActorComponent {
 
     const state = this.snapshot.value;
     const context = this.snapshot.context;
-    
+
     const stateMapping = {
-      'idle': { 
-        text: 'cleaning station', 
-        icon: '🧽', 
-        active: false,
+      'idle': {
+        text: 'maintaining station',
+        icon: '🧽',
+        active: true,
         story: context.hasCraftedCoffee
-          ? 'Another masterpiece delivered! The aroma of success fills the air...'
-          : 'A coffee artisan who treats every cup as a masterpiece, waiting for the next creation...'
+          ? 'Station cleaned and ready for next order!'
+          : 'Cleaning equipment, organizing workspace...',
+        education: context.hasCraftedCoffee
+          ? 'Actors automatically cleanup and reset - self-managing systems'
+          : 'Idle actors can do housekeeping without blocking message processing'
       },
-      'makingCoffee': { 
-        text: 'brewing coffee', 
-        icon: '☕', 
+      'receivingOrder': {
+        text: '← receiving order',
+        icon: '📋',
         active: true,
-        story: 'Each actor is lightweight - you can have millions of them!'
+        loading: true,
+        story: '"Got it! One cappuccino coming up!"',
+        education: 'Mailbox pattern: messages queue up if actor is busy'
       },
-      'done': { 
-        text: 'coffee ready!', 
-        icon: '✨', 
+      'grindingBeans': {
+        text: 'grinding fresh beans',
+        icon: '🌱',
         active: true,
-        story: 'Actor systems scale horizontally - just add more actors!'
+        loading: true,
+        story: '*Grinding premium coffee beans*',
+        education: 'Actors excel at specialized tasks - domain-driven design in action'
+      },
+      'brewing': {
+        text: 'pulling espresso shot',
+        icon: '🔥',
+        active: true,
+        loading: true,
+        story: '*Pulling the perfect espresso shot*',
+        education: 'Async message processing: actors work independently without blocking each other'
+      },
+      'finishingCoffee': {
+        text: 'steaming milk & finishing',
+        icon: '✨',
+        active: true,
+        loading: true,
+        story: '*Steaming milk, creating perfect foam*',
+        education: 'Complex workflows stay simple: each actor focuses on its role'
+      },
+      'coffeeReady': {
+        text: '← coffee ready',
+        icon: '☕',
+        active: true,
+        loading: true,
+        story: '"Cappuccino ready at the bar!"',
+        education: 'Central orchestrator routes messages between actors - clean separation of concerns'
       }
     };
 
     const stateInfo = stateMapping[state] || { text: state, icon: '🧽', active: false };
 
+    // Handle loading state
+    const isLoading = stateInfo.loading || false;
+
     this.shadowRoot.innerHTML = `
       <link rel="stylesheet" href="/src/components/demos/actors/actor-ui.css">
       
-      <div class="actor-box" data-state="${state}" data-active="${stateInfo.active}">
-        <div class="actor-icon">${stateInfo.icon}</div>
+      <div class="actor-box actor-card ${isLoading ? 'is-loading' : ''}" data-state="${state}" data-active="${stateInfo.active}">
+        <div class="actor-icon state-icon">${stateInfo.icon}</div>
         <div class="actor-name">Barista</div>
-        <div class="actor-state">${stateInfo.text}</div>
-        <div class="actor-story">${stateInfo.story || ''}</div>
+        <div class="actor-state state-text">${stateInfo.text}</div>
+        <div class="actor-story story-text">${stateInfo.story || ''}</div>
+        <div class="actor-education">${stateInfo.education || ''}</div>
+        
+        ${isLoading ? `
+          <loading-indicator>
+          </loading-indicator>
+        ` : ''}
       </div>
     `;
   }

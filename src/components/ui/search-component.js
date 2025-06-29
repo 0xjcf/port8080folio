@@ -245,10 +245,10 @@ class SearchComponent extends HTMLElement {
         }
         
         .search-toggle {
-          background: transparent;
+          background: rgba(15, 17, 21, 0.5);
           border: 1px solid rgba(13, 153, 255, 0.3);
           border-radius: 8px;
-          padding: 0.5rem;
+          padding: 0.5rem 0.75rem;
           color: var(--teagreen);
           cursor: pointer;
           transition: all 0.3s ease;
@@ -256,12 +256,17 @@ class SearchComponent extends HTMLElement {
           align-items: center;
           gap: 0.5rem;
           font-size: 0.9rem;
+          min-width: 120px;
+          justify-content: space-between;
+          backdrop-filter: blur(4px);
         }
         
         .search-toggle:hover {
           border-color: var(--jasper);
           color: var(--jasper);
+          background: rgba(13, 153, 255, 0.05);
           transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(13, 153, 255, 0.2);
         }
         
         .search-icon {
@@ -294,8 +299,8 @@ class SearchComponent extends HTMLElement {
         }
         
         .search-modal {
-          background: rgba(15, 17, 21, 0.95);
-          border: 1px solid rgba(13, 153, 255, 0.2);
+          background: rgba(15, 17, 21, 0.98);
+          border: 1px solid rgba(13, 153, 255, 0.3);
           border-radius: 16px;
           width: 100%;
           max-width: 600px;
@@ -303,6 +308,8 @@ class SearchComponent extends HTMLElement {
           overflow: hidden;
           transform: translateY(-50px);
           transition: transform 0.3s ease;
+          backdrop-filter: blur(20px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
         
         .search-active .search-modal {
@@ -324,11 +331,12 @@ class SearchComponent extends HTMLElement {
           color: var(--heading-color);
           font-size: 1.2rem;
           outline: none;
+          width: 100%;
         }
         
         .search-input::placeholder {
-          color: var(--teagreen);
-          opacity: 0.6;
+          color: rgba(245, 245, 245, 0.6);
+          opacity: 1;
         }
         
         .search-close {
@@ -427,6 +435,12 @@ class SearchComponent extends HTMLElement {
             padding: 1rem;
           }
           
+          .search-toggle {
+            min-width: 44px;
+            padding: 0.5rem;
+            justify-content: center;
+          }
+          
           .search-toggle span {
             display: none;
           }
@@ -459,7 +473,7 @@ class SearchComponent extends HTMLElement {
             <input 
               class="search-input" 
               type="text" 
-              placeholder="Search articles, resources, services..."
+              placeholder="Search content..."
               autocomplete="off"
             />
             <button class="search-close" aria-label="Close search">

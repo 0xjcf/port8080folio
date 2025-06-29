@@ -1,3 +1,5 @@
+// Navbar component is imported in the module script block in HTML
+
 // Utility functions
 function debounce(func, wait) {
   let timeout;
@@ -111,9 +113,6 @@ window.addEventListener('scroll', debounce(() => {
 }, 200));
 
 // DOM Elements
-const menu = document.querySelector(".menu");
-const close = document.querySelector(".close");
-const navlist = document.querySelector(".navlist");
 const body = document.querySelector("body");
 const cta = document.querySelector(".cta");
 const name = document.querySelector(".name");
@@ -149,24 +148,8 @@ if (form) {
   });
 }
 
-// Mobile menu handling with tracking
-menu.addEventListener("click", () => {
-  navlist.classList.add("navlist--visible");
-  menu.classList.add("menu--hide");
-  close.classList.add("close--visible");
-  body.classList.add("body--no-scroll");
-  body.style.paddingRight = `${scrollBarWidth}px`;
-  trackEvent('navigation', 'menu_open', 'Mobile Menu');
-});
-
-close.addEventListener("click", () => {
-  navlist.classList.remove("navlist--visible");
-  menu.classList.remove("menu--hide");
-  close.classList.remove("close--visible");
-  body.classList.remove("body--no-scroll");
-  body.style.paddingRight = "0px";
-  trackEvent('navigation', 'menu_close', 'Mobile Menu');
-});
+// Mobile menu handling is now managed by the navbar component
+// External link tracking for navbar component links is handled within the component
 
 // Enhanced Intersection Observer for CTA animation
 const observer = new IntersectionObserver(

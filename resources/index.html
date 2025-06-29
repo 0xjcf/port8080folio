@@ -18,6 +18,7 @@
     <!-- Web Components -->
     <script type="module">
         import '../src/components/ui/brand-icon.js';
+        import '../src/components/ui/navbar.js';
         import '../src/components/ui/privacy-notice.js';
         import '../src/components/ui/breadcrumbs.js';
         import '../src/components/ui/search-component.js';
@@ -122,56 +123,7 @@
     <privacy-notice></privacy-notice>
 
     <div class="grid-container subpage">
-        <nav aria-labelledby="site-navigation">
-            <h2 id="site-navigation" class="hidden-h1">Site Navigation</h2>
-
-            <a href="../" class="brand-link">
-                <span class="brand-icon">
-                    <brand-icon size="48" animate="true" icon-type="state-machine"></brand-icon>
-                    <h1 class="hidden-h1">Jose Flores</h1>
-                </span>
-            </a>
-
-            <ul class="navlist">
-                <li class="nav-item">
-                    <a href="../">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="../about/">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="../blog/">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="../resources/" class="active">Resources</a>
-                </li>
-                <li class="nav-item nav-search">
-                    <search-component></search-component>
-                </li>
-                <li class="nav-item">
-                    <a href="https://github.com/0xjcf" target="_blank" rel="noopener">Github</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://www.linkedin.com/in/joseflores-io/" target="_blank" rel="noopener">LinkedIn</a>
-                </li>
-            </ul>
-
-            <button class="menu" id="menu-open-button" aria-label="Open menu" role="button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="currentColor"
-                    aria-label="Menu icon">
-                    <rect y="4" width="24" height="2" class="line" />
-                    <rect y="11" width="24" height="2" class="line" />
-                    <rect y="18" width="24" height="2" class="line" />
-                </svg>
-            </button>
-            <button class="close" id="menu-close-button" aria-label="Close menu" role="button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40"
-                    aria-label="Close menu icon">
-                    <line x1="3" y1="3" x2="21" y2="21" class="line" />
-                    <line x1="3" y1="21" x2="21" y2="3" class="line" />
-                </svg>
-            </button>
-        </nav>
+        <nav-bar current-page="resources" base-path="../"></nav-bar>
 
         <hr class="gradient-line" id="hr1" />
 

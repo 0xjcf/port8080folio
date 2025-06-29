@@ -24,14 +24,19 @@ class CoffeeShopAppClean extends HTMLElement {
 
   initializeOrchestrator() {
     this.orchestrator = createActor(coffeeShopOrchestratorMachine);
-    
+    this.actorsInitialized = false;
+
     this.orchestrator.subscribe((snapshot) => {
       this.updateStats(snapshot.context);
-      // Delay actor reference updates to ensure DOM is ready
-      requestAnimationFrame(() => {
-        this.updateActorReferences(snapshot.context);
-        this.subscribeToMessageLog(snapshot.context);
-      });
+      
+      // Only update actor references once when they're first created
+      if (!this.actorsInitialized && snapshot.context.customerActor) {
+        requestAnimationFrame(() => {
+          this.updateActorReferences(snapshot.context);
+          this.subscribeToMessageLog(snapshot.context);
+          this.actorsInitialized = true;
+        });
+      }
     });
 
     this.orchestrator.start();
@@ -78,10 +83,9 @@ class CoffeeShopAppClean extends HTMLElement {
     const messagesEl = this.shadowRoot.getElementById('messages');
     if (messagesEl) {
       messagesEl.innerHTML = messages
-        .map(({ timestamp, from, to, message }) => `
+        .map(({ timestamp, message, type }) => `
           <div class="message">
-            <span class="message-time" style="color: #666; font-size: 0.85rem;">${new Date(timestamp).toLocaleTimeString()}</span>
-            <span class="message-flow">${from} → ${to}:</span>
+            <span class="message-time" style="color: #666; font-size: 0.85rem;">${timestamp}</span>
             <span class="message-text">${message}</span>
           </div>
         `)
@@ -91,19 +95,29 @@ class CoffeeShopAppClean extends HTMLElement {
   }
 
   handleOrder() {
-    // Send to orchestrator to coordinate all actors
-    this.orchestrator.send({ 
-      type: 'CUSTOMER_ORDERS',
-      item: 'coffee'
-    });
+    // Send ORDER event to customer actor to start the flow
+    const customerActor = this.orchestrator.getSnapshot().context.customerActor;
+    if (customerActor) {
+      customerActor.send({ type: 'ORDER' });
+    }
   }
 
   handleReset() {
+    // Send clear message to log actor before stopping
+    const messageLogActor = this.orchestrator?.getSnapshot().context.messageLogActor;
+    if (messageLogActor) {
+      messageLogActor.send({ type: 'CLEAR_LOG' });
+    }
+    
     // Stop current orchestrator and restart
     this.orchestrator?.stop();
     this.messageLogSubscription?.unsubscribe();
     this.messageLogSubscription = null;
-    
+    this.actorsInitialized = false;
+
+    // Clear the message display immediately
+    this.renderMessages([]);
+
     // Reinitialize
     this.initializeOrchestrator();
   }
@@ -116,7 +130,7 @@ class CoffeeShopAppClean extends HTMLElement {
         <div class="demo-container">
           <h3 class="concept-title">☕ Actor-Based Coffee Shop Demo</h3>
           <p class="concept-description" style="text-align: center; margin-bottom: 30px;">
-            Each component owns its actor - with a dedicated message log actor!
+            Each UI component manages its own actor, coordinated by an orchestrator - with a dedicated message log actor for observability!
           </p>
 
           <div class="coffee-shop">
@@ -178,10 +192,10 @@ class CoffeeShopAppClean extends HTMLElement {
     // Attach event listeners
     this.shadowRoot.getElementById('order-button')
       ?.addEventListener('click', () => this.handleOrder());
-    
+
     this.shadowRoot.getElementById('reset-button')
       ?.addEventListener('click', () => this.handleReset());
-      
+
     // Add smooth scrolling for CTA
     const ctaButton = this.shadowRoot.querySelector('.demo-cta-button');
     if (ctaButton) {

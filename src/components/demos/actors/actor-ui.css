@@ -17,8 +17,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 12px;
   box-sizing: border-box;
+  position: relative;
 }
 
 .actor-box[data-active="true"] {
@@ -33,8 +35,9 @@
 }
 
 .actor-box[data-active="true"] .actor-state {
-  color: var(--jasper);
+  color: var(--jasper-light);
   transform: translateY(-2px);
+  font-weight: 500;
 }
 
 /* Icon bounce animation for state changes */
@@ -65,33 +68,37 @@
 }
 
 .actor-state {
-  font-size: 1rem;
-  color: var(--teagreen);
-  margin-bottom: 15px;
+  font-size: 1.1rem;
+  color: var(--jasper-light);
+  margin-bottom: 20px;
   font-style: italic;
   flex-shrink: 0;
   transition: all 0.4s ease;
   position: relative;
+  line-height: 1.4;
+  padding: 0 15px;
+  text-align: center;
+  max-width: 280px;
 }
 
 .actor-story {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-top: auto;
-  line-height: 1.5;
-  padding: 10px;
+  display: none; /* Hide the redundant story section */
+}
+
+.actor-education {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+  padding: 15px 10px 10px;
   width: 100%;
-  max-width: 250px;
-  min-height: 60px;
+  max-width: 280px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   transition: all 0.5s ease;
   opacity: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   text-align: center;
-  font-style: italic;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Highlight educational content in active states */
@@ -156,6 +163,12 @@
   animation-duration: 0.8s;
 }
 
+.actor-education {
+  animation-delay: 0.4s;
+  animation-fill-mode: both;
+  animation-duration: 0.8s;
+}
+
 /* Special pulse animation for active state */
 @keyframes pulse {
   0% {
@@ -166,6 +179,87 @@
   }
   100% {
     box-shadow: 0 0 20px rgba(0, 136, 255, 0.3);
+  }
+}
+
+/* Loading states */
+.actor-card:not(.is-loading) loading-indicator {
+  display: none;
+}
+
+/* Loading indicator is part of the flex layout */
+.actor-card loading-indicator {
+  margin: 16px 0;
+  flex-shrink: 0;
+}
+
+/* Shimmer effect on text during loading */
+.actor-card.is-loading .state-text {
+  background: linear-gradient(
+    90deg,
+    #3b82f6 0%,
+    #60a5fa 50%,
+    #3b82f6 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Subtle scale animation on icon */
+.actor-card.is-loading .state-icon {
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Enhanced border glow during loading */
+.actor-card.is-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.actor-card.is-loading::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(59, 130, 246, 0.5),
+    transparent 70%
+  );
+  animation: borderSweep 3s linear infinite;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+@keyframes borderSweep {
+  0% {
+    transform: translateX(-100%) translateY(-100%);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%);
   }
 }
 
