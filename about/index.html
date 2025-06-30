@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/port8080folio/" />
-    <link rel="icon" type="image/svg+xml" href="../public/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="public/favicon.svg" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,19 +13,19 @@
         href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&family=Lora:ital@1&family=Oswald:wght@700&display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="../src/styles/main.css" rel="stylesheet" type="text/css" />
-    <script src="../src/scripts/main.js" defer></script>
+    <link href="src/styles/main.css" rel="stylesheet" type="text/css" />
+    <script src="src/scripts/main.js" defer></script>
 
     <!-- Web Components -->
     <script type="module">
-        import '../src/components/ui/brand-icon.js';
-        import '../src/components/ui/navbar.js';
-        import '../src/components/ui/privacy-notice.js';
-        import '../src/components/ui/breadcrumbs.js';
-        import '../src/components/ui/search-component.js';
-        import '../src/components/ui/related-content.js';
-        import '../src/components/sections/about-section.js';
-        import '../src/components/sections/projects-section.js';
+        import './src/components/ui/brand-icon.js';
+        import './src/components/ui/navbar.js';
+        import './src/components/ui/privacy-notice.js';
+        import './src/components/ui/breadcrumbs.js';
+        import './src/components/ui/search-component.js';
+        import './src/components/ui/related-content.js';
+        import './src/components/sections/about-section.js';
+        import './src/components/sections/projects-section.js';
     </script>
 
     <!-- SEO Meta Tags -->
@@ -40,6 +40,7 @@
 
     <!-- Additional SEO Meta Tags -->
     <meta name="theme-color" content="#0D99FF">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -95,7 +96,7 @@
     <privacy-notice></privacy-notice>
 
     <div class="grid-container subpage">
-        <nav-bar current-page="about" base-path="../"></nav-bar>
+        <nav-bar current-page="about"></nav-bar>
 
         <hr class="gradient-line" id="hr1" />
 
