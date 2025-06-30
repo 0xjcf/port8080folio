@@ -11,14 +11,14 @@ class NavbarComponent extends HTMLElement {
     }
 
     getNavLinks() {
-        const isSubpage = this.basePath !== '/';
-        const pathPrefix = isSubpage ? '../' : '/';
+        // For GitHub Pages, we need to use absolute paths with the repository name
+        const repoName = '/port8080folio';
 
         return [
-            { href: pathPrefix, label: 'Home', key: 'home' },
-            { href: `${pathPrefix}about/`, label: 'About', key: 'about' },
-            { href: `${pathPrefix}blog/`, label: 'Blog', key: 'blog' },
-            { href: `${pathPrefix}resources/`, label: 'Resources', key: 'resources' }
+            { href: `${repoName}/`, label: 'Home', key: 'home' },
+            { href: `${repoName}/about/`, label: 'About', key: 'about' },
+            { href: `${repoName}/blog/`, label: 'Blog', key: 'blog' },
+            { href: `${repoName}/resources/`, label: 'Resources', key: 'resources' }
         ];
     }
 
@@ -86,15 +86,14 @@ class NavbarComponent extends HTMLElement {
     render() {
         const navLinks = this.getNavLinks();
         const socialLinks = this.getSocialLinks();
-        const isSubpage = this.basePath !== '/';
-        const brandPath = isSubpage ? '../' : '/';
+        const repoName = '/port8080folio';
 
         this.innerHTML = `
       <nav aria-labelledby="site-navigation">
         <!-- Visually hidden heading to label the navigation -->
         <h2 id="site-navigation" class="hidden-h1">Site Navigation</h2>
 
-        <a href="${brandPath}" class="brand-link">
+        <a href="${repoName}/" class="brand-link">
           <span class="brand-icon">
             <brand-icon size="48" animate="true" icon-type="state-machine"></brand-icon>
             <h1 class="hidden-h1">Jose Flores</h1>
