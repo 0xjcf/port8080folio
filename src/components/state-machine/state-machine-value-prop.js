@@ -10,7 +10,7 @@ class StateMachineValueProp extends HTMLElement {
 
   render() {
     this.shadowRoot.innerHTML = `
-      <link rel="stylesheet" href="/src/styles/state-machine-education.css">
+      <link rel="stylesheet" href="../../styles/state-machine-education.css">
       
       <div class="container">
         <div class="concept-section" style="background: linear-gradient(135deg, rgba(13, 153, 255, 0.1), rgba(15, 17, 21, 0.9)); border: 2px solid var(--jasper);">

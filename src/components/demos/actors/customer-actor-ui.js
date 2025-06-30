@@ -6,7 +6,7 @@ export class CustomerActorUI extends ActorComponent {
   render() {
     if (!this.snapshot) {
       this.shadowRoot.innerHTML = `
-        <link rel="stylesheet" href="/src/components/demos/actors/actor-ui.css">
+        <link rel="stylesheet" href="./actor-ui.css">
         
         <div class="actor-box">
           <div class="actor-icon">🚶</div>
