@@ -4,7 +4,7 @@ class ProjectsSection extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    
+
     this.projects = [
       {
         emoji: '🦀',
@@ -54,44 +54,49 @@ class ProjectsSection extends HTMLElement {
           width: 100%;
         }
         
+        /* Use consistent section header styling */
         .section-header {
           text-align: center;
-          margin-bottom: 2rem;
+          margin-bottom: 3rem;
         }
         
-        @media (min-width: 768px) {
-          .section-header {
-            margin-bottom: 3rem;
-          }
-        }
-        
-        h2 {
-          font-size: 1.75rem;
+        .section-header h2 {
+          font-size: 2.5rem;
           color: var(--heading-color, #FFFFFF);
           margin: 0 0 1rem 0;
           font-weight: 700;
-          line-height: 1.2;
-        }
-        
-        @media (min-width: 768px) {
-          h2 {
-            font-size: 2.5rem;
-          }
+          letter-spacing: -0.02em;
         }
         
         .section-subtitle {
-          font-size: 1rem;
+          font-size: 1.25rem;
           color: var(--teagreen, #F5F5F5);
           margin: 0;
-          line-height: 1.5;
-          padding: 0 1rem;
+          line-height: 1.6;
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+          opacity: 0.9;
         }
         
         @media (min-width: 768px) {
+          .section-header h2 {
+            font-size: 3rem;
+          }
+          
           .section-subtitle {
-            font-size: 1.25rem;
-            line-height: 1.6;
-            padding: 0;
+            font-size: 1.3rem;
+            line-height: 1.7;
+          }
+        }
+        
+        @media (max-width: 850px) {
+          .section-header h2 {
+            font-size: 2rem;
+          }
+          
+          .section-subtitle {
+            font-size: 1.1rem;
           }
         }
         

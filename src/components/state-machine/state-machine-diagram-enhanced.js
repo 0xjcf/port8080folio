@@ -99,7 +99,7 @@ class StateMachineDiagramEnhanced extends HTMLElement {
     if (this.animationActor) {
       this.animationActor.stop();
     }
-    
+
     const machine = this.createAnimationMachine();
     this.animationActor = createActor(machine);
     this.animationActor.start();
@@ -110,7 +110,7 @@ class StateMachineDiagramEnhanced extends HTMLElement {
     const componentPath = new URL(import.meta.url).pathname;
     const basePath = componentPath.substring(0, componentPath.indexOf('/src/'));
     const styleHref = `${basePath}/src/styles/state-machine-education.css`;
-    
+
     this.shadowRoot.innerHTML = `
       <link rel="stylesheet" href="${styleHref}">
       
@@ -289,25 +289,6 @@ class StateMachineDiagramEnhanced extends HTMLElement {
         <div class="statechart-diagram-container">
           <h3 class="concept-title" style="text-align: center; margin-bottom: 2rem;">📊 From Chaos to Clarity: State Machines</h3>
           
-          <!-- Metrics to build credibility -->
-          <div class="metrics-section">
-            <div class="metric-card">
-              <div class="metric-value">70%</div>
-              <div class="metric-label">Fewer state bugs reported</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-value">3x</div>
-              <div class="metric-label">Faster feature development</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-value">90%</div>
-              <div class="metric-label">Reduction in edge cases</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-value">100%</div>
-              <div class="metric-label">Visual state coverage</div>
-            </div>
-          </div>
           
           <div class="statechart-diagram">
             <div class="statechart-title">Watch how state machines work:</div>
@@ -333,7 +314,7 @@ class StateMachineDiagramEnhanced extends HTMLElement {
           <!-- XState introduction -->
           <div class="xstate-intro">
             <div class="xstate-logo">
-              <span>⚡</span> Meet XState
+              <span>⚡</span> XState
             </div>
             <p style="color: var(--teagreen); font-size: 1.1rem; margin-bottom: 1rem;">
               The industry-standard library for state machines in JavaScript. Used by Microsoft, Netflix, and thousands of production apps.

@@ -27,7 +27,7 @@ This document outlines marketing strategies to reach audiences at three key awar
   - Connect these to underlying architectural issues
 
 #### Social Media Content
-- Twitter/LinkedIn posts about developer frustrations:
+- X/LinkedIn posts about developer frustrations:
   - "That feeling when a simple feature takes 3 days because the codebase is a maze 🙃"
   - "POV: You're debugging a state issue that cascades through 12 components"
   - Memes about "temporary" solutions becoming permanent
@@ -196,7 +196,7 @@ Target searches like:
 - Portfolio website blog
 - Email newsletter
 - LinkedIn profile
-- Twitter/X presence
+- X/X presence
 
 ### Earned Channels
 - Guest posts on dev.to, Medium, Hashnode

@@ -34,8 +34,21 @@ class AboutSection extends HTMLElement {
         h2 {
           font-size: 2.5rem;
           color: var(--heading-color, #FFFFFF);
-          margin: 0;
+          margin: 0 0 1rem 0;
           font-weight: 700;
+          letter-spacing: -0.02em;
+        }
+        
+        @media (min-width: 768px) {
+          h2 {
+            font-size: 3rem;
+          }
+        }
+        
+        @media (max-width: 850px) {
+          h2 {
+            font-size: 2rem;
+          }
         }
         
         .story-section {

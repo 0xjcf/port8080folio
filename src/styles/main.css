@@ -66,10 +66,102 @@ a:focus {
   outline-offset: 2px;
 }
 
+/* Better header hierarchy and spacing */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--primary-font);
   color: var(--heading-color);
   font-weight: 700;
+  line-height: 1.3;
+}
+
+/* Enhanced visual hierarchy with subtle variations */
+h1 {
+  /* Brightest and most prominent */
+  color: #FFFFFF;
+  text-shadow: 0 0 20px rgba(13, 153, 255, 0.3);
+}
+
+h2 {
+  /* Slightly dimmed but still prominent */
+  color: #F8F9FA;
+  opacity: 0.95;
+}
+
+h3 {
+  /* More subdued for clear hierarchy */
+  color: #E9ECEF;
+  opacity: 0.9;
+}
+
+/* Main page heading - Much larger for clear hierarchy */
+h1 {
+  font-size: 3rem;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+
+/* Section headings - Medium size, clear step down */
+h2 {
+  font-size: 2rem;
+  margin: 3rem 0 2rem 0;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+/* Subsection headings - Smaller, but still prominent */
+h3 {
+  font-size: 1.4rem;
+  margin: 2rem 0 1.5rem 0;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+/* Smaller headings */
+h4 {
+  font-size: 1.2rem;
+  margin: 1.5rem 0 1rem 0;
+  font-weight: 600;
+}
+
+h5 {
+  font-size: 1.1rem;
+  margin: 1.25rem 0 0.75rem 0;
+  font-weight: 600;
+}
+
+h6 {
+  font-size: 1rem;
+  margin: 1rem 0 0.5rem 0;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 3.5rem;
+    margin: 0 0 2rem 0;
+    letter-spacing: -0.04em;
+  }
+  
+  h2 {
+    font-size: 2.4rem;
+    margin: 3.5rem 0 2.5rem 0;
+  }
+  
+  h3 {
+    font-size: 1.6rem;
+    margin: 2.5rem 0 1.75rem 0;
+  }
+  
+  h4 {
+    font-size: 1.3rem;
+    margin: 2rem 0 1.25rem 0;
+  }
+  
+  h5 {
+    font-size: 1.15rem;
+    margin: 1.5rem 0 1rem 0;
+  }
 }
 
 /* Better spacing for section headings */
@@ -83,6 +175,7 @@ section h3 {
 }
 
 /* Hero section headings should not have top margin */
+#about-hero h1, #blog-hero h1, #resources-hero h1,
 #about-hero h2, #blog-hero h2, #resources-hero h2,
 #about-hero h3, #blog-hero h3, #resources-hero h3 {
   margin-top: 0;
@@ -99,6 +192,7 @@ section h3 {
   }
   
   /* Hero section headings should not have top margin */
+  #about-hero h1, #blog-hero h1, #resources-hero h1,
   #about-hero h2, #blog-hero h2, #resources-hero h2,
   #about-hero h3, #blog-hero h3, #resources-hero h3 {
     margin-top: 0;
@@ -244,9 +338,9 @@ button:active {
     "nav"
     "header"
     "education"
-    "related"
     "contact"
     "signup"
+    "related"
     "footer";
   grid-template-rows: auto auto auto auto auto auto auto;
   grid-template-columns: minmax(0, 1fr);
@@ -255,7 +349,7 @@ button:active {
   margin: 0 auto;
   padding: 0 1rem;
   align-items: start;
-  gap: 1.5rem;
+  gap: 1rem;
   overflow-x: hidden;
   box-sizing: border-box;
 }
@@ -263,24 +357,24 @@ button:active {
 @media (min-width: 768px) {
   .grid-container {
     padding: 0 2rem;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 }
 
 @media (min-width: 1024px) {
   .grid-container {
-    gap: 2.5rem;
+    gap: 2rem;
   }
 }
 
 /* Reduced gap for subpages to avoid extra spacing */
 .grid-container.subpage {
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 @media (min-width: 768px) {
   .grid-container.subpage {
-    gap: 1.5rem;
+    gap: 1rem;
   }
 }
 
@@ -320,25 +414,25 @@ hero-section {
 
 /* Section spacing */
 header, main, footer, #newsletter-signup, #contact {
-  padding: 3rem 0;
+  padding: 2rem 0;
   width: 100%;
   max-width: 100%;
 }
 
 @media (min-width: 768px) {
   header, main, footer, #newsletter-signup, #contact {
-    padding: 4rem 0;
+    padding: 2.5rem 0;
   }
 }
 
 /* Increase spacing for main content area on subpages */
 .subpage main {
-  padding: 2rem 0;
+  padding: 1.5rem 0;
 }
 
 @media (min-width: 768px) {
   .subpage main {
-    padding: 3rem 0;
+    padding: 2rem 0;
   }
 }
 
@@ -1337,8 +1431,8 @@ footer.fade-in { animation-delay: 0.8s; }
 #footer {
   grid-area: footer;
   width: 100%;
-  margin-top: 5rem;
-  padding: 6rem 0 3rem 0;
+  margin-top: 2rem;
+  padding: 3rem 0 2rem 0;
   background: linear-gradient(
     to bottom,
     transparent 0%,
@@ -1350,8 +1444,8 @@ footer.fade-in { animation-delay: 0.8s; }
 
 @media (min-width: 768px) {
   #footer {
-    margin-top: 6rem;
-    padding: 7rem 0 3rem 0;
+    margin-top: 2.5rem;
+    padding: 4rem 0 2.5rem 0;
   }
 }
 
@@ -1434,9 +1528,6 @@ footer.fade-in { animation-delay: 0.8s; }
 
 /* Mobile-first typography adjustments */
 @media (max-width: 480px) {
-  h1 { font-size: 1.75rem; }
-  h2 { font-size: 1.4rem; }
-  h3 { font-size: 1.15rem; }
   p, li { font-size: 0.9rem; line-height: 1.5; }
   
   /* Ensure all content fits within viewport */
@@ -1466,9 +1557,6 @@ footer.fade-in { animation-delay: 0.8s; }
     font-size: 1rem;
   }
   
-  h1 { font-size: 2rem; }
-  h2 { font-size: 1.6rem; }
-  h3 { font-size: 1.3rem; }
   p, li { font-size: 0.95rem; line-height: 1.6; }
   
   /* Container adjustments */
@@ -1519,10 +1607,6 @@ footer.fade-in { animation-delay: 0.8s; }
   body {
     font-size: 1.15rem;
   }
-  
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem; }
-  h3 { font-size: 1.5rem; }
   
   .grid-container {
     padding: 0 1.5rem;
@@ -1866,12 +1950,21 @@ footer.fade-in { animation-delay: 0.8s; }
 }
 
 .card-header h3 {
-  color: var(--teagreen);
+  /* Follow global H3 hierarchy */
+  color: #E9ECEF;
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 600;
   flex: 1;
   line-height: 1.3;
+  letter-spacing: -0.01em;
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .card-header h3 {
+    font-size: 1.6rem;
+  }
 }
 
 .radio-indicator {
@@ -2078,7 +2171,7 @@ footer.fade-in { animation-delay: 0.8s; }
   }
   
   .card-header h3 {
-    font-size: 1.125rem;
+    font-size: 1.2rem !important;
   }
   
   .card-content p {
@@ -2270,9 +2363,17 @@ projects-section .project-card:last-child {
   font-size: 1.5rem;
   color: var(--jasper);
   margin-bottom: 1.5rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 768px) {
+  .resource-category h3 {
+    font-size: 1.75rem;
+  }
 }
 
 .resource-item {
@@ -2298,8 +2399,422 @@ projects-section .project-card:last-child {
   font-size: 1.25rem;
   color: var(--heading-color);
   margin-bottom: 0.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+  .resource-item h4 {
+    font-size: 1.375rem;
+  }
+}
+
+/* Outcome Preview Section */
+.outcome-preview {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .outcome-preview {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin: 3rem 0;
+    padding: 0;
+  }
+}
+
+.outcome-stat {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: rgba(13, 153, 255, 0.05);
+  border: 1px solid rgba(13, 153, 255, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.outcome-stat:hover {
+  transform: translateY(-4px);
+  border-color: rgba(13, 153, 255, 0.4);
+  background: rgba(13, 153, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(13, 153, 255, 0.15);
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--jasper);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, var(--jasper) 0%, var(--jasper-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (min-width: 768px) {
+  .stat-number {
+    font-size: 2.5rem;
+  }
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--teagreen);
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .stat-label {
+    font-size: 1rem;
+  }
+}
+
+/* Enhanced Resource Categories */
+.resource-category.primary-cta,
+.resource-category.secondary-cta {
+  position: relative;
+  overflow: hidden;
+}
+
+.resource-category.primary-cta {
+  background: linear-gradient(
+    135deg,
+    rgba(13, 153, 255, 0.1) 0%,
+    rgba(13, 153, 255, 0.05) 100%
+  );
+  border: 2px solid rgba(13, 153, 255, 0.3);
+}
+
+.resource-category.secondary-cta {
+  background: linear-gradient(
+    135deg,
+    rgba(13, 153, 255, 0.08) 0%,
+    rgba(13, 153, 255, 0.03) 100%
+  );
+  border: 2px solid rgba(13, 153, 255, 0.25);
+}
+
+.resource-category.primary-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--jasper), var(--jasper-light), transparent);
+  opacity: 0.8;
+}
+
+.resource-item.featured {
+  background: rgba(15, 17, 21, 0.9);
+  border: 1px solid rgba(13, 153, 255, 0.3);
+  position: relative;
+}
+
+.resource-item.featured:hover {
+  border-color: rgba(13, 153, 255, 0.5);
+  box-shadow: 0 8px 24px rgba(13, 153, 255, 0.2);
+}
+
+.resource-type.active {
+  background: rgba(13, 153, 255, 0.2);
+  color: var(--jasper-light);
+  border-color: rgba(13, 153, 255, 0.4);
   font-weight: 600;
 }
+
+.resource-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, var(--jasper) 0%, var(--jasper-light) 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.resource-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.resource-cta:hover {
+  background: linear-gradient(45deg, var(--jasper-light) 0%, var(--jasper) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(13, 153, 255, 0.4);
+  color: white;
+}
+
+.resource-cta:hover::before {
+  left: 100%;
+}
+
+/* Mobile adjustments for new sections */
+@media (max-width: 480px) {
+  .outcome-preview {
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .outcome-stat {
+    padding: 1.5rem 1rem;
+  }
+  
+  .stat-number {
+    font-size: 1.75rem;
+  }
+  
+  .stat-label {
+    font-size: 0.85rem;
+  }
+  
+  .resource-cta {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Final CTA Section */
+.cta-section {
+  background: linear-gradient(
+    135deg,
+    rgba(13, 153, 255, 0.08) 0%,
+    rgba(13, 153, 255, 0.04) 100%
+  );
+  border: 2px solid rgba(13, 153, 255, 0.3);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  margin: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--jasper), var(--jasper-light), transparent);
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .cta-section {
+    padding: 4rem 3rem;
+  }
+}
+
+.cta-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin: 2rem 0;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .cta-options {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cta-options {
+    gap: 3rem;
+  }
+}
+
+.cta-option {
+  padding: 2rem;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.cta-option.primary {
+  background: rgba(13, 153, 255, 0.1);
+  border: 2px solid rgba(13, 153, 255, 0.3);
+}
+
+.cta-option.secondary {
+  background: rgba(13, 153, 255, 0.05);
+  border: 2px solid rgba(13, 153, 255, 0.2);
+}
+
+.cta-option:hover {
+  transform: translateY(-4px);
+  border-color: rgba(13, 153, 255, 0.5);
+  box-shadow: 0 12px 32px rgba(13, 153, 255, 0.15);
+}
+
+.cta-option h3 {
+  font-size: 1.25rem;
+  color: var(--jasper);
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+}
+
+.cta-option p {
+  color: var(--teagreen);
+  margin: 0 0 1.5rem 0;
+  line-height: 1.6;
+  opacity: 0.9;
+  flex-grow: 1;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button.primary {
+  background: linear-gradient(45deg, var(--jasper) 0%, var(--jasper-light) 100%);
+  color: white;
+}
+
+.cta-button.secondary {
+  background: transparent;
+  color: var(--jasper);
+  border: 2px solid var(--jasper);
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(13, 153, 255, 0.3);
+}
+
+.cta-button.primary:hover {
+  background: linear-gradient(45deg, var(--jasper-light) 0%, var(--jasper) 100%);
+  color: white;
+}
+
+.cta-button.secondary:hover {
+  background: rgba(13, 153, 255, 0.1);
+  color: var(--jasper-light);
+}
+
+.cta-button:hover::before {
+  left: 100%;
+}
+
+.trust-signals {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(13, 153, 255, 0.2);
+}
+
+.trust-signals p {
+  color: var(--teagreen);
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Mobile adjustments for CTA section */
+@media (max-width: 480px) {
+  .cta-section {
+    padding: 2rem 1.5rem;
+    margin: 2rem 0;
+  }
+  
+  .cta-option {
+    padding: 1.5rem;
+  }
+  
+  .cta-option h3 {
+    font-size: 1.125rem;
+  }
+  
+  .cta-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .trust-signals p {
+    font-size: 0.85rem;
+  }
+  
+  .choice-indicator {
+    margin: 1.5rem 0;
+    padding: 0.75rem;
+  }
+  
+  .choice-indicator p {
+    font-size: 1rem;
+  }
+  
+  .option-badge {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+
 
 .resource-item p {
   color: var(--teagreen);
@@ -2316,6 +2831,53 @@ projects-section .project-card:last-child {
   font-size: 0.875rem;
   font-weight: 500;
   border: 1px solid rgba(13, 153, 255, 0.2);
+}
+
+/* Section Header Styling - consistent across all pages */
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  margin-top: 3rem;
+}
+
+.section-header h2 {
+  font-size: 2.5rem;
+  color: var(--heading-color);
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+  font-size: 1.25rem;
+  color: var(--teagreen);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .section-header h2 {
+    font-size: 3rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1.3rem;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 850px) {
+  .section-header h2 {
+    font-size: 2rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1.1rem;
+  }
 }
 
 .section-intro {
@@ -2353,19 +2915,21 @@ projects-section .project-card:last-child {
 }
 
 #about-hero h1, #blog-hero h1, #resources-hero h1 {
-  font-size: 2.5rem;
-  color: var(--heading-color);
+  font-size: 3rem !important;
+  color: #FFFFFF !important;
   margin: 0 0 1.5rem 0;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em;
   text-align: center;
   width: 100%;
+  text-shadow: 0 0 20px rgba(13, 153, 255, 0.3);
 }
 
 @media (min-width: 768px) {
   #about-hero h1, #blog-hero h1, #resources-hero h1 {
-    font-size: 3rem;
+    font-size: 3.5rem !important;
     margin-bottom: 2rem;
+    letter-spacing: -0.04em;
   }
 }
 
@@ -2414,7 +2978,8 @@ projects-section .project-card:last-child {
   }
   
   #about-hero h1, #blog-hero h1, #resources-hero h1 {
-    font-size: 2rem;
+    font-size: 2.4rem !important;
+    font-weight: 800 !important;
   }
   
   #about-hero .lead, #blog-hero .lead, #resources-hero .lead {
@@ -2990,5 +3555,104 @@ related-content,
   .subpage main > * {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+}
+
+/* First heading in any section should have reduced top margin */
+section > h1:first-child,
+section > h2:first-child,
+section > h3:first-child,
+section > .section-header h1:first-child,
+section > .section-header h2:first-child,
+section > .section-header h3:first-child {
+  margin-top: 0;
+}
+
+/* Section headers within components should have less aggressive spacing */
+.section-header h2 {
+  margin: 0 0 1.5rem 0;
+  /* Ensure hierarchy is maintained */
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+}
+
+.section-header h3 {
+  margin: 0 0 1rem 0;
+  /* Ensure hierarchy is maintained */
+  font-size: 1.4rem !important;
+  font-weight: 600 !important;
+}
+
+@media (min-width: 768px) {
+  .section-header h2 {
+    margin: 0 0 2rem 0;
+    font-size: 2.4rem !important;
+  }
+  
+  .section-header h3 {
+    margin: 0 0 1.25rem 0;
+    font-size: 1.6rem !important;
+  }
+}
+
+/* Mobile header size adjustments to prevent excessive spacing */
+@media (max-width: 480px) {
+  h1 { 
+    font-size: 1.75rem;
+    margin: 0 0 1rem 0;
+  }
+  h2 { 
+    font-size: 1.4rem;
+    margin: 2rem 0 1.25rem 0;
+  }
+  h3 { 
+    font-size: 1.15rem;
+    margin: 1.5rem 0 1rem 0;
+  }
+  h4 {
+    font-size: 1.1rem;
+    margin: 1.25rem 0 0.75rem 0;
+  }
+  
+  /* Ensure all content fits within viewport */
+  section, article, div {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Section headers on mobile should have minimal top spacing */
+  .section-header h1,
+  .section-header h2,
+  .section-header h3 {
+    margin-top: 0;
+  }
+  
+  /* Ensure hierarchy on mobile by overriding component styles */
+  h1 {
+    font-size: 2.4rem !important;
+    font-weight: 800 !important;
+    margin: 0 0 1rem 0;
+  }
+  
+  /* Hero sections on mobile should maintain prominence */
+  #about-hero h1, #blog-hero h1, #resources-hero h1 {
+    font-size: 2.4rem !important;
+    margin: 0 0 1rem 0;
+    font-weight: 800 !important;
+  }
+  
+  h2 {
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
+  }
+  
+  h3 {
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+  }
+  
+  h4 {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
   }
 }

@@ -234,14 +234,27 @@ class CoffeeShopAppClean extends HTMLElement {
         .demo-container {
           background: linear-gradient(
             135deg,
-            rgba(15, 17, 21, 0.9) 0%,
-            rgba(18, 22, 32, 0.9) 100%
+            rgba(13, 153, 255, 0.06) 0%,
+            rgba(13, 153, 255, 0.02) 100%
           );
-          border: 2px solid rgba(13, 153, 255, 0.2);
-          border-radius: 20px;
+          border: 1px solid rgba(13, 153, 255, 0.2);
+          border-radius: 16px;
           padding: 2.5rem;
           backdrop-filter: blur(15px);
-          box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 12px 48px rgba(13, 153, 255, 0.1);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .demo-container::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--jasper), transparent);
+          opacity: 0.4;
         }
         
         @media (min-width: 768px) {
@@ -387,17 +400,37 @@ class CoffeeShopAppClean extends HTMLElement {
         
         .stat-item {
           text-align: center;
-          background: rgba(15, 17, 21, 0.6);
+          background: linear-gradient(135deg, rgba(13, 153, 255, 0.06) 0%, rgba(13, 153, 255, 0.02) 100%);
           padding: 1.5rem;
-          border-radius: 12px;
-          border: 2px solid rgba(13, 153, 255, 0.2);
+          border-radius: 16px;
+          border: 1px solid rgba(13, 153, 255, 0.2);
           min-width: 120px;
           transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .stat-item::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--jasper), transparent);
+          opacity: 0.4;
         }
         
         .stat-item:hover {
           border-color: rgba(13, 153, 255, 0.4);
+          background: linear-gradient(135deg, rgba(13, 153, 255, 0.08) 0%, rgba(13, 153, 255, 0.04) 100%);
           transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(13, 153, 255, 0.15);
+        }
+        
+        .stat-item:hover::before {
+          opacity: 0.6;
         }
         
         .stat-value {
@@ -418,13 +451,26 @@ class CoffeeShopAppClean extends HTMLElement {
         .message-log-container {
           background: linear-gradient(
             135deg,
-            rgba(8, 8, 8, 0.8) 0%,
-            rgba(15, 17, 21, 0.8) 100%
+            rgba(13, 153, 255, 0.06) 0%,
+            rgba(13, 153, 255, 0.02) 100%
           );
-          border: 2px solid rgba(13, 153, 255, 0.2);
+          border: 1px solid rgba(13, 153, 255, 0.2);
           border-radius: 16px;
           padding: 1.5rem;
           backdrop-filter: blur(10px);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .message-log-container::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--jasper), transparent);
+          opacity: 0.4;
         }
         
         .message-log-title {

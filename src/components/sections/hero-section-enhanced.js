@@ -71,17 +71,19 @@ class HeroSectionEnhanced extends HTMLElement {
         }
         
         h1 {
-          font-size: 2rem;
+          /* Follow global hierarchy - largest heading */
+          font-size: 3rem;
           margin: 0 0 1rem 0;
-          color: var(--heading-color, #FFFFFF);
-          font-weight: 700;
+          color: #FFFFFF;
+          font-weight: 800;
           line-height: 1.2;
-          letter-spacing: -0.02em;
+          letter-spacing: -0.03em;
+          text-shadow: 0 0 20px rgba(13, 153, 255, 0.3);
         }
         
         @media (min-width: 480px) {
           h1 {
-            font-size: 2.5rem;
+            font-size: 3.2rem;
           }
         }
         
@@ -90,6 +92,7 @@ class HeroSectionEnhanced extends HTMLElement {
             font-size: 3.5rem;
             margin: 0 0 1.5rem 0;
             line-height: 1.1;
+            letter-spacing: -0.04em;
           }
         }
         
@@ -110,6 +113,120 @@ class HeroSectionEnhanced extends HTMLElement {
           100% { transform: rotate(0deg); }
         }
         
+        /* Quick pain points section - standardized to match design system */
+        .quick-pain-points {
+          margin: 2rem 0;
+          padding: 2rem;
+          background: linear-gradient(135deg, rgba(13, 153, 255, 0.08) 0%, rgba(13, 153, 255, 0.03) 100%);
+          border-radius: 16px;
+          border: 1px solid rgba(13, 153, 255, 0.2);
+          text-align: center;
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+          backdrop-filter: blur(10px);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .pain-intro {
+          color: var(--teagreen, #F5F5F5);
+          font-size: 1.1rem;
+          margin: 0 0 1.5rem 0;
+          opacity: 0.95;
+        }
+        
+        .pain-list {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1rem;
+          margin: 1.5rem 0;
+        }
+        
+        @media (min-width: 768px) {
+          .pain-list {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+          }
+        }
+        
+        .pain-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 1rem;
+          background: rgba(15, 17, 21, 0.6);
+          border-radius: 8px;
+          border: 1px solid rgba(13, 153, 255, 0.1);
+          transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .pain-item::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--jasper), transparent);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        
+        @media (min-width: 768px) {
+          .pain-item {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+            padding: 1.5rem 1rem;
+          }
+        }
+        
+        .pain-item:hover {
+          transform: translateY(-2px);
+          border-color: rgba(13, 153, 255, 0.3);
+          background: rgba(15, 17, 21, 0.8);
+          box-shadow: 0 4px 20px rgba(13, 153, 255, 0.1);
+        }
+        
+        .pain-item:hover::before {
+          opacity: 0.6;
+        }
+        
+        .pain-emoji {
+          font-size: 1.5rem;
+          flex-shrink: 0;
+        }
+        
+        .pain-text {
+          color: var(--teagreen, #F5F5F5);
+          font-size: 0.95rem;
+          line-height: 1.4;
+          opacity: 0.9;
+        }
+        
+        @media (min-width: 768px) {
+          .pain-text {
+            font-size: 1rem;
+          }
+        }
+        
+        .pain-solution {
+          color: var(--jasper-light, #47B4FF);
+          font-size: 1.1rem;
+          margin: 1.5rem 0 0 0;
+          font-weight: 500;
+        }
+        
+        @media (min-width: 768px) {
+          .pain-solution {
+            font-size: 1.2rem;
+          }
+        }
+        
         .tagline {
           font-size: 1rem;
           color: var(--teagreen, #F5F5F5);
@@ -126,7 +243,7 @@ class HeroSectionEnhanced extends HTMLElement {
           }
         }
         
-        /* Social proof for MOST AWARE visitors */
+        /* Social proof for MOST AWARE visitors - standardized */
         .social-proof {
           display: flex;
           flex-direction: column;
@@ -134,9 +251,23 @@ class HeroSectionEnhanced extends HTMLElement {
           gap: 1rem;
           margin: 1.5rem 0;
           padding: 1.5rem;
-          background: rgba(15, 17, 21, 0.4);
-          border-radius: 12px;
-          border: 1px solid rgba(13, 153, 255, 0.1);
+          background: linear-gradient(135deg, rgba(13, 153, 255, 0.06) 0%, rgba(13, 153, 255, 0.02) 100%);
+          border-radius: 16px;
+          border: 1px solid rgba(13, 153, 255, 0.2);
+          backdrop-filter: blur(10px);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .social-proof::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--jasper), transparent);
+          opacity: 0.4;
         }
         
         .trust-indicators {
@@ -211,9 +342,9 @@ class HeroSectionEnhanced extends HTMLElement {
           flex-direction: column;
           align-items: center;
           padding: 1rem 0.75rem;
-          background: rgba(15, 17, 21, 0.6);
+          background: linear-gradient(135deg, rgba(13, 153, 255, 0.06) 0%, rgba(13, 153, 255, 0.02) 100%);
           backdrop-filter: blur(10px);
-          border-radius: 8px;
+          border-radius: 16px;
           border: 1px solid rgba(13, 153, 255, 0.2);
           transition: all 0.3s ease;
           cursor: pointer;
@@ -224,7 +355,7 @@ class HeroSectionEnhanced extends HTMLElement {
         @media (min-width: 768px) {
           .stat-card {
             padding: 1.5rem 1rem;
-            border-radius: 12px;
+            border-radius: 16px;
           }
         }
         
@@ -238,13 +369,14 @@ class HeroSectionEnhanced extends HTMLElement {
           background: linear-gradient(90deg, transparent, var(--jasper), transparent);
           transform: translateX(-100%);
           transition: transform 0.6s ease;
+          opacity: 0.6;
         }
         
         .stat-card:hover {
           transform: translateY(-4px);
           border-color: rgba(13, 153, 255, 0.4);
-          background: rgba(15, 17, 21, 0.8);
-          box-shadow: 0 8px 24px rgba(13, 153, 255, 0.15);
+          background: linear-gradient(135deg, rgba(13, 153, 255, 0.08) 0%, rgba(13, 153, 255, 0.04) 100%);
+          box-shadow: 0 8px 24px rgba(13, 153, 255, 0.2);
         }
         
         .stat-card:hover::before {
@@ -359,16 +491,17 @@ class HeroSectionEnhanced extends HTMLElement {
         }
         
         .email-capture h3 {
+          /* Follow global hierarchy for H3 */
           color: var(--jasper, #0D99FF);
-          font-size: 1.5rem;
+          font-size: 1.4rem;
           margin: 0 0 0.75rem 0;
-          font-weight: 700;
-          letter-spacing: -0.02em;
+          font-weight: 600;
+          letter-spacing: -0.01em;
         }
         
         @media (min-width: 768px) {
           .email-capture h3 {
-            font-size: 1.75rem;
+            font-size: 1.6rem;
           }
         }
         
@@ -555,67 +688,23 @@ class HeroSectionEnhanced extends HTMLElement {
       
       <section class="hero">
         <div class="content">
-          <!-- Level 1: UNAWARE - Outcome hook -->
+          <!-- Level 1: UNAWARE - Outcome-focused hook for above-the-fold -->
           <div class="outcome-hook">
-            <p class="outcome-text">✨ Ship Features 3x Faster with Predictable State Management</p>
+            <p class="outcome-text">✨ Transform Complex State Into Elegant, Maintainable Systems</p>
           </div>
           
           <h1>Hey there! <span class="wave">👋</span> I'm José</h1>
           <p class="tagline">
             Solo dev who turns complex state machines into maintainable magic
+            <br />
             (and occasionally creates 1,700-line monsters that teach me valuable lessons 😅)
           </p>
           
-          <!-- Level 5: MOST AWARE - Credibility markers -->
-          <div class="social-proof">
-            <div class="trust-indicators">
-              <div class="trust-item">
-                <span class="trust-icon">🎯</span>
-                <span>Real Production Experience</span>
-              </div>
-              <div class="trust-item">
-                <span class="trust-icon">📚</span>
-                <span>Open Source Contributor</span>
-              </div>
-              <div class="trust-item">
-                <span class="trust-icon">🔧</span>
-                <span>Battle-Tested Solutions</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="quick-stats">
-            <div class="stat-card" data-stat="complexity">
-              <span class="stat-emoji">⚡</span>
-              <p class="stat-value">1 → 12</p>
-              <p class="stat-label">State machines</p>
-              <p class="stat-detail">1,700 lines split</p>
-            </div>
-            <div class="stat-card" data-stat="statecharts">
-              <span class="stat-emoji">📊</span>
-              <p class="stat-value">100%</p>
-              <p class="stat-label">State coverage</p>
-              <p class="stat-detail">Visual statecharts</p>
-            </div>
-            <div class="stat-card" data-stat="actors">
-              <span class="stat-emoji">🎭</span>
-              <p class="stat-value">Zero</p>
-              <p class="stat-label">Shared state</p>
-              <p class="stat-detail">Actor isolation</p>
-            </div>
-            <div class="stat-card" data-stat="predictability">
-              <span class="stat-emoji">🔐</span>
-              <p class="stat-value">100%</p>
-              <p class="stat-label">Predictable</p>
-              <p class="stat-detail">State transitions</p>
-            </div>
-          </div>
-          
-          <!-- Email capture form - now more prominent -->
+                    <!-- Email capture form - moved above the fold for maximum conversion -->
           <div class="email-capture">
-            <h3>🎯 Start Your XState Journey Today</h3>
-            <p>Join other developers learning to build predictable UIs with state machines</p>
-            <p class="benefit-text">✓ Get Challenge #1 in your inbox</p>
+            <h3>🎯 Start Building Better State Management Today</h3>
+            <p>Join other developers learning to turn complex state into elegant, maintainable systems</p>
+            <p class="benefit-text">✓ Get Challenge #1: From chaos to clean architecture in 30 minutes</p>
             <form 
               class="email-form" 
               id="hero-email-form"

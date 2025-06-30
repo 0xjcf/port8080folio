@@ -16,6 +16,9 @@
     <link href="src/styles/main.css" rel="stylesheet" type="text/css" />
     <script src="src/scripts/main.js" defer></script>
 
+    <!-- Enhanced Newsletter Form Script -->
+    <script src="src/scripts/newsletter-form.js"></script>
+
     <!-- Web Components -->
     <script type="module">
         import './src/components/ui/brand-icon.js';
@@ -29,16 +32,14 @@
         // State Machine Educational Components
         import './src/components/state-machine/state-machine-concepts-enhanced.js';
         import './src/components/state-machine/state-machine-diagram-enhanced.js';
-        import './src/components/state-machine/state-machine-evolution.js';
         import './src/components/state-machine/state-machine-code-example.js';
         import './src/components/state-machine/state-machine-benefits.js';
-        import './src/components/state-machine/state-machine-progression.js';
     </script>
 
     <!-- SEO Meta Tags -->
-    <title>Resources - José Flores | Frontend Architecture Tools & Guides</title>
+    <title>Ship Features 3x Faster - Frontend State Management Resources | José Flores</title>
     <meta name="description"
-        content="Free tools, templates, guides, and code examples for frontend architecture, XState, React optimization, and building maintainable applications.">
+        content="Transform chaotic frontend state into predictable, maintainable systems. Learn how to split 1,700-line monsters into clean state machines and ship features 3x faster.">
     <meta name="keywords"
         content="frontend architecture resources, XState tools, React optimization guides, state machine tutorials, JavaScript templates, developer tools, free resources, code examples, frontend templates">
     <meta name="author" content="José Flores">
@@ -54,9 +55,9 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://0xjcf.github.io/port8080folio/resources/">
-    <meta property="og:title" content="Resources - José Flores | Frontend Architecture Tools & Guides">
+    <meta property="og:title" content="Ship Features 3x Faster - Frontend State Management Resources">
     <meta property="og:description"
-        content="Free tools, templates, guides, and code examples for frontend architecture, XState, React optimization, and building maintainable applications.">
+        content="Transform chaotic frontend state into predictable, maintainable systems. Learn how to split 1,700-line monsters into clean state machines and ship features 3x faster.">
     <meta property="og:image" content="https://0xjcf.github.io/port8080folio/public/images/me.jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -64,16 +65,16 @@
     <meta property="og:site_name" content="José Flores Portfolio">
     <meta property="og:locale" content="en_US">
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://0xjcf.github.io/port8080folio/resources/">
-    <meta name="twitter:title" content="Resources - José Flores | Frontend Architecture Tools & Guides">
-    <meta name="twitter:description"
-        content="Free tools, templates, guides, and code examples for frontend architecture, XState, React optimization, and building maintainable applications.">
-    <meta name="twitter:image" content="https://0xjcf.github.io/port8080folio/public/images/me.jpeg">
-    <meta name="twitter:image:alt" content="José Flores - Frontend Architecture Resources">
-    <meta name="twitter:creator" content="@0xjcf">
-    <meta name="twitter:site" content="@0xjcf">
+    <!-- X Card -->
+    <meta name="X:card" content="summary_large_image">
+    <meta name="X:url" content="https://0xjcf.github.io/port8080folio/resources/">
+    <meta name="X:title" content="Ship Features 3x Faster - Frontend State Management Resources">
+    <meta name="X:description"
+        content="Transform chaotic frontend state into predictable, maintainable systems. Learn how to split 1,700-line monsters into clean state machines and ship features 3x faster.">
+    <meta name="X:image" content="https://0xjcf.github.io/port8080folio/public/images/me.jpeg">
+    <meta name="X:image:alt" content="José Flores - Frontend Architecture Resources">
+    <meta name="X:creator" content="@0xjcf">
+    <meta name="X:site" content="@0xjcf">
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -100,7 +101,7 @@
             "@type": "ItemList",
             "name": "Frontend Architecture Resources",
             "description": "Collection of tools, guides, and resources for frontend development",
-            "numberOfItems": 8,
+            "numberOfItems": 2,
             "itemListElement": [
                 {
                     "@type": "Course",
@@ -129,99 +130,166 @@
         <nav-bar current-page="resources"></nav-bar>
 
         <main>
+            <!-- LEVEL 1: UNAWARE - Outcome-focused hook -->
             <section id="resources-hero">
-                <h1>Developer Resources</h1>
-                <p class="lead">Free tools, templates, guides, and code examples to help you build better frontend
-                    applications.</p>
+                <h1>Ship Features 3x Faster</h1>
+                <p class="lead">Transform chaotic frontend state into predictable, maintainable systems that your future
+                    self will actually understand.</p>
+
+                <!-- Outcome preview -->
+                <div class="outcome-preview">
+                    <div class="outcome-stat">
+                        <span class="stat-number">90% Fewer Bugs</span>
+                        <span class="stat-label">Turn impossible states into... literally impossible</span>
+                    </div>
+                    <div class="outcome-stat">
+                        <span class="stat-number">3x Faster Shipping</span>
+                        <span class="stat-label">Features that used to take weeks now take days</span>
+                    </div>
+                    <div class="outcome-stat">
+                        <span class="stat-number">Zero Race Conditions</span>
+                        <span class="stat-label">State machines make chaos impossible</span>
+                    </div>
+                </div>
             </section>
 
-            <!-- Comprehensive State Machine Education -->
-            <section id="state-machine-deep-dive">
-                <h2>State Machine Mastery Guide</h2>
-                <p class="section-intro">Comprehensive, interactive guide to understanding and implementing state
-                    machines in frontend applications.</p>
+            <!-- LEVEL 2: PROBLEM AWARE - Show the pain clearly -->
+            <section id="frontend-chaos">
+                <div class="section-header">
+                    <h2>Does This Sound Familiar?</h2>
+                    <p class="section-subtitle">The hidden costs of complex frontend state management</p>
+                </div>
 
-                <!-- Level 2: PROBLEM AWARE - Show the problem clearly -->
                 <state-machine-concepts-enhanced></state-machine-concepts-enhanced>
+            </section>
 
-                <!-- Level 3: SOLUTION AWARE - Introduce state machines -->
+            <!-- LEVEL 3: SOLUTION AWARE - Visual introduction to state machines -->
+            <section id="state-machine-solution">
+                <div class="section-header">
+                    <h2>Meet XState: Visual State Management</h2>
+                    <p class="section-subtitle">Watch how state machines turn chaos into predictable workflows</p>
+                </div>
+
                 <state-machine-diagram-enhanced></state-machine-diagram-enhanced>
+            </section>
 
-                <!-- Bridge: Why state machines alone aren't enough -->
-                <state-machine-evolution></state-machine-evolution>
+            <!-- LEVEL 4: PRODUCT AWARE - Show implementation and results -->
+            <section id="implementation-and-results">
+                <div class="section-header">
+                    <h2>The Actor Model Implementation</h2>
+                    <p class="section-subtitle">How I turn 1,700-line monsters into 12 beautiful, testable actors</p>
+                </div>
 
-                <!-- Level 5: MOST AWARE - Implementation details -->
+                <!-- Implementation details -->
                 <state-machine-code-example></state-machine-code-example>
 
                 <!-- Results and social proof -->
                 <state-machine-benefits></state-machine-benefits>
-
-                <!-- The journey -->
-                <state-machine-progression></state-machine-progression>
             </section>
 
-            <section id="additional-resources">
-                <h2>Additional Resources</h2>
+            <!-- LEVEL 5: MOST AWARE - Newsletter signup with choice -->
+            <section id="newsletter-signup" class="cta-section">
+                <div class="section-header">
+                    <h2>Ready to Transform Your Frontend?</h2>
+                    <p class="section-subtitle">Choose your path to state machine mastery. Get immediate access to your
+                        selected resource.</p>
+                </div>
 
-                <div class="resource-category">
-                    <h3>🎯 Learning Challenges</h3>
-                    <div class="resource-item">
-                        <h4>Weekly XState Challenges</h4>
-                        <p>Get a new state machine challenge every Monday. Build real features, learn by doing, and see
-                            multiple solutions every Friday.</p>
-                        <span class="resource-type">Available via Newsletter</span>
+                <!-- Mailchimp-Integrated Form -->
+                <div id="mc_embed_shell">
+                    <div id="mc_embed_signup">
+                        <form
+                            action="https://gmail.us15.list-manage.com/subscribe/post?u=a5d21e2e22f61cf619c8acfb4&amp;id=09a07976e0&amp;f_id=00579ee1f0"
+                            method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form"
+                            class="newsletter-form validate" target="_blank" novalidate="">
+                            <div id="mc_embed_signup_scroll">
+
+                                <!-- Interactive Lead Magnet Selection -->
+                                <div class="lead-magnet-cards">
+                                    <label class="lead-magnet-card" for="challenge-option">
+                                        <input type="radio" name="LEADMAGNET" value="xstate_challenges"
+                                            id="challenge-option" checked>
+                                        <div class="card-content">
+                                            <div class="card-header">
+                                                <span class="card-icon">🎯</span>
+                                                <h3>Weekly XState Challenges</h3>
+                                                <div class="radio-indicator"></div>
+                                            </div>
+                                            <p>Get a new state machine challenge every Monday. Build real features,
+                                                learn by doing, and see
+                                                multiple solutions every Friday.</p>
+                                            <div class="card-footer">
+                                                <span class="value-prop">Join other developers mastering XState</span>
+                                                <span class="cta-text">Start Week 1's Challenge →</span>
+                                            </div>
+                                        </div>
+                                    </label>
+
+                                    <label class="lead-magnet-card" for="consultation-option">
+                                        <input type="radio" name="LEADMAGNET" value="strategy_session"
+                                            id="consultation-option">
+                                        <div class="card-content">
+                                            <div class="card-header">
+                                                <span class="card-icon">💡</span>
+                                                <h3>1-on-1 Strategy Session</h3>
+                                                <div class="radio-indicator"></div>
+                                            </div>
+                                            <p>30-minute personalized consultation for your state management challenges
+                                                and get actionable
+                                                recommendations.</p>
+                                            <div class="card-footer">
+                                                <span class="value-prop">Limited spots available each month</span>
+                                                <span class="cta-text">Schedule Your Session →</span>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <!-- Email Input -->
+                                <div class="form-group">
+                                    <label for="mce-EMAIL" class="newsletter-label">Email Address</label>
+                                    <input type="email" name="EMAIL" id="mce-EMAIL"
+                                        class="newsletter-input required email" placeholder="you@example.com"
+                                        required />
+                                    <div class="input-helper">We'll send your selected resource immediately after you
+                                        confirm your email.
+                                    </div>
+                                </div>
+
+                                <!-- Mailchimp bot protection -->
+                                <div aria-hidden="true" style="position: absolute; left: -5000px">
+                                    <input type="text" name="b_a5d21e2e22f61cf619c8acfb4_09a07976e0" tabindex="-1"
+                                        value="" />
+                                </div>
+
+                                <!-- Dynamic Submit Button -->
+                                <button type="submit" name="subscribe" id="mc-embedded-subscribe"
+                                    class="newsletter-button action-button">
+                                    <span class="button-text">Get Started →</span>
+                                    <span class="button-loading">
+                                        <svg class="spinner" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-dasharray="32"
+                                                stroke-dashoffset="32">
+                                                <animate attributeName="stroke-dashoffset" dur="1s" values="32;0;32"
+                                                    repeatCount="indefinite" />
+                                            </circle>
+                                        </svg>
+                                        Processing...
+                                    </span>
+                                </button>
+
+                                <div id="mce-responses" class="form-responses">
+                                    <div class="response error" id="mce-error-response" style="display: none"></div>
+                                    <div class="response success" id="mce-success-response" style="display: none"></div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
-                <div class="resource-category">
-                    <h3>💡 Personalized Guidance</h3>
-                    <div class="resource-item">
-                        <h4>1-on-1 Strategy Session</h4>
-                        <p>30-minute call to discuss your specific state management challenges and get personalized
-                            recommendations.</p>
-                        <span class="resource-type">Schedule via Newsletter Signup</span>
-                    </div>
-                </div>
-
-                <div class="resource-category">
-                    <h3>🛠️ Tools & Templates</h3>
-                    <div class="resource-item">
-                        <h4>XState Project Starter Templates</h4>
-                        <p>Battle-tested project templates with proper XState configuration and best practices.</p>
-                        <span class="resource-type">Coming Soon - GitHub Repository</span>
-                    </div>
-
-                    <div class="resource-item">
-                        <h4>Bundle Optimization Scripts</h4>
-                        <p>Automated scripts and tools to analyze and optimize your bundle size.</p>
-                        <span class="resource-type">Coming Soon - CLI Tool</span>
-                    </div>
-                </div>
-
-                <div class="resource-category">
-                    <h3>💻 Code Examples</h3>
-                    <div class="resource-item">
-                        <h4>Actor Model Implementation Patterns</h4>
-                        <p>Real-world code examples showing how to implement the actor model in frontend applications.
-                        </p>
-                        <span class="resource-type">Coming Soon - Code Repository</span>
-                    </div>
-
-                    <div class="resource-item">
-                        <h4>React Performance Optimization Patterns</h4>
-                        <p>Proven patterns and techniques for optimizing React applications at scale.</p>
-                        <span class="resource-type">Coming Soon - Code Examples</span>
-                    </div>
-                </div>
-
-                <div class="resource-category">
-                    <h3>📚 Guides & Tutorials</h3>
-                    <div class="resource-item">
-                        <h4>From Chaos to Clean: State Machine Refactoring Guide</h4>
-                        <p>Step-by-step guide to refactoring complex state management into maintainable state machines.
-                        </p>
-                        <span class="resource-type">Coming Soon - PDF Guide</span>
-                    </div>
+                <div class="trust-signals">
+                    <p>✓ No spam, ever • ✓ Unsubscribe anytime • ✓ Used by developers at Fortune 500 companies</p>
                 </div>
             </section>
 
@@ -246,7 +314,7 @@
                 <div class="footer-links">
                     <a href="https://github.com/0xjcf" target="_blank" rel="noopener">GitHub</a>
                     <a href="https://www.linkedin.com/in/joseflores-io/" target="_blank" rel="noopener">LinkedIn</a>
-                    <a href="https://twitter.com/0xjcf" target="_blank" rel="noopener">Twitter</a>
+                    <a href="https://X.com/0xjcf" target="_blank" rel="noopener">X</a>
                 </div>
                 <p class="copyright">© 2024 José Flores. Built with ☕ and XState.</p>
             </div>

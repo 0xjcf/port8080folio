@@ -104,7 +104,7 @@
   LinkedIn Tagline: "Turning 1,700-line state machine monsters into maintainable architectures | Frontend Architect specializing in
   XState"
 
-  Twitter Bio: "Frontend architect who makes state machines behave 🤖 | Split 1,700-line monster into 12 actors | XState, React, TypeScript | Also into
+  X Bio: "Frontend architect who makes state machines behave 🤖 | Split 1,700-line monster into 12 actors | XState, React, TypeScript | Also into
    trading"
 
   Email Signature: "José Flores | Frontend Architect | Helping teams build maintainable applications that actually ship 🚀"

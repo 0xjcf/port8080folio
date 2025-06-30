@@ -9,6 +9,38 @@ function debounce(func, wait) {
   };
 }
 
+// Pre-fill email forms from URL parameters (useful for redirects from challenges page)
+function handleEmailPreFill() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const emailParam = urlParams.get('email');
+
+  if (emailParam) {
+    // Pre-fill all email inputs on the page
+    const emailInputs = document.querySelectorAll('input[type="email"][name="EMAIL"]');
+    emailInputs.forEach(input => {
+      input.value = decodeURIComponent(emailParam);
+    });
+
+    // Clean up URL by removing the email parameter
+    const cleanUrl = new URL(window.location);
+    cleanUrl.searchParams.delete('email');
+    history.replaceState({}, '', cleanUrl);
+
+    // Focus on the newsletter signup section if it exists
+    if (window.location.hash === '#newsletter-signup') {
+      setTimeout(() => {
+        const section = document.querySelector('#newsletter-signup');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 500);
+    }
+  }
+}
+
+// Run pre-fill check when DOM is ready
+document.addEventListener('DOMContentLoaded', handleEmailPreFill);
+
 // Only track events if analytics are enabled
 function trackEvent(category, action, label, value) {
   if (window.gtag && localStorage.getItem('analytics_consent') === 'accepted') {

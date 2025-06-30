@@ -23,13 +23,13 @@ class StateMachineBenefits extends HTMLElement {
         <div class="benefits-grid">
           <div class="benefit-card">
             <div class="benefit-icon">🐛</div>
-            <h3>90% Fewer Bugs</h3>
+            <h3>Fewer Bugs</h3>
             <p>Impossible states become literally impossible. Edge cases? Already handled.</p>
           </div>
           
           <div class="benefit-card">
             <div class="benefit-icon">🚀</div>
-            <h3>Ship 3x Faster</h3>
+            <h3>Ship Faster</h3>
             <p>New features slot in perfectly. No more "wait, how does this work again?"</p>
           </div>
           
@@ -38,16 +38,6 @@ class StateMachineBenefits extends HTMLElement {
             <h3>Sleep Better</h3>
             <p>Your app behaves predictably. Even that junior dev can't break it.</p>
           </div>
-        </div>
-        
-        <div class="real-world-section">
-          <h3>Real Client Results:</h3>
-          <ul class="results-list">
-            <li>🎭 <strong>Actor-based isolation</strong> - Each service runs independently with zero shared state</li>
-            <li>🔧 <strong>1 → 12 state machines</strong> - Refactored 1,700-line monster into modular actors</li>
-            <li>📊 <strong>Visual statecharts</strong> - Debug complex flows with XState Inspector</li>
-            <li>🎯 <strong>0 race conditions</strong> - Actor model eliminates them by design</li>
-          </ul>
         </div>
         
         <!-- CTA to contact form -->
@@ -144,9 +134,15 @@ class StateMachineBenefits extends HTMLElement {
     if (ctaButton) {
       ctaButton.addEventListener('click', (e) => {
         e.preventDefault();
-        const target = document.querySelector('#contact');
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Check if we're on a page with a contact section
+        const contactSection = document.querySelector('#contact');
+        if (contactSection) {
+          // Scroll to contact section if it exists
+          contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          // Redirect to homepage contact section
+          window.location.href = '/#contact';
         }
       });
     }

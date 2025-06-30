@@ -55,16 +55,19 @@ class BlogPosts extends HTMLElement {
           width: 100%;
         }
         
+        /* Use global section header styles for consistency */
         .section-header {
           text-align: center;
           margin-bottom: 3rem;
         }
         
-        h2 {
-          font-size: 2.5rem;
+        .section-header h2 {
+          /* Follow global hierarchy - smaller than page H1 */
+          font-size: 2rem;
           color: var(--heading-color, #FFFFFF);
           margin: 0 0 1rem 0;
           font-weight: 700;
+          letter-spacing: -0.02em;
         }
         
         .section-subtitle {
@@ -72,6 +75,22 @@ class BlogPosts extends HTMLElement {
           color: var(--teagreen, #F5F5F5);
           margin: 0;
           line-height: 1.6;
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+          opacity: 0.9;
+        }
+        
+        @media (min-width: 768px) {
+          .section-header h2 {
+            /* Follow global hierarchy - smaller than page H1 */
+            font-size: 2.4rem;
+          }
+          
+          .section-subtitle {
+            font-size: 1.3rem;
+            line-height: 1.7;
+          }
         }
         
         .posts-grid {
@@ -144,9 +163,17 @@ class BlogPosts extends HTMLElement {
         
         h3 {
           color: var(--heading-color, #FFFFFF);
-          font-size: 1.5rem;
+          font-size: 1.25rem;
           margin: 1rem 0;
           line-height: 1.3;
+          font-weight: 600;
+          letter-spacing: -0.01em;
+        }
+        
+        @media (min-width: 768px) {
+          h3 {
+            font-size: 1.4rem;
+          }
         }
         
         .post-excerpt {
@@ -218,8 +245,16 @@ class BlogPosts extends HTMLElement {
         }
         
         @media (max-width: 850px) {
-          h2 {
-            font-size: 2rem;
+          .section-header h2 {
+            font-size: 1.8rem;
+          }
+          
+          .section-subtitle {
+            font-size: 1.1rem;
+          }
+          
+          h3 {
+            font-size: 1.15rem;
           }
           
           .posts-grid {

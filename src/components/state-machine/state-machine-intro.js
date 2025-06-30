@@ -66,17 +66,19 @@ class StateMachineIntro extends HTMLElement {
         }
         
         h2 {
-          font-size: 2.5rem;
-          color: var(--heading-color, #FFFFFF);
+          /* Follow global hierarchy for H2 */
+          font-size: 2rem;
+          color: #F8F9FA;
           margin: 0 0 1rem;
           font-weight: 700;
           letter-spacing: -0.02em;
           line-height: 1.2;
+          opacity: 0.95;
         }
         
         @media (min-width: 768px) {
           h2 {
-            font-size: 3rem;
+            font-size: 2.4rem;
             margin: 0 0 1.5rem;
           }
         }
@@ -102,10 +104,10 @@ class StateMachineIntro extends HTMLElement {
         .pain-point {
           background: linear-gradient(
             135deg,
-            rgba(15, 17, 21, 0.9) 0%,
-            rgba(18, 22, 32, 0.9) 100%
+            rgba(13, 153, 255, 0.06) 0%,
+            rgba(13, 153, 255, 0.02) 100%
           );
-          border: 2px solid rgba(13, 153, 255, 0.2);
+          border: 1px solid rgba(13, 153, 255, 0.2);
           border-radius: 16px;
           padding: 2rem;
           text-align: left;
@@ -114,8 +116,19 @@ class StateMachineIntro extends HTMLElement {
           position: relative;
           overflow: hidden;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 8px 32px rgba(13, 153, 255, 0.1);
           backdrop-filter: blur(10px);
+        }
+        
+        .pain-point::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--jasper), transparent);
+          opacity: 0.4;
         }
         
 
@@ -123,7 +136,16 @@ class StateMachineIntro extends HTMLElement {
         .pain-point:hover {
           transform: translateY(-8px);
           border-color: rgba(13, 153, 255, 0.4);
-          box-shadow: 0 16px 48px rgba(13, 153, 255, 0.15);
+          background: linear-gradient(
+            135deg,
+            rgba(13, 153, 255, 0.08) 0%,
+            rgba(13, 153, 255, 0.04) 100%
+          );
+          box-shadow: 0 16px 48px rgba(13, 153, 255, 0.2);
+        }
+        
+        .pain-point:hover::before {
+          opacity: 0.6;
         }
         
         .pain-point-header {
@@ -140,12 +162,13 @@ class StateMachineIntro extends HTMLElement {
           justify-content: center;
           width: 60px;
           height: 60px;
-          background: rgba(13, 153, 255, 0.1);
+          background: linear-gradient(135deg, rgba(13, 153, 255, 0.08) 0%, rgba(13, 153, 255, 0.04) 100%);
           border-radius: 16px;
-          border: 2px solid rgba(13, 153, 255, 0.3);
+          border: 1px solid rgba(13, 153, 255, 0.2);
           flex-shrink: 0;
           position: relative;
           overflow: hidden;
+          backdrop-filter: blur(10px);
         }
         
         .emoji-container::before {
@@ -269,16 +292,28 @@ class StateMachineIntro extends HTMLElement {
           padding: 2rem;
           background: linear-gradient(
             135deg,
-            rgba(13, 153, 255, 0.08) 0%,
-            rgba(13, 153, 255, 0.04) 100%
+            rgba(13, 153, 255, 0.06) 0%,
+            rgba(13, 153, 255, 0.02) 100%
           );
           border-radius: 16px;
-          border: 2px solid rgba(13, 153, 255, 0.2);
+          border: 1px solid rgba(13, 153, 255, 0.2);
           position: relative;
           overflow: hidden;
           max-width: 700px;
           margin-left: auto;
           margin-right: auto;
+          backdrop-filter: blur(10px);
+        }
+        
+        .experience-insight::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--jasper), transparent);
+          opacity: 0.4;
         }
         
 
@@ -331,7 +366,7 @@ class StateMachineIntro extends HTMLElement {
           }
           
           h2 {
-            font-size: 2rem;
+            font-size: 1.6rem;
             margin: 0 0 1rem;
           }
           
@@ -372,12 +407,12 @@ class StateMachineIntro extends HTMLElement {
       </style>
       
       <div class="intro-container">
-        <!-- Level 1 to Level 2 transition -->
+        <!-- Level 2 to Level 3 transition -->
         <p class="transition-text">
-          That promise to "Ship Features 3x Faster"? Here's what's really standing in your way...
+          You know the pain. Now here's exactly what's causing it and why it keeps getting worse...
         </p>
         
-        <h2>Is Your Frontend Team Fighting These Battles?</h2>
+        <h2>The Real Cost of Chaotic State Management</h2>
         
         <div class="pain-points">
           <div class="pain-point">
@@ -420,7 +455,7 @@ class StateMachineIntro extends HTMLElement {
           </div>
         </div>
         
-        <p class="closing-statement">These aren't just annoying developer problems. They're costing your business real money and slowing down your ability to ship features that matter.</p>
+        <p class="closing-statement">These costs compound daily. But what if there was a way to eliminate them entirely? Not just reduce them – but make them impossible by design.</p>
         
         <!-- Enhanced experience insight -->
         <div class="experience-insight">
