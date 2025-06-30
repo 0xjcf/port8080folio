@@ -85,7 +85,7 @@ export class BaristaActorUI extends ActorComponent {
     const isLoading = stateInfo.loading || false;
 
     this.shadowRoot.innerHTML = `
-      <link rel="stylesheet" href="/src/components/demos/actors/actor-ui.css">
+      <link rel="stylesheet" href="${styleHref}">
       
       <div class="actor-box actor-card ${isLoading ? 'is-loading' : ''}" data-state="${state}" data-active="${stateInfo.active}">
         <div class="actor-icon state-icon">${stateInfo.icon}</div>
