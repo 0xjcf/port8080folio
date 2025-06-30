@@ -20,6 +20,7 @@
     <script type="module">
         import './src/components/ui/brand-icon.js';
         import './src/components/ui/navbar.js';
+        import './src/components/ui/search-modal.js';
         import './src/components/ui/privacy-notice.js';
         import './src/components/ui/breadcrumbs.js';
         import './src/components/ui/search-component.js';
@@ -98,11 +99,6 @@
     <div class="grid-container subpage">
         <nav-bar current-page="about"></nav-bar>
 
-        <hr class="gradient-line" id="hr1" />
-
-        <!-- Breadcrumbs -->
-        <breadcrumb-nav></breadcrumb-nav>
-
         <main>
             <section id="about-hero">
                 <h1>About José Flores</h1>
@@ -110,13 +106,9 @@
                     with complex state management.</p>
             </section>
 
-            <hr class="gradient-line" id="hr2" />
-
             <section id="about-content">
                 <about-section></about-section>
             </section>
-
-            <hr class="gradient-line" id="hr-projects" />
 
             <section id="projects">
                 <projects-section></projects-section>
@@ -126,7 +118,8 @@
             <related-content></related-content>
         </main>
 
-        <hr class="gradient-line" id="hr3" />
+        <!-- Breadcrumbs -->
+        <breadcrumb-nav></breadcrumb-nav>
 
         <footer id="footer">
             <div class="footer-content">

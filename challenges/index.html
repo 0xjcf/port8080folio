@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master XState - Weekly Coding Challenges</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <a href="/port8080folio/" class="logo-link">
+                <div class="logo">← XState Challenges</div>
+            </a>
+            <div class="nav-links">
+                <a href="/port8080folio/">Home</a>
+                <a href="/port8080folio/about/">About</a>
+                <a href="/port8080folio/blog/">Blog</a>
+                <a href="/port8080folio/resources/">Resources</a>
+                <a href="#start" style="background: #3b82f6; padding: 8px 20px; border-radius: 6px;">Get Started</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Master <span class="gradient-text">XState</span> in 12 Weeks</h1>
+        <p>One Challenge at a Time</p>
+
+        <div class="live-activity">
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>LIVE NOW</span>
+            </div>
+            <div style="flex: 1;">
+                <strong>127 developers</strong> coding this week's challenge
+            </div>
+            <div>
+                <strong>Week 4:</strong> Shopping Cart
+            </div>
+        </div>
+
+        <a href="#start" class="cta-button">Get Your First Challenge Free →</a>
+
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">2,341</div>
+                <div class="stat-label">Active Learners</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">28,152</div>
+                <div class="stat-label">Challenges Completed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">96%</div>
+                <div class="stat-label">Would Recommend</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenge Preview -->
+    <section class="challenge-preview" id="challenges">
+        <div class="section-header">
+            <h2>Real Challenges. Real Skills.</h2>
+            <p style="color: #94a3b8; font-size: 20px;">Every week, tackle a production-inspired problem</p>
+        </div>
+
+        <div class="challenge-card">
+            <div class="challenge-header">
+                <h3 class="challenge-title">🎯 The Double-Click Dilemma</h3>
+                <span class="challenge-week">Week 5</span>
+            </div>
+            <p class="challenge-description">
+                Build a button that handles single vs double clicks without accidental triggers.
+                Master delayed transitions, event cancellation, and state timing.
+            </p>
+            <div class="challenge-tags">
+                <span class="tag">Timers</span>
+                <span class="tag">Guards</span>
+                <span class="tag">Event Handling</span>
+                <span class="tag">45 mins</span>
+            </div>
+        </div>
+
+        <div class="challenge-card">
+            <div class="challenge-header">
+                <h3 class="challenge-title">📤 File Upload Orchestra</h3>
+                <span class="challenge-week">Week 9</span>
+            </div>
+            <p class="challenge-description">
+                Create a multi-file upload system with individual progress tracking, pause/resume,
+                and retry logic. Learn parallel states and actor spawning.
+            </p>
+            <div class="challenge-tags">
+                <span class="tag">Actors</span>
+                <span class="tag">Parallel States</span>
+                <span class="tag">Services</span>
+                <span class="tag">90 mins</span>
+            </div>
+        </div>
+
+        <div class="challenge-card">
+            <div class="challenge-header">
+                <h3 class="challenge-title">🔄 Collaborative Editor States</h3>
+                <span class="challenge-week">Week 10</span>
+            </div>
+            <p class="challenge-description">
+                Handle complex editing states with conflict resolution, optimistic updates, and
+                rollback mechanisms. Build Notion-like collaborative features.
+            </p>
+            <div class="challenge-tags">
+                <span class="tag">Complex Guards</span>
+                <span class="tag">History States</span>
+                <span class="tag">Optimistic UI</span>
+                <span class="tag">2 hours</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p style="color: #94a3b8; font-size: 20px;">Simple. Effective. Community-driven.</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-icon">📬</div>
+                <h3>Monday Challenge</h3>
+                <p>Get a new challenge with starter code and clear requirements</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">💻</div>
+                <h3>Build & Learn</h3>
+                <p>Work through the problem with hints and community support</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">🎉</div>
+                <h3>Friday Solutions</h3>
+                <p>See multiple approaches and learn from different implementations</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">🚀</div>
+                <h3>Apply It</h3>
+                <p>Use your new skills in real projects immediately</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-header">
+            <h2>Success Stories</h2>
+            <p style="color: #94a3b8; font-size: 20px;">From our community of XState practitioners</p>
+        </div>
+
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <p class="testimonial-content">
+                    "Week 3's form validation challenge completely changed how I handle forms.
+                    Used it in production the next day!"
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SL</div>
+                    <div class="author-info">
+                        <div class="author-name">Sarah Liu</div>
+                        <div class="author-role">Frontend Lead at Stripe</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial">
+                <p class="testimonial-content">
+                    "The actor model challenges in week 7-8 finally made it click.
+                    Now I'm refactoring our entire notification system."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MR</div>
+                    <div class="author-info">
+                        <div class="author-name">Marcus Rodriguez</div>
+                        <div class="author-role">Senior Dev at Vercel</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial">
+                <p class="testimonial-content">
+                    "Started as a complete beginner. By week 12, I was teaching
+                    my team about state machines. This course is magic."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">AK</div>
+                    <div class="author-info">
+                        <div class="author-name">Amy Kim</div>
+                        <div class="author-role">Full-Stack Developer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="start">
+        <h2>Ready to <span class="gradient-text">Level Up</span>?</h2>
+        <p style="color: #94a3b8; font-size: 20px; margin-bottom: 40px;">
+            Join 2,341 developers mastering XState through practice
+        </p>
+
+        <form class="email-form">
+            <input type="email" class="email-input" placeholder="your@email.com" required>
+            <button type="submit" class="submit-button">Get Challenge #1</button>
+        </form>
+
+        <p style="color: #64748b; font-size: 14px;">
+            🔒 No spam. Unsubscribe anytime. Free forever.
+        </p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 XState Challenges. Built with state machines, obviously.</p>
+    </footer>
+
+    <script src="script.js" defer></script>
+</body>
+
+</html>

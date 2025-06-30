@@ -299,83 +299,141 @@ class HeroSectionEnhanced extends HTMLElement {
           text-align: center;
         }
         
-        /* Email capture for converting visitors */
+        /* Email capture for converting visitors - enhanced prominence */
         .email-capture {
-          background: rgba(13, 153, 255, 0.05);
-          border: 1px solid rgba(13, 153, 255, 0.2);
-          border-radius: 12px;
-          padding: 1.5rem;
-          margin: 2rem 1rem;
+          background: linear-gradient(
+            135deg,
+            rgba(13, 153, 255, 0.12) 0%,
+            rgba(13, 153, 255, 0.06) 100%
+          );
+          border: 2px solid rgba(13, 153, 255, 0.4);
+          border-radius: 20px;
+          padding: 2.5rem;
+          margin: 2.5rem 1rem;
           text-align: center;
           width: 100%;
-          max-width: 500px;
+          max-width: 700px;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 12px 40px rgba(13, 153, 255, 0.15);
+          backdrop-filter: blur(20px);
+          animation: gentle-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes gentle-glow {
+          0%, 100% { 
+            box-shadow: 0 12px 40px rgba(13, 153, 255, 0.15);
+            border-color: rgba(13, 153, 255, 0.4);
+          }
+          50% { 
+            box-shadow: 0 16px 48px rgba(13, 153, 255, 0.25);
+            border-color: rgba(13, 153, 255, 0.6);
+          }
+        }
+
+        .email-capture::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: linear-gradient(90deg, transparent, var(--jasper), var(--jasper-light), transparent);
+          opacity: 0.9;
+        }
+        
+
+        
+        @media (min-width: 768px) {
+          .email-capture {
+            padding: 2.5rem;
+            margin: 2rem 0;
+          }
+        }
+        
+        @media (min-width: 1024px) {
+          .email-capture {
+            padding: 3rem;
+            margin: 2.5rem 0;
+          }
         }
         
         .email-capture h3 {
           color: var(--jasper, #0D99FF);
-          font-size: 1.25rem;
-          margin: 0 0 0.5rem 0;
+          font-size: 1.5rem;
+          margin: 0 0 0.75rem 0;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+        }
+        
+        @media (min-width: 768px) {
+          .email-capture h3 {
+            font-size: 1.75rem;
+          }
         }
         
         .email-capture p {
           color: var(--teagreen, #F5F5F5);
+          font-size: 1.1rem;
+          margin: 0 0 2rem 0;
+          opacity: 0.95;
+          line-height: 1.6;
+          font-weight: 500;
+        }
+        
+        @media (min-width: 768px) {
+          .email-capture p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+          }
+        }
+
+        .email-capture .benefit-text {
           font-size: 0.9rem;
-          margin: 0 0 1rem 0;
+          color: var(--jasper-light, #47B4FF);
+          margin: -0.5rem 0 1.5rem 0;
           opacity: 0.9;
+          font-style: italic;
         }
         
         .email-form {
           display: flex;
-          gap: 0.5rem;
+          gap: 0.75rem;
           flex-direction: column;
         }
         
         @media (min-width: 480px) {
           .email-form {
             flex-direction: row;
+            gap: 1rem;
           }
         }
         
         .email-input {
           flex: 1;
-          padding: 0.75rem 1rem;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 0.875rem 1.25rem;
+          background: rgba(255, 255, 255, 0.08);
+          border: 2px solid rgba(13, 153, 255, 0.2);
           border-radius: 8px;
           color: white;
           font-size: 1rem;
           transition: all 0.3s ease;
+          font-family: var(--primary-font);
+        }
+        
+        .email-input::placeholder {
+          color: rgba(245, 245, 245, 0.6);
         }
         
         .email-input:focus {
           outline: none;
           border-color: var(--jasper, #0D99FF);
-          background: rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.12);
+          box-shadow: 0 0 0 3px rgba(13, 153, 255, 0.15);
         }
         
         .email-submit {
-          padding: 0.75rem 1.5rem;
-          background: var(--jasper, #0D99FF);
-          color: white;
-          border: none;
-          border-radius: 8px;
-          font-size: 1rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-        
-        .email-submit:hover {
-          background: var(--jasper-light, #47B4FF);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(13, 153, 255, 0.4);
-        }
-        
-        .cta-button {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.875rem 1.5rem;
+          padding: 0.875rem 1.75rem;
           background: linear-gradient(45deg, var(--jasper, #0D99FF) 0%, var(--jasper-light, #47B4FF) 100%);
           color: white;
           border: none;
@@ -383,90 +441,116 @@ class HeroSectionEnhanced extends HTMLElement {
           font-size: 1rem;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s ease;
-          text-decoration: none;
-          width: fit-content;
-          margin: 0 1rem;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+          font-family: var(--primary-font);
         }
         
-        @media (min-width: 768px) {
-          .cta-button {
-            padding: 1rem 2rem;
-            font-size: 1.125rem;
-            margin: 0;
-          }
-        }
-        
-        .cta-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(13, 153, 255, 0.4);
-        }
-        
-        .cta-button::after {
-          content: '→';
-          transition: transform 0.3s ease;
-        }
-        
-        .cta-button:hover::after {
-          transform: translateX(4px);
-        }
-        
-        .tech-stack {
-          margin-top: 2rem;
-          padding: 2rem 1rem 0;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        .email-submit::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
           width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
+          transition: left 0.5s ease;
         }
         
-        @media (min-width: 768px) {
-          .tech-stack {
-            margin-top: 3rem;
-            padding: 2rem 0 0;
-          }
+        .email-submit:hover {
+          background: linear-gradient(45deg, var(--jasper-light, #47B4FF) 0%, var(--jasper, #0D99FF) 100%);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(13, 153, 255, 0.4);
         }
         
-        .tech-label {
+        .email-submit:hover::before {
+          left: 100%;
+        }
+
+        .email-submit:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        .email-submit:disabled:hover {
+          transform: none;
+          box-shadow: 0 8px 25px rgba(13, 153, 255, 0.4);
+        }
+
+        .button-loading {
+          display: none;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .spinner {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        .email-capture .response {
+          font-weight: 500;
+          padding: 0.5rem;
+          border-radius: 6px;
+          text-align: center;
+        }
+
+        .email-capture .response.error {
+          background: rgba(255, 87, 87, 0.1);
+          border: 1px solid rgba(255, 87, 87, 0.3);
+        }
+
+        .email-capture .response.success {
+          background: rgba(46, 213, 115, 0.1);
+          border: 1px solid rgba(46, 213, 115, 0.3);
+        }
+        
+        /* Scroll indicator for natural flow */
+        .scroll-indicator {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+          margin-top: 1.5rem;
+          opacity: 0.6;
+          animation: gentle-bounce 2s ease-in-out infinite;
+          cursor: pointer;
+          transition: opacity 0.3s ease;
+        }
+        
+        .scroll-indicator:hover {
+          opacity: 0.9;
+        }
+        
+        @keyframes gentle-bounce {
+          0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+          40% { transform: translateY(-4px); }
+          60% { transform: translateY(-2px); }
+        }
+        
+        .scroll-text {
           font-size: 0.875rem;
           color: var(--teagreen, #F5F5F5);
-          opacity: 0.8;
-          margin: 0 0 1rem 0;
+          text-align: center;
         }
         
-        .tech-badges {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-          justify-content: center;
+        .scroll-arrow {
+          font-size: 1.5rem;
+          color: var(--jasper, #0D99FF);
         }
         
-        @media (min-width: 768px) {
-          .tech-badges {
-            gap: 0.75rem;
-          }
-        }
-        
-        .tech-badge {
-          background: rgba(13, 153, 255, 0.1);
-          color: var(--jasper-light, #47B4FF);
-          padding: 0.4rem 0.8rem;
-          border-radius: 20px;
-          font-size: 0.75rem;
-          border: 1px solid rgba(13, 153, 255, 0.3);
-          transition: all 0.2s ease;
-        }
-        
-        @media (min-width: 768px) {
-          .tech-badge {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-          }
-        }
-        
-        .tech-badge:hover {
-          background: rgba(13, 153, 255, 0.2);
-          transform: translateY(-2px);
-          border-color: var(--jasper, #0D99FF);
-        }
+
       </style>
       
       <section class="hero">
@@ -501,62 +585,81 @@ class HeroSectionEnhanced extends HTMLElement {
           </div>
           
           <div class="quick-stats">
-            <div class="stat-card" data-stat="bundle">
-              <span class="stat-emoji">📦</span>
-              <p class="stat-value">61%</p>
-              <p class="stat-label">Bundle size reduced</p>
-              <p class="stat-detail">892KB → 347KB</p>
-            </div>
             <div class="stat-card" data-stat="complexity">
               <span class="stat-emoji">⚡</span>
-              <p class="stat-value">1,700 → 12</p>
-              <p class="stat-label">Lines of code reduced</p>
-              <p class="stat-detail">Modular state machines</p>
+              <p class="stat-value">1 → 12</p>
+              <p class="stat-label">State machines</p>
+              <p class="stat-detail">1,700 lines split</p>
             </div>
-            <div class="stat-card" data-stat="performance">
+            <div class="stat-card" data-stat="statecharts">
               <span class="stat-emoji">📊</span>
               <p class="stat-value">100%</p>
-              <p class="stat-label">Visual mapping</p>
-              <p class="stat-detail">Every state tracked</p>
+              <p class="stat-label">State coverage</p>
+              <p class="stat-detail">Visual statecharts</p>
             </div>
-            <div class="stat-card" data-stat="renders">
-              <span class="stat-emoji">🔄</span>
-              <p class="stat-value">90%</p>
-              <p class="stat-label">Fewer re-renders</p>
-              <p class="stat-detail">React optimization</p>
+            <div class="stat-card" data-stat="actors">
+              <span class="stat-emoji">🎭</span>
+              <p class="stat-value">Zero</p>
+              <p class="stat-label">Shared state</p>
+              <p class="stat-detail">Actor isolation</p>
+            </div>
+            <div class="stat-card" data-stat="predictability">
+              <span class="stat-emoji">🔐</span>
+              <p class="stat-value">100%</p>
+              <p class="stat-label">Predictable</p>
+              <p class="stat-detail">State transitions</p>
             </div>
           </div>
           
-          <!-- Email capture form -->
+          <!-- Email capture form - now more prominent -->
           <div class="email-capture">
-            <h3>Get My State Machine Starter Kit</h3>
-            <p>Free guide: Turn complex UI logic into simple, visual state machines</p>
-            <form class="email-form" id="email-form">
+            <h3>🎯 Start Your XState Journey Today</h3>
+            <p>Join other developers learning to build predictable UIs with state machines</p>
+            <p class="benefit-text">✓ Get Challenge #1 in your inbox</p>
+            <form 
+              class="email-form" 
+              id="hero-email-form"
+              action="https://gmail.us15.list-manage.com/subscribe/post?u=a5d21e2e22f61cf619c8acfb4&amp;id=09a07976e0&amp;f_id=00579ee1f0"
+              method="post"
+              target="_blank"
+              novalidate
+            >
               <input 
                 type="email" 
                 class="email-input" 
+                name="EMAIL"
                 placeholder="your@email.com" 
                 required
                 aria-label="Email address"
               />
-              <button type="submit" class="email-submit">Send Me the Guide</button>
+              <!-- Hidden field to set lead magnet to challenges -->
+              <input type="hidden" name="LEADMAGNET" value="xstate_challenges" />
+              <!-- Mailchimp bot protection -->
+              <div aria-hidden="true" style="position: absolute; left: -5000px">
+                <input type="text" name="b_a5d21e2e22f61cf619c8acfb4_09a07976e0" tabindex="-1" value="" />
+              </div>
+              <button type="submit" class="email-submit">
+                <span class="button-text">Get Challenge #1 →</span>
+                <span class="button-loading" style="display: none;">
+                  <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32">
+                      <animate attributeName="stroke-dashoffset" dur="1s" values="32;0;32" repeatCount="indefinite"/>
+                    </circle>
+                  </svg>
+                  Sending...
+                </span>
+              </button>
             </form>
+            <div class="form-responses" style="margin-top: 1rem;">
+              <div class="response error" id="hero-error-response" style="display: none; color: #ff5757; font-size: 0.9rem;"></div>
+              <div class="response success" id="hero-success-response" style="display: none; color: #2ed573; font-size: 0.9rem;"></div>
+            </div>
           </div>
           
-          <a href="#state-machine-education" class="cta-button">
-            Discover How State Machines Can Help You
-          </a>
-          
-          <div class="tech-stack">
-            <p class="tech-label">Tech I love working with:</p>
-            <div class="tech-badges">
-              <span class="tech-badge">TypeScript</span>
-              <span class="tech-badge">React</span>
-              <span class="tech-badge">XState</span>
-              <span class="tech-badge">Vite</span>
-              <span class="tech-badge">Node.js</span>
-              <span class="tech-badge">Rust</span>
-            </div>
+          <!-- Subtle scroll indicator -->
+          <div class="scroll-indicator">
+            <p class="scroll-text">See how it works</p>
+            <div class="scroll-arrow">↓</div>
           </div>
         </div>
       </section>
@@ -576,29 +679,148 @@ class HeroSectionEnhanced extends HTMLElement {
       });
     });
 
-    const ctaButton = this.shadowRoot.querySelector('.cta-button');
-    ctaButton.addEventListener('click', (e) => {
-      if (e.target.getAttribute('href').startsWith('#')) {
-        e.preventDefault();
-        const target = document.querySelector(e.target.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-    });
-
     // Email form handler
-    const emailForm = this.shadowRoot.getElementById('email-form');
+    const emailForm = this.shadowRoot.getElementById('hero-email-form');
     if (emailForm) {
-      emailForm.addEventListener('submit', (e) => {
+      emailForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = e.target.querySelector('.email-input').value;
-        // Here you would typically send this to your email service
-        console.log('Email submitted:', email);
-        // Show success message
-        emailForm.innerHTML = '<p style="color: var(--jasper); margin: 0;">✓ Check your inbox! Guide sent.</p>';
+
+        const emailInput = emailForm.querySelector('.email-input');
+        const submitButton = emailForm.querySelector('.email-submit');
+        const buttonText = submitButton.querySelector('.button-text');
+        const buttonLoading = submitButton.querySelector('.button-loading');
+        const errorResponse = this.shadowRoot.getElementById('hero-error-response');
+        const successResponse = this.shadowRoot.getElementById('hero-success-response');
+
+        const email = emailInput.value.trim();
+
+        // Validate email
+        if (!email) {
+          this.showHeroMessage(errorResponse, 'Please enter your email address.');
+          emailInput.focus();
+          return;
+        }
+
+        if (!this.isValidEmail(email)) {
+          this.showHeroMessage(errorResponse, 'Please enter a valid email address.');
+          emailInput.focus();
+          return;
+        }
+
+        // Show loading state
+        submitButton.disabled = true;
+        buttonText.style.display = 'none';
+        buttonLoading.style.display = 'flex';
+
+        try {
+          const formData = new FormData(emailForm);
+
+          // Submit to Mailchimp
+          await fetch(emailForm.action, {
+            method: 'POST',
+            body: formData,
+            mode: 'no-cors'
+          });
+
+          // Show success message
+          this.showHeroMessage(successResponse, '✓ Welcome! Check your inbox for Challenge #1 and starter code.');
+
+          // Reset form
+          emailInput.value = '';
+
+          // Track conversion
+          this.trackHeroConversion(email);
+
+        } catch (error) {
+          console.error('Hero form submission error:', error);
+          this.showHeroMessage(errorResponse, 'Oops! Something went wrong. Please try again.');
+        } finally {
+          // Reset button state
+          submitButton.disabled = false;
+          buttonText.style.display = 'inline';
+          buttonLoading.style.display = 'none';
+        }
       });
     }
+
+    // Optional: Add smooth scroll when clicking the scroll indicator
+    const scrollIndicator = this.shadowRoot.querySelector('.scroll-indicator');
+    if (scrollIndicator) {
+      scrollIndicator.addEventListener('click', () => {
+        const nextSection = document.querySelector('#state-machine-education');
+        if (nextSection) {
+          nextSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+  }
+
+  // Helper methods for form handling
+  isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  showHeroMessage(element, message) {
+    // Hide all response messages first
+    const errorResponse = this.shadowRoot.getElementById('hero-error-response');
+    const successResponse = this.shadowRoot.getElementById('hero-success-response');
+
+    if (errorResponse) errorResponse.style.display = 'none';
+    if (successResponse) successResponse.style.display = 'none';
+
+    // Show the specific message
+    if (element) {
+      element.textContent = message;
+      element.style.display = 'block';
+
+      // Auto-hide success messages after 5 seconds
+      if (element.id === 'hero-success-response') {
+        setTimeout(() => {
+          element.style.display = 'none';
+        }, 5000);
+      }
+    }
+  }
+
+  trackHeroConversion(email) {
+    // Track with Google Analytics if available
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'hero_email_signup', {
+        'event_category': 'engagement',
+        'event_label': 'xstate_journey_start',
+        'value': 1
+      });
+
+      gtag('event', 'challenge_signup', {
+        'event_category': 'lead_magnet',
+        'event_label': 'hero_section',
+        'custom_parameters': {
+          'form_location': 'hero'
+        }
+      });
+    }
+
+    // Track with Facebook Pixel if available
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Lead', {
+        content_name: 'XState Journey Start',
+        content_category: 'hero_email_capture',
+        value: 25,
+        source: 'hero_section'
+      });
+    }
+
+    // Dispatch custom event for other tracking systems
+    this.dispatchEvent(new CustomEvent('hero-email-signup', {
+      detail: {
+        email: email,
+        timestamp: new Date().toISOString(),
+        source: 'hero_section'
+      },
+      bubbles: true,
+      composed: true
+    }));
   }
 }
 

@@ -1,0 +1,20 @@
+{
+  "name": "port8080folio",
+  "version": "1.0.0",
+  "description": "José C. Flores Portfolio - Frontend Architect & XState Specialist",
+  "scripts": {
+    "serve": "python3 serve-local.py",
+    "serve:node": "node serve-local.js",
+    "serve:simple": "npx http-server -p 8080 --proxy http://localhost:8080/port8080folio/ -c-1",
+    "serve:live": "npx live-server --port=8080 --mount=/port8080folio:."
+  },
+  "keywords": [
+    "portfolio",
+    "frontend",
+    "architecture",
+    "xstate",
+    "state-machines"
+  ],
+  "author": "José C. Flores",
+  "license": "MIT"
+} 

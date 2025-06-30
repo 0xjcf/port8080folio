@@ -102,7 +102,7 @@ Target searches like:
 ### Content Marketing Strategies
 
 #### Case Studies
-- **"How We Cut Bundle Size by 61% While Improving Developer Experience"**
+- **"How We Split a 1,700-Line State Machine Monster into 12 Clean Actors"**
   - Detailed walkthrough of the process
   - Metrics and screenshots
   - Developer testimonials

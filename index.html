@@ -67,6 +67,7 @@
     import './src/components/ui/privacy-notice.js';
     import './src/components/ui/brand-icon.js';
     import './src/components/ui/navbar.js';
+    import './src/components/ui/search-modal.js';
     import './src/components/ui/syntax-highlighter-with-themes.js';
     import './src/components/ui/breadcrumbs.js';
     import './src/components/ui/search-component.js';
@@ -90,7 +91,7 @@
   <!-- SEO Meta Tags -->
   <title>José Flores - Frontend Architect & XState Specialist | State Machine Expert</title>
   <meta name="description"
-    content="Expert frontend architect specializing in XState, React performance, and state machine architecture. Transform complex UIs into maintainable systems. 61% bundle size reduction proven results.">
+    content="Expert frontend architect specializing in XState, statecharts, and actor-based architecture. Transform complex UIs into maintainable systems with 100% visual state coverage.">
   <meta name="keywords"
     content="frontend architect, XState specialist, state machines, React performance optimization, TypeScript, bundle optimization, actor model, frontend consulting, JavaScript architecture, UI state management">
   <meta name="author" content="José Flores">
@@ -109,7 +110,7 @@
   <meta property="og:url" content="https://0xjcf.github.io/port8080folio/">
   <meta property="og:title" content="José Flores - Frontend Architect & XState Specialist">
   <meta property="og:description"
-    content="Expert frontend architect specializing in XState, React performance, and state machine architecture. Transform complex UIs into maintainable systems. 61% bundle size reduction proven results.">
+    content="Expert frontend architect specializing in XState, statecharts, and actor-based architecture. Transform complex UIs into maintainable systems with 100% visual state coverage.">
   <meta property="og:image" content="https://0xjcf.github.io/port8080folio/public/images/me.jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -244,9 +245,14 @@
     <!-- LEVEL 1: UNAWARE - Hero Section with outcome-focused hook -->
     <hero-section-enhanced profile-image="./public/images/me.jpeg"></hero-section-enhanced>
 
-    <hr class="gradient-line" id="hr1" />
-
-    <!-- State Machine Education Section - Optimized awareness progression -->
+    <!-- State Machine Education Section - 5 Levels of Market Awareness -->
+    <!-- 
+      1. UNAWARE: Hero section - They don't know they have a problem
+      2. PROBLEM AWARE: State machine intro - They know the pain but not the solution
+      3. SOLUTION AWARE: Solution bridge - They know solutions exist
+      4. PRODUCT AWARE: Actor model demo - They see our specific approach
+      5. MOST AWARE: Newsletter signup - Ready to take action
+    -->
     <section id="state-machine-education">
       <!-- LEVEL 2: PROBLEM AWARE - Pain points and struggles -->
       <state-machine-intro></state-machine-intro>
@@ -268,7 +274,7 @@
       <!-- LEVEL 5: MOST AWARE - Value prop and CTA -->
       <state-machine-value-prop></state-machine-value-prop>
 
-      <!-- Bridge to deeper learning -->
+      <!-- Bridge to deeper learning for MOST AWARE visitors -->
       <div class="learning-bridge">
         <p class="bridge-text">
           Want to dive deeper into state machines and frontend architecture?
@@ -277,14 +283,10 @@
       </div>
     </section>
 
-    <hr class="gradient-line" id="hr2" />
-
     <!-- Related Content Suggestions -->
     <related-content></related-content>
 
-    <hr class="gradient-line" id="hr3" />
-
-    <!-- Contact Section - Main CTA for SOLUTION AWARE visitors -->
+    <!-- Contact Section - LEVEL 4-5: PRODUCT/MOST AWARE - Direct consultation offer -->
     <section id="contact">
       <h2>Let's Build Something That Actually Ships 🚀</h2>
       <p>
@@ -293,8 +295,8 @@
         I turn overwhelming codebases into maintainable systems that developers actually enjoy working with.
       </p>
       <p>
-        Recent wins include cutting bundle sizes by 61%, transforming 1,700-line state machine
-        monsters into modular architectures, and delivering reliable, high-performance apps with state machines.
+        Recent wins include splitting a 1,700-line state machine monster into 12 modular actors,
+        achieving 100% visual state coverage, and delivering predictable apps with zero race conditions.
       </p>
 
       <h3>How I Can Help</h3>
@@ -303,8 +305,8 @@
           Help your team build maintainable, scalable applications from day one</li>
         <li><strong>XState Implementation & Optimization</strong><br>
           Turn complex workflows into elegant state machines that don't become monsters</li>
-        <li><strong>Performance Audits & Bundle Optimization</strong><br>
-          Cut load times in half without breaking TypeScript or your sanity</li>
+        <li><strong>State Machine Architecture Reviews</strong><br>
+          Transform complex state logic into visual, maintainable statecharts</li>
         <li><strong>Education Platform Development</strong><br>
           Specialized in building interactive learning experiences with complex state needs</li>
         <li><strong>Code Complexity Reviews</strong><br>
@@ -323,24 +325,10 @@
       </p>
     </section>
 
-    <hr class="gradient-line" id="hr4" />
-
-    <!-- Newsletter Signup - After visitors have seen value -->
+    <!-- Newsletter Signup - LEVEL 5: MOST AWARE - Clear CTAs for ready visitors -->
     <section id="newsletter-signup" class="fade-in">
-      <h2>Get Frontend Architecture Insights That Actually Help</h2>
-      <div class="lead-magnets">
-        <div class="lead-magnet">
-          <h3>Frontend Architecture Audit Checklist</h3>
-          <p>Learn how to identify and fix the most common state management issues before they become problems.</p>
-          <span class="value-prop">Perfect for teams evaluating their current architecture</span>
-        </div>
-
-        <div class="lead-magnet">
-          <h3>5-Day Email Course: Taming Frontend Complexity</h3>
-          <p>Daily actionable tips to improve your state management and code maintainability.</p>
-          <span class="value-prop">Great for developers looking to level up their skills</span>
-        </div>
-      </div>
+      <h2>Ready to Master XState?</h2>
+      <p>Choose your path to state machine mastery. Get immediate access to your selected resource.</p>
 
       <!-- Mailchimp-Integrated Form -->
       <div id="mc_embed_shell">
@@ -350,29 +338,51 @@
             method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form"
             class="newsletter-form validate" target="_blank" novalidate="">
             <div id="mc_embed_signup_scroll">
+
+              <!-- Interactive Lead Magnet Selection -->
+              <div class="lead-magnet-cards">
+                <label class="lead-magnet-card" for="challenge-option">
+                  <input type="radio" name="LEADMAGNET" value="xstate_challenges" id="challenge-option" checked>
+                  <div class="card-content">
+                    <div class="card-header">
+                      <span class="card-icon">🎯</span>
+                      <h3>Weekly XState Challenges</h3>
+                      <div class="radio-indicator"></div>
+                    </div>
+                    <p>Get a new state machine challenge every Monday. Build real features, learn by doing, and see
+                      multiple solutions every Friday.</p>
+                    <div class="card-footer">
+                      <span class="value-prop">Join other developers mastering XState</span>
+                      <span class="cta-text">Start Week 1's Challenge →</span>
+                    </div>
+                  </div>
+                </label>
+
+                <label class="lead-magnet-card" for="consultation-option">
+                  <input type="radio" name="LEADMAGNET" value="consultation" id="consultation-option">
+                  <div class="card-content">
+                    <div class="card-header">
+                      <span class="card-icon">💡</span>
+                      <h3>1-on-1 Strategy Session</h3>
+                      <div class="radio-indicator"></div>
+                    </div>
+                    <p>30-minute call to discuss your specific state management challenges and get personalized
+                      recommendations.</p>
+                    <div class="card-footer">
+                      <span class="value-prop">Limited spots available each month</span>
+                      <span class="cta-text">Schedule Your Session →</span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Email Input -->
               <div class="form-group">
                 <label for="mce-EMAIL" class="newsletter-label">Email Address</label>
                 <input type="email" name="EMAIL" id="mce-EMAIL" class="newsletter-input required email"
                   placeholder="you@example.com" required />
-              </div>
-
-              <div class="form-group lead-magnet-selection">
-                <label class="resource-option">
-                  <input type="radio" name="LEADMAGNET" value="audit_checklist" checked>
-                  <span class="radio-custom"></span>
-                  <div class="option-content">
-                    <strong>Frontend Architecture Audit Checklist</strong>
-                    <span>Perfect for teams evaluating their current architecture</span>
-                  </div>
-                </label>
-                <label class="resource-option">
-                  <input type="radio" name="LEADMAGNET" value="email_course">
-                  <span class="radio-custom"></span>
-                  <div class="option-content">
-                    <strong>5-Day Email Course</strong>
-                    <span>Great for developers looking to level up their skills</span>
-                  </div>
-                </label>
+                <div class="input-helper">We'll send your selected resource immediately after you confirm your email.
+                </div>
               </div>
 
               <!-- Mailchimp bot protection -->
@@ -380,8 +390,18 @@
                 <input type="text" name="b_a5d21e2e22f61cf619c8acfb4_09a07976e0" tabindex="-1" value="" />
               </div>
 
+              <!-- Dynamic Submit Button -->
               <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="newsletter-button action-button">
-                Get Free Resources
+                <span class="button-text">Get Started →</span>
+                <span class="button-loading">
+                  <svg class="spinner" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="32">
+                      <animate attributeName="stroke-dashoffset" dur="1s" values="32;0;32" repeatCount="indefinite" />
+                    </circle>
+                  </svg>
+                  Processing...
+                </span>
               </button>
 
               <div id="mce-responses" class="form-responses">
@@ -392,48 +412,7 @@
           </form>
         </div>
       </div>
-
-      <!-- Mailchimp validation script -->
-      <script type="text/javascript">
-        window.addEventListener('DOMContentLoaded', (event) => {
-          const form = document.getElementById('mc-embedded-subscribe-form');
-          const submitButton = document.getElementById('mc-embedded-subscribe');
-          const errorResponse = document.getElementById('mce-error-response');
-          const successResponse = document.getElementById('mce-success-response');
-
-          form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            submitButton.disabled = true;
-            submitButton.textContent = 'Sending...';
-
-            try {
-              const formData = new FormData(form);
-              const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors'
-              });
-
-              // Show success message
-              successResponse.textContent = 'Thank you! Check your email for your free resources.';
-              successResponse.style.display = 'block';
-              errorResponse.style.display = 'none';
-              form.reset();
-            } catch (error) {
-              // Show error message
-              errorResponse.textContent = 'Oops! Something went wrong. Please try again.';
-              errorResponse.style.display = 'block';
-              successResponse.style.display = 'none';
-            } finally {
-              submitButton.disabled = false;
-              submitButton.textContent = 'Get Free Resources';
-            }
-          });
-        });
-      </script>
     </section>
-
-    <hr class="gradient-line" id="hr5" />
 
     <footer id="footer">
       <div class="footer-content">
@@ -442,7 +421,7 @@
           <p class="philosophy">
             <em>"Here's what I know: your codebase shouldn't make you cry. State machines shouldn't need a PhD to
               understand.
-              And yes, that 1,700-line state machine can absolutely become 12 clean, testable actors. Let's build
+              And yes, that 1,700-line state machine can absolutely be split into 12 clean, testable actors. Let's build
               something that makes sense."</em>
           </p>
         </div>
@@ -478,6 +457,9 @@
       ]
     }
     </script>
+
+  <!-- Enhanced Newsletter Form Script -->
+  <script src="./src/scripts/newsletter-form.js"></script>
 </body>
 
 </html>

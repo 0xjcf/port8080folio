@@ -3,6 +3,7 @@ import { customerMachine } from './customer/customer-machine-actor.js';
 import { cashierMachine } from './cashier/cashier-machine-actor.js';
 import { baristaMachine } from './barista/barista-machine-actor.js';
 import { messageLogMachine } from './message-log-actor.js';
+import { uiStateMachine } from './ui-state-machine.js';
 
 // Orchestrator that spawns and manages child actors
 export const coffeeShopOrchestratorMachine = setup({
@@ -19,13 +20,25 @@ export const coffeeShopOrchestratorMachine = setup({
                     message: event.message
                 });
             }
-        }
+        },
+        incrementOrderQueue: assign({
+            ordersInQueue: ({ context }) => context.ordersInQueue + 1
+        }),
+        completeOrder: assign({
+            ordersCompleted: ({ context }) => context.ordersCompleted + 1,
+            ordersInQueue: ({ context }) => Math.max(0, context.ordersInQueue - 1)
+        }),
+        resetStats: assign({
+            ordersCompleted: 0,
+            ordersInQueue: 0
+        })
     },
     actors: {
         customer: customerMachine,
         cashier: cashierMachine,
         barista: baristaMachine,
-        messageLog: messageLogMachine
+        messageLog: messageLogMachine,
+        uiState: uiStateMachine
     }
 }).createMachine({
     id: 'coffeeShopOrchestrator',
@@ -33,7 +46,10 @@ export const coffeeShopOrchestratorMachine = setup({
         customerActor: null,
         cashierActor: null,
         baristaActor: null,
-        messageLogActor: null
+        messageLogActor: null,
+        uiStateActor: null,
+        ordersCompleted: 0,
+        ordersInQueue: 0
     },
     initial: 'closed',
     states: {
@@ -46,6 +62,7 @@ export const coffeeShopOrchestratorMachine = setup({
             entry: assign({
                 // Spawn child actors
                 messageLogActor: ({ spawn }) => spawn('messageLog', { id: 'messageLog' }),
+                uiStateActor: ({ spawn }) => spawn('uiState', { id: 'uiState' }),
                 customerActor: ({ spawn }) => spawn('customer', { id: 'customer' }),
                 cashierActor: ({ spawn }) => spawn('cashier', { id: 'cashier' }),
                 baristaActor: ({ spawn }) => spawn('barista', { id: 'barista' })
@@ -64,14 +81,19 @@ export const coffeeShopOrchestratorMachine = setup({
 
                 // Customer wants to order
                 'customer.WANTS_TO_ORDER': {
-                    actions: 'forwardWithLog'
+                    actions: [
+                        'forwardWithLog',
+                        'incrementOrderQueue',
+                        sendTo(({ context }) => context.uiStateActor, { type: 'ORDER_STARTED' })
+                    ]
                 },
 
                 // Cashier requests payment
                 'cashier.REQUESTS_PAYMENT': {
                     actions: [
                         'forwardWithLog',
-                        sendTo(({ context }) => context.customerActor, { type: 'PAYMENT_REQUEST' })
+                        sendTo(({ context }) => context.customerActor, { type: 'PAYMENT_REQUEST' }),
+                        sendTo(({ context }) => context.uiStateActor, { type: 'PAYMENT_REQUESTED' })
                     ]
                 },
 
@@ -87,7 +109,8 @@ export const coffeeShopOrchestratorMachine = setup({
                 'barista.COFFEE_READY': {
                     actions: [
                         'forwardWithLog',
-                        sendTo(({ context }) => context.cashierActor, { type: 'COFFEE_READY' })
+                        sendTo(({ context }) => context.cashierActor, { type: 'COFFEE_READY' }),
+                        sendTo(({ context }) => context.uiStateActor, { type: 'COFFEE_READY' })
                     ]
                 },
 
@@ -101,7 +124,11 @@ export const coffeeShopOrchestratorMachine = setup({
 
                 // Customer received coffee
                 'customer.COFFEE_RECEIVED': {
-                    actions: 'forwardWithLog'
+                    actions: [
+                        'forwardWithLog',
+                        'completeOrder',
+                        sendTo(({ context }) => context.uiStateActor, { type: 'COFFEE_DELIVERED' })
+                    ]
                 },
 
                 // Customer events with messages
@@ -141,7 +168,10 @@ export const coffeeShopOrchestratorMachine = setup({
 
                 // Barista events with messages
                 'barista.RECEIVED_ORDER': {
-                    actions: 'forwardWithLog'
+                    actions: [
+                        'forwardWithLog',
+                        sendTo(({ context }) => context.uiStateActor, { type: 'BARISTA_STARTED' })
+                    ]
                 },
                 'barista.GRINDING_BEANS': {
                     actions: 'forwardWithLog'
@@ -169,10 +199,15 @@ export const coffeeShopOrchestratorMachine = setup({
         },
         resetting: {
             entry: [
+                // Reset stats
+                'resetStats',
                 // Send reset to all actors
                 sendTo(({ context }) => context.customerActor, { type: 'RESET' }),
                 sendTo(({ context }) => context.cashierActor, { type: 'RESET' }),
-                sendTo(({ context }) => context.baristaActor, { type: 'RESET' })
+                sendTo(({ context }) => context.baristaActor, { type: 'RESET' }),
+                sendTo(({ context }) => context.uiStateActor, { type: 'RESET' }),
+                // Clear message log
+                sendTo(({ context }) => context.messageLogActor, { type: 'CLEAR_LOG' })
             ],
             always: 'open'
         }

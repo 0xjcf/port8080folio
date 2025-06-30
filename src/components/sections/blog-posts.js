@@ -9,31 +9,31 @@ class BlogPosts extends HTMLElement {
         emoji: '🎯',
         title: 'Your XState Components Are Re-Rendering Like Crazy',
         excerpt: 'That debugging session that made me question everything about React and state machines...',
-        metric: '90% fewer renders',
+        metric: 'Isolated actors',
         readTime: '5 min',
         date: '2024-01-15',
         url: 'https://www.linkedin.com/pulse/your-xstate-components-re-rendering-like-crazy-i-found-jos%25C3%25A9-c-flores-utr6e/',
-        tags: ['XState', 'React', 'Performance']
+        tags: ['XState', 'React', 'Actors']
       },
       {
         emoji: '🗂️',
         title: 'Actor-Based File Structures',
         excerpt: 'Why state machines made me completely rethink how I organize my project folders.',
-        metric: 'Better architecture',
+        metric: 'Actor architecture',
         readTime: '8 min',
         date: '2024-01-08',
         url: 'https://www.linkedin.com/pulse/actor-based-file-structures-jos%25C3%25A9-c-flores-dmmce/',
         tags: ['XState', 'Architecture', 'Best Practices']
       },
       {
-        emoji: '📦',
+        emoji: '📊',
         title: 'Stop Loading Your Entire XState App',
-        excerpt: 'The lazy loading pattern that changed everything. From 892KB to 347KB with one simple trick.',
-        metric: '61% smaller',
+        excerpt: 'How splitting a 1,700-line state machine into 12 focused actors transformed our architecture.',
+        metric: 'Modular statecharts',
         readTime: '12 min',
         date: '2023-12-20',
         url: 'https://www.linkedin.com/pulse/stop-loading-your-entire-xstate-app-jos%25C3%25A9-c-flores-llcle/',
-        tags: ['Performance', 'Webpack', 'Optimization']
+        tags: ['Statecharts', 'XState', 'Architecture']
       }
     ];
   }

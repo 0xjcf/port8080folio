@@ -20,6 +20,7 @@
     <script type="module">
         import './src/components/ui/brand-icon.js';
         import './src/components/ui/navbar.js';
+        import './src/components/ui/search-modal.js';
         import './src/components/ui/privacy-notice.js';
         import './src/components/ui/breadcrumbs.js';
         import './src/components/ui/search-component.js';
@@ -102,15 +103,15 @@
             "numberOfItems": 8,
             "itemListElement": [
                 {
-                    "@type": "SoftwareApplication",
-                    "name": "Frontend Architecture Audit Checklist",
-                    "description": "Comprehensive checklist to identify and fix common state management issues",
+                    "@type": "Course",
+                    "name": "Weekly XState Challenges",
+                    "description": "Get a new state machine challenge every Monday with solutions on Friday",
                     "applicationCategory": "DeveloperApplication"
                 },
                 {
-                    "@type": "Course",
-                    "name": "5-Day Email Course: Taming Frontend Complexity",
-                    "description": "Daily actionable tips to improve state management and code maintainability"
+                    "@type": "ConsultingService",
+                    "name": "1-on-1 Strategy Session",
+                    "description": "30-minute personalized consultation for your state management challenges"
                 }
             ]
         },
@@ -127,19 +128,12 @@
     <div class="grid-container subpage">
         <nav-bar current-page="resources"></nav-bar>
 
-        <hr class="gradient-line" id="hr1" />
-
-        <!-- Breadcrumbs -->
-        <breadcrumb-nav></breadcrumb-nav>
-
         <main>
             <section id="resources-hero">
                 <h1>Developer Resources</h1>
                 <p class="lead">Free tools, templates, guides, and code examples to help you build better frontend
                     applications.</p>
             </section>
-
-            <hr class="gradient-line" id="hr2" />
 
             <!-- Comprehensive State Machine Education -->
             <section id="state-machine-deep-dive">
@@ -166,27 +160,26 @@
                 <state-machine-progression></state-machine-progression>
             </section>
 
-            <hr class="gradient-line" id="hr-resources" />
-
             <section id="additional-resources">
                 <h2>Additional Resources</h2>
 
                 <div class="resource-category">
-                    <h3>📋 Audit Tools</h3>
+                    <h3>🎯 Learning Challenges</h3>
                     <div class="resource-item">
-                        <h4>Frontend Architecture Audit Checklist</h4>
-                        <p>A comprehensive checklist to identify and fix common state management issues before they
-                            become problems.</p>
-                        <span class="resource-type">Coming Soon - PDF Download</span>
+                        <h4>Weekly XState Challenges</h4>
+                        <p>Get a new state machine challenge every Monday. Build real features, learn by doing, and see
+                            multiple solutions every Friday.</p>
+                        <span class="resource-type">Available via Newsletter</span>
                     </div>
                 </div>
 
                 <div class="resource-category">
-                    <h3>🎓 Learning Materials</h3>
+                    <h3>💡 Personalized Guidance</h3>
                     <div class="resource-item">
-                        <h4>5-Day Email Course: Taming Frontend Complexity</h4>
-                        <p>Daily actionable tips to improve your state management and code maintainability.</p>
-                        <span class="resource-type">Available via Newsletter</span>
+                        <h4>1-on-1 Strategy Session</h4>
+                        <p>30-minute call to discuss your specific state management challenges and get personalized
+                            recommendations.</p>
+                        <span class="resource-type">Schedule via Newsletter Signup</span>
                     </div>
                 </div>
 
@@ -236,7 +229,8 @@
             <related-content></related-content>
         </main>
 
-        <hr class="gradient-line" id="hr3" />
+        <!-- Breadcrumbs -->
+        <breadcrumb-nav></breadcrumb-nav>
 
         <footer id="footer">
             <div class="footer-content">

@@ -226,10 +226,10 @@ class AboutSection extends HTMLElement {
               </div>
             </div>
             <div class="lesson-item">
-              <span class="lesson-emoji">📦</span>
+              <span class="lesson-emoji">🎭</span>
               <div class="lesson-text">
-                <strong>Bundle size matters</strong> - Reduced our bundles by 61% by splitting 
-                that behemoth into focused, lazy-loaded pieces.
+                <strong>Actor isolation is everything</strong> - Split that 1,700-line behemoth into 12 
+                independent state machines. No more debugging nightmares!
               </div>
             </div>
             <div class="lesson-item">
@@ -257,11 +257,11 @@ class AboutSection extends HTMLElement {
             </div>
             <div class="stat-box" data-stat="components">
               <p class="stat-number">12</p>
-              <p class="stat-label">Smaller, focused machines</p>
+              <p class="stat-label">Modular state machines</p>
             </div>
-            <div class="stat-box" data-stat="performance">
-              <p class="stat-number">94</p>
-              <p class="stat-label">Lighthouse score after</p>
+            <div class="stat-box" data-stat="actors">
+              <p class="stat-number">8</p>
+              <p class="stat-label">Actor-based services</p>
             </div>
             <div class="stat-box" data-stat="sanity">
               <p class="stat-number">100%</p>
@@ -290,11 +290,11 @@ class AboutSection extends HTMLElement {
           <div class="story-section" style="margin-top: 2rem;">
             <h3><span>💡</span> The Plot Twist</h3>
             <p>
-              That 1,700-line disaster? It's now my most valuable teaching tool. 
-              I use it in code reviews to show why complexity limits matter.
+              That 1,700-line disaster? It's now 12 beautiful, independent state machines. 
+              And it's become my most valuable teaching tool.
             </p>
             <p>
-              Sometimes your biggest failures become your best stories. 
+              Sometimes your biggest messes lead to your best architectures. 
               And hey, at least my IDE doesn't cry anymore! 🎉
             </p>
           </div>

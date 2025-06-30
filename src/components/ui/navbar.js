@@ -1,3 +1,5 @@
+import SearchModal from './search-modal.js';
+
 class NavbarComponent extends HTMLElement {
     constructor() {
         super();
@@ -18,7 +20,8 @@ class NavbarComponent extends HTMLElement {
             { href: `${repoName}/`, label: 'Home', key: 'home' },
             { href: `${repoName}/about/`, label: 'About', key: 'about' },
             { href: `${repoName}/blog/`, label: 'Blog', key: 'blog' },
-            { href: `${repoName}/resources/`, label: 'Resources', key: 'resources' }
+            { href: `${repoName}/resources/`, label: 'Resources', key: 'resources' },
+            { href: `${repoName}/challenges/`, label: 'XState Challenges', key: 'challenges' }
         ];
     }
 
@@ -81,6 +84,25 @@ class NavbarComponent extends HTMLElement {
                 }
             });
         });
+
+        // Search toggle functionality
+        const searchToggle = this.querySelector('.search-toggle');
+        if (searchToggle) {
+            searchToggle.addEventListener('click', () => {
+                // Dispatch event to open search modal
+                document.dispatchEvent(new CustomEvent('search-toggle'));
+            });
+        }
+
+        // Keyboard shortcut for search (Cmd/Ctrl + K)
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                if (searchToggle) {
+                    searchToggle.click();
+                }
+            }
+        });
     }
 
     render() {
@@ -104,12 +126,17 @@ class NavbarComponent extends HTMLElement {
           <!-- Primary Navigation -->
           <ul class="navlist primary-nav">
             ${navLinks.map(link => `
-              <li class="nav-item">
+              <li class="nav-item ${link.key === 'challenges' ? 'nav-item-challenges' : ''}">
                 <a href="${link.href}" ${link.key === this.currentPage ? 'class="active"' : ''}>${link.label}</a>
               </li>
             `).join('')}
-            <li class="nav-item nav-search">
-              <search-component></search-component>
+            <li class="nav-item nav-search-icon">
+              <button class="search-toggle" aria-label="Toggle search" title="Search (⌘K)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.35-4.35"/>
+                </svg>
+              </button>
             </li>
           </ul>
 
@@ -143,6 +170,7 @@ class NavbarComponent extends HTMLElement {
           </svg>
         </button>
       </nav>
+      <search-modal></search-modal>
     `;
     }
 }

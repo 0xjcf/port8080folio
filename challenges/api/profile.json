@@ -1,0 +1,48 @@
+{
+  "user": {
+    "id": "user-12345",
+    "name": "José C. Flores",
+    "email": "demo@example.com",
+    "avatar": "JF",
+    "joinedDate": "2024-01-15",
+    "subscription": {
+      "type": "premium",
+      "active": true,
+      "startDate": "2024-01-15",
+      "currentWeek": 4
+    }
+  },
+  "progress": {
+    "completedChallenges": 3,
+    "currentChallenge": {
+      "week": 4,
+      "title": "Shopping Cart State Machine",
+      "status": "in-progress",
+      "startedAt": "2024-02-05T10:00:00Z"
+    },
+    "achievements": [
+      {
+        "id": "first-challenge",
+        "name": "First Steps",
+        "description": "Completed your first challenge",
+        "earnedAt": "2024-01-22"
+      },
+      {
+        "id": "streak-3",
+        "name": "On Fire",
+        "description": "3-week completion streak",
+        "earnedAt": "2024-02-05"
+      }
+    ],
+    "stats": {
+      "totalTimeSpent": "12h 45m",
+      "averageCompletionTime": "4h 15m",
+      "successRate": 100
+    }
+  },
+  "leaderboard": {
+    "weeklyRank": 47,
+    "overallRank": 234,
+    "points": 450
+  }
+} 

@@ -13,7 +13,7 @@ class StateMachineBenefits extends HTMLElement {
     const componentPath = new URL(import.meta.url).pathname;
     const basePath = componentPath.substring(0, componentPath.indexOf('/src/'));
     const styleHref = `${basePath}/src/styles/state-machine-education.css`;
-    
+
     this.shadowRoot.innerHTML = `
       <link rel="stylesheet" href="${styleHref}">
       
@@ -43,9 +43,9 @@ class StateMachineBenefits extends HTMLElement {
         <div class="real-world-section">
           <h3>Real Client Results:</h3>
           <ul class="results-list">
-            <li>📉 <strong>61% smaller bundles</strong> - Removed redundant state management code</li>
-            <li>🔧 <strong>1,700 → 200 lines</strong> - Refactored monster components into clean actors</li>
-            <li>⚡ <strong>Faster load times</strong> - Predictable updates and fewer re-renders with state machines</li>
+            <li>🎭 <strong>Actor-based isolation</strong> - Each service runs independently with zero shared state</li>
+            <li>🔧 <strong>1 → 12 state machines</strong> - Refactored 1,700-line monster into modular actors</li>
+            <li>📊 <strong>Visual statecharts</strong> - Debug complex flows with XState Inspector</li>
             <li>🎯 <strong>0 race conditions</strong> - Actor model eliminates them by design</li>
           </ul>
         </div>
@@ -138,7 +138,7 @@ class StateMachineBenefits extends HTMLElement {
         }
       </style>
     `;
-    
+
     // Add smooth scrolling
     const ctaButton = this.shadowRoot.querySelector('.cta-button');
     if (ctaButton) {

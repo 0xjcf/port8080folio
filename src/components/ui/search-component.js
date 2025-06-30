@@ -44,8 +44,8 @@ class SearchComponent extends HTMLElement {
                 section: "Services"
             },
             {
-                title: "Performance Audits & Bundle Optimization",
-                content: "Performance audits, bundle optimization, load times, TypeScript",
+                title: "State Machine Architecture Reviews",
+                content: "State machine reviews, actor model design, architecture consulting",
                 url: "/#contact",
                 type: "service",
                 section: "Services"
@@ -66,7 +66,7 @@ class SearchComponent extends HTMLElement {
             },
             {
                 title: "XState Components Re-Rendering",
-                content: "XState components re-rendering performance optimization React",
+                content: "XState components re-rendering actor isolation React patterns",
                 url: "/blog/",
                 type: "article",
                 section: "Blog"
@@ -86,11 +86,18 @@ class SearchComponent extends HTMLElement {
                 section: "Resources"
             },
             {
-                title: "Frontend Architecture Audit Checklist",
-                content: "Audit checklist, state management issues, architecture review",
-                url: "/resources/",
-                type: "tool",
-                section: "Resources"
+                title: "Weekly XState Challenges",
+                content: "XState challenges, weekly coding practice, state machine learning",
+                url: "/challenges/",
+                type: "course",
+                section: "Challenges"
+            },
+            {
+                title: "1-on-1 Strategy Session",
+                content: "Personal consultation, state management help, architecture guidance",
+                url: "/#newsletter-signup",
+                type: "service",
+                section: "Consultation"
             },
             {
                 title: "XState Project Templates",
@@ -100,8 +107,8 @@ class SearchComponent extends HTMLElement {
                 section: "Resources"
             },
             {
-                title: "Bundle Optimization Scripts",
-                content: "Bundle optimization, automated scripts, CLI tool, performance",
+                title: "Actor System Templates",
+                content: "Actor model templates, state machine patterns, XState architecture",
                 url: "/resources/",
                 type: "tool",
                 section: "Resources"
@@ -215,7 +222,7 @@ class SearchComponent extends HTMLElement {
             results.innerHTML = `
         <div class="no-results">
           <p>No results found for "${query}"</p>
-          <p class="suggestion">Try searching for: state machines, XState, frontend, React, performance</p>
+          <p class="suggestion">Try searching for: state machines, XState, actors, statecharts, architecture</p>
         </div>
       `;
             return;

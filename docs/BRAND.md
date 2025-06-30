@@ -16,7 +16,7 @@
 
   - Casual but Expert: "Hey there! 👋 I'm José"
   - Self-Aware Humor: References to "1,700-line monsters that teach me valuable lessons 😅"
-  - Results-Driven: Always backed by metrics (61% bundle reduction, 94 Lighthouse score)
+  - Results-Driven: Always backed by metrics (1,700 → 12 actors, 100% state coverage)
   - Pragmatic: "I believe in simple solutions to complex problems"
 
   2. Key Messaging Pillars
@@ -29,9 +29,9 @@
   - Code Complexity Reviews
 
   Proven Results
-  - 61% bundle size reduction (892KB → 347KB)
-  - 1,700 → 12 files refactored
-  - 94 Lighthouse score
+  - 1 state machine (1,700 lines) → 12 modular state machines
+    - Complete architectural refactoring
+  - 100% visual state coverage
   - 4.2s → 1.8s Time to Interactive
   - 90% fewer React re-renders
 
@@ -94,7 +94,7 @@
   Key Questions for Marketing Alignment
 
   1. Consistency Check: Does all marketing material maintain this balance of technical expertise + approachable personality?
-  2. Metric Usage: Are we using the same performance metrics (61%, 94 score, etc.) consistently across channels?
+  2. Metric Usage: Are we using the same state machine metrics (1 → 12 state machines from 1,700 lines, 100% coverage, etc.) consistently across channels?
   3. Service Focus: Are we positioning services as "solving problems" rather than just "providing skills"?
   4. Story Format: Can we adapt the "Problem → Solution → Impact" format for case studies and testimonials?
   5. Visual Cohesion: Does marketing material use the same dark theme + blue accent approach?
@@ -104,7 +104,7 @@
   LinkedIn Tagline: "Turning 1,700-line state machine monsters into maintainable architectures | Frontend Architect specializing in
   XState"
 
-  Twitter Bio: "Frontend architect who makes state machines behave 🤖 | Cut bundle sizes by 61% | XState, React, TypeScript | Also into
+  Twitter Bio: "Frontend architect who makes state machines behave 🤖 | Split 1,700-line monster into 12 actors | XState, React, TypeScript | Also into
    trading"
 
   Email Signature: "José Flores | Frontend Architect | Helping teams build maintainable applications that actually ship 🚀"
@@ -112,7 +112,7 @@
   Case Study Format:
   - The Challenge: [Client]'s education platform had a 1,700-line state machine...
   - The Approach: Implemented role-based lazy loading and modular architecture...
-  - The Results: 61% smaller bundles, 90% fewer re-renders, happy developers
+  - The Results: 12 clean actors, 100% state coverage, happy developers
 
   Brand Don'ts
 
