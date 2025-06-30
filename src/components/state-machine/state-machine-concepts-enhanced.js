@@ -13,8 +13,13 @@ class StateMachineConceptsEnhanced extends HTMLElement {
   }
 
   render() {
+    // Calculate the base path using import.meta.url
+    const componentPath = new URL(import.meta.url).pathname;
+    const basePath = componentPath.substring(0, componentPath.indexOf('/src/'));
+    const styleHref = `${basePath}/src/styles/state-machine-education.css`;
+    
     this.shadowRoot.innerHTML = `
-      <link rel="stylesheet" href="/src/styles/state-machine-education.css">
+      <link rel="stylesheet" href="${styleHref}">
       
       <div class="container">
         <!-- Bridge from Level 1 to Level 2 -->

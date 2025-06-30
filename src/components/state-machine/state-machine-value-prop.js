@@ -9,8 +9,12 @@ class StateMachineValueProp extends HTMLElement {
   }
 
   render() {
+    // Calculate the base path using import.meta.url
+    const componentPath = new URL(import.meta.url).pathname;
+    const basePath = componentPath.substring(0, componentPath.indexOf('/src/'));
+    const styleHref = `${basePath}/src/styles/state-machine-education.css`;
     this.shadowRoot.innerHTML = `
-      <link rel="stylesheet" href="../../styles/state-machine-education.css">
+      <link rel="stylesheet" href="${styleHref}">
       
       <div class="container">
         <div class="concept-section" style="background: linear-gradient(135deg, rgba(13, 153, 255, 0.1), rgba(15, 17, 21, 0.9)); border: 2px solid var(--jasper);">

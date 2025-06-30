@@ -9,8 +9,13 @@ class StateMachineProgression extends HTMLElement {
   }
 
   render() {
+    // Calculate the base path using import.meta.url
+    const componentPath = new URL(import.meta.url).pathname;
+    const basePath = componentPath.substring(0, componentPath.indexOf('/src/'));
+    const styleHref = `${basePath}/src/styles/state-machine-education.css`;
+    
     this.shadowRoot.innerHTML = `
-      <link rel="stylesheet" href="/src/styles/state-machine-education.css">
+      <link rel="stylesheet" href="${styleHref}">
       
       <div class="container">
         <h3 class="concept-title" style="text-align: center; margin-bottom: 3rem;">🎯 Your Journey to Clean Architecture</h3>

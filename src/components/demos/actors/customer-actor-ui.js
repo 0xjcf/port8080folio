@@ -4,9 +4,13 @@ import '../../ui/loading-indicator.js';
 export class CustomerActorUI extends ActorComponent {
 
   render() {
+    // Calculate the base path using import.meta.url
+    const componentPath = new URL(import.meta.url).pathname;
+    const basePath = componentPath.substring(0, componentPath.indexOf('/src/'));
+    const styleHref = `${basePath}/src/components/demos/actors/actor-ui.css`;
     if (!this.snapshot) {
       this.shadowRoot.innerHTML = `
-        <link rel="stylesheet" href="./actor-ui.css">
+        <link rel="stylesheet" href="${styleHref}">
         
         <div class="actor-box">
           <div class="actor-icon">🚶</div>
@@ -71,7 +75,7 @@ export class CustomerActorUI extends ActorComponent {
     const isLoading = stateInfo.loading || false;
 
     this.shadowRoot.innerHTML = `
-      <link rel="stylesheet" href="/src/components/demos/actors/actor-ui.css">
+      <link rel="stylesheet" href="${styleHref}">
       
       <div class="actor-box actor-card ${isLoading ? 'is-loading' : ''}" data-state="${state}" data-active="${stateInfo.active}">
         <div class="actor-icon state-icon">${stateInfo.icon}</div>
