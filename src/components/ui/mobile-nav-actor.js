@@ -1,3 +1,23 @@
+/**
+ * DEPRECATED: Mobile Navigation XState v4 Implementation
+ * 
+ * Status: DISABLED (See ui-orchestrator.js)
+ * Replaced by: mobile-nav-component.js + mobile-nav-state-machine.js (XState v5)
+ * 
+ * This file is kept for:
+ * - Emergency fallback if new system fails
+ * - Reference implementation for XState v4 → v5 migration
+ * - Historical documentation of architecture evolution
+ * 
+ * Issues that led to replacement:
+ * - XState v4 API deprecation (services → actors)
+ * - CSS conflicts with tablet media queries (@media min-width: 768px)
+ * - Competing with new mobile-nav-component system
+ * 
+ * DO NOT DELETE - Keep as backup
+ * Last working version: 2024-12-28
+ */
+
 import { createMachine, createActor, assign, fromPromise } from 'https://cdn.jsdelivr.net/npm/xstate@5/+esm';
 import { uiOrchestrator } from './ui-orchestrator.js';
 

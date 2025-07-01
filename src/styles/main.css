@@ -1630,6 +1630,19 @@ footer.fade-in { animation-delay: 0.8s; }
     font-size: 1.25rem;
   }
   
+  /* Ensure hamburger menu is visible on tablet */
+  .nav-content {
+    display: none;
+  }
+  
+  .menu {
+    display: block !important;
+    z-index: 1001;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
   /* Section spacing */
   header, main, footer, #newsletter-signup, #contact {
     padding: 2.5rem 0;
@@ -1666,12 +1679,11 @@ footer.fade-in { animation-delay: 0.8s; }
 @media (max-width: 850px) {
   .body--no-scroll { overflow: hidden; }
   .grid-container {
-    grid-template-rows: auto;
     padding: 0 1rem;
-    gap: 1.5rem;
+    gap: 0.75rem;
   }
   .grid-container.subpage {
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
   nav {
     justify-content: space-between;
@@ -1811,6 +1823,25 @@ footer.fade-in { animation-delay: 0.8s; }
   .newsletter-button {
     margin-top: 0.5rem;
     padding: 0.75rem;
+  }
+  .nav-search-icon {
+    display: none; /* Hide search on mobile */
+  }
+  
+  /* Better mobile menu styling */
+  .nav-content.nav-content--visible {
+    animation: slideInLeft 0.3s ease-out;
+  }
+  
+  @keyframes slideInLeft {
+    from {
+      left: -100%;
+      opacity: 0;
+    }
+    to {
+      left: 0;
+      opacity: 1;
+    }
   }
 }
 
@@ -3654,5 +3685,47 @@ section > .section-header h3:first-child {
   h4 {
     font-size: 1.1rem !important;
     font-weight: 600 !important;
+  }
+}
+
+/* Tablet-specific styles - ensure hamburger is visible on 768px-850px */
+@media (min-width: 768px) and (max-width: 850px) {
+  .nav-content {
+    display: none;
+  }
+  
+  .menu {
+    display: block !important;
+    z-index: 1001;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (max-width: 850px) {
+  .body--no-scroll { overflow: hidden; }
+  .grid-container {
+    padding: 0 1rem;
+    gap: 0.75rem;
+  }
+  .grid-container.subpage {
+    gap: 0.5rem;
+  }
+  nav {
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+  }
+  .nav-content {
+    display: none;
+  }
+  .menu {
+    display: block;
+    z-index: 1001;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }

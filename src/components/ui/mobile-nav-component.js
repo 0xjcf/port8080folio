@@ -1,40 +1,54 @@
 // Mobile Navigation Web Component - View Layer Only
+import { devConfig } from '../../scripts/dev-config.js';
 class MobileNavComponent extends HTMLElement {
     constructor() {
         super();
         this.isOpen = false;
         this.touchStartX = 0;
         this.touchStartY = 0;
+        devConfig.log('Mobile nav component constructed');
     }
 
     connectedCallback() {
+        devConfig.log('Mobile nav component connected');
+
         this.render();
         this.setupEventListeners();
         this.setupGestureHandling();
+        this.setupResizeHandler();
 
         // Initialize proper accessibility state
         this.isOpen = false;
         this.setAttribute('aria-hidden', 'true');
 
-        // Force show during development only
-        if (this.isDevelopmentMode()) {
+        // Show on mobile/tablet or in development mode
+        const shouldShow = devConfig.isDevelopment || window.innerWidth < 1024;
+
+        if (shouldShow) {
             this.setAttribute('data-force-show', '');
+            devConfig.log('Mobile nav visibility enabled', {
+                reason: devConfig.isDevelopment ? 'dev-mode' : 'screen-size',
+                width: window.innerWidth
+            });
         }
 
-        // Debug slot content after a short delay to ensure DOM is ready
+        // Setup development features
+        if (devConfig.isEnabled('enableMobileNavTesting')) {
+            this.setupDevelopmentFeatures();
+        }
+
+        // Initialize content after DOM is ready
         setTimeout(() => {
             this.debugSlotContent();
             this.ensureContentIsVisible();
         }, 100);
     }
 
-    isDevelopmentMode() {
-        return window.location.hostname === 'localhost' ||
-            window.location.hostname === '127.0.0.1' ||
-            window.location.hostname.includes('.local') ||
-            window.location.protocol === 'file:' ||
-            window.location.search.includes('debug=mobile-nav') ||
-            window.location.search.includes('dev=true');
+    setupDevelopmentFeatures() {
+        // Add development testing controls and keyboard shortcuts
+        this.setupGlobalKeyHandlers();
+        this.addDevelopmentTestingControls();
+        this.addMouseSwipeSimulation();
     }
 
     disconnectedCallback() {
@@ -160,12 +174,13 @@ class MobileNavComponent extends HTMLElement {
       }
 
       .mobile-nav-intro {
-        padding: 4rem 2rem 2rem 2rem;
+        padding: 4rem 2rem 1.5rem 2rem;
         text-align: center;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         background: rgba(0, 0, 0, 0.1);
         margin-top: 0;
         position: relative;
+        flex-shrink: 0; /* Prevent intro from shrinking */
       }
 
       .mobile-nav-intro h2 {
@@ -229,9 +244,9 @@ class MobileNavComponent extends HTMLElement {
       .mobile-nav-content .navlist {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.25rem; /* Tighter spacing to fit more items */
         margin: 0;
-        padding: 1.5rem 1.5rem 3rem 1.5rem; /* Extra bottom padding for mobile browsers */
+        padding: 1rem 1.5rem 3rem 1.5rem; /* Reduced top padding, keep bottom padding for mobile browsers */
         list-style: none;
         flex: 1;
         justify-content: flex-start;
@@ -245,14 +260,14 @@ class MobileNavComponent extends HTMLElement {
       .mobile-nav-content .nav-item a {
         display: flex;
         align-items: center;
-        padding: 1rem 1.25rem;
+        padding: 0.875rem 1.25rem; /* Slightly reduced padding */
         color: var(--teagreen, #90ee90);
         text-decoration: none;
-        font-size: 1.125rem;
+        font-size: 1.1rem; /* Slightly smaller font */
         font-weight: 500;
         border-radius: 12px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        min-height: 48px;
+        min-height: 44px; /* Meet minimum touch target while being compact */
         border: 1px solid transparent;
         position: relative;
         overflow: hidden;
@@ -353,8 +368,8 @@ class MobileNavComponent extends HTMLElement {
         text-align: center;
       }
 
-      /* Hide on desktop only when not explicitly shown */
-      @media (min-width: 768px) {
+      /* Hide on large desktop only when not explicitly shown */
+      @media (min-width: 1024px) {
         mobile-nav:not([data-force-show]) {
           display: none;
         }
@@ -502,11 +517,45 @@ class MobileNavComponent extends HTMLElement {
         document.addEventListener('touchstart', handleTouchStart, { passive: true });
         document.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-        // Development testing: Only enable in local development
-        if (this.isDevelopmentMode()) {
-            this.addDevelopmentTestingControls();
-            this.addMouseSwipeSimulation();
-        }
+        // Development testing features are set up in setupDevelopmentFeatures()
+    }
+
+    setupGlobalKeyHandlers() {
+        // Key handler for mobile nav testing
+        this._globalKeyHandler = (e) => {
+            // 'T' key to toggle dev panel (only when dev mode is enabled)
+            if (e.key.toLowerCase() === 't' && !e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
+                const activeElement = document.activeElement;
+                const isInInput = activeElement &&
+                    (activeElement.tagName === 'INPUT' ||
+                        activeElement.tagName === 'TEXTAREA' ||
+                        activeElement.isContentEditable);
+
+                if (!isInInput && devConfig.isDevelopment) {
+                    const testControls = document.getElementById('mobile-nav-dev-controls');
+                    if (testControls) {
+                        testControls.style.display = testControls.style.display === 'none' ? 'flex' : 'none';
+                        devConfig.log('Mobile nav test panel toggled');
+                        e.preventDefault();
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('keydown', this._globalKeyHandler);
+    }
+
+    setupResizeHandler() {
+        this._resizeHandler = () => {
+            const shouldShow = devConfig.isDevelopment || window.innerWidth < 1024;
+            if (shouldShow) {
+                this.setAttribute('data-force-show', '');
+            } else {
+                this.removeAttribute('data-force-show');
+            }
+        };
+
+        window.addEventListener('resize', this._resizeHandler);
     }
 
     addDevelopmentTestingControls() {
@@ -541,13 +590,6 @@ class MobileNavComponent extends HTMLElement {
         `;
 
         document.body.appendChild(testControls);
-
-        // Show/hide controls with 'T' key
-        document.addEventListener('keydown', (e) => {
-            if (e.key.toLowerCase() === 't' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-                testControls.style.display = testControls.style.display === 'none' ? 'flex' : 'none';
-            }
-        });
 
         // Test button handlers
         document.getElementById('test-open').addEventListener('click', () => {
@@ -723,7 +765,12 @@ class MobileNavComponent extends HTMLElement {
 
     // Public API methods for state machine to call
     open() {
-        if (this.isOpen) return;
+        if (this.isOpen) {
+            devConfig.log('Mobile nav already open');
+            return;
+        }
+
+        devConfig.log('Opening mobile nav');
 
         this.isOpen = true;
         this.setAttribute('open', '');
@@ -732,6 +779,8 @@ class MobileNavComponent extends HTMLElement {
         const container = this.querySelector('.mobile-nav-container');
         if (container) {
             container.classList.add('nav-open');
+        } else {
+            devConfig.warn('Mobile nav container not found');
         }
 
         // Lock body scroll
@@ -935,12 +984,31 @@ class MobileNavComponent extends HTMLElement {
             document.body.style.overflow = '';
             document.body.style.paddingRight = '';
         }
+
+        // Remove global key handler
+        if (this._globalKeyHandler) {
+            document.removeEventListener('keydown', this._globalKeyHandler);
+            this._globalKeyHandler = null;
+        }
+
+        // Remove resize handler
+        if (this._resizeHandler) {
+            window.removeEventListener('resize', this._resizeHandler);
+            this._resizeHandler = null;
+        }
+
+        // Remove dev controls if they exist
+        const devControls = document.getElementById('mobile-nav-dev-controls');
+        if (devControls) {
+            devControls.remove();
+        }
     }
 }
 
 // Define the custom element
 if (!customElements.get('mobile-nav')) {
     customElements.define('mobile-nav', MobileNavComponent);
+    devConfig.log('Mobile nav custom element registered');
 }
 
 export default MobileNavComponent; 

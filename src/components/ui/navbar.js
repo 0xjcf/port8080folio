@@ -1,4 +1,5 @@
 import SearchModal from './search-modal.js';
+import { devConfig } from '../../scripts/dev-config.js';
 
 class NavbarComponent extends HTMLElement {
   constructor() {
@@ -8,6 +9,7 @@ class NavbarComponent extends HTMLElement {
   }
 
   connectedCallback() {
+    devConfig.log('Navbar component connected');
     this.render();
     this.setupEventListeners();
     this.initializeMobileNav();
@@ -200,7 +202,8 @@ class NavbarComponent extends HTMLElement {
   }
 
   async initializeMobileNav() {
-    // Initialize mobile navigation with proper architecture
+    devConfig.log('Initializing mobile navigation');
+
     try {
       // Load components
       await Promise.all([
@@ -213,6 +216,7 @@ class NavbarComponent extends HTMLElement {
 
       // Get the mobile nav component
       const mobileNavElement = this.querySelector('mobile-nav');
+
       if (mobileNavElement) {
         // Wait for the mobile nav component to be fully initialized
         await new Promise(resolve => setTimeout(resolve, 50));
@@ -224,14 +228,19 @@ class NavbarComponent extends HTMLElement {
         const { default: MobileNavController } = await import('./mobile-nav-state-machine.js');
         this.mobileNavController = new MobileNavController(mobileNavElement);
 
-        // Expose controller for debugging in development only
-        if (this.isDevelopmentMode()) {
+        // Expose controller for debugging in development mode
+        if (devConfig.isDevelopment) {
           window.__mobileNavController = this.mobileNavController;
           window.__mobileNavComponent = mobileNavElement;
+          devConfig.log('Mobile nav controller exposed for debugging');
         }
+
+        devConfig.log('Mobile nav initialization completed');
+      } else {
+        devConfig.error('Mobile nav element not found');
       }
     } catch (error) {
-      console.warn('Failed to initialize mobile navigation with state machine, using fallback:', error);
+      devConfig.error('Failed to initialize mobile navigation:', error);
       // Notify simple-mobile-nav.js to take over
       document.dispatchEvent(new CustomEvent('mobile-nav-architecture-failed', {
         detail: { error: error.message }
@@ -291,7 +300,7 @@ class NavbarComponent extends HTMLElement {
       const navList = document.createElement('ul');
       navList.className = 'navlist primary-nav';
 
-      navLinks.forEach(link => {
+      navLinks.forEach((link, index) => {
         const li = document.createElement('li');
         li.className = 'nav-item';
         const a = document.createElement('a');
@@ -302,7 +311,13 @@ class NavbarComponent extends HTMLElement {
         }
         li.appendChild(a);
         navList.appendChild(li);
+
+        // Development debugging
+        devConfig.log(`Created nav item ${index + 1}/${navLinks.length}: ${link.label}`);
       });
+
+      // Development debugging - log total
+      devConfig.log(`Total navigation items created: ${navLinks.length}`);
 
       navSlotTarget.parentNode.replaceChild(navList, navSlotTarget);
     }
@@ -353,14 +368,7 @@ class NavbarComponent extends HTMLElement {
     }, 100);
   }
 
-  isDevelopmentMode() {
-    return window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1' ||
-      window.location.hostname.includes('.local') ||
-      window.location.protocol === 'file:' ||
-      window.location.search.includes('debug=mobile-nav') ||
-      window.location.search.includes('dev=true');
-  }
+
 
   disconnectedCallback() {
     // Cleanup

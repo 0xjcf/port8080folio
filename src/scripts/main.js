@@ -1,3 +1,6 @@
+// Import development configuration
+import { devConfig } from './dev-config.js';
+
 // Navbar component is imported in the module script block in HTML
 
 // New Architecture: Component-based approach with state machine controller
@@ -14,7 +17,7 @@ import('../components/ui/simple-mobile-nav.js').then(module => {
 // Mobile navigation components are loaded on-demand by navbar component
 // This provides better architecture with component isolation
 
-console.log('New architecture initialized - components load on demand');
+devConfig.log('New architecture initialized - components load on demand');
 
 // Utility functions
 function debounce(func, wait) {
@@ -354,4 +357,9 @@ if (!document.getElementById('easter-egg-styles')) {
     }
   `;
   document.head.appendChild(style);
+}
+
+// Development features
+if (devConfig.isEnabled('enablePerformanceLogging')) {
+  devConfig.log('Performance logging enabled');
 }

@@ -153,13 +153,15 @@ export const uiOrchestratorMachine = createMachine({
             }
         }),
         initializeNavigation: () => {
-            // Initialize mobile navigation enhancements
-            import('./mobile-nav-actor.js').then(module => {
-                const navElement = document.querySelector('nav-bar');
-                if (navElement) {
-                    navElement.initMobileEnhancements();
-                }
-            });
+            // DISABLED: Old mobile navigation system conflicts with new mobile-nav-component.js
+            // The mobile-nav-actor.js hides navigation on tablet screens with @media (min-width: 768px)
+            // import('./mobile-nav-actor.js').then(module => {
+            //     const navElement = document.querySelector('nav-bar');
+            //     if (navElement) {
+            //         navElement.initMobileEnhancements();
+            //     }
+            // });
+            console.log('🚫 Old mobile-nav-actor disabled to prevent tablet conflicts');
         },
         initializeCodeDisplays: () => {
             // Initialize code display enhancements
