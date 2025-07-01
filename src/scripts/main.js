@@ -1,5 +1,21 @@
 // Navbar component is imported in the module script block in HTML
 
+// New Architecture: Component-based approach with state machine controller
+// Mobile navigation is now initialized directly by the navbar component
+// with proper separation of concerns (View/Controller layers)
+
+// Keep simple mobile nav as ultimate fallback
+import('../components/ui/simple-mobile-nav.js').then(module => {
+  console.log('Simple mobile navigation loaded as ultimate fallback');
+}).catch(err => {
+  console.warn('Failed to load fallback mobile navigation:', err);
+});
+
+// Mobile navigation components are loaded on-demand by navbar component
+// This provides better architecture with component isolation
+
+console.log('New architecture initialized - components load on demand');
+
 // Utility functions
 function debounce(func, wait) {
   let timeout;
