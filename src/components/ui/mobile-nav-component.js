@@ -16,8 +16,8 @@ class MobileNavComponent extends HTMLElement {
         this.isOpen = false;
         this.setAttribute('aria-hidden', 'true');
 
-        // Force show during development or when explicitly enabled
-        if (this.isDevelopmentMode() || this.hasAttribute('force-show')) {
+        // Force show during development only
+        if (this.isDevelopmentMode()) {
             this.setAttribute('data-force-show', '');
         }
 
@@ -31,7 +31,10 @@ class MobileNavComponent extends HTMLElement {
     isDevelopmentMode() {
         return window.location.hostname === 'localhost' ||
             window.location.hostname === '127.0.0.1' ||
-            window.location.search.includes('debug=mobile-nav');
+            window.location.hostname.includes('.local') ||
+            window.location.protocol === 'file:' ||
+            window.location.search.includes('debug=mobile-nav') ||
+            window.location.search.includes('dev=true');
     }
 
     disconnectedCallback() {
@@ -117,8 +120,9 @@ class MobileNavComponent extends HTMLElement {
         right: 0;
         width: 80%;
         max-width: 320px;
-        height: 100vh; /* Use viewport height */
-        max-height: 100vh; /* Ensure it doesn't exceed viewport */
+        height: 100vh;
+        height: 100dvh; /* Use dynamic viewport height when supported */
+        max-height: calc(100vh - 2rem); /* Account for browser UI */
         background: var(--secondary-bg, #1a1a1a);
         box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
         transform: translateX(100%);
@@ -126,7 +130,8 @@ class MobileNavComponent extends HTMLElement {
         display: flex;
         flex-direction: column;
         pointer-events: all;
-        overflow: hidden; /* Prevent any overflow from the menu itself */
+        overflow: hidden;
+        padding-bottom: env(safe-area-inset-bottom, 1rem); /* Account for safe areas */
       }
 
       .mobile-nav-container.nav-open .mobile-nav-menu {
@@ -203,17 +208,21 @@ class MobileNavComponent extends HTMLElement {
 
       .mobile-nav-content {
         flex: 1;
-        overflow: hidden; /* Remove auto scrolling */
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
         display: flex;
         flex-direction: column;
+        min-height: 0; /* Allow flex item to shrink */
       }
 
 
 
       .mobile-nav-footer {
-        padding: 1.5rem;
+        padding: 1.5rem 1.5rem 2rem 1.5rem; /* Extra bottom padding for mobile browsers */
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         background: rgba(0, 0, 0, 0.1);
+        flex-shrink: 0; /* Prevent footer from shrinking */
       }
 
       /* Navigation content styling */
@@ -222,11 +231,11 @@ class MobileNavComponent extends HTMLElement {
         flex-direction: column;
         gap: 0.5rem;
         margin: 0;
-        padding: 1.5rem; /* Move padding here from the previous rule */
+        padding: 1.5rem 1.5rem 3rem 1.5rem; /* Extra bottom padding for mobile browsers */
         list-style: none;
         flex: 1;
         justify-content: flex-start;
-        min-height: 0; /* Allow flex item to shrink */
+        min-height: 0;
       }
 
       .mobile-nav-content .nav-item {
@@ -493,8 +502,8 @@ class MobileNavComponent extends HTMLElement {
         document.addEventListener('touchstart', handleTouchStart, { passive: true });
         document.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-        // Development testing: Simulate touch events with mouse for desktop testing
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        // Development testing: Only enable in local development
+        if (this.isDevelopmentMode()) {
             this.addDevelopmentTestingControls();
             this.addMouseSwipeSimulation();
         }

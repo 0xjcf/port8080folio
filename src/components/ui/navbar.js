@@ -224,8 +224,8 @@ class NavbarComponent extends HTMLElement {
         const { default: MobileNavController } = await import('./mobile-nav-state-machine.js');
         this.mobileNavController = new MobileNavController(mobileNavElement);
 
-        // Expose controller for debugging in development
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        // Expose controller for debugging in development only
+        if (this.isDevelopmentMode()) {
           window.__mobileNavController = this.mobileNavController;
           window.__mobileNavComponent = mobileNavElement;
         }
@@ -351,6 +351,15 @@ class NavbarComponent extends HTMLElement {
         mobileNavElement.refreshContent();
       }
     }, 100);
+  }
+
+  isDevelopmentMode() {
+    return window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      window.location.hostname.includes('.local') ||
+      window.location.protocol === 'file:' ||
+      window.location.search.includes('debug=mobile-nav') ||
+      window.location.search.includes('dev=true');
   }
 
   disconnectedCallback() {
