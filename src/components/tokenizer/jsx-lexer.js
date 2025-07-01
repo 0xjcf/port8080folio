@@ -9,198 +9,250 @@ export class JSXLexer extends Lexer {
   }
 
   /**
-   * Override to add JSX-specific matching
-   */
+ * Override to add JSX-specific matching
+ */
   matchLanguageSpecific() {
-    // Check for JSX elements
-    if (this.matchJSX()) return true;
-    
-    // Check for React-specific identifiers
-    if (this.matchReactComponent()) return true;
-    
+    // Check for JSX comment syntax {/* ... */}
+    if (this.code.slice(this.position, this.position + 3) === '{/*') {
+      return this.matchJSXComment();
+    }
+
+    // Check for JSX tags with escaped HTML entities
+    if (this.code.slice(this.position, this.position + 4) === '&lt;') {
+      return this.matchJSX();
+    }
+
     return false;
   }
 
   /**
-   * Match JSX elements
+   * Match JSX comments
    */
-  matchJSX() {
-    // Check for escaped < (&lt;)
-    if (this.code.slice(this.position, this.position + 4) !== '&lt;') {
-      return false;
+  matchJSXComment() {
+    if (this.code.slice(this.position, this.position + 2) === '/*') {
+      const start = this.position;
+
+      // Find the end of the JSX comment
+      const end = this.code.indexOf('*/}', start + 3);
+      if (end !== -1) {
+        const fullEnd = end + 3;
+        this.addToken('comment', start, fullEnd);
+        this.position = fullEnd;
+        return true;
+      }
     }
 
-    const afterLt = this.position + 4;
-    
-    // Skip whitespace after <
-    let pos = afterLt;
-    while (pos < this.code.length && /\s/.test(this.code[pos])) {
-      pos++;
+    return false;
+  }
+
+  /**
+   * Enhanced JSX matching for escaped JSX only
+   */
+  matchJSX() {
+    // Check for escaped JSX: &lt;
+    if (this.code.slice(this.position, this.position + 4) === '&lt;') {
+      return this.matchEscapedJSX();
     }
-    
-    // Check what comes after <
-    const nextChar = this.code[pos];
-    
-    // Check for closing tag (</), self-closing (/>) or opening tag
-    if (nextChar === '/' || /[a-zA-Z]/.test(nextChar) || nextChar === '&' || nextChar === '>') {
-      // Add opening bracket
-      this.addToken('jsxBracket', this.position, this.position + 4, '&lt;');
-      this.position = afterLt;
-      
-      // Handle closing tag slash
-      if (this.code[this.position] === '/') {
-        this.addToken('jsxBracket', this.position, this.position + 1, '/');
+
+    return false;
+  }
+
+  /**
+   * Match escaped JSX (&lt;div&gt; format)
+   */
+  matchEscapedJSX() {
+    const start = this.position;
+
+    // Add the opening bracket token first
+    this.addToken('jsxBracket', this.position, this.position + 4, '&lt;');
+    this.position += 4; // Skip &lt;
+
+    // Skip whitespace after <
+    this.skipWhitespace();
+
+    // Check for closing tag
+    let isClosing = false;
+    if (this.code[this.position] === '/') {
+      isClosing = true;
+      this.addToken('jsxBracket', this.position, this.position + 1, '/');
+      this.position++;
+      this.skipWhitespace();
+    }
+
+    // Match tag name
+    if (/[a-zA-Z]/.test(this.code[this.position])) {
+      const tagStart = this.position;
+      while (this.position < this.code.length && /[a-zA-Z0-9\.\-]/.test(this.code[this.position])) {
         this.position++;
       }
-      
-      // Skip whitespace
-      while (this.position < this.code.length && /\s/.test(this.code[this.position])) {
-        this.position++;
-      }
-      
-      // Match tag name (including React.Fragment)
-      if (/[a-zA-Z]/.test(this.code[this.position])) {
-        const tagStart = this.position;
-        
-        // Match tag name with dots (for React.Fragment)
-        while (this.position < this.code.length && /[a-zA-Z0-9.]/.test(this.code[this.position])) {
-          this.position++;
-        }
-        
-        this.addToken('jsxTag', tagStart, this.position);
-        
-        // Match attributes
+
+      const tagName = this.code.slice(tagStart, this.position);
+      const tokenType = /^[A-Z]/.test(tagName) ? 'reactComponent' : 'jsxTag';
+      this.addToken(tokenType, tagStart, this.position, tagName);
+
+      // Match attributes (only for opening tags)
+      if (!isClosing) {
         this.matchJSXAttributes();
       }
-      
-      // Match closing >
+
+      // Skip whitespace
       this.skipWhitespace();
-      
-      // Handle self-closing />
+
+      // Handle self-closing tag
       if (this.code[this.position] === '/') {
         this.addToken('jsxBracket', this.position, this.position + 1, '/');
         this.position++;
         this.skipWhitespace();
       }
-      
-      // Match > or &gt;
+
+      // Match closing &gt;
       if (this.code.slice(this.position, this.position + 4) === '&gt;') {
         this.addToken('jsxBracket', this.position, this.position + 4, '&gt;');
         this.position += 4;
       }
-      
+
       return true;
     }
-    
+
+    // Reset position if we couldn't match a valid tag
+    this.position = start;
     return false;
   }
 
   /**
-   * Match JSX attributes
+   * Enhanced JSX attributes matching
    */
   matchJSXAttributes() {
     while (this.position < this.code.length) {
       this.skipWhitespace();
-      
-      // Check for end of tag
-      if (this.code[this.position] === '/' || 
-          this.code[this.position] === '>' ||
-          this.code.slice(this.position, this.position + 4) === '&gt;') {
+
+      // Check for end of opening tag
+      if (this.code[this.position] === '/' ||
+        this.code.slice(this.position, this.position + 4) === '&gt;') {
         break;
       }
-      
+
       // Match attribute name
       if (/[a-zA-Z]/.test(this.code[this.position])) {
         const attrStart = this.position;
-        
-        while (this.position < this.code.length && /[a-zA-Z0-9-]/.test(this.code[this.position])) {
+
+        // Match attribute name (including data-* and aria-*)
+        while (this.position < this.code.length && /[a-zA-Z0-9\-_]/.test(this.code[this.position])) {
           this.position++;
         }
-        
+
         this.addToken('jsxAttribute', attrStart, this.position);
-        
-        // Skip whitespace
+
         this.skipWhitespace();
-        
+
         // Check for = and attribute value
         if (this.code[this.position] === '=') {
-          this.position++; // Skip =
+          this.addToken('operator', this.position, this.position + 1, '=');
+          this.position++;
           this.skipWhitespace();
-          
-          // Match attribute value (string, expression, etc.)
+
+          // Match attribute value
           if (this.code[this.position] === '"' || this.code[this.position] === "'") {
-            // String value - let regular string matcher handle it
-            const savedPos = this.position;
-            if (this.matchString()) {
-              // Successfully matched string
-              continue;
-            }
-            this.position = savedPos;
+            // String value - let base lexer handle it
+            this.matchString();
           } else if (this.code[this.position] === '{') {
-            // JSX expression - skip it for now
-            let braceCount = 1;
-            this.position++;
-            
-            while (this.position < this.code.length && braceCount > 0) {
-              if (this.code[this.position] === '{') braceCount++;
-              else if (this.code[this.position] === '}') braceCount--;
-              this.position++;
-            }
+            // JSX expression
+            this.matchJSXExpression();
           }
         }
       } else {
-        // Unknown character, break
         break;
       }
     }
   }
 
   /**
-   * Match React component names
+   * Match JSX expressions {value}
    */
-  matchReactComponent() {
-    // Check if current position could be a React component
-    if (this.position > 0 && /[A-Z]/.test(this.code[this.position])) {
-      // Look back to see if this is likely a component
-      const prevToken = this.tokens[this.tokens.length - 1];
-      
-      // Common patterns before components: <Component, const Component, class Component
-      if (prevToken && (
-        prevToken.type === 'jsxBracket' || 
-        prevToken.type === 'keyword' && ['const', 'let', 'var', 'class', 'function'].includes(prevToken.value)
-      )) {
-        const start = this.position;
-        
-        while (this.position < this.code.length && /[a-zA-Z0-9_$]/.test(this.code[this.position])) {
+  matchJSXExpression() {
+    if (this.code[this.position] === '{') {
+      // Add opening brace
+      this.addToken('jsxBracket', this.position, this.position + 1, '{');
+      this.position++;
+
+      let braceCount = 1;
+      const exprStart = this.position;
+
+      // Find the end of the expression
+      while (this.position < this.code.length && braceCount > 0) {
+        if (this.code[this.position] === '{') {
+          braceCount++;
+        } else if (this.code[this.position] === '}') {
+          braceCount--;
+        }
+
+        if (braceCount > 0) {
           this.position++;
         }
-        
-        this.addToken('reactComponent', start, this.position);
-        return true;
       }
+
+      // Extract and tokenize the expression content as JavaScript
+      if (this.position > exprStart) {
+        const exprContent = this.code.slice(exprStart, this.position);
+        const exprLexer = new Lexer(exprContent, { language: 'javascript' });
+        const exprTokens = exprLexer.tokenize();
+
+        // Adjust token positions and add them
+        for (const token of exprTokens) {
+          this.addToken(
+            token.type,
+            exprStart + token.start,
+            exprStart + token.end,
+            token.value
+          );
+        }
+      }
+
+      // Add closing brace
+      if (this.code[this.position] === '}') {
+        this.addToken('jsxBracket', this.position, this.position + 1, '}');
+        this.position++;
+      }
+
+      return true;
     }
-    
+
     return false;
   }
 
   /**
-   * Override identifier type detection to recognize React hooks
+   * Override identifier type detection for React patterns
    */
   getIdentifierType(value) {
-    // Check for React hooks
-    if (value.startsWith('use') && value.length > 3 && /[A-Z]/.test(value[3])) {
+    // Check for React hooks first
+    if (/^use[A-Z]/.test(value)) {
       return 'reactHook';
     }
-    
+
     // Check for React/JSX keywords
-    const reactKeywords = ['React', 'Fragment', 'useState', 'useEffect', 'useContext', 'useReducer',
-                          'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect',
-                          'useDebugValue', 'createPortal', 'render', 'hydrate'];
-    
+    const reactKeywords = [
+      'React', 'Fragment', 'useState', 'useEffect', 'useContext', 'useReducer',
+      'useCallback', 'useMemo', 'useRef', 'useImperativeHandle', 'useLayoutEffect',
+      'useDebugValue', 'createPortal', 'render', 'hydrate', 'StrictMode',
+      'Suspense', 'ErrorBoundary', 'createElement', 'cloneElement'
+    ];
+
     if (reactKeywords.includes(value)) {
       return 'reactKeyword';
     }
-    
+
+    // Check for component names (PascalCase) but only in certain contexts
+    if (/^[A-Z][a-zA-Z0-9]*$/.test(value)) {
+      const prevToken = this.lastNonWhitespaceToken;
+      if (prevToken && (
+        prevToken.type === 'keyword' && ['const', 'let', 'var', 'function', 'class'].includes(prevToken.value) ||
+        prevToken.value === '=' ||
+        prevToken.value === 'return'
+      )) {
+        return 'reactComponent';
+      }
+    }
+
     return super.getIdentifierType(value);
   }
 }

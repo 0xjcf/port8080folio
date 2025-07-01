@@ -40,35 +40,114 @@ const customerMachine = createMachine({
   id: 'customer',
   initial: 'browsing',
   context: {
-    coffeeReady: false
+    coffeeReady: false,
+    orderDetails: null,
+    orderCount: 0
   },
   states: {
     browsing: {
       on: { 
         ORDER: {
           target: 'ordering',
-          actions: sendParent({
-            type: 'customer.WANTS_TO_ORDER',
-            message: '☕ Customer: "I\'d like a cappuccino please!"'
-          })
+          actions: [
+            assign({
+              orderDetails: (context, event) => event.order
+            }),
+            sendParent({
+              type: 'customer.WANTS_TO_ORDER',
+              message: '☕ Customer: "I\'d like a cappuccino please!"'
+            })
+          ]
         }
       } 
     },
     ordering: { 
-      on: { ORDER_CONFIRMED: 'paying' } 
+      on: { 
+        ORDER_CONFIRMED: {
+          target: 'paying',
+          actions: 'notifyOrderConfirmed'
+        },
+        CANCEL_ORDER: {
+          target: 'browsing',
+          actions: assign({ orderDetails: null })
+        }
+      } 
     },
     paying: { 
-      on: { PAYMENT_COMPLETE: 'waiting' } 
+      invoke: {
+        id: 'processPayment',
+        src: 'paymentService',
+        onDone: {
+          target: 'waiting',
+          actions: [
+            'logPaymentSuccess',
+            assign({ orderCount: (context) => context.orderCount + 1 })
+          ]
+        },
+        onError: {
+          target: 'paymentFailed',
+          actions: 'logPaymentError'
+        }
+      }
+    },
+    paymentFailed: {
+      on: {
+        RETRY_PAYMENT: 'paying',
+        CANCEL_ORDER: {
+          target: 'browsing',
+          actions: assign({ orderDetails: null })
+        }
+      }
     },
     waiting: { 
-      on: { RECEIVE_COFFEE: 'enjoying' } 
+      on: { 
+        RECEIVE_COFFEE: {
+          target: 'enjoying',
+          cond: 'coffeeIsReady',
+          actions: assign({ coffeeReady: true })
+        }
+      },
+      after: {
+        30000: {
+          target: 'checkingStatus',
+          actions: 'notifyLongWait'
+        }
+      }
+    },
+    checkingStatus: {
+      entry: 'askAboutOrder',
+      on: {
+        COFFEE_COMING: 'waiting',
+        RECEIVE_COFFEE: 'enjoying'
+      }
     },
     enjoying: {
-      // Customer is happy! Maybe they'll order again?
+      entry: 'celebrateCoffee',
       after: {
         5000: 'browsing' // Browse menu again after 5 seconds
       }
     }
+  }
+}, {
+  actions: {
+    notifyOrderConfirmed: () => console.log('Order confirmed!'),
+    logPaymentSuccess: () => console.log('Payment successful'),
+    logPaymentError: (context, event) => console.error('Payment failed:', event.data),
+    notifyLongWait: () => console.log('This is taking a while...'),
+    askAboutOrder: () => console.log('Checking on your order...'),
+    celebrateCoffee: () => console.log('☕ Enjoying that coffee!')
+  },
+  services: {
+    paymentService: (context) => 
+      // Simulate payment processing
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          Math.random() > 0.1 ? resolve() : reject('Card declined')
+        }, 2000)
+      })
+  },
+  guards: {
+    coffeeIsReady: (context) => context.coffeeReady
   }
 });
             </syntax-highlighter-with-themes>
@@ -85,34 +164,70 @@ const customerMachine = createMachine({
 // Your React component - clean and declarative!
 const CoffeeShopUI = () => {
   const [state, send] = useMachine(customerMachine);
+  const { orderDetails, orderCount } = state.context;
   
   return (
-    &lt;div&gt;
-      &lt;h2&gt;Customer: {state.value}&lt;/h2&gt;
+    &lt;div className="coffee-shop"&gt;
+      &lt;h2&gt;Customer Status: {state.value}&lt;/h2&gt;
+      {orderCount > 0 && &lt;p&gt;Orders today: {orderCount}&lt;/p&gt;}
       
       {state.matches('browsing') && (
-        &lt;button onClick={() => send('ORDER')}&gt;
+        &lt;button onClick={() => send({ 
+          type: 'ORDER',
+          order: { type: 'cappuccino', size: 'large' }
+        })}&gt;
           Order Coffee ☕
         &lt;/button&gt;
       )}
       
       {state.matches('ordering') && (
-        &lt;button onClick={() => send('ORDER_CONFIRMED')}&gt;
-          Confirm Order ✓
-        &lt;/button&gt;
+        &lt;div&gt;
+          &lt;p&gt;Confirming your {orderDetails?.type}...&lt;/p&gt;
+          &lt;button onClick={() => send('ORDER_CONFIRMED')}&gt;
+            Confirm Order ✓
+          &lt;/button&gt;
+          &lt;button onClick={() => send('CANCEL_ORDER')}&gt;
+            Cancel ✗
+          &lt;/button&gt;
+        &lt;/div&gt;
       )}
       
       {state.matches('paying') && (
-        &lt;button onClick={() => send('PAYMENT_COMPLETE')}&gt;
-          Complete Payment 💳
-        &lt;/button&gt;
+        &lt;div className="payment-processing"&gt;
+          &lt;span className="spinner" /&gt;
+          Processing payment...
+        &lt;/div&gt;
+      )}
+      
+      {state.matches('paymentFailed') && (
+        &lt;div className="error"&gt;
+          &lt;p&gt;Payment failed! 😞&lt;/p&gt;
+          &lt;button onClick={() => send('RETRY_PAYMENT')}&gt;
+            Retry Payment 💳
+          &lt;/button&gt;
+          &lt;button onClick={() => send('CANCEL_ORDER')}&gt;
+            Cancel Order
+          &lt;/button&gt;
+        &lt;/div&gt;
       )}
       
       {state.matches('waiting') && (
         &lt;div&gt;
           &lt;p&gt;Waiting for coffee...&lt;/p&gt;
-          &lt;button onClick={() => send('RECEIVE_COFFEE')}&gt;
-            Receive Coffee ☕
+          &lt;button 
+            onClick={() => send('RECEIVE_COFFEE')}
+            disabled={!state.context.coffeeReady}
+          &gt;
+            {state.context.coffeeReady ? 'Receive Coffee ☕' : 'Coffee not ready yet...'}
+          &lt;/button&gt;
+        &lt;/div&gt;
+      )}
+      
+      {state.matches('checkingStatus') && (
+        &lt;div&gt;
+          &lt;p&gt;Let me check on that order for you...&lt;/p&gt;
+          &lt;button onClick={() => send('COFFEE_COMING')}&gt;
+            It's coming!
           &lt;/button&gt;
         &lt;/div&gt;
       )}
@@ -139,42 +254,144 @@ const CoffeeShopUI = () => {
             Each actor stays focused on its own domain:
           </p>
           <syntax-highlighter-with-themes language="javascript">
-// Now with multiple actors coordinating through an orchestrator!
-export const coffeeShopOrchestrator = setup({
-  actors: {
-    customer: customerMachine,  // We already know how this works
-    cashier: cashierMachine,    // Each actor has its own logic
-    barista: baristaMachine,    // No shared state!
-    messageLog: messageLogMachine
+// The orchestrator coordinates multiple actors
+export const coffeeShopOrchestrator = createMachine({
+  id: 'coffeeShop',
+  context: {
+    customerActor: null,
+    cashierActor: null,
+    baristaActor: null,
+    messageLogActor: null,
+    shopStatus: 'closed'
   },
-  actions: {
-    announceToShop: ({ context, event }) => {
-      // Announce what's happening so everyone knows!
-      if (event.message && context.messageLogActor) {
-        context.messageLogActor.send({ 
-          type: 'LOG_MESSAGE', 
-          message: event.message 
-        });
+  initial: 'closed',
+  states: {
+    closed: {
+      on: {
+        OPEN_SHOP: {
+          target: 'open',
+          actions: assign({
+            shopStatus: 'open',
+            customerActor: ({ spawn }) => spawn(customerMachine, { id: 'customer' }),
+            cashierActor: ({ spawn }) => spawn(cashierMachine, { id: 'cashier' }),
+            baristaActor: ({ spawn }) => spawn(baristaMachine, { id: 'barista' }),
+            messageLogActor: ({ spawn }) => spawn(messageLogMachine, { id: 'messageLog' })
+          })
+        }
+      }
+    },
+    open: {
+      on: {
+        // Customer → Cashier communication
+        'customer.WANTS_TO_ORDER': {
+          actions: [
+            (context, event) => {
+              context.messageLogActor.send({ 
+                type: 'LOG_MESSAGE', 
+                message: event.message,
+                timestamp: Date.now()
+              });
+              context.cashierActor.send({ 
+                type: 'TAKE_ORDER',
+                order: event.order 
+              });
+            }
+          ]
+        },
+        
+        // Cashier → Barista communication
+        'cashier.ORDER_PLACED': {
+          actions: [
+            (context, event) => {
+              context.baristaActor.send({ 
+                type: 'MAKE_COFFEE',
+                order: event.order 
+              });
+            }
+          ]
+        },
+        
+        // Barista → Customer communication
+        'barista.COFFEE_READY': {
+          actions: [
+            (context, event) => {
+              context.customerActor.send({ 
+                type: 'COFFEE_READY',
+                coffee: event.coffee 
+              });
+              context.messageLogActor.send({ 
+                type: 'LOG_MESSAGE', 
+                message: '☕ Coffee is ready!',
+                timestamp: Date.now()
+              });
+            }
+          ]
+        },
+        
+        CLOSE_SHOP: {
+          target: 'closing',
+          actions: [
+            // Stop all actors gracefully
+            (context) => {
+              context.customerActor?.stop();
+              context.cashierActor?.stop();
+              context.baristaActor?.stop();
+              context.messageLogActor?.stop();
+            }
+          ]
+        }
+      }
+    },
+    closing: {
+      after: {
+        1000: 'closed'
       }
     }
   }
-}).createMachine({
-  entry: assign({
-    // Spawn all actors when shop opens
-    customerActor: ({ spawn }) => spawn('customer', { id: 'customer' }),
-    cashierActor: ({ spawn }) => spawn('cashier', { id: 'cashier' }),
-    baristaActor: ({ spawn }) => spawn('barista', { id: 'barista' }),
-    messageLogActor: ({ spawn }) => spawn('messageLog', { id: 'messageLog' })
-  }),
-  on: {
-    // Actors communicate through the orchestrator
-    'customer.WANTS_TO_ORDER': {
-      actions: [
-        'announceToShop',
-        sendTo(({ context }) => context.cashierActor, { type: 'TAKE_ORDER' })
-      ]
+});
+
+// Example of a barista actor with parallel states
+const baristaMachine = createMachine({
+  id: 'barista',
+  type: 'parallel',
+  states: {
+    workStatus: {
+      initial: 'idle',
+      states: {
+        idle: {
+          on: {
+            MAKE_COFFEE: 'makingCoffee'
+          }
+        },
+        makingCoffee: {
+          invoke: {
+            src: 'brewCoffee',
+            onDone: {
+              target: 'idle',
+              actions: sendParent((context, event) => ({
+                type: 'barista.COFFEE_READY',
+                coffee: event.data
+              }))
+            }
+          }
+        }
+      }
+    },
+    equipment: {
+      initial: 'ready',
+      states: {
+        ready: {
+          on: {
+            EQUIPMENT_MALFUNCTION: 'maintenance'
+          }
+        },
+        maintenance: {
+          after: {
+            10000: 'ready'
+          }
+        }
+      }
     }
-    // ... more event routing
   }
 });
           </syntax-highlighter-with-themes>

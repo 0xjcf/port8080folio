@@ -16,16 +16,12 @@ class SyntaxHighlighterWithThemes extends HTMLElement {
   }
 
   render() {
-    const code = this.textContent.trim();
-    
-    // Escape the code for HTML
-    const escapeHtml = (text) => {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    };
-    
-    const escapedCode = escapeHtml(code);
+    // Extract code from innerHTML to preserve HTML entities like &lt; &gt;
+    // This ensures JSX patterns remain as &lt;div&gt; for the tokenizer
+    const code = this.innerHTML.trim();
+
+    // No need to escape again - innerHTML already has proper entities
+    const escapedCode = code;
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -196,7 +192,7 @@ class SyntaxHighlighterWithThemes extends HTMLElement {
           --operator: #9CA3AF;
           --punctuation: #9CA3AF;
           --variable: #60A5FA;
-          --property: #47B4FF;
+          --property: #14B8A6;
           --boolean: #FCD34D;
           --null: #C084FC;
           --default: #F5F5F5;
@@ -232,7 +228,7 @@ class SyntaxHighlighterWithThemes extends HTMLElement {
           --operator: #8B949E;
           --punctuation: #8B949E;
           --variable: #B392F0;
-          --property: #79B8FF;
+          --property: #7dcfff;
           --boolean: #79B8FF;
           --null: #B392F0;
           --default: #E1E4E8;
@@ -268,7 +264,7 @@ class SyntaxHighlighterWithThemes extends HTMLElement {
           --operator: #C792EA;
           --punctuation: #D6DEEB;
           --variable: #ADDB67;
-          --property: #7FDBCA;
+          --property: #80CAE8;
           --boolean: #FF6B9D;
           --null: #C792EA;
           --default: #D6DEEB;
@@ -304,7 +300,7 @@ class SyntaxHighlighterWithThemes extends HTMLElement {
           --operator: #FF6188;
           --punctuation: #FCFCFA;
           --variable: #FCFCFA;
-          --property: #78DCE8;
+          --property: #66D9EF;
           --boolean: #AB9DF2;
           --null: #AB9DF2;
           --default: #FCFCFA;
@@ -340,7 +336,7 @@ class SyntaxHighlighterWithThemes extends HTMLElement {
           --operator: #89ddff;
           --punctuation: #a9b1d6;
           --variable: #c0caf5;
-          --property: #7dcfff;
+          --property: #73daca;
           --boolean: #ff9e64;
           --null: #bb9af7;
           --default: #a9b1d6;
@@ -370,7 +366,7 @@ class SyntaxHighlighterWithThemes extends HTMLElement {
           --operator: #d73a49;
           --punctuation: #24292e;
           --variable: #e36209;
-          --property: #e36209;
+          --property: #005cc5;
           --boolean: #005cc5;
           --null: #005cc5;
           --default: #24292e;
