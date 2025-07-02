@@ -5,10 +5,10 @@
  * Serves the site at http://localhost:8080/port8080folio/
  */
 
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-const url = require('url');
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import url from 'url';
 
 const PORT = 8080;
 const BASE_PATH = '/port8080folio';

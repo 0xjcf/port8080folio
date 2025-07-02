@@ -14,19 +14,29 @@
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="src/styles/main.css" rel="stylesheet" type="text/css" />
-    <script src="src/scripts/main.js" defer></script>
+
+    <!-- Import Map for XState -->
+    <script type="importmap">
+      {
+        "imports": {
+          "xstate": "https://cdn.jsdelivr.net/npm/xstate@5/+esm"
+        }
+      }
+      </script>
+
+    <script src="dist/src/scripts/main.js" type="module" defer></script>
 
     <!-- Web Components -->
     <script type="module">
-        import './src/components/ui/brand-icon.js';
-        import './src/components/ui/navbar.js';
-        import './src/components/ui/search-modal.js';
-        import './src/components/ui/privacy-notice.js';
-        import './src/components/ui/breadcrumbs.js';
-        import './src/components/ui/search-component.js';
-        import './src/components/ui/related-content.js';
-        import './src/components/sections/about-section.js';
-        import './src/components/sections/projects-section.js';
+        import './dist/src/components/ui/brand-icon.js';
+        import './dist/src/components/ui/navbar.js';
+        import './dist/src/components/ui/search-modal.js';
+        import './dist/src/components/ui/privacy-notice.js';
+        import './dist/src/components/ui/breadcrumbs.js';
+        import './dist/src/components/ui/search-component.js';
+        import './dist/src/components/ui/related-content.js';
+        import './dist/src/components/sections/about-section.js';
+        import './dist/src/components/sections/projects-section.js';
     </script>
 
     <!-- SEO Meta Tags -->

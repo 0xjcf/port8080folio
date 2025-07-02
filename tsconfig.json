@@ -8,7 +8,8 @@
         "allowJs": true,
         "checkJs": false,
         "strict": true,
-        "noEmit": true,
+        "noEmit": false,
+        "outDir": "./dist",
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "lib": [
@@ -16,9 +17,7 @@
             "DOM.Iterable",
             "ES2022"
         ],
-        "types": [
-            "node"
-        ],
+        "types": [],
         "baseUrl": ".",
         "paths": {
             "@/*": [
@@ -32,6 +31,12 @@
             ],
             "@/scripts/*": [
                 "src/scripts/*"
+            ],
+            "@/framework/*": [
+                "src/framework/*"
+            ],
+            "@/app/*": [
+                "src/app/*"
             ]
         }
     },

@@ -1,3 +1,6 @@
+/* Import View Transitions CSS */
+@import url('./view-transitions.css');
+
 :root {
   --indigodye: #080808;       /* Darker background to match intro */
   --secondary-bg: #0F1115;    /* Secondary background color */
@@ -15,16 +18,14 @@
   box-sizing: border-box;
 }
 
-/* Prevent horizontal overflow on mobile */
-html {
+/* Prevent horizontal overflow without constraining elements */
+html, body {
   overflow-x: hidden;
   width: 100%;
 }
 
 body {
-  overflow-x: hidden;
   position: relative;
-  width: 100%;
 }
 
 /* Base styles */
@@ -39,7 +40,6 @@ body {
   font-size: 1.1rem;
   color: var(--teagreen);
   margin: 0;
-  min-height: 100vh;
   overflow-x: hidden;
 }
 
@@ -414,14 +414,14 @@ hero-section {
 
 /* Section spacing */
 header, main, footer, #newsletter-signup, #contact {
-  padding: 2rem 0;
+  padding: 1.5rem 0;
   width: 100%;
   max-width: 100%;
 }
 
 @media (min-width: 768px) {
   header, main, footer, #newsletter-signup, #contact {
-    padding: 2.5rem 0;
+    padding: 2rem 0;
   }
 }
 
@@ -1367,6 +1367,11 @@ nav a.brand-link:hover {
   gap: 0.5rem;
 }
 
+.button-text {
+  font-weight: 600 !important;
+  color: #FFFFFF;
+}
+
 .newsletter-button.loading .button-text {
   display: none;
 }
@@ -1431,8 +1436,8 @@ footer.fade-in { animation-delay: 0.8s; }
 #footer {
   grid-area: footer;
   width: 100%;
-  margin-top: 2rem;
-  padding: 3rem 0 2rem 0;
+  margin-top: 1.5rem;
+  padding: 2rem 0 1rem 0;
   background: linear-gradient(
     to bottom,
     transparent 0%,
@@ -1444,8 +1449,8 @@ footer.fade-in { animation-delay: 0.8s; }
 
 @media (min-width: 768px) {
   #footer {
-    margin-top: 2.5rem;
-    padding: 4rem 0 2.5rem 0;
+    margin-top: 2rem;
+    padding: 2.5rem 0 1.5rem 0;
   }
 }
 
@@ -2049,19 +2054,29 @@ footer.fade-in { animation-delay: 0.8s; }
 }
 
 .cta-text {
-  color: var(--jasper);
+  color: var(--jasper) !important;
   font-weight: 600;
   font-size: 0.95rem;
   transition: all 0.3s ease;
 }
 
 .lead-magnet-card:hover .cta-text {
-  color: var(--jasper-light);
+  color: var(--jasper-light) !important;
   transform: translateX(4px);
 }
 
 .lead-magnet-card input[type="radio"]:checked + .card-content .cta-text {
-  color: var(--jasper-light);
+  color: var(--jasper-light) !important;
+}
+
+/* Challenge Info */
+.challenge-info {
+  font-size: 0.875rem;
+  color: var(--jasper, #0D99FF) !important;
+  opacity: 0.9;
+  margin: 1.5rem 0 1rem 0;
+  font-weight: 600;
+  text-align: center;
 }
 
 /* Newsletter Form Styles */
@@ -2072,8 +2087,8 @@ footer.fade-in { animation-delay: 0.8s; }
 .newsletter-label {
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--teagreen, #F5F5F5);
-  font-weight: 500;
+  color: var(--jasper, #0D99FF);
+  font-weight: 600;
 }
 
 .newsletter-input {
@@ -2216,6 +2231,8 @@ footer.fade-in { animation-delay: 0.8s; }
   
   .cta-text {
     font-size: 0.875rem;
+    color: var(--jasper) !important;
+    font-weight: 600;
   }
   
   .newsletter-button {

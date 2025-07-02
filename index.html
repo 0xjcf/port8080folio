@@ -54,40 +54,50 @@
     rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link href="./src/styles/main.css" rel="stylesheet" type="text/css" />
-  <script src="./src/scripts/main.js" defer></script>
+
+  <!-- Import Map for XState -->
+  <script type="importmap">
+    {
+      "imports": {
+        "xstate": "https://cdn.jsdelivr.net/npm/xstate@5/+esm"
+      }
+    }
+    </script>
+
+  <script src="./dist/src/scripts/main.js" type="module" defer></script>
 
   <!-- Web Components -->
   <script type="module">
     // Import development configuration first
-    import './src/scripts/dev-config.js';
+    import './dist/src/scripts/dev-config.js';
 
-    // Sections
-    import './src/components/sections/hero-section-enhanced.js';
+    // Sections (using TypeScript compiled version)
+    import './dist/src/components/sections/hero-section-enhanced.js';
 
-    // UI Components
-    import './src/components/ui/project-card.js';
-    import './src/components/ui/loading-state.js';
-    import './src/components/ui/privacy-notice.js';
-    import './src/components/ui/brand-icon.js';
-    import './src/components/ui/navbar.js';
-    import './src/components/ui/search-modal.js';
-    import './src/components/ui/syntax-highlighter-with-themes.js';
-    import './src/components/ui/breadcrumbs.js';
-    import './src/components/ui/search-component.js';
-    import './src/components/ui/related-content.js';
+    // UI Components (using TypeScript compiled versions where available)
+    import './dist/src/components/ui/project-card.js';
+    import './dist/src/components/ui/loading-state.js';
+    import './dist/src/components/ui/privacy-notice.js';
+    import './dist/src/components/ui/brand-icon.js';
+    import './dist/src/components/ui/navbar.js';
+    import './dist/src/components/ui/search-modal.js';
+    import './dist/src/components/ui/syntax-highlighter-with-themes.js';
+    import './dist/src/components/ui/breadcrumbs.js';
+    import './dist/src/components/ui/search-component.js';
+    import './dist/src/components/ui/related-content.js';
 
     // State Machine Components (Core conversion flow only)
-    import './src/components/state-machine/state-machine-intro.js';
+    import './dist/src/components/state-machine/state-machine-intro.js';
 
     // Tokenizer
-    import './src/components/tokenizer/syntax-highlighter-v3.js';
+    import './dist/src/components/tokenizer/syntax-highlighter-v3.js';
 
     // Demos
-    import './src/components/demos/coffee-shop-app-clean.js';
-    import './src/components/demos/actor-architecture-diagram.js';
-    import './src/components/demos/actors/customer-actor-ui.js';
-    import './src/components/demos/actors/cashier-actor-ui.js';
-    import './src/components/demos/actors/barista-actor-ui.js';
+    import './dist/src/components/demos/coffee-shop-app-clean.js';
+    import './dist/src/components/demos/actor-architecture-diagram.js';
+    import './dist/src/components/demos/actors/customer-actor-ui.js';
+    import './dist/src/components/demos/actors/cashier-actor-ui.js';
+    import './dist/src/components/demos/actors/barista-actor-ui.js';
   </script>
 
   <!-- SEO Meta Tags -->
@@ -245,7 +255,7 @@
     <nav-bar current-page="home" base-path="/"></nav-bar>
 
     <!-- LEVEL 1: UNAWARE - Hero Section with outcome-focused hook -->
-    <hero-section-enhanced profile-image="./public/images/me.jpeg"></hero-section-enhanced>
+    <hero-section-enhanced></hero-section-enhanced>
 
     <!-- State Machine Education Section - 5 Levels of Market Awareness -->
     <!-- 
@@ -365,6 +375,11 @@
                 </label>
               </div>
 
+              <!-- Challenge Info Above Email -->
+              <div class="challenge-info">
+                ✓ Get Challenge #1: From chaos to clean architecture in 30 minutes
+              </div>
+
               <!-- Email Input -->
               <div class="form-group">
                 <label for="mce-EMAIL" class="newsletter-label">Email Address</label>
@@ -451,7 +466,7 @@
     </script>
 
   <!-- Enhanced Newsletter Form Script -->
-  <script src="./src/scripts/newsletter-form.js"></script>
+  <script src="./dist/src/scripts/newsletter-form.js" type="module"></script>
 </body>
 
 </html>

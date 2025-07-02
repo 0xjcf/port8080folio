@@ -183,12 +183,12 @@
 }
 
 /* Loading states */
-.actor-card:not(.is-loading) loading-indicator {
+.actor-card:not(.is-loading) loading-state {
   display: none;
 }
 
 /* Loading indicator is part of the flex layout */
-.actor-card loading-indicator {
+.actor-card loading-state {
   margin: 16px 0;
   flex-shrink: 0;
 }
@@ -203,6 +203,7 @@
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shimmer 2s linear infinite;
 }
