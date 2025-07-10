@@ -12,6 +12,13 @@
         "outDir": "./dist",
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
+        "plugins": [
+            {
+                "name": "ts-lit-plugin",
+                "htmlTemplateTags": ["html", "raw"],
+                "cssTemplateTags": ["css"]
+            }
+        ],
         "lib": [
             "DOM",
             "DOM.Iterable",

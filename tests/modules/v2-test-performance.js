@@ -1,33 +1,33 @@
 // Performance tests for V2 syntax highlighter
 
 class V2PerformanceParser {
-    constructor() {
-        this.testCases = [
-            {
-                name: 'Small Code Block (10 lines)',
-                lines: 10,
-                generator: this.generateSmallCode
-            },
-            {
-                name: 'Medium Code Block (100 lines)',
-                lines: 100,
-                generator: this.generateMediumCode
-            },
-            {
-                name: 'Large Code Block (500 lines)',
-                lines: 500,
-                generator: this.generateLargeCode
-            },
-            {
-                name: 'Complex XState Machine (200 lines)',
-                lines: 200,
-                generator: this.generateComplexXState
-            }
-        ];
-    }
+  constructor() {
+    this.testCases = [
+      {
+        name: 'Small Code Block (10 lines)',
+        lines: 10,
+        generator: this.generateSmallCode,
+      },
+      {
+        name: 'Medium Code Block (100 lines)',
+        lines: 100,
+        generator: this.generateMediumCode,
+      },
+      {
+        name: 'Large Code Block (500 lines)',
+        lines: 500,
+        generator: this.generateLargeCode,
+      },
+      {
+        name: 'Complex XState Machine (200 lines)',
+        lines: 200,
+        generator: this.generateComplexXState,
+      },
+    ];
+  }
 
-    generateSmallCode(lines) {
-        return `
+  generateSmallCode(_lines) {
+    return `
 const config = {
     theme: 'dark',
     color: '#0ea5e9'
@@ -40,12 +40,13 @@ function processData(data) {
     }));
 }
         `.trim();
-    }
+  }
 
-    generateMediumCode(lines) {
-        let code = [];
-        for (let i = 0; i < lines / 10; i++) {
-            code.push(`
+  generateMediumCode(lines) {
+    const code = [];
+    for (let i = 0; i < lines / 10; i++) {
+      code.push(
+        `
 // Function ${i}
 function process${i}(data) {
     const result = data.filter(item => item.active);
@@ -56,22 +57,24 @@ function process${i}(data) {
     }));
     return mapped.reduce((acc, curr) => acc + curr.value, 0);
 }
-            `.trim());
-        }
-        return code.join('\n\n');
+            `.trim()
+      );
     }
+    return code.join('\n\n');
+  }
 
-    generateLargeCode(lines) {
-        let code = [];
-        
-        // Generate a large React component
-        code.push(`import React, { useState, useEffect, useCallback, useMemo } from 'react';`);
-        code.push(`import { createMachine, assign } from 'xstate';`);
-        code.push('');
-        
-        // Add multiple components
-        for (let i = 0; i < lines / 20; i++) {
-            code.push(`
+  generateLargeCode(lines) {
+    const code = [];
+
+    // Generate a large React component
+    code.push(`import React, { useState, useEffect, useCallback, useMemo } from 'react';`);
+    code.push(`import { createMachine, assign } from 'xstate';`);
+    code.push('');
+
+    // Add multiple components
+    for (let i = 0; i < lines / 20; i++) {
+      code.push(
+        `
 const Component${i} = ({ data, onUpdate }) => {
     const [state, setState] = useState({
         value: ${i},
@@ -96,14 +99,15 @@ const Component${i} = ({ data, onUpdate }) => {
         </div>
     );
 };
-            `.trim());
-        }
-        
-        return code.join('\n\n');
+            `.trim()
+      );
     }
 
-    generateComplexXState(lines) {
-        return `
+    return code.join('\n\n');
+  }
+
+  generateComplexXState(_lines) {
+    return `
 import { setup, assign, sendTo, enqueueActions } from 'xstate';
 
 const complexMachine = setup({
@@ -216,122 +220,123 @@ const complexMachine = setup({
     }
 });
         `.trim();
+  }
+
+  async runTests() {
+    const results = [];
+    const performanceData = {
+      times: [],
+      avgTime: 0,
+      minTime: Number.POSITIVE_INFINITY,
+      maxTime: 0,
+      totalTests: 0,
+    };
+
+    for (const testCase of this.testCases) {
+      const testResult = await this.runPerformanceTest(testCase);
+      results.push(testResult);
+
+      // Collect performance data
+      if (testResult.times) {
+        performanceData.times.push(...testResult.times);
+        performanceData.totalTests += testResult.times.length;
+      }
     }
 
-    async runTests() {
-        const results = [];
-        const performanceData = {
-            times: [],
-            avgTime: 0,
-            minTime: Infinity,
-            maxTime: 0,
-            totalTests: 0
-        };
-        
-        for (const testCase of this.testCases) {
-            const testResult = await this.runPerformanceTest(testCase);
-            results.push(testResult);
-            
-            // Collect performance data
-            if (testResult.times) {
-                performanceData.times.push(...testResult.times);
-                performanceData.totalTests += testResult.times.length;
-            }
-        }
-
-        // Calculate overall metrics
-        if (performanceData.times.length > 0) {
-            performanceData.avgTime = Math.round(
-                performanceData.times.reduce((a, b) => a + b, 0) / performanceData.times.length
-            );
-            performanceData.minTime = Math.round(Math.min(...performanceData.times));
-            performanceData.maxTime = Math.round(Math.max(...performanceData.times));
-        }
-
-        const allPassed = results.every(result => result.passed);
-        
-        return {
-            status: allPassed ? 'pass' : 'fail',
-            tests: results,
-            performance: performanceData,
-            summary: {
-                total: results.length,
-                passed: results.filter(r => r.passed).length,
-                failed: results.filter(r => !r.passed).length
-            }
-        };
+    // Calculate overall metrics
+    if (performanceData.times.length > 0) {
+      performanceData.avgTime = Math.round(
+        performanceData.times.reduce((a, b) => a + b, 0) / performanceData.times.length
+      );
+      performanceData.minTime = Math.round(Math.min(...performanceData.times));
+      performanceData.maxTime = Math.round(Math.max(...performanceData.times));
     }
 
-    async runPerformanceTest(testCase) {
-        try {
-            const code = testCase.generator(testCase.lines);
-            const times = [];
-            const iterations = testCase.lines < 100 ? 10 : testCase.lines < 500 ? 5 : 3;
-            
-            // Run multiple iterations
-            for (let i = 0; i < iterations; i++) {
-                const startTime = performance.now();
-                await this.createHighlightedOutput(code);
-                const endTime = performance.now();
-                times.push(endTime - startTime);
-            }
-            
-            const avgTime = Math.round(times.reduce((a, b) => a + b, 0) / times.length);
-            const output = this.generatePerformanceOutput(testCase.name, avgTime, times);
-            
-            // Add debug info if performance is slow
-            let debugInfo = null;
-            if (avgTime > 500) { // Warn if over 500ms
-                debugInfo = this.generateDebugInfo(testCase, times, avgTime, code);
-            }
-            
-            return {
-                name: testCase.name,
-                passed: avgTime < 1000, // Pass if under 1 second
-                output: output,
-                times: times,
-                avgTime: avgTime,
-                debugInfo
-            };
-        } catch (error) {
-            return {
-                name: testCase.name,
-                passed: false,
-                error: error.message
-            };
-        }
+    const allPassed = results.every((result) => result.passed);
+
+    return {
+      status: allPassed ? 'pass' : 'fail',
+      tests: results,
+      performance: performanceData,
+      summary: {
+        total: results.length,
+        passed: results.filter((r) => r.passed).length,
+        failed: results.filter((r) => !r.passed).length,
+      },
+    };
+  }
+
+  async runPerformanceTest(testCase) {
+    try {
+      const code = testCase.generator(testCase.lines);
+      const times = [];
+      const iterations = testCase.lines < 100 ? 10 : testCase.lines < 500 ? 5 : 3;
+
+      // Run multiple iterations
+      for (let i = 0; i < iterations; i++) {
+        const startTime = performance.now();
+        await this.createHighlightedOutput(code);
+        const endTime = performance.now();
+        times.push(endTime - startTime);
+      }
+
+      const avgTime = Math.round(times.reduce((a, b) => a + b, 0) / times.length);
+      const output = this.generatePerformanceOutput(testCase.name, avgTime, times);
+
+      // Add debug info if performance is slow
+      let debugInfo = null;
+      if (avgTime > 500) {
+        // Warn if over 500ms
+        debugInfo = this.generateDebugInfo(testCase, times, avgTime, code);
+      }
+
+      return {
+        name: testCase.name,
+        passed: avgTime < 1000, // Pass if under 1 second
+        output: output,
+        times: times,
+        avgTime: avgTime,
+        debugInfo,
+      };
+    } catch (error) {
+      return {
+        name: testCase.name,
+        passed: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async createHighlightedOutput(code) {
+    const container = document.createElement('div');
+    const highlighter = document.createElement('syntax-highlighter');
+    highlighter.textContent = code;
+    container.appendChild(highlighter);
+    document.body.appendChild(container);
+
+    // Wait for highlighting to complete
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // Get the shadow DOM content if available (for validation)
+    let highlightedContent = '';
+    if (highlighter.shadowRoot) {
+      const codeElement = highlighter.shadowRoot.querySelector('code, pre');
+      if (codeElement) {
+        highlightedContent = codeElement.innerHTML;
+      } else {
+        highlightedContent = highlighter.shadowRoot.innerHTML;
+      }
     }
 
-    async createHighlightedOutput(code) {
-        const container = document.createElement('div');
-        const highlighter = document.createElement('syntax-highlighter');
-        highlighter.textContent = code;
-        container.appendChild(highlighter);
-        document.body.appendChild(container);
-        
-        // Wait for highlighting to complete
-        await new Promise(resolve => setTimeout(resolve, 50));
-        
-        // Get the shadow DOM content if available (for validation)
-        let highlightedContent = '';
-        if (highlighter.shadowRoot) {
-            const codeElement = highlighter.shadowRoot.querySelector('code, pre');
-            if (codeElement) {
-                highlightedContent = codeElement.innerHTML;
-            } else {
-                highlightedContent = highlighter.shadowRoot.innerHTML;
-            }
-        }
-        
-        document.body.removeChild(container);
-        return highlightedContent;
-    }
+    document.body.removeChild(container);
+    return highlightedContent;
+  }
 
-    generatePerformanceOutput(name, avgTime, times) {
-        const minTime = Math.round(Math.min(...times));
-        const maxTime = Math.round(Math.max(...times));
-        
-        return `
+  generatePerformanceOutput(_name, avgTime, times) {
+    const minTime = Math.round(Math.min(...times));
+    const maxTime = Math.round(Math.max(...times));
+
+    return `
             <div style="padding: 20px;">
                 <div style="text-align: center;">
                     <div style="font-size: 48px; font-weight: 600; color: ${avgTime < 100 ? '#4ade80' : avgTime < 500 ? '#f59e0b' : '#ef4444'}; margin-bottom: 10px;">
@@ -353,55 +358,55 @@ const complexMachine = setup({
                 </div>
             </div>
         `;
+  }
+
+  generateDebugInfo(testCase, times, avgTime, code) {
+    let debugInfo = 'Performance Debug Info:\n';
+    debugInfo += `Test: ${testCase.name}\n`;
+    debugInfo += `Code Size: ${code.length} characters, ${testCase.lines} lines\n\n`;
+
+    debugInfo += 'Performance Metrics:\n';
+    debugInfo += `  Average Time: ${avgTime}ms ${avgTime > 500 ? '⚠️ SLOW' : ''}\n`;
+    debugInfo += `  Min Time: ${Math.round(Math.min(...times))}ms\n`;
+    debugInfo += `  Max Time: ${Math.round(Math.max(...times))}ms\n`;
+    debugInfo += `  Variance: ${Math.round(Math.max(...times) - Math.min(...times))}ms\n`;
+    debugInfo += `  Iterations: ${times.length}\n\n`;
+
+    debugInfo += 'Individual Run Times:\n';
+    times.forEach((time, index) => {
+      debugInfo += `  Run ${index + 1}: ${Math.round(time)}ms\n`;
+    });
+
+    // Performance recommendations
+    debugInfo += '\nPerformance Analysis:\n';
+    if (avgTime > 1000) {
+      debugInfo += '  ❌ CRITICAL: Performance is over 1 second!\n';
+      debugInfo += '  - Consider optimizing the tokenizer\n';
+      debugInfo += '  - Check for inefficient regex patterns\n';
+    } else if (avgTime > 500) {
+      debugInfo += '  ⚠️ WARNING: Performance is slower than expected\n';
+      debugInfo += '  - May impact user experience on large files\n';
+      debugInfo += '  - Consider caching or lazy loading\n';
+    } else if (avgTime > 200) {
+      debugInfo += '  ℹ️ INFO: Performance is acceptable but could be improved\n';
+    } else {
+      debugInfo += '  ✓ Performance is good\n';
     }
-    
-    generateDebugInfo(testCase, times, avgTime, code) {
-        let debugInfo = `Performance Debug Info:\n`;
-        debugInfo += `Test: ${testCase.name}\n`;
-        debugInfo += `Code Size: ${code.length} characters, ${testCase.lines} lines\n\n`;
-        
-        debugInfo += `Performance Metrics:\n`;
-        debugInfo += `  Average Time: ${avgTime}ms ${avgTime > 500 ? '⚠️ SLOW' : ''}\n`;
-        debugInfo += `  Min Time: ${Math.round(Math.min(...times))}ms\n`;
-        debugInfo += `  Max Time: ${Math.round(Math.max(...times))}ms\n`;
-        debugInfo += `  Variance: ${Math.round(Math.max(...times) - Math.min(...times))}ms\n`;
-        debugInfo += `  Iterations: ${times.length}\n\n`;
-        
-        debugInfo += `Individual Run Times:\n`;
-        times.forEach((time, index) => {
-            debugInfo += `  Run ${index + 1}: ${Math.round(time)}ms\n`;
-        });
-        
-        // Performance recommendations
-        debugInfo += `\nPerformance Analysis:\n`;
-        if (avgTime > 1000) {
-            debugInfo += `  ❌ CRITICAL: Performance is over 1 second!\n`;
-            debugInfo += `  - Consider optimizing the tokenizer\n`;
-            debugInfo += `  - Check for inefficient regex patterns\n`;
-        } else if (avgTime > 500) {
-            debugInfo += `  ⚠️ WARNING: Performance is slower than expected\n`;
-            debugInfo += `  - May impact user experience on large files\n`;
-            debugInfo += `  - Consider caching or lazy loading\n`;
-        } else if (avgTime > 200) {
-            debugInfo += `  ℹ️ INFO: Performance is acceptable but could be improved\n`;
-        } else {
-            debugInfo += `  ✓ Performance is good\n`;
-        }
-        
-        // Code complexity analysis
-        const hasComplexPatterns = code.includes('${') || code.includes('createMachine') || code.includes('jsx');
-        if (hasComplexPatterns) {
-            debugInfo += `\nCode Complexity:\n`;
-            debugInfo += `  Template literals: ${code.includes('${') ? '✓ YES' : '✗ NO'}\n`;
-            debugInfo += `  XState patterns: ${code.includes('createMachine') ? '✓ YES' : '✗ NO'}\n`;
-            debugInfo += `  JSX elements: ${code.includes('<') && code.includes('>') ? '✓ YES' : '✗ NO'}\n`;
-        }
-        
-        return debugInfo;
+
+    // Code complexity analysis
+    const hasComplexPatterns =
+      code.includes('${') || code.includes('createMachine') || code.includes('jsx');
+    if (hasComplexPatterns) {
+      debugInfo += '\nCode Complexity:\n';
+      debugInfo += `  Template literals: ${code.includes('${') ? '✓ YES' : '✗ NO'}\n`;
+      debugInfo += `  XState patterns: ${code.includes('createMachine') ? '✓ YES' : '✗ NO'}\n`;
+      debugInfo += `  JSX elements: ${code.includes('<') && code.includes('>') ? '✓ YES' : '✗ NO'}\n`;
     }
+
+    return debugInfo;
+  }
 }
 
 // Register the parser
 window.V2TestParsers = window.V2TestParsers || {};
 window.V2TestParsers.performance = new V2PerformanceParser();
-console.log('v2-test-performance registered');

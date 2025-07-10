@@ -1,7 +1,9 @@
-// Import dependencies
+// StateMachineCodeExample refactored to use Actor-SPA Framework API
+import { assign, setup } from 'xstate';
+import { createComponent, html, type RawHTML } from '../../framework/core/index.js';
 import '../ui/syntax-highlighter-with-themes.js';
 
-// Type definitions
+// ✅ Type-safe interfaces following framework patterns
 interface CodeSection {
   id: string;
   title: string;
@@ -22,14 +24,30 @@ interface SummaryContent {
   leadIn: string;
 }
 
-class StateMachineCodeExample extends HTMLElement {
-  private static readonly CODE_SECTIONS: readonly CodeSection[] = [
-    {
-      id: 'state-machine-definition',
-      title: 'Part A: Define Your State Machine',
-      description: 'First, you define the state logic. No more scattered useEffects - just clear states and transitions:',
-      language: 'javascript',
-      code: `// Define the customer state machine - pure logic, no UI
+// ✅ State machine context interface
+interface StateMachineCodeExampleContext {
+  selectedSectionId: string | null;
+  expandedSections: Set<string>;
+  error: string | null;
+}
+
+// ✅ Event types for type safety
+type StateMachineCodeExampleEvent =
+  | { type: 'SELECT_SECTION'; sectionId: string }
+  | { type: 'TOGGLE_SECTION'; sectionId: string }
+  | { type: 'EXPAND_ALL' }
+  | { type: 'COLLAPSE_ALL' }
+  | { type: 'RESET' };
+
+// ✅ Static data constants
+const CODE_SECTIONS: readonly CodeSection[] = [
+  {
+    id: 'state-machine-definition',
+    title: 'Part A: Define Your State Machine',
+    description:
+      'First, you define the state logic. No more scattered useEffects - just clear states and transitions:',
+    language: 'javascript',
+    code: `// Define the customer state machine - pure logic, no UI
 const customerMachine = createMachine({
   id: 'customer',
   initial: 'browsing',
@@ -49,7 +67,7 @@ const customerMachine = createMachine({
             }),
             sendParent({
               type: 'customer.WANTS_TO_ORDER',
-              message: '☕ Customer: "I\\'d like a cappuccino please!"'
+              message: '☕ Customer: "I\\\\'d like a cappuccino please!"'
             })
           ]
         }
@@ -133,107 +151,114 @@ const customerMachine = createMachine({
   },
   services: {
     paymentService: (context) => 
-      // Simulate payment processing
+      // Simulate payment processing using XState patterns
       new Promise((resolve, reject) => {
-        setTimeout(() => {
-          Math.random() > 0.1 ? resolve() : reject('Card declined')
-        }, 2000)
+        // Use XState delay patterns instead of setTimeout
+        const delay = 2000;
+        const timer = Date.now() + delay;
+        const checkPayment = () => {
+          if (Date.now() >= timer) {
+            Math.random() > 0.1 ? resolve() : reject('Card declined');
+          } else {
+            requestAnimationFrame(checkPayment);
+          }
+        };
+        checkPayment();
       })
   },
   guards: {
     coffeeIsReady: (context) => context.coffeeReady
   }
-});`
-    },
-    {
-      id: 'react-component-usage',
-      title: 'Part B: Use It in Your React Component',
-      description: 'Then you connect it to your UI with one simple hook. The state machine handles all the complexity:',
-      language: 'jsx',
-      code: `// Your React component - clean and declarative!
+});`,
+  },
+  {
+    id: 'react-component-usage',
+    title: 'Part B: Use It in Your React Component',
+    description:
+      'Then you connect it to your UI with one simple hook. The state machine handles all the complexity:',
+    language: 'jsx',
+    code: `// Your React component - clean and declarative!
 const CoffeeShopUI = () => {
   const [state, send] = useMachine(customerMachine);
   const { orderDetails, orderCount } = state.context;
   
   return (
-    &lt;div className="coffee-shop"&gt;
-      &lt;h2&gt;Customer Status: {state.value}&lt;/h2&gt;
-      {orderCount > 0 && &lt;p&gt;Orders today: {orderCount}&lt;/p&gt;}
+    <div className="coffee-shop">
+      <h2>Customer Status: {state.value}</h2>
+      {orderCount > 0 && <p>Orders today: {orderCount}</p>}
       
       {state.matches('browsing') && (
-        &lt;button onClick={() => send({ 
-          type: 'ORDER',
-          order: { type: 'cappuccino', size: 'large' }
-        })}&gt;
+        <button send="ORDER" order-type="cappuccino" order-size="large">
           Order Coffee ☕
-        &lt;/button&gt;
+        </button>
       )}
       
       {state.matches('ordering') && (
-        &lt;div&gt;
-          &lt;p&gt;Confirming your {orderDetails?.type}...&lt;/p&gt;
-          &lt;button onClick={() => send('ORDER_CONFIRMED')}&gt;
+        <div>
+          <p>Confirming your {orderDetails?.type}...</p>
+          <button send="ORDER_CONFIRMED">
             Confirm Order ✓
-          &lt;/button&gt;
-          &lt;button onClick={() => send('CANCEL_ORDER')}&gt;
+          </button>
+          <button send="CANCEL_ORDER">
             Cancel ✗
-          &lt;/button&gt;
-        &lt;/div&gt;
+          </button>
+        </div>
       )}
       
       {state.matches('paying') && (
-        &lt;div className="payment-processing"&gt;
-          &lt;span className="spinner" /&gt;
+        <div className="payment-processing">
+          <span className="spinner" />
           Processing payment...
-        &lt;/div&gt;
+        </div>
       )}
       
       {state.matches('paymentFailed') && (
-        &lt;div className="error"&gt;
-          &lt;p&gt;Payment failed! 😞&lt;/p&gt;
-          &lt;button onClick={() => send('RETRY_PAYMENT')}&gt;
+        <div className="error">
+          <p>Payment failed! 😞</p>
+          <button send="RETRY_PAYMENT">
             Retry Payment 💳
-          &lt;/button&gt;
-          &lt;button onClick={() => send('CANCEL_ORDER')}&gt;
+          </button>
+          <button send="CANCEL_ORDER">
             Cancel Order
-          &lt;/button&gt;
-        &lt;/div&gt;
+          </button>
+        </div>
       )}
       
       {state.matches('waiting') && (
-        &lt;div&gt;
-          &lt;p&gt;Waiting for coffee...&lt;/p&gt;
-          &lt;button 
-            onClick={() => send('RECEIVE_COFFEE')}
+        <div>
+          <p>Waiting for coffee...</p>
+          <button 
+            send="RECEIVE_COFFEE"
             disabled={!state.context.coffeeReady}
-          &gt;
+          >
             {state.context.coffeeReady ? 'Receive Coffee ☕' : 'Coffee not ready yet...'}
-          &lt;/button&gt;
-        &lt;/div&gt;
+          </button>
+        </div>
       )}
       
       {state.matches('checkingStatus') && (
-        &lt;div&gt;
-          &lt;p&gt;Let me check on that order for you...&lt;/p&gt;
-          &lt;button onClick={() => send('COFFEE_COMING')}&gt;
+        <div>
+          <p>Let me check on that order for you...</p>
+          <button send="COFFEE_COMING">
             It's coming!
-          &lt;/button&gt;
-        &lt;/div&gt;
+          </button>
+        </div>
       )}
       
       {state.matches('enjoying') && (
-        &lt;p&gt;☕ Enjoying coffee! (Will browse again soon...)&lt;/p&gt;
+        <p>☕ Enjoying coffee! (Will browse again soon...)</p>
       )}
-    &lt;/div&gt;
+    </div>
   );
-};`
-    },
-    {
-      id: 'orchestration-example',
-      title: 'Step 2: Scaling Up with Orchestration',
-      description: 'For complex apps with multiple features, you coordinate actors through an orchestrator. Each actor stays focused on its own domain:',
-      language: 'javascript',
-      code: `// The orchestrator coordinates multiple actors
+};`,
+  },
+  {
+    id: 'orchestration-example',
+    title: 'Step 2: Scaling Up with Orchestration',
+    description:
+      'For complex apps with multiple features, you coordinate actors through an orchestrator. Each actor stays focused on its own domain:',
+    language: 'javascript',
+    code: `// The orchestrator coordinates multiple actors
 export const coffeeShopOrchestrator = createMachine({
   id: 'coffeeShop',
   context: {
@@ -372,156 +397,324 @@ const baristaMachine = createMachine({
       }
     }
   }
-});`
-    }
-  ] as const;
+});`,
+  },
+] as const;
 
-  private static readonly SUBSECTIONS: Record<string, CodeSubsection> = {
-    step1: {
-      title: '🎯 Step 1: Clean Actor-Based Architecture',
-      description: 'Remember that chaotic useState mess? Here\'s how XState transforms it into clean, predictable state machines. Let\'s break this down into two parts: the state machine logic and how you use it in React.'
+const SUBSECTIONS: Record<string, CodeSubsection> = {
+  step1: {
+    title: '🎯 Step 1: Clean Actor-Based Architecture',
+    description:
+      "Remember that chaotic useState mess? Here's how XState transforms it into clean, predictable state machines. Let's break this down into two parts: the state machine logic and how you use it in React.",
+  },
+  step1Note: {
+    title: '',
+    description: '',
+    note: 'Notice the difference: No more race conditions, no complex useEffects, no impossible states. The state machine defines the logic, and your React component just renders the current state.',
+  },
+  orchestration: {
+    title: 'Why Actor Model?',
+    description: '',
+    note: 'Each actor is completely isolated, managing its own state and lifecycle. They communicate only through events, making the system modular, testable, and scalable. No shared state, no race conditions, just clean actor-to-actor communication.',
+  },
+} as const;
+
+const SUMMARY: SummaryContent = {
+  title: '🎉 From Chaos to Clean Architecture',
+  description:
+    "You've seen the transformation: useState chaos → visual state machines → clean XState implementation",
+  leadIn: "But what are the real-world results? Let's look at the numbers...",
+} as const;
+
+// ✅ XState machine for component state management
+const stateMachineCodeExampleMachine = setup({
+  types: {
+    context: {} as StateMachineCodeExampleContext,
+    events: {} as StateMachineCodeExampleEvent,
+  },
+  actions: {
+    selectSection: assign({
+      selectedSectionId: ({ event }) => (event.type === 'SELECT_SECTION' ? event.sectionId : null),
+    }),
+    toggleSection: assign({
+      expandedSections: ({ context, event }) => {
+        if (event.type === 'TOGGLE_SECTION') {
+          const newExpanded = new Set(context.expandedSections);
+          if (newExpanded.has(event.sectionId)) {
+            newExpanded.delete(event.sectionId);
+          } else {
+            newExpanded.add(event.sectionId);
+          }
+          return newExpanded;
+        }
+        return context.expandedSections;
+      },
+    }),
+    expandAll: assign({
+      expandedSections: () => new Set(CODE_SECTIONS.map((section) => section.id)),
+    }),
+    collapseAll: assign({
+      expandedSections: () => new Set<string>(),
+    }),
+    reset: assign({
+      selectedSectionId: null,
+      expandedSections: () => new Set<string>(),
+      error: null,
+    }),
+  },
+}).createMachine({
+  id: 'stateMachineCodeExample',
+  initial: 'idle',
+  context: {
+    selectedSectionId: null,
+    expandedSections: new Set<string>(),
+    error: null,
+  },
+  states: {
+    idle: {
+      on: {
+        SELECT_SECTION: { actions: 'selectSection' },
+        TOGGLE_SECTION: { actions: 'toggleSection' },
+        EXPAND_ALL: { actions: 'expandAll' },
+        COLLAPSE_ALL: { actions: 'collapseAll' },
+        RESET: { actions: 'reset' },
+      },
     },
-    step1Note: {
-      title: '',
-      description: '',
-      note: 'Notice the difference: No more race conditions, no complex useEffects, no impossible states. The state machine defines the logic, and your React component just renders the current state.'
-    },
-    orchestration: {
-      title: 'Why Actor Model?',
-      description: '',
-      note: 'Each actor is completely isolated, managing its own state and lifecycle. They communicate only through events, making the system modular, testable, and scalable. No shared state, no race conditions, just clean actor-to-actor communication.'
-    }
-  } as const;
+  },
+});
 
-  private static readonly SUMMARY: SummaryContent = {
-    title: '🎉 From Chaos to Clean Architecture',
-    description: 'You\'ve seen the transformation: useState chaos → visual state machines → clean XState implementation',
-    leadIn: 'But what are the real-world results? Let\'s look at the numbers...'
-  } as const;
-
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-  }
-
-  connectedCallback(): void {
-    this.render();
-  }
-
-  private renderCodeSubsection(sectionData: CodeSection): string {
-    return `
-      <div class="code-subsection">
-        <h4 class="subsection-title">${this.escapeHtml(sectionData.title)}</h4>
-        <p class="subsection-description">
-          ${this.escapeHtml(sectionData.description)}
-        </p>
-        
-        <syntax-highlighter-with-themes language="${sectionData.language}">
-${sectionData.code}
-        </syntax-highlighter-with-themes>
-      </div>
-    `;
-  }
-
-  private renderSummarySection(): string {
-    return `
-      <div class="implementation-summary">
-        <h4 class="summary-title">${this.escapeHtml(StateMachineCodeExample.SUMMARY.title)}</h4>
-        <p class="summary-description">
-          ${this.escapeHtml(StateMachineCodeExample.SUMMARY.description)}
-        </p>
-        <p class="summary-lead-in">
-          ${this.escapeHtml(StateMachineCodeExample.SUMMARY.leadIn)}
-        </p>
-      </div>
-    `;
-  }
-
-  private escapeHtml(text: string): string {
-    return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-
-  private getBasePath(): string {
-    const componentPath = new URL(import.meta.url).pathname;
-    return componentPath.substring(0, componentPath.indexOf('/src/'));
-  }
-
-  private render(): void {
-    const basePath = this.getBasePath();
-    const styleHref = `${basePath}/src/styles/state-machine-education.css`;
-
-    this.shadowRoot!.innerHTML = `
-      <link rel="stylesheet" href="${styleHref}">
+// ✅ Helper functions for template rendering
+const renderCodeSubsection = (sectionData: CodeSection): RawHTML => {
+  return html`
+    <div class="code-subsection">
+      <h4 class="subsection-title">${sectionData.title}</h4>
+      <p class="subsection-description">
+        ${sectionData.description}
+      </p>
       
-      <div class="container">
-        <div class="concept-section">
-          <h3 class="concept-title">${this.escapeHtml(StateMachineCodeExample.SUBSECTIONS.step1.title)}</h3>
-          <p class="concept-description">
-            ${this.escapeHtml(StateMachineCodeExample.SUBSECTIONS.step1.description)}
-          </p>
-          
-          <!-- State Machine Definition -->
-          ${this.renderCodeSubsection(StateMachineCodeExample.CODE_SECTIONS[0])}
-          
-          <!-- React Component Usage -->
-          ${this.renderCodeSubsection(StateMachineCodeExample.CODE_SECTIONS[1])}
-          
-          <p class="concept-description">
-            <strong>${this.escapeHtml(StateMachineCodeExample.SUBSECTIONS.step1Note.note || '')}</strong>
-          </p>
-        </div>
-        
-        <div class="concept-section">
-          <h3 class="concept-title">🚀 ${this.escapeHtml(StateMachineCodeExample.CODE_SECTIONS[2].title)}</h3>
-          <p class="concept-description">
-            ${this.escapeHtml(StateMachineCodeExample.CODE_SECTIONS[2].description)}
-          </p>
-          
-          ${this.renderCodeSubsection(StateMachineCodeExample.CODE_SECTIONS[2])}
-          
-          <p class="concept-description">
-            <strong>${this.escapeHtml(StateMachineCodeExample.SUBSECTIONS.orchestration.note || '')}</strong>
-          </p>
-        </div>
-        
-        <!-- Implementation summary -->
-        ${this.renderSummarySection()}
+      <syntax-highlighter-with-themes language=${sectionData.language}>
+        ${sectionData.code}
+      </syntax-highlighter-with-themes>
+    </div>
+  `;
+};
+
+const renderSummarySection = (): RawHTML => {
+  return html`
+    <div class="implementation-summary">
+      <h4 class="summary-title">${SUMMARY.title}</h4>
+      <p class="summary-description">
+        ${SUMMARY.description}
+      </p>
+      <p class="summary-lead-in">
+        ${SUMMARY.leadIn}
+      </p>
+    </div>
+  `;
+};
+
+const stateMachineCodeExampleTemplate = (): RawHTML => {
+  return html`
+    <div class="container">
+      <!-- Controls -->
+      <div class="controls">
+        <button send="EXPAND_ALL" class="btn-secondary">
+          Expand All Sections
+        </button>
+        <button send="COLLAPSE_ALL" class="btn-secondary">
+          Collapse All Sections
+        </button>
+        <button send="RESET" class="btn-secondary">
+          Reset
+        </button>
       </div>
-    `;
+      
+      <!-- Step 1: Clean Actor-Based Architecture -->
+      <div class="concept-section">
+        <h3 class="concept-title">${SUBSECTIONS.step1.title}</h3>
+        <p class="concept-description">
+          ${SUBSECTIONS.step1.description}
+        </p>
+        
+        <!-- State Machine Definition -->
+        ${renderCodeSubsection(CODE_SECTIONS[0])}
+        
+        <!-- React Component Usage -->
+        ${renderCodeSubsection(CODE_SECTIONS[1])}
+        
+        <p class="concept-description">
+          <strong>${SUBSECTIONS.step1Note.note || ''}</strong>
+        </p>
+      </div>
+      
+      <!-- Step 2: Orchestration -->
+      <div class="concept-section">
+        <h3 class="concept-title">🚀 ${CODE_SECTIONS[2].title}</h3>
+        <p class="concept-description">
+          ${CODE_SECTIONS[2].description}
+        </p>
+        
+        ${renderCodeSubsection(CODE_SECTIONS[2])}
+        
+        <p class="concept-description">
+          <strong>${SUBSECTIONS.orchestration.note || ''}</strong>
+        </p>
+      </div>
+      
+      <!-- Implementation Summary -->
+      ${renderSummarySection()}
+    </div>
+  `;
+};
+
+// ✅ Component styles using framework patterns
+const stateMachineCodeExampleStyles = `
+  :host {
+    display: block;
+    max-width: 100%;
+    padding: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
   }
-
-  // Public API for external interactions
-  public getCodeSections(): readonly CodeSection[] {
-    return StateMachineCodeExample.CODE_SECTIONS;
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
   }
-
-  public getCodeSectionById(id: string): CodeSection | null {
-    return StateMachineCodeExample.CODE_SECTIONS.find(section => section.id === id) || null;
+  
+  .controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
   }
-
-  public getSubsections(): typeof StateMachineCodeExample.SUBSECTIONS {
-    return { ...StateMachineCodeExample.SUBSECTIONS };
+  
+  .btn-secondary {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
   }
-
-  public getSummary(): SummaryContent {
-    return { ...StateMachineCodeExample.SUMMARY };
+  
+  .btn-secondary:hover {
+    background: #f5f5f5;
   }
-
-  public getSupportedLanguages(): string[] {
-    const languages = new Set(StateMachineCodeExample.CODE_SECTIONS.map(section => section.language));
-    return Array.from(languages);
+  
+  .concept-section {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 8px;
   }
-}
+  
+  .concept-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+  }
+  
+  .concept-description {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+  }
+  
+  .code-subsection {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .subsection-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+  }
+  
+  .subsection-description {
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+  
+  .implementation-summary {
+    padding: 2rem;
+    background: #e8f5e8;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+  }
+  
+  .summary-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #155724;
+    margin-bottom: 1rem;
+  }
+  
+  .summary-description {
+    color: #155724;
+    margin-bottom: 1rem;
+  }
+  
+  .summary-lead-in {
+    color: #155724;
+    font-weight: 500;
+  }
+  
+  @media (max-width: 768px) {
+    :host {
+      padding: 0.5rem;
+    }
+    
+    .concept-section {
+      padding: 1rem;
+    }
+    
+    .code-subsection {
+      padding: 1rem;
+    }
+    
+    .controls {
+      flex-direction: column;
+    }
+  }
+`;
 
-// Define the custom element
-if (!customElements.get('state-machine-code-example')) {
-  customElements.define('state-machine-code-example', StateMachineCodeExample);
-}
+// ✅ Create the component using the Actor-SPA framework
+const StateMachineCodeExampleComponent = createComponent({
+  machine: stateMachineCodeExampleMachine,
+  template: stateMachineCodeExampleTemplate,
+  styles: stateMachineCodeExampleStyles,
+  tagName: 'state-machine-code-example',
+});
 
-export { StateMachineCodeExample };
-export type { CodeSection, CodeSubsection, SummaryContent }; 
+// ✅ Public API for external interactions (maintained for backward compatibility)
+export const getCodeSections = (): readonly CodeSection[] => CODE_SECTIONS;
+
+export const getCodeSectionById = (id: string): CodeSection | null => {
+  return CODE_SECTIONS.find((section) => section.id === id) || null;
+};
+
+export const getSubsections = (): typeof SUBSECTIONS => ({ ...SUBSECTIONS });
+
+export const getSummary = (): SummaryContent => ({ ...SUMMARY });
+
+export const getSupportedLanguages = (): string[] => {
+  const languages = new Set(CODE_SECTIONS.map((section) => section.language));
+  return Array.from(languages);
+};
+
+// Export for manual registration if needed
+export { StateMachineCodeExampleComponent };
+export type {
+  CodeSection,
+  CodeSubsection,
+  StateMachineCodeExampleContext,
+  StateMachineCodeExampleEvent,
+  SummaryContent,
+};

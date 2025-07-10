@@ -4,7 +4,7 @@ interface Token {
   start: number;
   end: number;
   value: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   subType?: string;
 }
 
@@ -15,7 +15,7 @@ interface RendererOptions {
   highlightSection?: string;
   showLineNumbers?: boolean;
   copyButton?: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface ThemeConfig {
@@ -30,7 +30,7 @@ interface ASTNode {
   type: string;
   children?: ASTNode[];
   token?: Token;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -51,7 +51,7 @@ export class Renderer {
     this.language = options.language || 'javascript';
     this.highlightMode = options.highlightMode || 'default';
     this.highlightSection = options.highlightSection || '';
-    
+
     this.loadTheme();
   }
 
@@ -100,7 +100,7 @@ export class Renderer {
     }
 
     if (node.children) {
-      return node.children.map(child => this.renderASTNode(child)).join('');
+      return node.children.map((child) => this.renderASTNode(child)).join('');
     }
 
     return '';
@@ -161,9 +161,11 @@ export class Renderer {
   private getTokenStyle(token: Token): string {
     if (!this.themeConfig) return '';
 
-    const color = this.themeConfig.colors[token.type] || 
-                  this.themeConfig.colors[`${token.type}-${token.subType}`] ||
-                  this.themeConfig.foreground || '';
+    const color =
+      this.themeConfig.colors[token.type] ||
+      this.themeConfig.colors[`${token.type}-${token.subType}`] ||
+      this.themeConfig.foreground ||
+      '';
 
     const style = this.themeConfig.styles?.[token.type] || '';
 
@@ -183,8 +185,10 @@ export class Renderer {
     }
 
     // Check if token is part of the highlighted section
-    return token.metadata?.section === this.highlightSection ||
-           token.value.includes(this.highlightSection);
+    return (
+      token.metadata?.section === this.highlightSection ||
+      token.value.includes(this.highlightSection)
+    );
   }
 
   /**
@@ -206,7 +210,7 @@ export class Renderer {
     // Apply theme background
     const background = this.themeConfig?.background || '';
     const foreground = this.themeConfig?.foreground || '';
-    
+
     const style = `${background ? `background: ${background};` : ''} ${foreground ? `color: ${foreground};` : ''}`;
 
     return `<div class="syntax-highlight ${this.theme}" style="${style}">${result}</div>`;
@@ -231,7 +235,7 @@ export class Renderer {
   private addCopyButton(html: string): string {
     return `
       <div class="code-container">
-        <button class="copy-button" onclick="this.parentElement.querySelector('.syntax-highlight').copyCode()">
+        <button class="copy-button" send="COPY_CODE">
           Copy
         </button>
         ${html}
@@ -251,108 +255,108 @@ export class Renderer {
    */
   private getThemeConfig(themeName: string): ThemeConfig {
     const themes: { [key: string]: ThemeConfig } = {
-      'default': {
+      default: {
         name: 'Default',
         colors: {
-          'keyword': '#0066CC',
-          'string': '#008000',
-          'comment': '#808080',
-          'number': '#FF6600',
-          'operator': '#333333',
-          'identifier': '#333333',
-          'punctuation': '#333333'
+          keyword: '#0066CC',
+          string: '#008000',
+          comment: '#808080',
+          number: '#FF6600',
+          operator: '#333333',
+          identifier: '#333333',
+          punctuation: '#333333',
         },
         background: '#FFFFFF',
-        foreground: '#333333'
+        foreground: '#333333',
       },
 
       'github-dark': {
         name: 'GitHub Dark',
         colors: {
-          'keyword': '#FF7B72',
-          'string': '#A5C261',
-          'comment': '#8B949E',
-          'number': '#79C0FF',
-          'operator': '#F85149',
-          'identifier': '#E1E4E8',
-          'punctuation': '#E1E4E8',
-          'functionCall': '#D2A8FF',
-          'reactComponent': '#7CE38B',
-          'xstate-keyword': '#FFA348'
+          keyword: '#FF7B72',
+          string: '#A5C261',
+          comment: '#8B949E',
+          number: '#79C0FF',
+          operator: '#F85149',
+          identifier: '#E1E4E8',
+          punctuation: '#E1E4E8',
+          functionCall: '#D2A8FF',
+          reactComponent: '#7CE38B',
+          'xstate-keyword': '#FFA348',
         },
         background: '#0D1117',
-        foreground: '#E1E4E8'
+        foreground: '#E1E4E8',
       },
 
-      'monokai': {
+      monokai: {
         name: 'Monokai',
         colors: {
-          'keyword': '#F92672',
-          'string': '#E6DB74',
-          'comment': '#75715E',
-          'number': '#AE81FF',
-          'operator': '#F92672',
-          'identifier': '#F8F8F2',
-          'punctuation': '#F8F8F2',
-          'functionCall': '#A6E22E',
-          'reactComponent': '#A6E22E'
+          keyword: '#F92672',
+          string: '#E6DB74',
+          comment: '#75715E',
+          number: '#AE81FF',
+          operator: '#F92672',
+          identifier: '#F8F8F2',
+          punctuation: '#F8F8F2',
+          functionCall: '#A6E22E',
+          reactComponent: '#A6E22E',
         },
         background: '#272822',
-        foreground: '#F8F8F2'
+        foreground: '#F8F8F2',
       },
 
       'night-owl': {
         name: 'Night Owl',
         colors: {
-          'keyword': '#C792EA',
-          'string': '#ECC48D',
-          'comment': '#637777',
-          'number': '#F78C6C',
-          'operator': '#C792EA',
-          'identifier': '#D6DEEB',
-          'punctuation': '#D6DEEB',
-          'functionCall': '#82AAFF',
-          'reactComponent': '#ADDB67'
+          keyword: '#C792EA',
+          string: '#ECC48D',
+          comment: '#637777',
+          number: '#F78C6C',
+          operator: '#C792EA',
+          identifier: '#D6DEEB',
+          punctuation: '#D6DEEB',
+          functionCall: '#82AAFF',
+          reactComponent: '#ADDB67',
         },
         background: '#011627',
-        foreground: '#D6DEEB'
+        foreground: '#D6DEEB',
       },
 
       'tokyo-night': {
         name: 'Tokyo Night',
         colors: {
-          'keyword': '#BB9AF7',
-          'string': '#9ECE6A',
-          'comment': '#565F89',
-          'number': '#FF9E64',
-          'operator': '#89DDFF',
-          'identifier': '#C0CAF5',
-          'punctuation': '#89DDFF',
-          'functionCall': '#7AA2F7',
-          'reactComponent': '#9ECE6A'
+          keyword: '#BB9AF7',
+          string: '#9ECE6A',
+          comment: '#565F89',
+          number: '#FF9E64',
+          operator: '#89DDFF',
+          identifier: '#C0CAF5',
+          punctuation: '#89DDFF',
+          functionCall: '#7AA2F7',
+          reactComponent: '#9ECE6A',
         },
         background: '#1A1B26',
-        foreground: '#C0CAF5'
+        foreground: '#C0CAF5',
       },
 
       'minimal-light': {
         name: 'Minimal Light',
         colors: {
-          'keyword': '#0451A5',
-          'string': '#008000',
-          'comment': '#008000',
-          'number': '#098658',
-          'operator': '#0000FF',
-          'identifier': '#000000',
-          'punctuation': '#000000',
-          'functionCall': '#795E26'
+          keyword: '#0451A5',
+          string: '#008000',
+          comment: '#008000',
+          number: '#098658',
+          operator: '#0000FF',
+          identifier: '#000000',
+          punctuation: '#000000',
+          functionCall: '#795E26',
         },
         background: '#FFFFFF',
-        foreground: '#000000'
-      }
+        foreground: '#000000',
+      },
     };
 
-    return themes[themeName] || themes['default'];
+    return themes[themeName] || themes.default;
   }
 
   /**
@@ -364,10 +368,10 @@ export class Renderer {
       '<': '&lt;',
       '>': '&gt;',
       '"': '&quot;',
-      "'": '&#39;'
+      "'": '&#39;',
     };
 
-    return text.replace(/[&<>"']/g, char => escapeMap[char]);
+    return text.replace(/[&<>"']/g, (char) => escapeMap[char]);
   }
 
   // Public API methods
@@ -392,4 +396,4 @@ export class Renderer {
   public getCurrentTheme(): ThemeConfig | null {
     return this.themeConfig;
   }
-} 
+}

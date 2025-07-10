@@ -3,7 +3,7 @@ import { Lexer } from './lexer.js';
 
 interface XStateLexerOptions {
   language?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -24,34 +24,107 @@ export class XStateLexer extends Lexer {
 
   constructor(code: string, options: XStateLexerOptions = {}) {
     super(code, { ...options, language: 'xstate' });
-    
+
     this.machineContext = {
       inStates: false,
       inEvents: false,
       inActions: false,
       inGuards: false,
       inServices: false,
-      depth: 0
+      depth: 0,
     };
 
     // XState v5 keywords and methods
     this.xstateKeywords = new Set([
-      'createMachine', 'createActor', 'assign', 'setup', 'fromPromise', 'fromCallback',
-      'createActorContext', 'waitFor', 'stopChild', 'spawnChild', 'sendTo', 'sendParent',
-      'raise', 'emit', 'enqueueActions', 'and', 'or', 'not', 'stateIn', 'pathMatches',
-      'log', 'cancel', 'forwardTo', 'escalate', 'choose', 'pure', 'after', 'invoke',
-      'spawn', 'send', 'sendUpdate', 'respond', 'stop', 'done', 'error', 'snapshot',
-      'interpret', 'toPromise', 'onTransition', 'onDone', 'onError', 'start', 'getSnapshot'
+      'createMachine',
+      'createActor',
+      'assign',
+      'setup',
+      'fromPromise',
+      'fromCallback',
+      'createActorContext',
+      'waitFor',
+      'stopChild',
+      'spawnChild',
+      'sendTo',
+      'sendParent',
+      'raise',
+      'emit',
+      'enqueueActions',
+      'and',
+      'or',
+      'not',
+      'stateIn',
+      'pathMatches',
+      'log',
+      'cancel',
+      'forwardTo',
+      'escalate',
+      'choose',
+      'pure',
+      'after',
+      'invoke',
+      'spawn',
+      'send',
+      'sendUpdate',
+      'respond',
+      'stop',
+      'done',
+      'error',
+      'snapshot',
+      'interpret',
+      'toPromise',
+      'onTransition',
+      'onDone',
+      'onError',
+      'start',
+      'getSnapshot',
     ]);
 
     // XState-specific properties and configuration keys
     this.xstateProperties = new Set([
-      'states', 'initial', 'context', 'on', 'entry', 'exit', 'always', 'after',
-      'invoke', 'src', 'data', 'onDone', 'onError', 'id', 'type', 'target', 'actions',
-      'cond', 'guard', 'in', 'delay', 'meta', 'tags', 'description', 'version',
-      'predictableActionArguments', 'preserveActionOrder', 'strict', 'guards',
-      'services', 'activities', 'delays', 'actors', 'input', 'output', 'params',
-      'schema', 'tsTypes', 'autoForward', 'devTools', 'clock', 'logger'
+      'states',
+      'initial',
+      'context',
+      'on',
+      'entry',
+      'exit',
+      'always',
+      'after',
+      'invoke',
+      'src',
+      'data',
+      'onDone',
+      'onError',
+      'id',
+      'type',
+      'target',
+      'actions',
+      'cond',
+      'guard',
+      'in',
+      'delay',
+      'meta',
+      'tags',
+      'description',
+      'version',
+      'predictableActionArguments',
+      'preserveActionOrder',
+      'strict',
+      'guards',
+      'services',
+      'activities',
+      'delays',
+      'actors',
+      'input',
+      'output',
+      'params',
+      'schema',
+      'tsTypes',
+      'autoForward',
+      'devTools',
+      'clock',
+      'logger',
     ]);
   }
 
@@ -101,7 +174,10 @@ export class XStateLexer extends Lexer {
     const start = this.position;
     const word = this.readIdentifier();
 
-    if (word && ['assign', 'raise', 'send', 'sendTo', 'sendParent', 'log', 'choose', 'pure'].includes(word)) {
+    if (
+      word &&
+      ['assign', 'raise', 'send', 'sendTo', 'sendParent', 'log', 'choose', 'pure'].includes(word)
+    ) {
       this.addToken('xstateAction', start, this.position);
       return true;
     }
@@ -162,7 +238,18 @@ export class XStateLexer extends Lexer {
   /**
    * Override identifier type detection for XState patterns
    */
-  public getIdentifierType(value: any): "keyword" | "function" | "boolean" | "null" | "builtin" | "property" | "reactHook" | "className" | "identifier" {
+  public getIdentifierType(
+    value: string
+  ):
+    | 'keyword'
+    | 'function'
+    | 'boolean'
+    | 'null'
+    | 'builtin'
+    | 'property'
+    | 'reactHook'
+    | 'className'
+    | 'identifier' {
     if (typeof value !== 'string') {
       return super.getIdentifierType(value);
     }
@@ -180,7 +267,7 @@ export class XStateLexer extends Lexer {
     // State names (camelCase or SCREAMING_SNAKE_CASE)
     if (/^[a-z][a-zA-Z0-9]*$/.test(value) || /^[A-Z][A-Z0-9_]*$/.test(value)) {
       const context = this.getPreviousTokens(3);
-      if (context.some(token => token.value === 'states' || token.value === 'target')) {
+      if (context.some((token) => token.value === 'states' || token.value === 'target')) {
         return 'property';
       }
     }
@@ -188,7 +275,7 @@ export class XStateLexer extends Lexer {
     // Event names (typically UPPER_CASE)
     if (/^[A-Z][A-Z0-9_]*$/.test(value)) {
       const context = this.getPreviousTokens(3);
-      if (context.some(token => token.value === 'on' || token.value === 'type')) {
+      if (context.some((token) => token.value === 'on' || token.value === 'type')) {
         return 'property';
       }
     }
@@ -223,7 +310,7 @@ export class XStateLexer extends Lexer {
   /**
    * Get previous tokens for context analysis
    */
-  private getPreviousTokens(count: number): any[] {
+  private getPreviousTokens(count: number): Array<{ type: string; value: string }> {
     const start = Math.max(0, this.tokens.length - count);
     return this.tokens.slice(start);
   }
@@ -231,7 +318,7 @@ export class XStateLexer extends Lexer {
   /**
    * Update machine context based on current token
    */
-  private updateMachineContext(token: any): void {
+  private updateMachineContext(token: { type: string; value: string }): void {
     if (token.type === 'property' && token.value === 'states') {
       this.machineContext.inStates = true;
     } else if (token.type === 'property' && token.value === 'actions') {
@@ -260,7 +347,7 @@ export class XStateLexer extends Lexer {
   }
 
   // Public API methods
-  public getMachineContext(): any {
+  public getMachineContext(): Record<string, unknown> {
     return { ...this.machineContext };
   }
 
@@ -271,4 +358,4 @@ export class XStateLexer extends Lexer {
   public getXStateProperties(): Set<string> {
     return new Set(this.xstateProperties);
   }
-} 
+}

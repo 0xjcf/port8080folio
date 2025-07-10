@@ -1,3 +1,6 @@
+import { assign, type SnapshotFrom, setup } from 'xstate';
+import { createComponent, css, html, storageHelpers } from '../../framework/core/index.js';
+
 // Type definitions
 type ConsentStatus = 'accepted' | 'declined';
 type ConsentSource = 'accept-button' | 'customize-panel' | 'expired-reset';
@@ -8,12 +11,7 @@ interface ConsentData {
   expiryDate: string;
 }
 
-interface LocalStorageKeys {
-  analytics_consent: ConsentStatus;
-  consent_date: string;
-}
-
-// Custom events
+// Custom events for external listeners
 interface ConsentUpdatedEvent extends CustomEvent {
   detail: {
     consent: ConsentStatus;
@@ -29,502 +27,537 @@ interface ConsentExpiredEvent extends CustomEvent {
   };
 }
 
-class PrivacyNotice extends HTMLElement {
-  private static readonly CONSENT_EXPIRY_YEARS = 1;
-  private static readonly GA_DISABLE_KEY = 'ga-disable-G-5TR1LWNXXY';
-  
-  private isVisible: boolean = false;
-  private consentData: ConsentData | null = null;
+// ✅ Analytics service following reactive patterns
+interface AnalyticsService {
+  enableAnalytics: () => void;
+  disableAnalytics: () => void;
+}
 
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this.isVisible = false;
-    this.consentData = null;
-  }
-
-  connectedCallback(): void {
-    this.render();
-    this.checkConsentStatus();
-    this.addEventListeners();
-  }
-
-  private checkConsentStatus(): void {
-    const consentDate = this.getLocalStorageItem('consent_date');
-    
-    if (consentDate) {
-      const expiryDate = this.calculateExpiryDate(consentDate);
-      const isExpired = new Date() > expiryDate;
-      
-      if (isExpired) {
-        this.resetConsent('expired-reset');
-        return;
+const createAnalyticsService = (): AnalyticsService => ({
+  enableAnalytics: () => {
+    // Safely access window properties for Google Analytics control
+    const globalWindow = window as unknown as Record<string, unknown>;
+    try {
+      delete globalWindow['ga-disable-G-5TR1LWNXXY'];
+      // Only reload if gtag is not loaded - this ensures analytics starts working
+      if (typeof globalWindow.gtag === 'undefined') {
+        location.reload();
       }
-      
-      // Store current consent data
-      const consent = this.getLocalStorageItem('analytics_consent') as ConsentStatus || 'declined';
-      this.consentData = {
-        consent,
-        date: consentDate,
-        expiryDate: expiryDate.toISOString()
+    } catch {
+      // Silently handle any errors during analytics re-enabling
+    }
+  },
+  disableAnalytics: () => {
+    // Safely access window properties for Google Analytics control
+    const globalWindow = window as unknown as Record<string, unknown>;
+    try {
+      globalWindow['ga-disable-G-5TR1LWNXXY'] = true;
+    } catch {
+      // Silently handle any errors during analytics disabling
+    }
+  },
+});
+
+// Initialize analytics service
+const analyticsService = createAnalyticsService();
+
+// Privacy Notice State Machine
+const privacyMachine = setup({
+  types: {
+    context: {} as {
+      // ✅ FIXED: Removed isVisible boolean - use machine states instead
+      consentData: ConsentData | null;
+      showCustomizePanel: boolean;
+      analyticsEnabled: boolean;
+    },
+    events: {} as
+      | { type: 'SHOW_NOTICE' }
+      | { type: 'HIDE_NOTICE' }
+      | { type: 'ACCEPT_ALL' }
+      | { type: 'TOGGLE_CUSTOMIZE' }
+      | { type: 'TOGGLE_ANALYTICS'; checked: boolean }
+      | { type: 'SAVE_PREFERENCES' }
+      | { type: 'RESET_CONSENT' }
+      | { type: 'CHECK_CONSENT_STATUS' },
+  },
+  guards: {
+    needsConsent: ({ context }) => !context.consentData,
+    hasValidConsent: ({ context }) => {
+      if (!context.consentData) return false;
+      const expiryDate = new Date(context.consentData.expiryDate);
+      return new Date() <= expiryDate;
+    },
+  },
+  actions: {
+    // ✅ FIXED: Removed isVisible assignments - state machine handles visibility
+    hideNotice: assign({
+      showCustomizePanel: false,
+    }),
+    toggleCustomizePanel: assign({
+      showCustomizePanel: ({ context }) => !context.showCustomizePanel,
+    }),
+    updateAnalyticsPreference: assign({
+      analyticsEnabled: ({ event }) => {
+        if (event.type === 'TOGGLE_ANALYTICS') {
+          return event.checked;
+        }
+        return false;
+      },
+    }),
+    saveConsentData: assign({
+      consentData: ({ event, context }) => {
+        const timestamp = new Date().toISOString();
+        const expiryDate = new Date();
+        expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+        const consent: ConsentStatus =
+          event.type === 'ACCEPT_ALL'
+            ? 'accepted'
+            : context.analyticsEnabled
+              ? 'accepted'
+              : 'declined';
+
+        // Save to localStorage using framework helpers
+        storageHelpers.setItem('analytics_consent', consent);
+        storageHelpers.setItem('consent_date', timestamp);
+
+        return {
+          consent,
+          date: timestamp,
+          expiryDate: expiryDate.toISOString(),
+        };
+      },
+    }),
+    loadConsentData: assign({
+      consentData: () => {
+        const consentDate = storageHelpers.getItem<string>('consent_date');
+        const consent = storageHelpers.getItem<ConsentStatus>('analytics_consent');
+
+        if (consentDate && consent) {
+          const expiryDate = new Date(consentDate);
+          expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+          return {
+            consent,
+            date: consentDate,
+            expiryDate: expiryDate.toISOString(),
+          };
+        }
+        return null;
+      },
+      analyticsEnabled: () => {
+        return (
+          storageHelpers.getItem<ConsentStatus>('analytics_consent', 'declined') === 'accepted'
+        );
+      },
+    }),
+    clearConsentData: assign({
+      consentData: null,
+      analyticsEnabled: false,
+    }),
+    // ✅ REPLACED: Framework event bus instead of DOM manipulation
+    dispatchConsentEvent: ({ context, event }) => {
+      const consentEventData = {
+        consent: context.consentData?.consent || 'declined',
+        source: event.type === 'ACCEPT_ALL' ? 'accept-button' : 'customize-panel',
+        timestamp: new Date().toISOString(),
+        componentId: 'privacy-notice',
       };
-    }
-    
-    // Show notice if no valid consent exists
-    if (!this.getLocalStorageItem('consent_date')) {
-      this.show();
-    }
-  }
 
-  private calculateExpiryDate(consentDateStr: string): Date {
-    const expiryDate = new Date(consentDateStr);
-    expiryDate.setFullYear(expiryDate.getFullYear() + PrivacyNotice.CONSENT_EXPIRY_YEARS);
-    return expiryDate;
-  }
-
-  private getLocalStorageItem(key: keyof LocalStorageKeys): string | null {
-    try {
-      return localStorage.getItem(key);
-    } catch (error) {
-      console.warn('PrivacyNotice: LocalStorage access failed:', error);
-      return null;
-    }
-  }
-
-  private setLocalStorageItem(key: keyof LocalStorageKeys, value: string): void {
-    try {
-      localStorage.setItem(key, value);
-    } catch (error) {
-      console.warn('PrivacyNotice: LocalStorage write failed:', error);
-    }
-  }
-
-  private removeLocalStorageItem(key: keyof LocalStorageKeys): void {
-    try {
-      localStorage.removeItem(key);
-    } catch (error) {
-      console.warn('PrivacyNotice: LocalStorage removal failed:', error);
-    }
-  }
-
-  private resetConsent(source: ConsentSource): void {
-    const expiredDate = this.consentData?.date || new Date().toISOString();
-    
-    this.removeLocalStorageItem('analytics_consent');
-    this.removeLocalStorageItem('consent_date');
-    this.consentData = null;
-    
-    this.show();
-
-    // Dispatch expired event
-    if (source === 'expired-reset') {
-      const expiredEvent: ConsentExpiredEvent = new CustomEvent('consent-expired', {
-        detail: {
-          expiredDate,
-          resetTimestamp: new Date().toISOString()
+      // ✅ FRAMEWORK: Use framework event bus for global consent updates
+      if (typeof window !== 'undefined' && window.globalEventBus) {
+        window.globalEventBus.emit('consent-updated', consentEventData);
+      }
+    },
+    // ✅ Use analytics service instead of direct DOM manipulation
+    handleGoogleAnalytics: ({ context }) => {
+      if (context.consentData?.consent === 'accepted') {
+        analyticsService.enableAnalytics();
+      } else {
+        analyticsService.disableAnalytics();
+      }
+    },
+  },
+}).createMachine({
+  id: 'privacy-notice',
+  initial: 'checking',
+  context: {
+    // ✅ FIXED: Removed isVisible - use machine states instead
+    consentData: null,
+    showCustomizePanel: false,
+    analyticsEnabled: false,
+  },
+  states: {
+    checking: {
+      entry: 'loadConsentData',
+      always: [
+        {
+          target: 'hidden',
+          guard: 'hasValidConsent',
         },
-        bubbles: true,
-        composed: true
-      }) as ConsentExpiredEvent;
+        {
+          target: 'visible',
+          guard: 'needsConsent',
+        },
+        {
+          target: 'expired',
+        },
+      ],
+    },
+    hidden: {
+      entry: 'hideNotice',
+      on: {
+        SHOW_NOTICE: 'visible',
+        RESET_CONSENT: 'expired',
+      },
+    },
+    visible: {
+      // ✅ FIXED: No need for showNotice action - state indicates visibility
+      on: {
+        HIDE_NOTICE: 'hidden',
+        ACCEPT_ALL: {
+          target: 'hidden',
+          actions: [
+            assign({ analyticsEnabled: true }),
+            'saveConsentData',
+            'dispatchConsentEvent',
+            'handleGoogleAnalytics',
+          ],
+        },
+        TOGGLE_CUSTOMIZE: {
+          actions: 'toggleCustomizePanel',
+        },
+        TOGGLE_ANALYTICS: {
+          actions: 'updateAnalyticsPreference',
+        },
+        SAVE_PREFERENCES: {
+          target: 'hidden',
+          actions: ['saveConsentData', 'dispatchConsentEvent', 'handleGoogleAnalytics'],
+        },
+      },
+    },
+    expired: {
+      entry: ['clearConsentData'], // ✅ FIXED: No need for showNotice action
+      on: {
+        ACCEPT_ALL: {
+          target: 'hidden',
+          actions: [
+            assign({ analyticsEnabled: true }),
+            'saveConsentData',
+            'dispatchConsentEvent',
+            'handleGoogleAnalytics',
+          ],
+        },
+        TOGGLE_CUSTOMIZE: {
+          actions: 'toggleCustomizePanel',
+        },
+        SAVE_PREFERENCES: {
+          target: 'hidden',
+          actions: ['saveConsentData', 'dispatchConsentEvent', 'handleGoogleAnalytics'],
+        },
+      },
+    },
+  },
+});
 
-      this.dispatchEvent(expiredEvent);
+// Component Styles - Following framework patterns
+const privacyNoticeStyles = css`
+  :host {
+    --popup-bg: rgba(15, 17, 21, 0.98);
+    --border-color: rgba(13, 153, 255, 0.2);
+    --text-color: #f5f5f5;
+    --accent: #0d99ff;
+    --accent-light: #47b4ff;
+    --border-radius: 16px;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 0.75rem;
+    --spacing-lg: 1rem;
+    --spacing-xl: 1.5rem;
+    --spacing-2xl: 2rem;
+    display: contents;
+  }
+
+  .privacy-notice {
+    position: fixed;
+    bottom: var(--spacing-2xl);
+    right: var(--spacing-2xl);
+    background: var(--popup-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-2xl);
+    max-width: 420px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    transform: translateY(calc(100% + 3rem));
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+  }
+
+  .privacy-notice[data-state*="visible"] {
+    transform: translateY(0);
+  }
+
+  .notice-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .cookie-icon {
+    font-size: 2rem;
+  }
+
+  .notice-title {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .notice-content {
+    color: var(--text-color);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .notice-content p {
+    margin: 0 0 var(--spacing-md) 0;
+  }
+
+  .notice-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .notice-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .notice-button {
+    flex: 1;
+    padding: var(--spacing-md) 1.25rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+  }
+
+  .btn-accept {
+    background: linear-gradient(45deg, var(--accent), var(--accent-light));
+    color: white;
+  }
+
+  .btn-accept:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 153, 255, 0.3);
+  }
+
+  .btn-customize {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+
+  .btn-customize:hover {
+    background: rgba(13, 153, 255, 0.1);
+  }
+
+  .privacy-link {
+    display: inline-block;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.3s ease;
+  }
+
+  .privacy-link:hover {
+    color: var(--accent-light);
+    text-decoration: underline;
+  }
+
+  .privacy-link::after {
+    content: ' →';
+  }
+
+  .customize-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  /* ✅ Updated to use unified data-state pattern */
+  .customize-panel[data-state="expanded"] {
+    max-height: 200px;
+    margin-top: var(--spacing-lg);
+  }
+
+  .cookie-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: rgba(13, 153, 255, 0.05);
+    border-radius: 8px;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .cookie-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .cookie-option label {
+    color: var(--text-color);
+    font-size: 0.875rem;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  /* ✅ Updated to use unified data-state pattern */
+  .cookie-option[data-state="disabled"] {
+    opacity: 0.6;
+  }
+
+  .cookie-option[data-state="disabled"] input {
+    cursor: not-allowed;
+  }
+
+  .save-preferences {
+    width: 100%;
+    margin-top: var(--spacing-lg);
+    background: var(--accent);
+    color: white;
+  }
+
+  .save-preferences:hover {
+    background: var(--accent-light);
+  }
+
+  /* Mobile responsive design */
+  @media (max-width: 600px) {
+    .privacy-notice {
+      bottom: 0;
+      right: 0;
+      left: 0;
+      max-width: none;
+      border-radius: var(--border-radius) var(--border-radius) 0 0;
+      padding: var(--spacing-xl);
+      margin: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .notice-actions {
+      flex-direction: column;
+    }
+
+    .notice-header {
+      gap: var(--spacing-sm);
+    }
+
+    .cookie-icon {
+      font-size: 1.5rem;
+    }
+
+    .notice-title {
+      font-size: 1.1rem;
+    }
+
+    .notice-content {
+      font-size: 0.95rem;
+      margin-bottom: var(--spacing-lg);
     }
   }
+`;
 
-  private show(): void {
-    this.isVisible = true;
-    const banner = this.shadowRoot!.querySelector('.cookie-popup') as HTMLElement;
-    if (banner) {
-      banner.classList.add('visible');
-    }
+// Template function following framework patterns
+const privacyNoticeTemplate = (state: SnapshotFrom<typeof privacyMachine>) => {
+  const { showCustomizePanel, analyticsEnabled } = state.context;
+
+  // ✅ FIXED: Use machine state instead of isVisible boolean
+  // Only render when in visible or expired state
+  if (!state.matches('visible') && !state.matches('expired')) {
+    return html``;
   }
 
-  private hide(): void {
-    this.isVisible = false;
-    const banner = this.shadowRoot!.querySelector('.cookie-popup') as HTMLElement;
-    if (banner) {
-      banner.classList.remove('visible');
-    }
-  }
+  return html`
+    <div class="privacy-notice" role="dialog" aria-labelledby="privacy-notice-title" data-state=${state.value}>
+      <header class="notice-header">
+        <span class="cookie-icon" aria-hidden="true">🍪</span>
+        <h3 id="privacy-notice-title" class="notice-title">Quick heads up!</h3>
+      </header>
 
-  public handleAccept(): void {
-    this.saveConsent('accepted', 'accept-button');
-    this.hide();
-    
-    // Reload if Google Analytics not loaded
-    if (!this.isGoogleAnalyticsLoaded()) {
-      location.reload();
-    }
-  }
+      <div class="notice-content">
+        <p>I use cookies to remember your preferences and see which projects you find most interesting.</p>
+        <p>Cool with that?</p>
+      </div>
 
-  public handleCustomize(): void {
-    const optionsPanel = this.shadowRoot!.querySelector('.options-panel') as HTMLElement;
-    if (optionsPanel) {
-      optionsPanel.classList.toggle('visible');
-    }
-  }
+      <div class="notice-actions">
+        <button class="notice-button btn-accept" send="ACCEPT_ALL">
+          Sounds good!
+        </button>
+        <button class="notice-button btn-customize" send="TOGGLE_CUSTOMIZE">
+          Let me choose
+        </button>
+      </div>
 
-  public handleSavePreferences(): void {
-    const analyticsCheckbox = this.shadowRoot!.querySelector('#analytics-cookies') as HTMLInputElement;
-    const consent: ConsentStatus = analyticsCheckbox?.checked ? 'accepted' : 'declined';
-    
-    this.saveConsent(consent, 'customize-panel');
-    this.hide();
-    
-    if (consent === 'accepted' && !this.isGoogleAnalyticsLoaded()) {
-      location.reload();
-    } else if (consent === 'declined') {
-      this.disableGoogleAnalytics();
-    }
-  }
-
-  private saveConsent(consent: ConsentStatus, source: ConsentSource): void {
-    const timestamp = new Date().toISOString();
-    
-    this.setLocalStorageItem('analytics_consent', consent);
-    this.setLocalStorageItem('consent_date', timestamp);
-    
-    this.consentData = {
-      consent,
-      date: timestamp,
-      expiryDate: this.calculateExpiryDate(timestamp).toISOString()
-    };
-    
-    // Dispatch consent updated event
-    const event: ConsentUpdatedEvent = new CustomEvent('consent-updated', {
-      detail: { consent, source, timestamp },
-      bubbles: true,
-      composed: true
-    }) as ConsentUpdatedEvent;
-
-    this.dispatchEvent(event);
-  }
-
-  private isGoogleAnalyticsLoaded(): boolean {
-    return typeof window.gtag !== 'undefined';
-  }
-
-  private disableGoogleAnalytics(): void {
-    try {
-      (window as any)[PrivacyNotice.GA_DISABLE_KEY] = true;
-    } catch (error) {
-      console.warn('PrivacyNotice: Failed to disable Google Analytics:', error);
-    }
-  }
-
-  private render(): void {
-    this.shadowRoot!.innerHTML = `
-      <style>
-        :host {
-          --popup-bg: rgba(15, 17, 21, 0.98);
-          --border-color: rgba(13, 153, 255, 0.2);
-          --text-color: #F5F5F5;
-          --accent: #0D99FF;
-          --accent-light: #47B4FF;
-        }
-        
-        .cookie-popup {
-          position: fixed;
-          bottom: 2rem;
-          right: 2rem;
-          background: var(--popup-bg);
-          border: 1px solid var(--border-color);
-          border-radius: 16px;
-          padding: 2rem;
-          max-width: 420px;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-          backdrop-filter: blur(10px);
-          transform: translateY(calc(100% + 3rem));
-          transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          z-index: 1000;
-        }
-        
-        .cookie-popup.visible {
-          transform: translateY(0);
-        }
-        
-        .cookie-header {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          margin-bottom: 1rem;
-        }
-        
-        .cookie-icon {
-          font-size: 2rem;
-        }
-        
-        h3 {
-          margin: 0;
-          color: var(--text-color);
-          font-size: 1.25rem;
-          font-weight: 600;
-        }
-        
-        .cookie-content {
-          color: var(--text-color);
-          font-size: 1rem;
-          line-height: 1.6;
-          margin-bottom: 1.5rem;
-        }
-        
-        .cookie-content p {
-          margin: 0 0 0.75rem 0;
-        }
-        
-        .cookie-content p:last-child {
-          margin-bottom: 0;
-        }
-        
-        .actions {
-          display: flex;
-          gap: 0.75rem;
-          margin-bottom: 1rem;
-        }
-        
-        button {
-          flex: 1;
-          padding: 0.75rem 1.25rem;
-          border: none;
-          border-radius: 8px;
-          font-size: 0.875rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          font-family: inherit;
-        }
-        
-        .btn-accept {
-          background: linear-gradient(45deg, var(--accent), var(--accent-light));
-          color: white;
-        }
-        
-        .btn-accept:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(13, 153, 255, 0.3);
-        }
-        
-        .btn-customize {
-          background: transparent;
-          color: var(--accent);
-          border: 1px solid var(--accent);
-        }
-        
-        .btn-customize:hover {
-          background: rgba(13, 153, 255, 0.1);
-        }
-        
-        .privacy-link {
-          display: inline-block;
-          color: var(--accent);
-          text-decoration: none;
-          font-size: 0.875rem;
-          transition: color 0.3s ease;
-        }
-        
-        .privacy-link:hover {
-          color: var(--accent-light);
-          text-decoration: underline;
-        }
-        
-        .privacy-link::after {
-          content: ' →';
-        }
-        
-        .options-panel {
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.3s ease;
-        }
-        
-        .options-panel.visible {
-          max-height: 200px;
-          margin-top: 1rem;
-        }
-        
-        .cookie-option {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 0.75rem;
-          background: rgba(13, 153, 255, 0.05);
-          border-radius: 8px;
-          margin-bottom: 0.5rem;
-        }
-        
-        .cookie-option input[type="checkbox"] {
-          width: 18px;
-          height: 18px;
-          accent-color: var(--accent);
-          cursor: pointer;
-        }
-        
-        .cookie-option label {
-          color: var(--text-color);
-          font-size: 0.875rem;
-          cursor: pointer;
-          flex: 1;
-        }
-        
-        .cookie-option.disabled {
-          opacity: 0.6;
-        }
-        
-        .cookie-option.disabled input {
-          cursor: not-allowed;
-        }
-        
-        .save-preferences {
-          width: 100%;
-          margin-top: 1rem;
-          background: var(--accent);
-          color: white;
-        }
-        
-        .save-preferences:hover {
-          background: var(--accent-light);
-        }
-        
-        @media (max-width: 600px) {
-          .cookie-popup {
-            bottom: 0;
-            right: 0;
-            left: 0;
-            max-width: none;
-            border-radius: 16px 16px 0 0;
-            padding: 1.5rem;
-            margin: 0;
-            width: 100%;
-            box-sizing: border-box;
-          }
-          
-          .actions {
-            flex-direction: column;
-          }
-          
-          .cookie-header {
-            gap: 0.5rem;
-          }
-          
-          .cookie-icon {
-            font-size: 1.5rem;
-          }
-          
-          h3 {
-            font-size: 1.1rem;
-          }
-          
-          .cookie-content {
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-          }
-        }
-      </style>
-      
-      <div class="cookie-popup" role="dialog" aria-labelledby="cookie-title">
-        <div class="cookie-header">
-          <span class="cookie-icon">🍪</span>
-          <h3 id="cookie-title">Quick heads up!</h3>
+      <!-- ✅ Updated to use unified data-state pattern -->
+      <div class="customize-panel" data-state=${showCustomizePanel && 'expanded'}>
+        <div class="cookie-option" data-state="disabled">
+          <input type="checkbox" id="essential-cookies" checked disabled />
+          <label for="essential-cookies">Essential cookies (always on)</label>
         </div>
         
-        <div class="cookie-content">
-          <p>I use cookies to remember your preferences and see which projects you find most interesting.</p>
-          <p>Cool with that?</p>
+        <div class="cookie-option" data-state="enabled">
+          <input 
+            type="checkbox" 
+            id="analytics-cookies" 
+            ${analyticsEnabled && 'checked'}
+            send="TOGGLE_ANALYTICS"
+          />
+          <label for="analytics-cookies">Analytics (helps me improve the site)</label>
         </div>
         
-        <div class="actions">
-          <button class="btn-accept" onclick="this.getRootNode().host.handleAccept()">
-            Sounds good!
-          </button>
-          <button class="btn-customize" onclick="this.getRootNode().host.handleCustomize()">
-            Let me choose
-          </button>
-        </div>
-        
-        <div class="options-panel">
-          <div class="cookie-option disabled">
-            <input type="checkbox" id="essential-cookies" checked disabled />
-            <label for="essential-cookies">Essential cookies (always on)</label>
-          </div>
-          <div class="cookie-option">
-            <input type="checkbox" id="analytics-cookies" />
-            <label for="analytics-cookies">Analytics (helps me improve the site)</label>
-          </div>
-          <button class="save-preferences" onclick="this.getRootNode().host.handleSavePreferences()">
-            Save my preferences
-          </button>
-        </div>
-        
+        <button class="notice-button save-preferences" send="SAVE_PREFERENCES">
+          Save my preferences
+        </button>
+      </div>
+
+      <footer>
         <a href="/privacy-policy.html" class="privacy-link" target="_blank">
           The technical details
         </a>
-      </div>
-    `;
-  }
+      </footer>
+    </div>
+  `;
+};
 
-  private addEventListeners(): void {
-    const style = document.createElement('style');
-    style.textContent = `
-      privacy-notice {
-        display: contents;
-      }
-    `;
-    document.head.appendChild(style);
-  }
+// Create the component using the Actor-SPA framework
+const PrivacyNoticeComponent = createComponent({
+  machine: privacyMachine,
+  template: privacyNoticeTemplate,
+  styles: privacyNoticeStyles,
+  // Auto-registers as <privacy-notice-component> following framework conventions
+});
 
-  // Public API for external interactions
-  public isNoticeVisible(): boolean {
-    return this.isVisible;
-  }
+// Export for manual registration if needed
+export { PrivacyNoticeComponent };
+export default PrivacyNoticeComponent;
 
-  public getCurrentConsent(): ConsentData | null {
-    return this.consentData;
-  }
-
-  public getConsentStatus(): ConsentStatus | null {
-    return this.consentData?.consent || null;
-  }
-
-  public showNotice(): void {
-    this.show();
-  }
-
-  public hideNotice(): void {
-    this.hide();
-  }
-
-  public resetConsentData(): void {
-    this.resetConsent('expired-reset');
-  }
-
-  public isConsentExpired(): boolean {
-    if (!this.consentData) return true;
-    
-    const expiryDate = new Date(this.consentData.expiryDate);
-    return new Date() > expiryDate;
-  }
-
-  public getRemainingConsentDays(): number {
-    if (!this.consentData) return 0;
-    
-    const expiryDate = new Date(this.consentData.expiryDate);
-    const now = new Date();
-    const diffTime = expiryDate.getTime() - now.getTime();
-    return Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+// Public API - component can be used reactively via send() method
+declare global {
+  interface HTMLElementTagNameMap {
+    'privacy-notice-component': InstanceType<typeof PrivacyNoticeComponent>;
   }
 }
 
-// Define the custom element
-if (!customElements.get('privacy-notice')) {
-  customElements.define('privacy-notice', PrivacyNotice);
-}
-
-export { PrivacyNotice };
-export type { 
-  ConsentStatus, 
-  ConsentSource, 
-  ConsentData, 
-  LocalStorageKeys,
-  ConsentUpdatedEvent,
-  ConsentExpiredEvent 
-}; 
+// Export types for external use
+export type { ConsentData, ConsentExpiredEvent, ConsentSource, ConsentStatus, ConsentUpdatedEvent };

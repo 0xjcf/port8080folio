@@ -1,11 +1,15 @@
-import { extractHighlightedContent, createTestContainer, validateHighlighting, waitForHighlighting } from './test-helper.js';
+import {
+  createTestContainer,
+  extractHighlightedContent,
+  waitForHighlighting,
+} from './test-helper.js';
 
 export class EdgeCasesParser {
-    constructor() {
-        this.testCases = [
-            {
-                name: 'Nested Template Literals',
-                code: `
+  constructor() {
+    this.testCases = [
+      {
+        name: 'Nested Template Literals',
+        code: `
 const complexTemplate = \`
     Hello \${user.name}!
     Your balance is \${currency} \${
@@ -27,11 +31,11 @@ const nestedQuery = \`
         AND (\${filters.map(f => \`\${f.field} \${f.operator} '\${f.value}'\`).join(' OR ')})
     \` : ''}
 \`;
-                `.trim()
-            },
-            {
-                name: 'Mixed Quotes and Escapes',
-                code: `
+                `.trim(),
+      },
+      {
+        name: 'Mixed Quotes and Escapes',
+        code: `
 const messyStrings = {
     singleQuoted: 'He said, "Hello \\'world\\'!" and left.',
     doubleQuoted: "She replied, 'Don\\'t go!' with tears.",
@@ -53,11 +57,11 @@ const trickyRegex = {
     comments: /\\/\\*[\\s\\S]*?\\*\\//g,
     urls: /https?:\\/\\/[^\\s"'<>]+/g
 };
-                `.trim()
-            },
-            {
-                name: 'Complex Object Patterns',
-                code: `
+                `.trim(),
+      },
+      {
+        name: 'Complex Object Patterns',
+        code: `
 const complexObject = {
     // Nested objects with various patterns
     user: {
@@ -124,11 +128,11 @@ const complexObject = {
         this.emit('themeChanged', value);
     }
 };
-                `.trim()
-            },
-            {
-                name: 'Arrow Functions and Destructuring',
-                code: `
+                `.trim(),
+      },
+      {
+        name: 'Arrow Functions and Destructuring',
+        code: `
 // Complex arrow function patterns
 const utilities = {
     // Simple arrow
@@ -226,11 +230,11 @@ const processRequest = ({
         ...options
     });
 };
-                `.trim()
-            },
-            {
-                name: 'Comments and Mixed Content',
-                code: `
+                `.trim(),
+      },
+      {
+        name: 'Comments and Mixed Content',
+        code: `
 /**
  * Complex comment patterns and mixed content
  * @param {Object} config - Configuration object
@@ -331,11 +335,11 @@ const oldImplementation = {
 /* HACK: Temporary workaround for Safari bug */
 // NOTE: This approach is deprecated
 /* WARNING: Do not modify this without updating docs */
-                `.trim()
-            },
-            {
-                name: 'XState Edge Cases',
-                code: `
+                `.trim(),
+      },
+      {
+        name: 'XState Edge Cases',
+        code: `
 import { createMachine, assign } from 'xstate';
 
 // Complex XState machine with edge cases
@@ -481,303 +485,307 @@ const templateMachine = createMachine({
         }
     }
 });
-                `.trim()
-            }
+                `.trim(),
+      },
+    ];
+  }
+
+  async runTests() {
+    const results = [];
+
+    for (const testCase of this.testCases) {
+      const testResult = await this.runSingleTest(testCase);
+      results.push(testResult);
+    }
+
+    const allPassed = results.every((result) => result.passed);
+
+    return {
+      status: allPassed ? 'pass' : 'fail',
+      tests: results,
+      summary: {
+        total: results.length,
+        passed: results.filter((r) => r.passed).length,
+        failed: results.filter((r) => !r.passed).length,
+      },
+    };
+  }
+
+  async runSingleTest(testCase) {
+    try {
+      const outputs = await this.testAllHighlighters(testCase.code);
+
+      const validations = [
+        this.validateStringHandling(outputs, testCase.name),
+        this.validateCommentHandling(outputs, testCase.name),
+        this.validateTemplateliterals(outputs, testCase.name),
+        this.validateSpecialCharacters(outputs, testCase.name),
+        this.validateRobustness(outputs, testCase.name),
+      ];
+
+      const passed = validations.every((v) => v.passed);
+
+      return {
+        name: testCase.name,
+        passed,
+        output: this.generateComparisonHTML(outputs),
+        validations: validations.filter((v) => !v.passed),
+      };
+    } catch (error) {
+      return {
+        name: testCase.name,
+        passed: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async testAllHighlighters(code) {
+    const outputs = {};
+
+    // Wait for highlighters to be loaded
+    if (window.highlightersLoaded) {
+      await window.highlightersLoaded;
+    }
+
+    // Test original syntax-highlighter
+    try {
+      const originalEl = document.createElement('syntax-highlighter');
+      originalEl.textContent = code;
+      document.body.appendChild(originalEl);
+      await waitForHighlighting(originalEl);
+      outputs.original = extractHighlightedContent(originalEl);
+      document.body.removeChild(originalEl);
+    } catch (error) {
+      outputs.original = `Error: ${error.message}`;
+    }
+
+    // Test v2 syntax-highlighter
+    try {
+      const v2El = document.createElement('syntax-highlighter-v2');
+      v2El.textContent = code;
+      document.body.appendChild(v2El);
+      await waitForHighlighting(v2El);
+      outputs.v2 = extractHighlightedContent(v2El);
+      document.body.removeChild(v2El);
+    } catch (error) {
+      outputs.v2 = `Error: ${error.message}`;
+    }
+
+    // Test code-highlight
+    try {
+      const simpleEl = document.createElement('code-highlight');
+      simpleEl.textContent = code;
+      document.body.appendChild(simpleEl);
+      await waitForHighlighting(simpleEl);
+      outputs.simple = extractHighlightedContent(simpleEl);
+      document.body.removeChild(simpleEl);
+    } catch (error) {
+      outputs.simple = `Error: ${error.message}`;
+    }
+
+    return outputs;
+  }
+
+  validateStringHandling(outputs, testName) {
+    const checks = [];
+
+    Object.entries(outputs).forEach(([version, html]) => {
+      if (html.includes('Error:')) {
+        checks.push({ version, issue: 'Highlighter failed to render' });
+        return;
+      }
+
+      // Check for proper string highlighting with various quote types
+      const stringPatterns = [
+        /'[^']*'/, // Single quotes
+        /"[^"]*"/, // Double quotes
+        /`[^`]*`/, // Template literals
+      ];
+
+      // Ensure strings are properly highlighted
+      const hasStringHighlighting = stringPatterns.some((pattern) => {
+        const matches = html.match(new RegExp(`<span[^>]*>${pattern.source}</span>`, 'g'));
+        return matches && matches.length > 0;
+      });
+
+      if (!hasStringHighlighting && testName.includes('Quote')) {
+        checks.push({
+          version,
+          issue: 'String patterns not properly highlighted',
+        });
+      }
+    });
+
+    return {
+      name: 'String Handling',
+      passed: checks.length === 0,
+      issues: checks,
+    };
+  }
+
+  validateCommentHandling(outputs, testName) {
+    const checks = [];
+
+    Object.entries(outputs).forEach(([version, html]) => {
+      if (html.includes('Error:')) return;
+
+      if (testName.includes('Comment')) {
+        // Check for comment highlighting
+        const commentPatterns = [
+          /\/\*[\s\S]*?\*\//, // Multi-line comments
+          /\/\/.*$/m, // Single-line comments
         ];
-    }
 
-    async runTests() {
-        const results = [];
-        
-        for (const testCase of this.testCases) {
-            const testResult = await this.runSingleTest(testCase);
-            results.push(testResult);
+        const hasCommentHighlighting = commentPatterns.some((_pattern) => {
+          return html.includes('/*') || html.includes('//');
+        });
+
+        if (!hasCommentHighlighting) {
+          checks.push({
+            version,
+            issue: 'Comment patterns not found in output',
+          });
+        }
+      }
+    });
+
+    return {
+      name: 'Comment Handling',
+      passed: checks.length === 0,
+      issues: checks,
+    };
+  }
+
+  validateTemplateIterals(outputs, testName) {
+    const checks = [];
+
+    Object.entries(outputs).forEach(([version, html]) => {
+      if (html.includes('Error:')) return;
+
+      if (testName.includes('Template')) {
+        // Check for template literal highlighting
+        const hasTemplateMarkers = html.includes('`') || html.includes('&grave;');
+
+        if (!hasTemplateMarkers) {
+          checks.push({
+            version,
+            issue: 'Template literal markers not found',
+          });
         }
 
-        const allPassed = results.every(result => result.passed);
-        
-        return {
-            status: allPassed ? 'pass' : 'fail',
-            tests: results,
-            summary: {
-                total: results.length,
-                passed: results.filter(r => r.passed).length,
-                failed: results.filter(r => !r.passed).length
-            }
-        };
-    }
+        // Check for expression highlighting within templates
+        const hasExpressionMarkers = html.includes('${') || html.includes('&#36;{');
 
-    async runSingleTest(testCase) {
-        try {
-            const outputs = await this.testAllHighlighters(testCase.code);
-            
-            const validations = [
-                this.validateStringHandling(outputs, testCase.name),
-                this.validateCommentHandling(outputs, testCase.name),
-                this.validateTemplateliterals(outputs, testCase.name),
-                this.validateSpecialCharacters(outputs, testCase.name),
-                this.validateRobustness(outputs, testCase.name)
-            ];
-
-            const passed = validations.every(v => v.passed);
-            
-            return {
-                name: testCase.name,
-                passed,
-                output: this.generateComparisonHTML(outputs),
-                validations: validations.filter(v => !v.passed)
-            };
-        } catch (error) {
-            return {
-                name: testCase.name,
-                passed: false,
-                error: error.message
-            };
+        if (!hasExpressionMarkers && testName.includes('Nested')) {
+          checks.push({
+            version,
+            issue: 'Template expressions not highlighted',
+          });
         }
-    }
+      }
+    });
 
-    async testAllHighlighters(code) {
-        const outputs = {};
-        
-        // Wait for highlighters to be loaded
-        if (window.highlightersLoaded) {
-            await window.highlightersLoaded;
-        }
-        
-        // Test original syntax-highlighter
-        try {
-            const originalEl = document.createElement('syntax-highlighter');
-            originalEl.textContent = code;
-            document.body.appendChild(originalEl);
-            await waitForHighlighting(originalEl);
-            outputs.original = extractHighlightedContent(originalEl);
-            document.body.removeChild(originalEl);
-        } catch (error) {
-            outputs.original = `Error: ${error.message}`;
-        }
+    return {
+      name: 'Template Literals',
+      passed: checks.length === 0,
+      issues: checks,
+    };
+  }
 
-        // Test v2 syntax-highlighter
-        try {
-            const v2El = document.createElement('syntax-highlighter-v2');
-            v2El.textContent = code;
-            document.body.appendChild(v2El);
-            await waitForHighlighting(v2El);
-            outputs.v2 = extractHighlightedContent(v2El);
-            document.body.removeChild(v2El);
-        } catch (error) {
-            outputs.v2 = `Error: ${error.message}`;
-        }
+  validateSpecialCharacters(outputs, _testName) {
+    const checks = [];
 
-        // Test code-highlight
-        try {
-            const simpleEl = document.createElement('code-highlight');
-            simpleEl.textContent = code;
-            document.body.appendChild(simpleEl);
-            await waitForHighlighting(simpleEl);
-            outputs.simple = extractHighlightedContent(simpleEl);
-            document.body.removeChild(simpleEl);
-        } catch (error) {
-            outputs.simple = `Error: ${error.message}`;
-        }
+    Object.entries(outputs).forEach(([version, html]) => {
+      if (html.includes('Error:')) return;
 
-        return outputs;
-    }
+      // Check that special characters are properly escaped
+      const specialChars = ['<', '>', '&'];
 
-    validateStringHandling(outputs, testName) {
-        const checks = [];
-        
-        Object.entries(outputs).forEach(([version, html]) => {
-            if (html.includes('Error:')) {
-                checks.push({ version, issue: 'Highlighter failed to render' });
-                return;
-            }
-            
-            // Check for proper string highlighting with various quote types
-            const stringPatterns = [
-                /'[^']*'/,  // Single quotes
-                /"[^"]*"/,  // Double quotes
-                /`[^`]*`/   // Template literals
-            ];
-            
-            // Ensure strings are properly highlighted
-            const hasStringHighlighting = stringPatterns.some(pattern => {
-                const matches = html.match(new RegExp(`<span[^>]*>${pattern.source}</span>`, 'g'));
-                return matches && matches.length > 0;
+      specialChars.forEach((char) => {
+        // Raw special characters should be escaped in HTML output
+        if (
+          html.includes(char) &&
+          !html.includes(`&${char === '<' ? 'lt' : char === '>' ? 'gt' : 'amp'};`)
+        ) {
+          // This might be intentional, so only flag as warning for certain patterns
+          if (html.split(char).length > 3) {
+            // Multiple occurrences
+            checks.push({
+              version,
+              character: char,
+              issue: 'Special character might not be properly escaped',
             });
-            
-            if (!hasStringHighlighting && testName.includes('Quote')) {
-                checks.push({ 
-                    version, 
-                    issue: 'String patterns not properly highlighted' 
-                });
-            }
+          }
+        }
+      });
+    });
+
+    return {
+      name: 'Special Characters',
+      passed: checks.length === 0,
+      issues: checks,
+    };
+  }
+
+  validateRobustness(outputs, _testName) {
+    const checks = [];
+
+    Object.entries(outputs).forEach(([version, html]) => {
+      if (html.includes('Error:')) {
+        checks.push({ version, issue: 'Highlighter crashed on edge case' });
+        return;
+      }
+
+      // Check that output contains reasonable amount of highlighting
+      const spanCount = (html.match(/<span/g) || []).length;
+      const totalLength = html.length;
+
+      // Should have some highlighting spans for complex code
+      if (spanCount === 0 && totalLength > 100) {
+        checks.push({
+          version,
+          issue: 'No highlighting spans found in complex code',
         });
+      }
 
-        return {
-            name: 'String Handling',
-            passed: checks.length === 0,
-            issues: checks
-        };
-    }
+      // Check for balanced tags
+      const openSpans = (html.match(/<span/g) || []).length;
+      const closeSpans = (html.match(/<\/span>/g) || []).length;
 
-    validateCommentHandling(outputs, testName) {
-        const checks = [];
-        
-        Object.entries(outputs).forEach(([version, html]) => {
-            if (html.includes('Error:')) return;
-            
-            if (testName.includes('Comment')) {
-                // Check for comment highlighting
-                const commentPatterns = [
-                    /\/\*[\s\S]*?\*\//,  // Multi-line comments
-                    /\/\/.*$/m           // Single-line comments
-                ];
-                
-                const hasCommentHighlighting = commentPatterns.some(pattern => {
-                    return html.includes('/*') || html.includes('//');
-                });
-                
-                if (!hasCommentHighlighting) {
-                    checks.push({ 
-                        version, 
-                        issue: 'Comment patterns not found in output' 
-                    });
-                }
-            }
+      if (openSpans !== closeSpans) {
+        checks.push({
+          version,
+          issue: `Unbalanced span tags: ${openSpans} open, ${closeSpans} close`,
         });
+      }
 
-        return {
-            name: 'Comment Handling',
-            passed: checks.length === 0,
-            issues: checks
-        };
-    }
+      // Check for malformed HTML
+      const malformedPatterns = [
+        /<span[^>]*>[^<]*<span/, // Nested spans without closing
+        /<\/span>[^<]*<\/span>/, // Multiple closings
+      ];
 
-    validateTemplateIterals(outputs, testName) {
-        const checks = [];
-        
-        Object.entries(outputs).forEach(([version, html]) => {
-            if (html.includes('Error:')) return;
-            
-            if (testName.includes('Template')) {
-                // Check for template literal highlighting
-                const hasTemplateMarkers = html.includes('`') || html.includes('&grave;');
-                
-                if (!hasTemplateMarkers) {
-                    checks.push({ 
-                        version, 
-                        issue: 'Template literal markers not found' 
-                    });
-                }
-                
-                // Check for expression highlighting within templates
-                const hasExpressionMarkers = html.includes('${') || html.includes('&#36;{');
-                
-                if (!hasExpressionMarkers && testName.includes('Nested')) {
-                    checks.push({ 
-                        version, 
-                        issue: 'Template expressions not highlighted' 
-                    });
-                }
-            }
-        });
+      malformedPatterns.forEach((pattern, index) => {
+        if (pattern.test(html)) {
+          checks.push({
+            version,
+            issue: `Potentially malformed HTML detected (pattern ${index + 1})`,
+          });
+        }
+      });
+    });
 
-        return {
-            name: 'Template Literals',
-            passed: checks.length === 0,
-            issues: checks
-        };
-    }
+    return {
+      name: 'Robustness',
+      passed: checks.length === 0,
+      issues: checks,
+    };
+  }
 
-    validateSpecialCharacters(outputs, testName) {
-        const checks = [];
-        
-        Object.entries(outputs).forEach(([version, html]) => {
-            if (html.includes('Error:')) return;
-            
-            // Check that special characters are properly escaped
-            const specialChars = ['<', '>', '&'];
-            
-            specialChars.forEach(char => {
-                // Raw special characters should be escaped in HTML output
-                if (html.includes(char) && !html.includes(`&${char === '<' ? 'lt' : char === '>' ? 'gt' : 'amp'};`)) {
-                    // This might be intentional, so only flag as warning for certain patterns
-                    if (html.split(char).length > 3) { // Multiple occurrences
-                        checks.push({ 
-                            version, 
-                            character: char, 
-                            issue: 'Special character might not be properly escaped' 
-                        });
-                    }
-                }
-            });
-        });
-
-        return {
-            name: 'Special Characters',
-            passed: checks.length === 0,
-            issues: checks
-        };
-    }
-
-    validateRobustness(outputs, testName) {
-        const checks = [];
-        
-        Object.entries(outputs).forEach(([version, html]) => {
-            if (html.includes('Error:')) {
-                checks.push({ version, issue: 'Highlighter crashed on edge case' });
-                return;
-            }
-            
-            // Check that output contains reasonable amount of highlighting
-            const spanCount = (html.match(/<span/g) || []).length;
-            const totalLength = html.length;
-            
-            // Should have some highlighting spans for complex code
-            if (spanCount === 0 && totalLength > 100) {
-                checks.push({ 
-                    version, 
-                    issue: 'No highlighting spans found in complex code' 
-                });
-            }
-            
-            // Check for balanced tags
-            const openSpans = (html.match(/<span/g) || []).length;
-            const closeSpans = (html.match(/<\/span>/g) || []).length;
-            
-            if (openSpans !== closeSpans) {
-                checks.push({ 
-                    version, 
-                    issue: `Unbalanced span tags: ${openSpans} open, ${closeSpans} close` 
-                });
-            }
-            
-            // Check for malformed HTML
-            const malformedPatterns = [
-                /<span[^>]*>[^<]*<span/,  // Nested spans without closing
-                /<\/span>[^<]*<\/span>/   // Multiple closings
-            ];
-            
-            malformedPatterns.forEach((pattern, index) => {
-                if (pattern.test(html)) {
-                    checks.push({ 
-                        version, 
-                        issue: `Potentially malformed HTML detected (pattern ${index + 1})` 
-                    });
-                }
-            });
-        });
-
-        return {
-            name: 'Robustness',
-            passed: checks.length === 0,
-            issues: checks
-        };
-    }
-
-    generateComparisonHTML(outputs) {
-        // Return just the three columns without headers (headers are in the parent grid)
-        return `
+  generateComparisonHTML(outputs) {
+    // Return just the three columns without headers (headers are in the parent grid)
+    return `
             <div class="highlighter-output">
                 ${createTestContainer(outputs.original || 'No output')}
             </div>
@@ -788,5 +796,5 @@ const templateMachine = createMachine({
                 ${createTestContainer(outputs.simple || 'No output')}
             </div>
         `;
-    }
+  }
 }

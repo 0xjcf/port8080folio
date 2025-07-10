@@ -1,26 +1,7 @@
 // TypeScript version of JSX Parser - extends base parser with JSX support
+
+import type { Token } from './lexer.js';
 import { Parser } from './parser.js';
-
-interface TokenMetadata {
-  name?: string;
-  type?: string;
-  parameters?: string[];
-  superClass?: string;
-  source?: string;
-  default?: boolean;
-  attributes?: JSXAttribute[];
-  children?: JSXNode[];
-  [key: string]: unknown;
-}
-
-interface Token {
-  type: string;
-  start: number;
-  end: number;
-  value: string;
-  metadata?: TokenMetadata;
-  subType?: string;
-}
 
 interface JSXParserOptions {
   language?: string;
@@ -39,14 +20,13 @@ interface JSXNode {
   start?: number;
   end?: number;
   selfClosing?: boolean;
-  // Add ASTNode compatibility
-  metadata?: TokenMetadata;
+  // Add basic metadata without external dependency
   value?: string;
 }
 
 interface JSXAttribute {
   name: string;
-  value?: string | Token[];  // More specific than any
+  value?: string | Token[]; // More specific than any
   type: 'literal' | 'expression';
 }
 
@@ -69,7 +49,7 @@ export class JSXParser extends Parser {
    */
   public parseJSX(): JSXNode[] {
     const elements: JSXNode[] = [];
-    
+
     while (this.getPosition() < this.getTokens().length) {
       const element = this.parseJSXElementEnhanced();
       if (element) {
@@ -79,7 +59,7 @@ export class JSXParser extends Parser {
         break;
       }
     }
-    
+
     return elements;
   }
 
@@ -89,11 +69,11 @@ export class JSXParser extends Parser {
   public parseJSXElementEnhanced(): JSXNode | null {
     const tokens = this.getTokens();
     const position = this.getPosition();
-    
+
     if (position >= tokens.length) return null;
-    
+
     const token = tokens[position];
-    
+
     // Check for JSX opening bracket
     if (token.type !== 'jsxBracket' || (token.value !== '<' && token.value !== '&lt;')) {
       return null;
@@ -115,8 +95,10 @@ export class JSXParser extends Parser {
     }
 
     // Get tag name
-    if (currentPos >= tokens.length || 
-        (tokens[currentPos].type !== 'jsxTag' && tokens[currentPos].type !== 'reactComponent')) {
+    if (
+      currentPos >= tokens.length ||
+      (tokens[currentPos].type !== 'jsxTag' && tokens[currentPos].type !== 'reactComponent')
+    ) {
       return null;
     }
 
@@ -136,7 +118,7 @@ export class JSXParser extends Parser {
       children: [],
       tokens: [startToken, tagToken],
       start: startToken.start,
-      selfClosing: false
+      selfClosing: false,
     };
 
     // Parse attributes (only for opening tags)
@@ -155,13 +137,14 @@ export class JSXParser extends Parser {
     }
 
     // Find closing bracket
-    while (currentPos < tokens.length && 
-           tokens[currentPos].type !== 'jsxBracket') {
+    while (currentPos < tokens.length && tokens[currentPos].type !== 'jsxBracket') {
       currentPos++;
     }
 
-    if (currentPos < tokens.length && 
-        (tokens[currentPos].value === '>' || tokens[currentPos].value === '&gt;')) {
+    if (
+      currentPos < tokens.length &&
+      (tokens[currentPos].value === '>' || tokens[currentPos].value === '&gt;')
+    ) {
       if (!element.tokens) element.tokens = [];
       element.tokens.push(tokens[currentPos]);
       element.end = tokens[currentPos].end;
@@ -176,22 +159,22 @@ export class JSXParser extends Parser {
     // Parse children until we find the closing tag
     while (currentPos < tokens.length) {
       // Look for closing tag
-      if (currentPos + 2 < tokens.length &&
-          tokens[currentPos].type === 'jsxBracket' &&
-          tokens[currentPos + 1].value === '/' &&
-          tokens[currentPos + 2].value === tagName) {
-        
+      if (
+        currentPos + 2 < tokens.length &&
+        tokens[currentPos].type === 'jsxBracket' &&
+        tokens[currentPos + 1].value === '/' &&
+        tokens[currentPos + 2].value === tagName
+      ) {
         // Found closing tag, add tokens and break
         if (!element.tokens) element.tokens = [];
         element.tokens.push(tokens[currentPos], tokens[currentPos + 1], tokens[currentPos + 2]);
         currentPos += 3;
-        
+
         // Find closing bracket
-        while (currentPos < tokens.length && 
-               tokens[currentPos].type !== 'jsxBracket') {
+        while (currentPos < tokens.length && tokens[currentPos].type !== 'jsxBracket') {
           currentPos++;
         }
-        
+
         if (currentPos < tokens.length) {
           element.tokens.push(tokens[currentPos]);
           element.end = tokens[currentPos].end;
@@ -216,7 +199,7 @@ export class JSXParser extends Parser {
   /**
    * Parse JSX attributes
    */
-  private parseJSXAttributes(startPos: number): { attributes: JSXAttribute[], position: number } {
+  private parseJSXAttributes(startPos: number): { attributes: JSXAttribute[]; position: number } {
     const tokens = this.getTokens();
     const attributes: JSXAttribute[] = [];
     let currentPos = startPos;
@@ -228,10 +211,12 @@ export class JSXParser extends Parser {
       }
 
       // Check for end of opening tag
-      if (currentPos >= tokens.length ||
-          tokens[currentPos].value === '>' ||
-          tokens[currentPos].value === '&gt;' ||
-          tokens[currentPos].value === '/') {
+      if (
+        currentPos >= tokens.length ||
+        tokens[currentPos].value === '>' ||
+        tokens[currentPos].value === '&gt;' ||
+        tokens[currentPos].value === '/'
+      ) {
         break;
       }
 
@@ -242,7 +227,7 @@ export class JSXParser extends Parser {
 
         const attribute: JSXAttribute = {
           name,
-          type: 'literal'
+          type: 'literal',
         };
 
         // Skip whitespace
@@ -253,7 +238,7 @@ export class JSXParser extends Parser {
         // Check for attribute value
         if (currentPos < tokens.length && tokens[currentPos].value === '=') {
           currentPos++; // Skip '='
-          
+
           // Skip whitespace
           while (currentPos < tokens.length && tokens[currentPos].type === 'whitespace') {
             currentPos++;
@@ -262,7 +247,7 @@ export class JSXParser extends Parser {
           // Parse attribute value
           if (currentPos < tokens.length) {
             const valueToken = tokens[currentPos];
-            
+
             if (valueToken.type === 'string') {
               attribute.value = valueToken.value;
               attribute.type = 'literal';
@@ -291,13 +276,15 @@ export class JSXParser extends Parser {
   /**
    * Parse JSX expressions
    */
-  private parseJSXExpression(startPos: number): { tokens: Token[], position: number } | null {
+  private parseJSXExpression(startPos: number): { tokens: Token[]; position: number } | null {
     const tokens = this.getTokens();
     let currentPos = startPos;
 
-    if (currentPos >= tokens.length || 
-        tokens[currentPos].type !== 'jsxBracket' || 
-        tokens[currentPos].value !== '{') {
+    if (
+      currentPos >= tokens.length ||
+      tokens[currentPos].type !== 'jsxBracket' ||
+      tokens[currentPos].value !== '{'
+    ) {
       return null;
     }
 
@@ -326,7 +313,7 @@ export class JSXParser extends Parser {
   /**
    * Parse JSX child (element, text, or expression)
    */
-  private parseJSXChild(startPos: number): { node: JSXNode, position: number } | null {
+  private parseJSXChild(startPos: number): { node: JSXNode; position: number } | null {
     const tokens = this.getTokens();
     let currentPos = startPos;
 
@@ -338,9 +325,9 @@ export class JSXParser extends Parser {
     if (token.type === 'jsxBracket' && (token.value === '<' || token.value === '&lt;')) {
       const element = this.parseJSXElementEnhanced();
       if (element) {
-        return { 
-          node: element, 
-          position: currentPos + (element.tokens?.length || 1)
+        return {
+          node: element,
+          position: currentPos + (element.tokens?.length || 1),
         };
       }
     }
@@ -354,9 +341,9 @@ export class JSXParser extends Parser {
             type: 'jsxExpression',
             tokens: expr.tokens,
             start: expr.tokens[0].start,
-            end: expr.tokens[expr.tokens.length - 1].end
+            end: expr.tokens[expr.tokens.length - 1].end,
           },
-          position: expr.position
+          position: expr.position,
         };
       }
     }
@@ -365,10 +352,10 @@ export class JSXParser extends Parser {
     const textTokens: Token[] = [];
     while (currentPos < tokens.length) {
       const t = tokens[currentPos];
-      
+
       // Stop at JSX boundaries
       if (t.type === 'jsxBracket') break;
-      
+
       textTokens.push(t);
       currentPos++;
     }
@@ -379,9 +366,9 @@ export class JSXParser extends Parser {
           type: 'jsxText',
           tokens: textTokens,
           start: textTokens[0].start,
-          end: textTokens[textTokens.length - 1].end
+          end: textTokens[textTokens.length - 1].end,
         },
-        position: currentPos
+        position: currentPos,
       };
     }
 
@@ -400,4 +387,4 @@ export class JSXParser extends Parser {
   public isInJSX(): boolean {
     return this.jsxStack.length > 0;
   }
-} 
+}

@@ -1,15 +1,15 @@
 // TypeScript interfaces for base Lexer
 interface LexerOptions {
   language?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
-interface Token {
+export interface Token {
   type: string;
   start: number;
   end: number;
   value: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   subType?: string;
 }
 
@@ -229,15 +229,72 @@ export class Lexer {
    */
   public matchKeyword(): boolean {
     const keywords = [
-      'abstract', 'arguments', 'await', 'boolean', 'break', 'byte', 'case', 'catch',
-      'char', 'class', 'const', 'continue', 'debugger', 'default', 'delete', 'do',
-      'double', 'else', 'enum', 'eval', 'export', 'extends', 'false', 'final',
-      'finally', 'float', 'for', 'function', 'goto', 'if', 'implements', 'import',
-      'in', 'instanceof', 'int', 'interface', 'let', 'long', 'native', 'new',
-      'null', 'package', 'private', 'protected', 'public', 'return', 'short',
-      'static', 'super', 'switch', 'synchronized', 'this', 'throw', 'throws',
-      'transient', 'true', 'try', 'typeof', 'var', 'void', 'volatile', 'while',
-      'with', 'yield', 'async', 'of'
+      'abstract',
+      'arguments',
+      'await',
+      'boolean',
+      'break',
+      'byte',
+      'case',
+      'catch',
+      'char',
+      'class',
+      'const',
+      'continue',
+      'debugger',
+      'default',
+      'delete',
+      'do',
+      'double',
+      'else',
+      'enum',
+      'eval',
+      'export',
+      'extends',
+      'false',
+      'final',
+      'finally',
+      'float',
+      'for',
+      'function',
+      'goto',
+      'if',
+      'implements',
+      'import',
+      'in',
+      'instanceof',
+      'int',
+      'interface',
+      'let',
+      'long',
+      'native',
+      'new',
+      'null',
+      'package',
+      'private',
+      'protected',
+      'public',
+      'return',
+      'short',
+      'static',
+      'super',
+      'switch',
+      'synchronized',
+      'this',
+      'throw',
+      'throws',
+      'transient',
+      'true',
+      'try',
+      'typeof',
+      'var',
+      'void',
+      'volatile',
+      'while',
+      'with',
+      'yield',
+      'async',
+      'of',
     ];
 
     const start = this.position;
@@ -258,10 +315,50 @@ export class Lexer {
    */
   public matchOperator(): boolean {
     const operators = [
-      '===', '!==', '>=', '<=', '&&', '||', '++', '--', '=>', '**',
-      '+=', '-=', '*=', '/=', '%=', '&=', '|=', '^=', '<<=', '>>=',
-      '>>>=', '??', '?.', '...', '==', '!=', '<<', '>>', '>>>', 
-      '+', '-', '*', '/', '%', '=', '<', '>', '!', '&', '|', '^', '~', '?', ':'
+      '===',
+      '!==',
+      '>=',
+      '<=',
+      '&&',
+      '||',
+      '++',
+      '--',
+      '=>',
+      '**',
+      '+=',
+      '-=',
+      '*=',
+      '/=',
+      '%=',
+      '&=',
+      '|=',
+      '^=',
+      '<<=',
+      '>>=',
+      '>>>=',
+      '??',
+      '?.',
+      '...',
+      '==',
+      '!=',
+      '<<',
+      '>>',
+      '>>>',
+      '+',
+      '-',
+      '*',
+      '/',
+      '%',
+      '=',
+      '<',
+      '>',
+      '!',
+      '&',
+      '|',
+      '^',
+      '~',
+      '?',
+      ':',
     ];
 
     // Sort by length (longest first) for proper matching
@@ -299,18 +396,54 @@ export class Lexer {
   /**
    * Determine the type of an identifier
    */
-  public getIdentifierType(value: any): "keyword" | "function" | "boolean" | "null" | "builtin" | "property" | "reactHook" | "className" | "identifier" {
+  public getIdentifierType(
+    value: string
+  ):
+    | 'keyword'
+    | 'function'
+    | 'boolean'
+    | 'null'
+    | 'builtin'
+    | 'property'
+    | 'reactHook'
+    | 'className'
+    | 'identifier' {
     // Boolean literals
     if (value === 'true' || value === 'false') return 'boolean';
     if (value === 'null') return 'null';
 
     // Built-in objects and functions
     const builtins = [
-      'console', 'window', 'document', 'Array', 'Object', 'String', 'Number',
-      'Boolean', 'Date', 'Math', 'JSON', 'Promise', 'Set', 'Map', 'WeakMap',
-      'WeakSet', 'Symbol', 'BigInt', 'Proxy', 'Reflect', 'parseInt', 'parseFloat',
-      'isNaN', 'isFinite', 'encodeURI', 'decodeURI', 'setTimeout', 'clearTimeout',
-      'setInterval', 'clearInterval'
+      'console',
+      'window',
+      'document',
+      'Array',
+      'Object',
+      'String',
+      'Number',
+      'Boolean',
+      'Date',
+      'Math',
+      'JSON',
+      'Promise',
+      'Set',
+      'Map',
+      'WeakMap',
+      'WeakSet',
+      'Symbol',
+      'BigInt',
+      'Proxy',
+      'Reflect',
+      'parseInt',
+      'parseFloat',
+      'isNaN',
+      'isFinite',
+      'encodeURI',
+      'decodeURI',
+      'setTimeout',
+      'clearTimeout',
+      'setInterval',
+      'clearInterval',
     ];
 
     if (builtins.includes(value)) return 'builtin';
@@ -369,14 +502,20 @@ export class Lexer {
   /**
    * Add a token to the tokens array
    */
-  protected addToken(type: string, start: number, end: number, value?: string, metadata?: any): void {
+  protected addToken(
+    type: string,
+    start: number,
+    end: number,
+    value?: string,
+    metadata?: Record<string, unknown>
+  ): void {
     const tokenValue = value || this.code.slice(start, end);
     this.tokens.push({
       type,
       start,
       end,
       value: tokenValue,
-      metadata
+      metadata,
     });
   }
 
@@ -424,4 +563,4 @@ export class Lexer {
   public getLanguage(): string {
     return this.language;
   }
-} 
+}

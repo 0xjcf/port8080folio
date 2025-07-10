@@ -1,6 +1,12 @@
 // TypeScript version of Parser - converts tokens to AST
 
 // Enhanced type definitions without any types
+interface ASTAttribute {
+  name: string;
+  value: string | number | boolean;
+  type?: 'literal' | 'expression' | 'template';
+}
+
 interface TokenMetadata {
   name?: string;
   type?: string;
@@ -8,8 +14,8 @@ interface TokenMetadata {
   superClass?: string;
   source?: string;
   default?: boolean;
-  attributes?: any[];  // Will fix this separately
-  children?: any[];    // Will fix this separately
+  attributes?: ASTAttribute[];
+  children?: ASTNode[];
   [key: string]: unknown;
 }
 
@@ -41,8 +47,8 @@ interface ASTNodeMetadata {
   superClass?: string;
   source?: string;
   default?: boolean;
-  attributes?: any[];  // Will fix this separately
-  children?: any[];    // Will fix this separately
+  attributes?: ASTAttribute[];
+  children?: ASTNode[];
   kind?: string;
   declarations?: VariableDeclaration[];
   [key: string]: unknown;
@@ -162,7 +168,7 @@ export class Parser {
       start: token.start,
       end: token.end,
       value: token.value,
-      metadata: token.metadata
+      metadata: token.metadata,
     };
 
     this.position++;
@@ -185,7 +191,7 @@ export class Parser {
       type: 'functionDeclaration',
       tokens,
       start: startToken.start,
-      metadata: {}
+      metadata: {},
     };
 
     // Function name
@@ -241,7 +247,7 @@ export class Parser {
       type: 'classDeclaration',
       tokens,
       start: startToken.start,
-      metadata: {}
+      metadata: {},
     };
 
     // Class name
@@ -301,7 +307,7 @@ export class Parser {
       type: 'variableDeclaration',
       tokens,
       start: startToken.start,
-      metadata: { kind, declarations: [] }
+      metadata: { kind, declarations: [] },
     };
 
     // Parse declarators
@@ -371,7 +377,7 @@ export class Parser {
       type: 'importStatement',
       tokens,
       start: startToken.start,
-      metadata: {}
+      metadata: {},
     };
 
     // Import specifiers
@@ -411,7 +417,7 @@ export class Parser {
       type: 'exportStatement',
       tokens,
       start: startToken.start,
-      metadata: {}
+      metadata: {},
     };
 
     // Check for default export
@@ -453,7 +459,7 @@ export class Parser {
       type: 'jsxElement',
       tokens,
       start: startToken.start,
-      metadata: { attributes: [], children: [] }
+      metadata: { attributes: [], children: [] },
     };
 
     // Collect all JSX tokens
@@ -499,7 +505,7 @@ export class Parser {
         type: 'unknown',
         tokens: [startToken],
         start: startToken.start,
-        end: startToken.end
+        end: startToken.end,
       };
     }
 
@@ -515,8 +521,8 @@ export class Parser {
       type: 'expressionStatement',
       children: [expression],
       tokens: expression.tokens,
-      start: expression.start!,
-      end: expression.end!
+      start: expression.start ?? 0,
+      end: expression.end ?? 0,
     };
   }
 
@@ -547,8 +553,10 @@ export class Parser {
 
       // Stop at statement boundaries when not nested
       if (parenDepth === 0 && braceDepth === 0 && bracketDepth === 0) {
-        if ([';', '\n'].includes(token.value) || 
-            ['const', 'let', 'var', 'function', 'class', 'if', 'for', 'while'].includes(token.value)) {
+        if (
+          [';', '\n'].includes(token.value) ||
+          ['const', 'let', 'var', 'function', 'class', 'if', 'for', 'while'].includes(token.value)
+        ) {
           break;
         }
       }
@@ -557,8 +565,7 @@ export class Parser {
       this.position++;
 
       // Stop at certain tokens that end expressions
-      if (parenDepth === 0 && braceDepth === 0 && bracketDepth === 0 && 
-          token.value === ';') {
+      if (parenDepth === 0 && braceDepth === 0 && bracketDepth === 0 && token.value === ';') {
         break;
       }
     }
@@ -570,7 +577,7 @@ export class Parser {
       type: 'expression',
       tokens,
       start: startToken.start,
-      end: lastToken.end
+      end: lastToken.end,
     };
   }
 
@@ -590,7 +597,7 @@ export class Parser {
       type: 'parameterList',
       tokens,
       start: startToken.start,
-      metadata: { parameters: [] }
+      metadata: { parameters: [] },
     };
 
     while (this.position < this.tokens.length) {
@@ -630,7 +637,7 @@ export class Parser {
       type: 'block',
       tokens,
       start: startToken.start,
-      children: []
+      children: [],
     };
 
     let braceDepth = 1;
@@ -662,7 +669,7 @@ export class Parser {
   /**
    * Peek at next token - enhanced null safety
    */
-  private peekToken(offset: number = 1): Token | null {
+  private peekToken(offset = 1): Token | null {
     const pos = this.position + offset;
     return pos < this.tokens.length ? this.tokens[pos] : null;
   }
@@ -683,4 +690,4 @@ export class Parser {
   public getLanguage(): string {
     return this.language;
   }
-} 
+}

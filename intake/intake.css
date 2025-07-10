@@ -199,7 +199,7 @@
     background: Canvas;
     color: CanvasText;
   }
-  
+
   .submit-btn {
     border: 2px solid CanvasText;
     background: Canvas;
@@ -221,16 +221,16 @@
     margin: 1rem;
     padding: 1.5rem;
   }
-  
+
   .section {
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
   }
-  
+
   .form-actions {
     text-align: center;
   }
-  
+
   .submit-btn {
     width: 100%;
   }
@@ -241,13 +241,13 @@
   .minimal-cookie-banner {
     display: none;
   }
-  
+
   .intake-form {
     box-shadow: none;
     border: 1px solid #ccc;
   }
-  
+
   .submit-btn {
     display: none;
   }
-} 
+}

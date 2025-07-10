@@ -1,388 +1,182 @@
 /**
- * Accessibility helper utilities for the actor-based architecture
- * Based on patterns from docs/ACCESSIBILITY_UX_GUIDE.md
+ * Re-export reactive accessibility utilities from the framework
+ *
+ * This module provides backward compatibility by re-exporting
+ * the Actor-SPA framework's reactive accessibility implementations.
+ *
+ * Direct DOM manipulation is not allowed in the Actor-SPA framework.
+ * All accessibility features should use the reactive patterns provided.
  */
 
-// Simple screen reader announcer
-class SimpleAnnouncer {
-  private container: HTMLElement;
-  
-  constructor() {
-    this.container = this.createContainer();
-  }
-  
-  private createContainer(): HTMLElement {
-    const existing = document.getElementById('sr-announcer');
-    if (existing) return existing;
-    
-    const container = document.createElement('div');
-    container.id = 'sr-announcer';
-    container.style.cssText = `
-      position: absolute;
-      left: -10000px;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-    `;
-    container.setAttribute('aria-live', 'polite');
-    container.setAttribute('aria-atomic', 'true');
-    
-    document.body.appendChild(container);
-    return container;
-  }
-  
-  announce(message: string): void {
-    this.container.textContent = '';
-    setTimeout(() => {
-      this.container.textContent = message;
-    }, 100);
-  }
-  
-  announceLoading(resource: string): void {
-    this.announce(`Loading ${resource}`);
-  }
-  
-  announceError(error: string): void {
-    this.announce(`Error: ${error}`);
-  }
-  
-  announceSuccess(action: string): void {
-    this.announce(`${action} successful`);
-  }
-}
+// Re-export types from framework
+export type {
+  AccessibilityErrorMessage,
+  AccessibilityIssue,
+  AnnouncementConfig,
+  AriaAttributes,
+  FocusOptions,
+  KeyboardConfig,
+} from '../../framework/core/accessibility-utilities.js';
 
-// Create singleton instance
-export const announcer = new SimpleAnnouncer();
-
-// Quick helpers for common patterns
-
-/**
- * Check if user prefers reduced motion
- */
-export function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
-/**
- * Check if user prefers high contrast
- */
-export function prefersHighContrast(): boolean {
-  return window.matchMedia('(prefers-contrast: high)').matches;
-}
-
-/**
- * Get current color scheme preference
- */
-export function getColorScheme(): 'light' | 'dark' {
-  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-}
-
-/**
- * Ensure minimum touch target size (44x44px)
- */
-export function ensureTouchTarget(element: HTMLElement): void {
-  const rect = element.getBoundingClientRect();
-  const minSize = 44;
-  
-  if (rect.width < minSize || rect.height < minSize) {
-    // Add invisible expansion area
-    element.style.position = 'relative';
-    
-    const expander = document.createElement('div');
-    expander.style.cssText = `
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      min-width: ${minSize}px;
-      min-height: ${minSize}px;
-      pointer-events: none;
-    `;
-    
-    element.appendChild(expander);
-  }
-}
-
-/**
- * Add skip link for keyboard navigation
- */
-export function addSkipLink(targetId: string, text = 'Skip to main content'): void {
-  const skipLink = document.createElement('a');
-  skipLink.href = `#${targetId}`;
-  skipLink.className = 'skip-link';
-  skipLink.textContent = text;
-  
-  // Style as visually hidden but accessible
-  skipLink.style.cssText = `
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--color-accent);
-    color: var(--color-bg);
-    padding: 8px;
-    text-decoration: none;
-    border-radius: 0 0 4px 0;
-    z-index: 100;
-  `;
-  
-  // Show on focus
-  skipLink.addEventListener('focus', () => {
-    skipLink.style.top = '0';
-  });
-  
-  skipLink.addEventListener('blur', () => {
-    skipLink.style.top = '-40px';
-  });
-  
-  document.body.insertBefore(skipLink, document.body.firstChild);
-}
-
-/**
- * Debounce function for performance
- */
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: ReturnType<typeof setTimeout>;
-  
-  return function executedFunction(...args: Parameters<T>) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-/**
- * Throttle function for performance
- */
-export function throttle<T extends (...args: any[]) => any>(
-  func: T,
-  limit: number
-): (...args: Parameters<T>) => void {
-  let inThrottle: boolean;
-  
-  return function executedFunction(this: any, ...args: Parameters<T>) {
-    if (!inThrottle) {
-      func.apply(this, args);
-      inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
-    }
-  };
-}
-
-/**
- * Focus management for actor state changes
- */
-export interface FocusManagerConfig {
-  restoreFocus?: boolean;
-  focusFirst?: boolean;
-  trapFocus?: boolean;
-}
-
-export class FocusManager {
-  private previousFocus: Element | null = null;
-  
-  saveFocus(): void {
-    this.previousFocus = document.activeElement;
-  }
-  
-  restoreFocus(): void {
-    if (this.previousFocus && this.previousFocus instanceof HTMLElement) {
-      this.previousFocus.focus();
-    }
-  }
-  
-  focusFirst(container: HTMLElement): void {
-    const focusable = container.querySelector<HTMLElement>(
-      'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
-    );
-    
-    if (focusable) {
-      focusable.focus();
-    }
-  }
-  
-  /**
-   * Actor integration helper
-   */
-  static createFocusActions(config: FocusManagerConfig = {}) {
-    const manager = new FocusManager();
-    
-    return {
-      saveFocus: () => {
-        if (config.restoreFocus) {
-          manager.saveFocus();
-        }
-      },
-      
-      handleOpen: (element: HTMLElement) => {
-        if (config.focusFirst) {
-          requestAnimationFrame(() => {
-            manager.focusFirst(element);
-          });
-        }
-      },
-      
-      handleClose: () => {
-        if (config.restoreFocus) {
-          manager.restoreFocus();
-        }
-      }
-    };
-  }
-}
-
-/**
- * Loading state helper
- */
-export function setLoadingState(element: HTMLElement, isLoading: boolean): void {
-  element.setAttribute('aria-busy', isLoading.toString());
-  element.dataset.loading = isLoading.toString();
-  
-  if (isLoading) {
-    // Optionally announce loading state
-    announcer.announceLoading(element.getAttribute('aria-label') || 'content');
-  }
-}
-
-/**
- * Error state helper
- */
-export function setErrorState(
-  element: HTMLElement, 
-  hasError: boolean, 
-  errorMessage?: string
-): void {
-  element.setAttribute('aria-invalid', hasError.toString());
-  element.dataset.error = hasError.toString();
-  
-  if (hasError && errorMessage) {
-    // Create error message element if needed
-    let errorEl = element.querySelector('[role="alert"]');
-    if (!errorEl) {
-      errorEl = document.createElement('div');
-      errorEl.setAttribute('role', 'alert');
-      errorEl.className = 'error-message';
-      element.appendChild(errorEl);
-    }
-    
-    errorEl.textContent = errorMessage;
-    announcer.announceError(errorMessage);
-  } else {
-    // Remove error message
-    element.querySelector('[role="alert"]')?.remove();
-  }
-}
-
-/**
- * Success feedback helper
- */
-export function showSuccessFeedback(message: string, duration = 3000): void {
-  announcer.announceSuccess(message);
-  
-  // Visual feedback (toast, etc.)
-  const toast = document.createElement('div');
-  toast.className = 'success-toast';
-  toast.setAttribute('role', 'status');
-  toast.textContent = message;
-  toast.style.cssText = `
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    background: var(--color-success);
-    color: var(--color-bg);
-    padding: 1rem;
-    border-radius: var(--radius-md);
-    animation: slide-in 0.3s ease-out;
-    z-index: var(--z-toast);
-  `;
-  
-  document.body.appendChild(toast);
-  
-  setTimeout(() => {
-    toast.style.animation = 'slide-out 0.3s ease-in';
-    setTimeout(() => toast.remove(), 300);
-  }, duration);
-}
-
-/**
- * Roving tabindex helper for lists
- */
-export function setupRovingTabindex(
-  container: HTMLElement, 
-  itemSelector: string
-): () => void {
-  const items = Array.from(container.querySelectorAll<HTMLElement>(itemSelector));
-  let currentIndex = 0;
-  
-  // Initialize tabindex
-  items.forEach((item, index) => {
-    item.tabIndex = index === 0 ? 0 : -1;
-  });
-  
-  const handleKeyDown = (e: KeyboardEvent) => {
-    const key = e.key;
-    let newIndex = currentIndex;
-    
-    switch (key) {
-      case 'ArrowDown':
-      case 'ArrowRight':
-        e.preventDefault();
-        newIndex = (currentIndex + 1) % items.length;
-        break;
-        
-      case 'ArrowUp':
-      case 'ArrowLeft':
-        e.preventDefault();
-        newIndex = (currentIndex - 1 + items.length) % items.length;
-        break;
-        
-      case 'Home':
-        e.preventDefault();
-        newIndex = 0;
-        break;
-        
-      case 'End':
-        e.preventDefault();
-        newIndex = items.length - 1;
-        break;
-        
-      default:
-        return;
-    }
-    
-    // Update tabindex and focus
-    items[currentIndex].tabIndex = -1;
-    items[newIndex].tabIndex = 0;
-    items[newIndex].focus();
-    currentIndex = newIndex;
-  };
-  
-  container.addEventListener('keydown', handleKeyDown);
-  
-  // Return cleanup function
-  return () => {
-    container.removeEventListener('keydown', handleKeyDown);
-  };
-}
-
-// Export all patterns for easy access
-export const a11yPatterns = {
-  prefersReducedMotion,
-  prefersHighContrast,
+// Re-export pure utility functions
+export {
+  // Error messages
+  AccessibilityErrorMessages,
+  createAriaAttributeString,
+  generateId,
   getColorScheme,
-  ensureTouchTarget,
-  addSkipLink,
-  debounce,
-  throttle,
-  setLoadingState,
-  setErrorState,
-  showSuccessFeedback,
-  setupRovingTabindex,
-  FocusManager
-} as const; 
+  // ARIA utilities
+  isValidAriaAttribute,
+  // String utilities
+  kebabCase,
+  prefersHighContrast,
+  // User preference detection
+  prefersReducedMotion,
+} from '../../framework/core/accessibility-utilities.js';
+// Re-export ARIA observer class and types
+export {
+  type AriaMapping,
+  AriaObserver,
+  type AriaObserverOptions,
+} from '../../framework/core/aria-observer.js';
+export type {
+  DefaultFocusConfigType,
+  FocusContext,
+  FocusEvent,
+  FocusManagementActor,
+  FocusManagementConfig,
+  FocusManagementSnapshot,
+} from '../../framework/core/focus-management.js';
+// Re-export focus management
+export {
+  createFocusManagementHelper,
+  DefaultFocusConfigs,
+  FocusManagementHelper,
+  focusManagementMachine,
+  getFirstFocusableElement,
+  getFocusableElements,
+  getLastFocusableElement,
+  isFocusable,
+} from '../../framework/core/focus-management.js';
+export type {
+  DefaultKeyboardConfigType,
+  KeyboardNavigationActor,
+  KeyboardNavigationConfig,
+  KeyboardNavigationContext,
+  KeyboardNavigationEvent,
+  KeyboardNavigationSnapshot,
+} from '../../framework/core/keyboard-navigation.js';
+// Re-export keyboard navigation
+export {
+  createKeyboardNavigationHelper,
+  DefaultKeyboardConfigs,
+  KeyboardNavigationHelper,
+  keyboardNavigationMachine,
+} from '../../framework/core/keyboard-navigation.js';
+export type {
+  AnnouncementContext,
+  AnnouncementEvent,
+  AnnouncementMessage,
+  ScreenReaderAnnouncementActor,
+  ScreenReaderAnnouncementSnapshot,
+} from '../../framework/core/screen-reader-announcements.js';
+// Re-export screen reader announcements
+export {
+  createScreenReaderAnnouncementHelper,
+  ScreenReaderAnnouncementHelper,
+  screenReaderAnnouncementMachine,
+} from '../../framework/core/screen-reader-announcements.js';
+
+/**
+ * @deprecated AriaManager is replaced by reactive patterns
+ * Use AriaObserverHelper or template attributes instead
+ */
+export const AriaManager = {
+  setAttributes: () => {
+    console.warn(
+      'AriaManager.setAttributes is deprecated. Use AriaObserverHelper or template attributes instead.'
+    );
+  },
+  removeAttributes: () => {
+    console.warn(
+      'AriaManager.removeAttributes is deprecated. Use AriaObserverHelper or template attributes instead.'
+    );
+  },
+  toggleAttribute: () => {
+    console.warn(
+      'AriaManager.toggleAttribute is deprecated. Use AriaObserverHelper or template attributes instead.'
+    );
+    return false;
+  },
+  ensureId: (_element: HTMLElement, prefix = 'element') => {
+    console.warn('AriaManager.ensureId is deprecated. Use generateId() instead.');
+    // generateId is already imported above
+    return `${prefix}-${Math.random().toString(36).substr(2, 9)}`;
+  },
+  linkElements: () => {
+    console.warn('AriaManager.linkElements is deprecated. Use template attributes instead.');
+  },
+};
+
+/**
+ * @deprecated FocusManager is replaced by focusManagementMachine
+ * Use FocusManagementHelper instead
+ */
+export const FocusManager = {
+  setFocus: () => {
+    console.warn(
+      'FocusManager.setFocus is deprecated. Use FocusManagementHelper.focusElement() instead.'
+    );
+    return false;
+  },
+  restoreFocus: () => {
+    console.warn(
+      'FocusManager.restoreFocus is deprecated. Use FocusManagementHelper.restoreFocus() instead.'
+    );
+    return false;
+  },
+  trapFocus: () => {
+    console.warn(
+      'FocusManager.trapFocus is deprecated. Use FocusManagementHelper.trapFocus() instead.'
+    );
+  },
+  releaseFocusTrap: () => {
+    console.warn(
+      'FocusManager.releaseFocusTrap is deprecated. Use FocusManagementHelper.releaseFocusTrap() instead.'
+    );
+  },
+  getFocusableElements: (_container: HTMLElement) => {
+    console.warn(
+      'FocusManager.getFocusableElements is deprecated. Use getFocusableElements() instead.'
+    );
+    // Return empty array for deprecated function
+    return [];
+  },
+};
+
+/**
+ * Migration Guide:
+ *
+ * 1. Replace direct DOM manipulation with reactive patterns:
+ *    - Use XState machines for state management
+ *    - Use template functions for rendering
+ *    - Use data attributes for styling
+ *
+ * 2. Replace AriaManager with:
+ *    - AriaObserverHelper for reactive ARIA updates
+ *    - createAriaAttributeString() for template attributes
+ *
+ * 3. Replace FocusManager with:
+ *    - focusManagementMachine for focus state
+ *    - FocusManagementHelper for template integration
+ *
+ * 4. Replace addEventListener with:
+ *    - send attributes in templates
+ *    - XState event handling
+ *
+ * 5. Replace setTimeout/requestAnimationFrame with:
+ *    - XState delayed transitions
+ *    - Animation services from the framework
+ *
+ * See the framework documentation for detailed examples.
+ */

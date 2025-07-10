@@ -1,15 +1,15 @@
 /**
  * Tokenizer Module - TypeScript Version
- * 
+ *
  * A modular syntax highlighting system with separate lexer, parser, and renderer components.
  * Supports JavaScript, JSX, and XState with extensible architecture.
- * 
+ *
  * Usage:
- * 
+ *
  * // Basic usage with default tokenizer
  * import tokenizer from './tokenizer/index.js';
  * const highlighted = tokenizer.highlight(code);
- * 
+ *
  * // Custom tokenizer instance
  * import { Tokenizer } from './tokenizer/index.js';
  * const customTokenizer = new Tokenizer({
@@ -19,7 +19,7 @@
  *   highlightSection: 'stateSection'
  * });
  * const highlighted = customTokenizer.highlight(code);
- * 
+ *
  * // Direct component usage
  * import { JSXLexer, Parser, Renderer } from './tokenizer/index.js';
  * const lexer = new JSXLexer(code);
@@ -38,9 +38,9 @@ export interface TokenizerOptions {
   highlightSection?: string;
   useAST?: boolean;
   wrapCode?: boolean;
-  lexerOptions?: any;
-  parserOptions?: any;
-  rendererOptions?: any;
+  lexerOptions?: Record<string, unknown>;
+  parserOptions?: Record<string, unknown>;
+  rendererOptions?: Record<string, unknown>;
 }
 
 export interface Token {
@@ -48,7 +48,7 @@ export interface Token {
   start: number;
   end: number;
   value: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export interface LexerInterface {
@@ -56,22 +56,22 @@ export interface LexerInterface {
 }
 
 export interface ParserInterface {
-  parse(): any;
+  parse(): Record<string, unknown>;
 }
 
 export interface RendererInterface {
   renderTokens(tokens: Token[], code: string): string;
-  renderAST(ast: any): string;
+  renderAST(ast: Record<string, unknown>): string;
 }
 
-// Re-export everything from the main tokenizer module
-export * from './tokenizer.js';
-export { default } from './tokenizer.js';
+export { JSXLexer } from './jsx-lexer.js';
+export { JSXParser } from './jsx-parser.js';
 
 // Export individual components for direct access
 export { Lexer } from './lexer.js';
-export { JSXLexer } from './jsx-lexer.js';
-export { XStateLexer } from './xstate-lexer.js';
 export { Parser } from './parser.js';
-export { JSXParser } from './jsx-parser.js';
-export { Renderer } from './renderer.js'; 
+export { Renderer } from './renderer.js';
+// Re-export everything from the main tokenizer module
+export * from './tokenizer.js';
+export { default } from './tokenizer.js';
+export { XStateLexer } from './xstate-lexer.js';

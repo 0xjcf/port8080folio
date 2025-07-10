@@ -53,18 +53,19 @@ my-component[data-state="error"] { border: 1px solid red; }
 3. [Design Tokens](#design-tokens)
 4. [File Structure](#file-structure)
 5. [The Actor Pattern](#the-actor-pattern)
-6. [Common Actor Pattern Mistakes](#common-actor-pattern-mistakes)
-7. [CSS Architecture](#css-architecture)
+6. [Minimal API Integration](#minimal-api-integration)
+7. [Common Actor Pattern Mistakes](#common-actor-pattern-mistakes)
+8. [CSS Architecture](#css-architecture)
    - [Data State Pattern](#data-state-pattern)
    - [Token-Based Styling](#token-based-styling)
    - [Component Encapsulation](#component-encapsulation)
-8. [Component Guidelines](#component-guidelines)
-9. [Component Examples](#component-examples)
-10. [Inter-Actor Communication](#inter-actor-communication)
-11. [Testing Strategy](#testing-strategy)
-12. [Best Practices](#best-practices)
-13. [ARIA Automation](./ARIA_AUTOMATION_PATTERNS.md)
-14. [Migration Plan](#migration-plan)
+9. [Component Guidelines](#component-guidelines)
+10. [Component Examples](#component-examples)
+11. [Inter-Actor Communication](#inter-actor-communication)
+12. [Testing Strategy](#testing-strategy)
+13. [Best Practices](#best-practices)
+14. [ARIA Automation](./ARIA_AUTOMATION_PATTERNS.md)
+15. [Migration Plan](#migration-plan)
 
 ## Core Principles
 
@@ -785,6 +786,250 @@ class ComponentName extends HTMLElement {
 2. Implement inter-actor communication
 3. Performance optimization
 4. Documentation and examples
+
+## Minimal API Integration
+
+For simpler components that don't need the full Actor pattern complexity, the framework provides a **Minimal API** that offers automatic state management with just a machine and template function. This provides the benefits of the Actor pattern while maintaining simplicity for straightforward use cases.
+
+### When to Use Minimal API vs Manual Actor Pattern
+
+| Use Case | Minimal API | Manual Actor Pattern |
+|----------|-------------|---------------------|
+| **Simple Components** | ✅ Perfect | ❌ Overkill |
+| **Quick Prototypes** | ✅ Rapid development | ❌ Too much setup |
+| **Learning XState** | ✅ Easy entry point | ❌ Complex setup |
+| **Complex UI Logic** | ❌ Limited flexibility | ✅ Full control |
+| **Inter-Component Communication** | ❌ Basic events only | ✅ Rich messaging |
+| **Custom Lifecycle Management** | ❌ Automatic only | ✅ Full control |
+| **Framework Integration** | ✅ Automatic | ✅ Manual setup |
+
+### Minimal API Approach
+
+**Best for:** Standalone components, form widgets, simple UI state, rapid prototyping
+
+```typescript
+import { createComponent, html } from 'src/framework/core/minimal-api.js';
+import { setup, assign } from 'xstate';
+
+// 1. Define your state machine
+const counterMachine = setup({
+  types: {
+    context: {} as { count: number },
+    events: {} as { type: 'INCREMENT' } | { type: 'DECREMENT' }
+  },
+  actions: {
+    increment: assign({ count: ({ context }) => context.count + 1 }),
+    decrement: assign({ count: ({ context }) => context.count - 1 })
+  }
+}).createMachine({
+  id: 'counter',
+  initial: 'idle',
+  context: { count: 0 },
+  states: {
+    idle: {
+      on: {
+        INCREMENT: { actions: 'increment' },
+        DECREMENT: { actions: 'decrement' }
+      }
+    }
+  }
+});
+
+// 2. Define your template function
+const counterTemplate = (state: SnapshotFrom<typeof counterMachine>) => html`
+  <div class="counter">
+    <h3>Count: ${state.context.count}</h3>
+    <button data-action="DECREMENT">-</button>
+    <button data-action="INCREMENT">+</button>
+  </div>
+`;
+
+// 3. Create the component
+const CounterComponent = createComponent({
+  machine: counterMachine,
+  template: counterTemplate
+});
+
+// 4. That's it! ✨ Everything else is automatic:
+// - Event binding via data-action attributes
+// - State synchronization to data-state attributes  
+// - DOM updates on state changes
+// - Actor lifecycle management
+// - Custom element registration
+```
+
+### Enhanced Minimal API with Actor Pattern Integration
+
+For components that need Actor pattern benefits but want simplified API:
+
+```typescript
+import { createActorComponent } from 'src/framework/core/minimal-api.js';
+
+// Creates component with full Actor pattern integration
+const SmartCounterComponent = createActorComponent({
+  machine: counterMachine,
+  template: counterTemplate,
+  integration: {
+    useController: true,      // Enable Controller layer
+    useEventBus: true,        // Declarative event handling via ReactiveEventBus
+    useAriaObserver: true,    // Automatic ARIA updates
+    componentId: 'smart-counter' // Custom ID for event bus
+  }
+});
+
+// Now you get:
+// ✅ ReactiveEventBus integration for cross-component communication
+// ✅ AriaObserver for automatic accessibility
+// ✅ Controller layer for complex interactions
+// ✅ All the simplicity of the minimal API
+```
+
+### Comparison: All Three Approaches
+
+#### 1. Minimal API (Simplest)
+```typescript
+// Just machine + template = working component
+const SimpleComponent = createComponent({
+  machine: myMachine,
+  template: (state) => html`<div>Count: ${state.context.count}</div>`
+});
+```
+
+#### 2. Enhanced Minimal API (Actor Pattern Benefits)
+```typescript
+// Machine + template + Actor pattern integration
+const EnhancedComponent = createActorComponent({
+  machine: myMachine,
+  template: (state) => html`<div>Count: ${state.context.count}</div>`,
+  integration: {
+    useController: true,
+    useEventBus: true,
+    useAriaObserver: true
+  }
+});
+```
+
+#### 3. Manual Actor Pattern (Full Control)
+```typescript
+// Full control with explicit Controller layer
+class MyComponent extends HTMLElement {
+  private controller: MyController;
+  
+  connectedCallback() {
+    this.controller = new MyController(this);
+  }
+}
+
+class MyController {
+  constructor(component: MyComponent) {
+    this.actor = createActor(myMachine, { actions: myActions });
+    this.setupSubscriptions();
+  }
+  
+  private setupSubscriptions() {
+    this.actor.subscribe(state => {
+      this.component.dataset.state = state.value;
+      this.component.update(state);
+    });
+  }
+}
+```
+
+### Migration Strategy
+
+**Start Simple, Evolve as Needed:**
+
+1. **Begin with Minimal API** for rapid development
+2. **Add Actor Integration** when you need ReactiveEventBus or AriaObserver  
+3. **Move to Manual Pattern** when you need custom lifecycle or complex interactions
+
+```typescript
+// Phase 1: Start simple
+const ButtonComponent = createComponent({ machine, template });
+
+// Phase 2: Add framework integration
+const SmartButtonComponent = createActorComponent({ 
+  machine, 
+  template,
+  integration: { useEventBus: true, useAriaObserver: true }
+});
+
+// Phase 3: Full control when needed
+class AdvancedButtonComponent extends HTMLElement {
+  private controller: ButtonController;
+  // ... full manual implementation
+}
+```
+
+### Integration with Design System
+
+**Minimal API components automatically work with the design system:**
+
+```typescript
+const StyledButtonComponent = createComponent({
+  machine: buttonMachine,
+  template: (state) => html`
+    <button class="ds-button ds-button--${state.context.variant}">
+      ${state.context.label}
+    </button>
+  `,
+  styles: `
+    /* Component-specific styles using design tokens */
+    .ds-button {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-md);
+      font-weight: var(--font-semibold);
+    }
+    
+    /* State-based styling via data-state attributes (automatic) */
+    :host([data-state="loading"]) .ds-button {
+      opacity: 0.7;
+      cursor: wait;
+    }
+    
+    :host([data-state="disabled"]) .ds-button {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  `
+});
+```
+
+### Best Practices for Minimal API
+
+1. **Keep machines simple** - Complex state logic should use manual Actor pattern
+2. **Use data-action attributes** - Let the framework handle event binding
+3. **Leverage state synchronization** - Style via data-state attributes
+4. **Compose templates** - Use nested `html` calls for reusable pieces
+5. **Progress enhance** - Start minimal, add Actor integration when needed
+
+### Testing Minimal API Components
+
+The framework provides testing utilities for both approaches:
+
+```typescript
+import { createComponent, createTestableComponent } from 'src/framework/core/minimal-api.js';
+
+describe('Counter Component', () => {
+  it('increments count on button click', async () => {
+    // Create testable component instance
+    const component = createTestableComponent({
+      machine: counterMachine,
+      template: counterTemplate
+    });
+    
+    // Test using the same API as production
+    expect(component.html()).toContain('Count: 0');
+    
+    component.send({ type: 'INCREMENT' });
+    await waitForUpdate();
+    
+    expect(component.html()).toContain('Count: 1');
+  });
+});
+```
+
+This testing approach works identically for both minimal API and manually implemented Actor pattern components, ensuring consistency across your codebase.
 
 ## Common Actor Pattern Mistakes
 

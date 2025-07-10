@@ -1,5 +1,5 @@
 // TypeScript interfaces for Message Log Actor
-import { createMachine, assign } from 'xstate';
+import { assign, createMachine } from 'xstate';
 
 interface LogMessage {
   timestamp: string;
@@ -20,52 +20,61 @@ type MessageLogStates = 'active';
 export const messageLogMachine = createMachine({
   id: 'messageLog',
   initial: 'active' as MessageLogStates,
-  
+
   context: {
-    messages: []
+    messages: [],
   } as MessageLogContext,
-  
+
   types: {} as {
     context: MessageLogContext;
     events: MessageLogEvents;
   },
-  
+
   states: {
     active: {
       on: {
         LOG_MESSAGE: {
           actions: assign({
-            messages: ({ context, event }: { context: MessageLogContext; event: Extract<MessageLogEvents, { type: 'LOG_MESSAGE' }> }) => [
+            messages: ({
+              context,
+              event,
+            }: {
+              context: MessageLogContext;
+              event: Extract<MessageLogEvents, { type: 'LOG_MESSAGE' }>;
+            }) => [
               ...context.messages,
               {
                 timestamp: new Date().toLocaleTimeString(),
                 message: event.message,
-                type: event.messageType || 'info'
-              }
-            ]
-          })
+                type: event.messageType || 'info',
+              },
+            ],
+          }),
         },
-        
+
         CLEAR_LOG: {
           actions: assign({
-            messages: []
-          })
-        }
-      }
-    }
-  }
+            messages: [],
+          }),
+        },
+      },
+    },
+  },
 });
 
 // Helper functions for type-safe message logging
-export const createLogMessage = (message: string, type: LogMessage['type'] = 'info'): Extract<MessageLogEvents, { type: 'LOG_MESSAGE' }> => ({
+export const createLogMessage = (
+  message: string,
+  type: LogMessage['type'] = 'info'
+): Extract<MessageLogEvents, { type: 'LOG_MESSAGE' }> => ({
   type: 'LOG_MESSAGE',
   message,
-  messageType: type
+  messageType: type,
 });
 
 export const createClearLogEvent = (): Extract<MessageLogEvents, { type: 'CLEAR_LOG' }> => ({
-  type: 'CLEAR_LOG'
+  type: 'CLEAR_LOG',
 });
 
 // Type exports for external usage
-export type { LogMessage, MessageLogContext, MessageLogEvents, MessageLogStates }; 
+export type { LogMessage, MessageLogContext, MessageLogEvents, MessageLogStates };

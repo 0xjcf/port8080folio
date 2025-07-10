@@ -172,20 +172,20 @@
     gap: 15px;
     margin-bottom: 25px;
   }
-  
+
   .actor-box {
     padding: 20px 15px;
     min-height: 240px;
   }
-  
+
   .actor-name {
     font-size: 1.1rem;
   }
-  
+
   .actor-state {
     font-size: 0.9rem;
   }
-  
+
   .actor-icon {
     font-size: 2.5rem;
   }
@@ -290,7 +290,7 @@
     gap: 15px;
     margin-bottom: 25px;
   }
-  
+
   .action-button {
     flex: 1;
     width: auto;
@@ -400,8 +400,8 @@
 }
 
 .code-example {
-  background: linear-gradient(135deg, var(--code-bg, #0A0E1B) 0%, #0F172A 100%);
-  border: 1px solid var(--code-border, #1E293B);
+  background: linear-gradient(135deg, var(--code-bg, #0a0e1b) 0%, #0f172a 100%);
+  border: 1px solid var(--code-border, #1e293b);
   border-radius: 6px;
   padding: 12px;
   overflow-x: auto;
@@ -431,10 +431,10 @@
 
 .code-example pre {
   margin: 0;
-  color: var(--syntax-variable, #F3F4F6);
+  color: var(--syntax-variable, #f3f4f6);
   font-size: inherit;
   line-height: 1.4;
-  font-family: 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace;
   overflow-x: auto;
   max-width: 100%;
   min-width: 0;
@@ -479,23 +479,23 @@
 /* Custom "Midnight State Machine" Theme - Professional Edition */
 :root {
   /* Code backgrounds */
-  --code-bg: #0A0E1B;
-  --code-border: #1E293B;
-  
+  --code-bg: #0a0e1b;
+  --code-border: #1e293b;
+
   /* Syntax colors - Refined palette */
-  --syntax-comment: #6B7280;      /* Softer gray */
-  --syntax-keyword: #60A5FA;      /* Brand blue */
-  --syntax-string: #34D399;       /* Emerald green */
-  --syntax-function: #C084FC;     /* Muted purple */
-  --syntax-variable: #F3F4F6;     /* Near white */
-  --syntax-number: #FCD34D;       /* Warm amber */
-  --syntax-operator: #94A3B8;     /* Subtle gray-blue */
-  
+  --syntax-comment: #6b7280; /* Softer gray */
+  --syntax-keyword: #60a5fa; /* Brand blue */
+  --syntax-string: #34d399; /* Emerald green */
+  --syntax-function: #c084fc; /* Muted purple */
+  --syntax-variable: #f3f4f6; /* Near white */
+  --syntax-number: #fcd34d; /* Warm amber */
+  --syntax-operator: #94a3b8; /* Subtle gray-blue */
+
   /* XState specific */
-  --syntax-state-machine: #3B82F6;  /* Bright brand blue */
-  --syntax-state-names: #7DD3C0;    /* Soft teal */
-  --syntax-event-types: #FCD34D;    /* Warm amber */
-  --syntax-jsx: #F472B6;            /* Muted pink */
+  --syntax-state-machine: #3b82f6; /* Bright brand blue */
+  --syntax-state-names: #7dd3c0; /* Soft teal */
+  --syntax-event-types: #fcd34d; /* Warm amber */
+  --syntax-jsx: #f472b6; /* Muted pink */
 }
 
 .keyword {
@@ -554,8 +554,14 @@
 
 /* Add subtle animation for important elements */
 @keyframes subtleGlow {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; text-shadow: 0 0 12px rgba(59, 130, 246, 0.5); }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+    text-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+  }
 }
 
 .function.xstate-method {
@@ -579,9 +585,9 @@
 /* Statechart diagram styles - matching XState visual editor */
 .statechart-diagram {
   background: #0f0f0f;
-  background-image: 
-    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 20px 20px;
   border: 1px solid #2a2a2a;
   border-radius: 12px;
@@ -657,27 +663,27 @@
     padding: 20px 10px;
     max-width: 100%;
   }
-  
+
   .states-flow {
     gap: 8px;
     padding: 5px 10px;
     transform: scale(0.9);
     transform-origin: center;
   }
-  
+
   .state-box {
     padding: 8px 12px;
     font-size: 0.85rem;
   }
-  
+
   .state-arrow {
     font-size: 1rem;
   }
-  
+
   .state-event {
     font-size: 0.75rem;
   }
-  
+
   .state-indicator {
     font-size: 1rem;
   }
@@ -687,21 +693,21 @@
   .statechart-diagram {
     padding: 25px 15px;
   }
-  
+
   .states-flow {
     gap: 10px;
     padding: 5px 15px;
   }
-  
+
   .state-box {
     padding: 10px 18px;
     font-size: 0.9rem;
   }
-  
+
   .state-arrow {
     font-size: 1.1rem;
   }
-  
+
   .state-event {
     font-size: 0.8rem;
   }
@@ -712,11 +718,11 @@
   .education-grid {
     gap: 50px;
   }
-  
+
   .code-example {
     font-size: 0.88rem;
   }
-  
+
   .code-example pre {
     font-size: 0.88rem;
   }
@@ -738,47 +744,47 @@
   .actor-icon {
     font-size: 2.5rem;
   }
-  
+
   .actor-name {
     font-size: 1.1rem;
   }
-  
+
   .actor-state {
     font-size: 0.9rem;
   }
-  
+
   .message-log {
     padding: 15px;
     max-height: 150px;
   }
-  
+
   .stats {
     flex-direction: column;
     gap: 15px;
   }
-  
+
   .stat-value {
     font-size: 1.5rem;
   }
-  
+
   /* Ensure code blocks don't cause overflow */
   .code-example {
     max-width: 100%;
     margin-left: 0;
     margin-right: 0;
     border-radius: 6px;
-    background: var(--code-bg, #0A0E1B);
-    border: 1px solid var(--code-border, #1E293B);
+    background: var(--code-bg, #0a0e1b);
+    border: 1px solid var(--code-border, #1e293b);
     box-shadow: inset 0 1px 0 rgba(59, 130, 246, 0.05);
     padding: 8px;
     overflow-x: auto;
     position: relative;
     box-sizing: border-box;
   }
-  
+
   /* Add a subtle gradient indicator for scrollable content */
   .code-example::after {
-    content: '';
+    content: "";
     position: absolute;
     right: 0;
     top: 0;
@@ -787,31 +793,31 @@
     background: linear-gradient(to right, transparent, rgba(10, 10, 10, 0.8));
     pointer-events: none;
   }
-  
+
   .code-example pre {
     padding: 4px;
     font-size: 0.65rem;
     line-height: 1.3;
   }
-  
+
   .code-example code {
     /* Keep code formatting intact */
     white-space: pre;
     overflow-x: auto;
     display: block;
   }
-  
+
   /* Improve syntax highlighting visibility on mobile */
   .comment {
     opacity: 0.8;
   }
-  
+
   /* Override specific concept section font sizes on mobile */
   .concept-section:nth-child(1) .code-example,
   .concept-section:nth-child(2) .code-example {
     font-size: 0.65rem;
   }
-  
+
   .concept-section:nth-child(1) .code-example pre,
   .concept-section:nth-child(2) .code-example pre {
     font-size: 0.65rem;
@@ -824,25 +830,25 @@
     font-size: 0.6rem;
     padding: 6px;
   }
-  
+
   .code-example pre {
     font-size: 0.6rem;
     padding: 2px;
     line-height: 1.2;
   }
-  
+
   /* Make the scroll indicator more visible on small screens */
   .code-example::after {
     width: 30px;
     background: linear-gradient(to right, transparent, rgba(10, 10, 10, 0.9));
   }
-  
+
   /* Override specific concept section font sizes on mobile */
   .concept-section:nth-child(1) .code-example,
   .concept-section:nth-child(2) .code-example {
     font-size: 0.6rem;
   }
-  
+
   .concept-section:nth-child(1) .code-example pre,
   .concept-section:nth-child(2) .code-example pre {
     font-size: 0.6rem;

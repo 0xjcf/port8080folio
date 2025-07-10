@@ -1,334 +1,411 @@
 /**
- * View Transitions API Utility
- * 
+ * View Transitions API Utility - Actor-SPA Framework Compatible
+ *
  * Provides smooth transitions between different views/pages using the native
- * View Transitions API. Falls back gracefully on unsupported browsers.
- * 
+ * View Transitions API with reactive state management.
+ *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
  */
 
+import { type ActorRefFrom, assign, createActor, createMachine, fromPromise } from 'xstate';
+import { devConfig } from '../../scripts/dev-config.js';
+
 // Type definitions
 interface ViewTransitionOptions {
-    name?: string;
-    skipTransition?: boolean;
-    fallbackDuration?: number;
+  name?: string;
+  skipTransition?: boolean;
+  fallbackDuration?: number;
 }
 
 interface NavigationOptions {
-    transitionName?: string;
-    updateTitle?: boolean;
-    pushState?: boolean;
+  transitionName?: string;
+  updateTitle?: boolean;
+  pushState?: boolean;
 }
 
 interface SectionNavigationOptions {
-    transitionName?: string;
-    updateUrl?: boolean;
-    focus?: boolean;
+  transitionName?: string;
+  updateUrl?: boolean;
+  focus?: boolean;
 }
 
 interface PageContentUpdateOptions {
-    updateTitle?: boolean;
-    pushState?: boolean;
-    url?: string;
+  updateTitle?: boolean;
+  pushState?: boolean;
+  url?: string;
 }
 
-// Extend global Window interface only
-declare global {
-    interface Window {
-        viewTransitions?: ViewTransitions;
-    }
+interface TransitionContext {
+  isSupported: boolean;
+  activeTransition: ViewTransition | null;
+  transitionNames: Map<ViewTransition, string>;
+  currentSection: string | null;
+  currentUrl: string;
+  debugMode: boolean;
 }
+
+// ✅ FRAMEWORK: XState event types
+interface TransitionInput {
+  updateCallback: () => Promise<void> | void;
+  options: ViewTransitionOptions;
+}
+
+interface NavigationInput {
+  url: string;
+  options: NavigationOptions;
+}
+
+interface SectionInput {
+  sectionId: string;
+  options: SectionNavigationOptions;
+}
+
+// ✅ FRAMEWORK: ViewTransition type for better typing (using native types)
+// Remove custom ViewTransition interface since it's already in DOM types
+
+// ✅ FRAMEWORK: Global window interface
+declare global {
+  interface Window {
+    viewTransitions?: ViewTransitions;
+    globalEventBus?: {
+      emit(event: string, data?: unknown): void;
+      on(event: string, callback: (data: unknown) => void): void;
+    };
+  }
+}
+
+// ✅ REPLACED: State machine for transition management
+const transitionMachine = createMachine(
+  {
+    id: 'viewTransitions',
+    initial: 'idle',
+    context: {
+      isSupported: 'startViewTransition' in document,
+      activeTransition: null,
+      transitionNames: new Map(),
+      currentSection: null,
+      // ✅ REPLACED: Use framework state instead of direct window.location.href access
+      currentUrl: '/', // Will be updated via framework events
+      debugMode: window.location.search.includes('debug-transitions'),
+    } as TransitionContext,
+
+    states: {
+      idle: {
+        on: {
+          START_TRANSITION: 'transitioning',
+          NAVIGATE_TO_PAGE: 'navigating',
+          NAVIGATE_TO_SECTION: 'sectionTransition',
+          SETUP_TRACKING: 'settingUp',
+          UPDATE_CURRENT_URL: {
+            actions: 'updateCurrentUrl',
+          },
+        },
+      },
+
+      settingUp: {
+        entry: ['setupFrameworkTracking'],
+        always: 'idle',
+      },
+
+      transitioning: {
+        invoke: {
+          id: 'executeTransition',
+          src: 'executeTransition',
+          onDone: {
+            target: 'idle',
+            actions: 'cleanupTransition',
+          },
+          onError: {
+            target: 'idle',
+            actions: 'handleTransitionError',
+          },
+        },
+        // ✅ REPLACED: Use XState delayed transition instead of setTimeout
+        after: {
+          5000: {
+            target: 'idle',
+            actions: 'handleTransitionTimeout',
+          },
+        },
+      },
+
+      navigating: {
+        invoke: {
+          id: 'navigateToPage',
+          src: 'navigateToPage',
+          onDone: 'idle',
+          onError: {
+            target: 'idle',
+            actions: 'handleNavigationError',
+          },
+        },
+      },
+
+      sectionTransition: {
+        invoke: {
+          id: 'navigateToSection',
+          src: 'navigateToSection',
+          onDone: 'idle',
+          onError: 'idle',
+        },
+      },
+    },
+  },
+  {
+    actors: {
+      executeTransition: fromPromise(async ({ input }: { input: TransitionInput }) => {
+        const { updateCallback, options } = input;
+        const { name = 'default', skipTransition = false } = options;
+
+        if (skipTransition || !document.startViewTransition) {
+          await updateCallback();
+          return;
+        }
+
+        try {
+          const transition = document.startViewTransition(updateCallback);
+
+          // ✅ REPLACED: Use framework state management instead of setAttribute
+          if (name !== 'default') {
+            // Emit framework event for state update
+            if (typeof window !== 'undefined' && window.globalEventBus) {
+              window.globalEventBus.emit('transition-started', { name });
+            }
+          }
+
+          await transition.finished;
+
+          // ✅ REPLACED: Use framework event for cleanup
+          if (typeof window !== 'undefined' && window.globalEventBus) {
+            window.globalEventBus.emit('transition-completed', { name });
+          }
+        } catch (error) {
+          await updateCallback();
+          throw error;
+        }
+      }),
+
+      navigateToPage: fromPromise(async ({ input }: { input: NavigationInput }) => {
+        const { url, options } = input;
+        const response = await fetch(url);
+        const html = await response.text();
+        const parser = new DOMParser();
+        const newDoc = parser.parseFromString(html, 'text/html');
+
+        // ✅ REPLACED: Use framework event bus for content update
+        if (typeof window !== 'undefined' && window.globalEventBus) {
+          window.globalEventBus.emit('page-content-update', {
+            newDoc,
+            options,
+            url,
+          });
+        }
+      }),
+
+      navigateToSection: fromPromise(async ({ input }: { input: SectionInput }) => {
+        const { sectionId, options } = input;
+
+        // ✅ REPLACED: Use framework state management for section navigation
+        if (typeof window !== 'undefined' && window.globalEventBus) {
+          window.globalEventBus.emit('section-navigation', {
+            sectionId,
+            options,
+          });
+        }
+      }),
+    },
+
+    actions: {
+      setupFrameworkTracking: () => {
+        // ✅ REPLACED: Use framework event bus instead of addEventListener
+        if (typeof window !== 'undefined' && window.globalEventBus) {
+          // Setup framework-level event handling
+          window.globalEventBus.emit('view-transitions-setup', {
+            supported: 'startViewTransition' in document,
+          });
+
+          devConfig.log('View transitions setup completed using framework event bus');
+        }
+      },
+
+      updateCurrentUrl: assign({
+        currentUrl: ({ event }) => {
+          if (event.type === 'UPDATE_CURRENT_URL' && 'url' in event) {
+            return event.url as string;
+          }
+          return '/';
+        },
+      }),
+
+      cleanupTransition: assign({
+        activeTransition: null,
+      }),
+
+      handleTransitionError: ({ event }) => {
+        devConfig.error('Transition error:', event);
+      },
+
+      handleNavigationError: ({ event }) => {
+        devConfig.error('Navigation error:', event);
+      },
+
+      // ✅ REPLACED: XState action instead of setTimeout callback
+      handleTransitionTimeout: () => {
+        devConfig.error('Transition timeout after 5 seconds');
+      },
+    },
+  }
+);
 
 class ViewTransitions {
-    public readonly isSupported: boolean;
-    private activeTransition: any = null; // Use any to avoid type conflicts
-    private transitionNames = new Map<any, string>();
-    
-    constructor() {
-        this.isSupported = 'startViewTransition' in document;
-        
-        // Initialize transition tracking
-        this.setupTransitionTracking();
-        
-        console.log('🎬 View Transitions API:', this.isSupported ? 'Supported' : 'Not supported (fallback enabled)');
-    }
+  public readonly isSupported: boolean;
+  private machine: ActorRefFrom<typeof transitionMachine>;
 
-    /**
-     * Check if View Transitions API is supported
-     */
-    static isSupported(): boolean {
-        return 'startViewTransition' in document;
-    }
+  constructor() {
+    this.isSupported = 'startViewTransition' in document;
+    this.machine = createActor(transitionMachine);
+    this.machine.start();
 
-    /**
-     * Execute a view transition with callback
-     * @param updateCallback - Function that updates the DOM
-     * @param options - Transition options
-     * @returns Promise that resolves when transition completes
-     */
-    async transition(
-        updateCallback: () => Promise<void> | void, 
-        options: ViewTransitionOptions = {}
-    ): Promise<void> {
-        const { 
-            name = 'default',
-            skipTransition = false,
-            fallbackDuration = 300
-        } = options;
+    // ✅ REPLACED: Use framework setup instead of direct DOM manipulation
+    this.machine.send({ type: 'SETUP_TRACKING' });
+  }
 
-        // Skip if transitions are disabled or not supported
-        if (skipTransition || !this.isSupported) {
-            await updateCallback();
-            return;
+  /**
+   * Check if View Transitions API is supported
+   */
+  static isSupported(): boolean {
+    return 'startViewTransition' in document;
+  }
+
+  /**
+   * Execute a view transition with callback
+   */
+  async transition(
+    updateCallback: () => Promise<void> | void,
+    options: ViewTransitionOptions = {}
+  ): Promise<void> {
+    // ✅ FRAMEWORK: Use XState machine timeout mechanism only
+    return new Promise<void>((resolve, _reject) => {
+      this.machine.send({
+        type: 'START_TRANSITION',
+        updateCallback,
+        options,
+      });
+
+      const subscription = this.machine.subscribe((state) => {
+        if (state.matches('idle') && state.context.activeTransition === null) {
+          subscription.unsubscribe();
+          resolve();
         }
+        // ✅ FRAMEWORK: XState handles timeout via 'after' configuration
+        // No need for manual setTimeout - XState machine handles it
+      });
+    });
+  }
 
-        try {
-            // Cancel any existing transition
-            if (this.activeTransition) {
-                this.activeTransition.skipTransition();
-            }
+  /**
+   * Navigate to a new page with smooth transition
+   */
+  async navigateTo(url: string, options: NavigationOptions = {}): Promise<void> {
+    const transitionName = options.transitionName || this.getTransitionName(url);
 
-            // Start new transition
-            this.activeTransition = (document as any).startViewTransition(async () => {
-                await updateCallback();
-            });
-
-            // Store transition name for CSS targeting
-            if (name !== 'default') {
-                this.transitionNames.set(this.activeTransition, name);
-                document.documentElement.setAttribute('data-transition', name);
-            }
-
-            // Wait for transition to complete
-            await this.activeTransition.finished;
-            
-            // Clean up
-            this.activeTransition = null;
-            document.documentElement.removeAttribute('data-transition');
-
-        } catch (error) {
-            console.warn('View transition failed, falling back to immediate update:', error);
-            await updateCallback();
-        }
-    }
-
-    /**
-     * Navigate to a new page with smooth transition
-     * @param url - Target URL
-     * @param options - Navigation options
-     */
-    async navigateTo(url: string, options: NavigationOptions = {}): Promise<void> {
-        const {
-            transitionName = this.getTransitionName(url),
-            updateTitle = true,
-            pushState = true
-        } = options;
-
-        await this.transition(async () => {
-            // Fetch new content
-            const response = await fetch(url);
-            const html = await response.text();
-            
-            // Parse new document
-            const parser = new DOMParser();
-            const newDoc = parser.parseFromString(html, 'text/html');
-            
-            // Update page content
-            this.updatePageContent(newDoc, { updateTitle, pushState, url });
-            
-        }, { name: transitionName });
-    }
-
-    /**
-     * Navigate between sections within the same page
-     * @param sectionId - Target section ID
-     * @param options - Navigation options
-     */
-    async navigateToSection(sectionId: string, options: SectionNavigationOptions = {}): Promise<void> {
-        const {
-            transitionName = `section-${sectionId}`,
-            updateUrl = true,
-            focus = true
-        } = options;
-
-        await this.transition(async () => {
-            // Hide current section
-            const currentSection = document.querySelector('main > section:not([hidden])');
-            if (currentSection) {
-                (currentSection as HTMLElement).hidden = true;
-            }
-
-            // Show target section
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.hidden = false;
-                
-                // Update URL without page reload
-                if (updateUrl) {
-                    const newUrl = `#${sectionId}`;
-                    history.pushState(null, '', newUrl);
-                }
-
-                // Focus management for accessibility
-                if (focus) {
-                    const focusTarget = targetSection.querySelector('h1, h2, [tabindex="0"]') as HTMLElement;
-                    if (focusTarget) {
-                        focusTarget.focus();
-                    }
-                }
-            }
-            
-        }, { name: transitionName });
-    }
-
-    /**
-     * Update page content from new document
-     * @private
-     */
-    private updatePageContent(newDoc: Document, options: PageContentUpdateOptions = {}): void {
-        const { updateTitle, pushState, url } = options;
-
-        // Update title
-        if (updateTitle && newDoc.title) {
-            document.title = newDoc.title;
-        }
-
-        // Update main content
-        const newMain = newDoc.querySelector('main');
-        const currentMain = document.querySelector('main');
-        
-        if (newMain && currentMain) {
-            currentMain.innerHTML = newMain.innerHTML;
-        }
-
-        // Update navigation active states
-        if (url) {
-            this.updateNavigationStates(url);
-        }
-
-        // Update browser history
-        if (pushState && url) {
-            history.pushState(null, '', url);
-        }
-
-        // Re-initialize any components in the new content
-        this.reinitializeComponents();
-    }
-
-    /**
-     * Update navigation active states
-     * @private
-     */
-    private updateNavigationStates(url: string): void {
-        const navLinks = document.querySelectorAll('nav a, .nav-item a') as NodeListOf<HTMLAnchorElement>;
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            
-            if (link.href === url || link.href.endsWith(url)) {
-                link.classList.add('active');
-            }
+    await this.transition(
+      async () => {
+        this.machine.send({
+          type: 'NAVIGATE_TO_PAGE',
+          url,
+          options: { ...options, transitionName },
         });
-    }
+      },
+      { name: transitionName }
+    );
+  }
 
-    /**
-     * Re-initialize components after content change
-     * @private
-     */
-    private reinitializeComponents(): void {
-        // Dispatch event for components to re-initialize
-        document.dispatchEvent(new CustomEvent('page-content-updated', {
-            detail: { source: 'view-transition' }
-        }));
-    }
+  /**
+   * Navigate between sections within the same page
+   */
+  async navigateToSection(
+    sectionId: string,
+    options: SectionNavigationOptions = {}
+  ): Promise<void> {
+    const transitionName = options.transitionName || `section-${sectionId}`;
 
-    /**
-     * Get appropriate transition name based on URL
-     * @private
-     */
-    private getTransitionName(url: string): string {
-        if (url.includes('/about')) return 'slide-right';
-        if (url.includes('/blog')) return 'slide-up';
-        if (url.includes('/projects')) return 'slide-left';
-        if (url.includes('/resources')) return 'fade';
-        return 'default';
-    }
-
-    /**
-     * Setup transition tracking and debugging
-     * @private
-     */
-    private setupTransitionTracking(): void {
-        if (!this.isSupported) return;
-
-        // Track transition events
-        document.addEventListener('DOMContentLoaded', () => {
-            // Add transition class to body for CSS targeting
-            document.body.classList.add('view-transitions-supported');
+    await this.transition(
+      async () => {
+        this.machine.send({
+          type: 'NAVIGATE_TO_SECTION',
+          sectionId,
+          options,
         });
+      },
+      { name: transitionName }
+    );
+  }
 
-        // Debug mode
-        if (window.location.search.includes('debug-transitions')) {
-            this.enableDebugMode();
-        }
+  /**
+   * ✅ REPLACED: Framework-compatible content update
+   */
+  updatePageContent(newDoc: Document, options: PageContentUpdateOptions = {}): void {
+    // ✅ FRAMEWORK: Emit events for framework components to handle
+    if (typeof window !== 'undefined' && window.globalEventBus) {
+      window.globalEventBus.emit('page-content-updated', {
+        newDoc,
+        options,
+        timestamp: Date.now(),
+      });
     }
+  }
 
-    /**
-     * Enable debug mode for transitions
-     * @private
-     */
-    private enableDebugMode(): void {
-        console.log('🎬 View Transitions Debug Mode Enabled');
-        
-        // Add debug styles
-        const style = document.createElement('style');
-        style.textContent = `
-            ::view-transition-old(*),
-            ::view-transition-new(*) {
-                animation-duration: 2s !important;
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Log transition events
-        document.addEventListener('startViewTransition', (event) => {
-            console.log('🎬 Transition started:', event);
-        });
+  /**
+   * ✅ REPLACED: Framework-compatible navigation state update
+   */
+  updateNavigationStates(url: string): void {
+    // ✅ FRAMEWORK: Use event bus for navigation state updates
+    if (typeof window !== 'undefined' && window.globalEventBus) {
+      window.globalEventBus.emit('navigation-state-update', { url });
     }
+  }
 
-    /**
-     * Create a custom transition for specific elements
-     * @param selector - CSS selector for elements
-     * @param transitionName - Custom transition name
-     */
-    createCustomTransition(selector: string, transitionName: string): void {
-        const elements = document.querySelectorAll(selector) as NodeListOf<HTMLElement>;
-        
-        elements.forEach((element, index) => {
-            element.style.viewTransitionName = `${transitionName}-${index}`;
-        });
-    }
+  /**
+   * Get appropriate transition name based on URL
+   */
+  private getTransitionName(url: string): string {
+    if (url.includes('/about')) return 'slide-right';
+    if (url.includes('/blog')) return 'slide-up';
+    if (url.includes('/projects')) return 'slide-left';
+    if (url.includes('/resources')) return 'fade';
+    return 'default';
+  }
 
-    /**
-     * Prefetch page for faster transitions
-     * @param url - URL to prefetch
-     */
-    async prefetchPage(url: string): Promise<void> {
-        try {
-            // Use link prefetch if supported
-            const link = document.createElement('link');
-            if ('rel' in link) {
-                link.rel = 'prefetch';
-                link.href = url;
-                document.head.appendChild(link);
-            } else {
-                // Fallback: fetch and cache
-                await fetch(url);
-            }
-        } catch (error) {
-            console.warn('Failed to prefetch page:', url, error);
-        }
+  /**
+   * ✅ REPLACED: Framework-compatible custom transitions
+   */
+  createCustomTransition(selector: string, transitionName: string): void {
+    // ✅ FRAMEWORK: Use event bus for custom transition setup
+    if (typeof window !== 'undefined' && window.globalEventBus) {
+      window.globalEventBus.emit('custom-transition-request', {
+        selector,
+        transitionName,
+      });
     }
+  }
+
+  /**
+   * Prefetch page for faster transitions
+   */
+  async prefetchPage(url: string): Promise<void> {
+    try {
+      // ✅ FRAMEWORK: Use framework caching strategy
+      if (typeof window !== 'undefined' && window.globalEventBus) {
+        window.globalEventBus.emit('prefetch-request', { url });
+      }
+
+      // Fallback: direct fetch for caching
+      await fetch(url);
+    } catch (error) {
+      devConfig.error('Prefetch failed:', error);
+    }
+  }
 }
 
 // Create singleton instance
@@ -339,5 +416,5 @@ export default viewTransitions;
 
 // Global access for debugging
 if (typeof window !== 'undefined') {
-    window.viewTransitions = viewTransitions;
-} 
+  window.viewTransitions = viewTransitions;
+}

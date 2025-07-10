@@ -271,6 +271,20 @@ This hybrid approach ensures:
 - [ ] Implement state rehydration on reload
 - [ ] Add privacy-aware storage options
 
+#### 0.10 Reactive Infrastructure (CRITICAL - Required for all components)
+- [ ] Create reactive event bus for declarative event handling
+- [ ] Implement template-based rendering system
+- [ ] Build reactive data binding utilities
+- [ ] Create state machine timer services
+- [ ] Implement reactive observer patterns (IntersectionObserver, ResizeObserver)
+- [ ] Add reactive form handling utilities
+- [ ] Create reactive animation system using invoke services
+- [ ] Build declarative DOM update system
+- [ ] Implement differential rendering for performance
+- [ ] Create reactive debugging tools
+- [ ] Add Biome configuration and custom reactive pattern checker
+- [ ] Document all reactive patterns with examples
+
 ### Phase 1: Navigation Actor & Page Structure (HIGH PRIORITY)
 **Goal**: Create page structure with actor-based navigation
 
@@ -489,6 +503,61 @@ This hybrid approach ensures:
 2. **Separate actions from machines** for serializability
 3. **Use data-state for CSS**, not JavaScript DOM manipulation
 4. **Controllers manage actor lifecycle** and state sync
+5. **NO direct DOM queries** - Use refs or data attributes instead of querySelector/getElementById
+6. **NO imperative event listeners** - Use declarative event mapping through the reactive event bus
+7. **NO manual attribute updates** - Use reactive data binding (except data-* attributes)
+8. **NO unmanaged timers** - Use state machine delays/after/invoke services
+9. **NO direct style manipulation** - Use data attributes and CSS
+10. **NO innerHTML/textContent assignments** - Use template functions with state
+
+### Reactive Pattern Requirements
+
+#### Forbidden Patterns (Will fail code review)
+```typescript
+// ❌ Direct DOM queries
+element = document.querySelector('.class');
+button = this.shadowRoot.getElementById('id');
+
+// ❌ Imperative event handling
+element.addEventListener('click', handler);
+form.onsubmit = handler;
+
+// ❌ Direct DOM manipulation
+element.setAttribute('aria-expanded', 'true');
+element.classList.add('active');
+element.style.display = 'none';
+element.innerHTML = '<div>content</div>';
+element.textContent = 'text';
+
+// ❌ Unmanaged async
+setTimeout(() => doSomething(), 1000);
+setInterval(() => poll(), 5000);
+```
+
+#### Required Patterns
+```typescript
+// ✅ Reactive refs
+@query('[data-ref="button"]') button: HTMLElement;
+
+// ✅ Declarative events
+this.bindEvents({
+  'click [data-action="submit"]': 'SUBMIT',
+  'input [data-field]': 'UPDATE_FIELD'
+});
+
+// ✅ State-driven attributes
+this.setAttribute('data-expanded', state.context.isExpanded);
+// CSS: [data-expanded="true"] { ... }
+
+// ✅ Template-based rendering
+protected template(state: ActorSnapshot): string {
+  return `<div>${state.context.content}</div>`;
+}
+
+// ✅ State machine timers
+after: { 1000: 'nextState' }
+invoke: { src: 'pollService' }
+```
 
 ### Complementary Design Patterns
 
@@ -588,7 +657,38 @@ class MarkdownContentRepository implements ContentRepository {
 - Test theme variations
 - Test loading/error states
 
+#### Reactive Pattern Testing
+- Custom reactive pattern checker script
+- Biome for code quality and formatting
+- Unit tests verify no direct DOM manipulation
+- Integration tests check reactive data flow
+- Automated checks for forbidden patterns in CI/CD
+- Pre-commit hooks to prevent non-reactive code
+
+Example test:
+```typescript
+test('component uses only reactive patterns', () => {
+  const component = new TestComponent();
+  const controller = new TestController(component);
+  
+  // Verify no direct DOM manipulation
+  expect(component.querySelector).not.toHaveBeenCalled();
+  expect(component.addEventListener).not.toHaveBeenCalled();
+  
+  // Verify state-driven updates
+  controller.send('UPDATE');
+  expect(component.getAttribute('data-state')).toBe('updated');
+});
+```
+
 ## Key Principles
+
+### Reactive First
+- **All UI updates must be state-driven** - No direct DOM manipulation
+- **All events must go through state machines** - No imperative event handlers
+- **All async operations must be managed** - No untracked timers or promises
+- **All components must be purely reactive** - State in, UI out
+- **Refer to [Reactive Patterns Audit](./REACTIVE_PATTERNS_AUDIT.md)** for implementation details
 
 ### 5 Levels of Market Awareness (Home Page Focus)
 1. **Problem Unaware**: Hero section with problem introduction
@@ -706,6 +806,7 @@ Since we're building a SPA, we need to ensure SEO isn't compromised:
 - [Accessibility & UX Guide](./ACCESSIBILITY_UX_GUIDE.md)
 - [SPA Trade-off Mitigation](./SPA_TRADEOFF_MITIGATION.md)
 - [Actor-SPA Framework Architecture](./ACTOR_SPA_FRAMEWORK.md)
+- **[Reactive Patterns Audit](./REACTIVE_PATTERNS_AUDIT.md)** - CRITICAL: Must read before implementation
 
 ### Tools & Libraries
 - **XState v5** - State management
@@ -765,6 +866,9 @@ Since we're building a SPA, we need to ensure SEO isn't compromised:
 - [ ] Unit tests written
 - [ ] Documentation complete
 - [ ] Accessibility tested
+- [ ] **All reactive patterns followed (no ESLint errors)**
+- [ ] **No direct DOM manipulation**
+- [ ] **All events through state machine**
 
 ### For Each Page
 - [ ] Semantic HTML structure
@@ -790,6 +894,8 @@ Since we're building a SPA, we need to ensure SEO isn't compromised:
 - [ ] Design patterns reviewed
 - [ ] Accessibility guidelines clear
 - [ ] Performance budgets agreed
+- [ ] **Reactive patterns audit reviewed and understood**
+- [ ] **Biome configuration and reactive pattern checker set up**
 
 ### Environment Setup
 - [ ] VS Code with recommended extensions

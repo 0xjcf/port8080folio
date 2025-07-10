@@ -1,10 +1,10 @@
+import { JSXLexer } from './jsx-lexer.js';
+import { JSXParser } from './jsx-parser.js';
 // TypeScript version of Main Tokenizer - coordinates lexer, parser, and renderer
 import { Lexer } from './lexer.js';
-import { JSXLexer } from './jsx-lexer.js'; 
-import { XStateLexer } from './xstate-lexer.js';
 import { Parser } from './parser.js';
-import { JSXParser } from './jsx-parser.js';
 import { Renderer } from './renderer.js';
+import { XStateLexer } from './xstate-lexer.js';
 
 interface LexerOptions {
   language?: string;
@@ -76,7 +76,7 @@ export class Tokenizer {
       lexerOptions: { language: 'javascript' },
       parserOptions: { buildAST: true },
       rendererOptions: { theme: 'port8080' },
-      ...config
+      ...config,
     };
   }
 
@@ -138,29 +138,29 @@ export class Tokenizer {
     if (language === 'jsx' || language === 'tsx') {
       // Use JSX lexer for React components
       return new JSXLexer(code, options);
-    } else if (language === 'xstate') {
-      // Use XState lexer for state machines  
-      return new XStateLexer(code, options);
-    } else {
-      // Use base lexer for JavaScript/TypeScript
-      return new Lexer(code, options);
     }
+    if (language === 'xstate') {
+      // Use XState lexer for state machines
+      return new XStateLexer(code, options);
+    }
+    // Use base lexer for JavaScript/TypeScript
+    return new Lexer(code, options);
   }
 
   /**
    * Create parser instance - now properly typed
    */
   private createParser(tokens: Token[]): Parser | JSXParser {
-    const language = this.config.parserOptions?.language || this.lexer?.getLanguage() || 'javascript';
+    const language =
+      this.config.parserOptions?.language || this.lexer?.getLanguage() || 'javascript';
     const options = { ...this.config.parserOptions, language };
 
     if (language === 'jsx' || language === 'tsx') {
       // Use JSX parser for React components
       return new JSXParser(tokens, options);
-    } else {
-      // Use base parser for JavaScript/TypeScript
-      return new Parser(tokens, options);
     }
+    // Use base parser for JavaScript/TypeScript
+    return new Parser(tokens, options);
   }
 
   /**
@@ -233,4 +233,4 @@ export class Tokenizer {
 export { Lexer, Parser, Renderer };
 
 // Export the Tokenizer class as default
-export default Tokenizer; 
+export default Tokenizer;

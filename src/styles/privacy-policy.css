@@ -15,14 +15,14 @@
   color: var(--heading-color);
 }
 
-.privacy-container p, 
-.privacy-container ul, 
+.privacy-container p,
+.privacy-container ul,
 .privacy-container ol {
   margin-bottom: 1rem;
   line-height: 1.6;
 }
 
-.privacy-container ul, 
+.privacy-container ul,
 .privacy-container ol {
   padding-left: 2rem;
 }
@@ -45,7 +45,7 @@
   margin-top: 2rem;
   padding: 0.75rem 1.5rem;
   background: var(--jasper);
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   text-decoration: none;
   border-radius: 4px;
   font-weight: 500;
@@ -63,4 +63,4 @@
   color: var(--teagreen);
   margin-top: 3rem;
   font-size: 0.9rem;
-} 
+}

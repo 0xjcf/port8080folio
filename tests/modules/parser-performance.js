@@ -1,41 +1,39 @@
-import { extractHighlightedContent, createTestContainer, validateHighlighting, waitForHighlighting } from './test-helper.js';
-
 export class PerformanceParser {
-    constructor() {
-        this.testCases = [
-            {
-                name: 'Small Code Block',
-                size: 'small',
-                code: `
+  constructor() {
+    this.testCases = [
+      {
+        name: 'Small Code Block',
+        size: 'small',
+        code: `
 const greeting = 'Hello World';
 function sayHello(name) {
     return \`\${greeting}, \${name}!\`;
 }
 console.log(sayHello('Claude'));
-                `.trim()
-            },
-            {
-                name: 'Medium Code Block',
-                size: 'medium',
-                code: this.generateMediumCodeBlock()
-            },
-            {
-                name: 'Large Code Block',
-                size: 'large', 
-                code: this.generateLargeCodeBlock()
-            },
-            {
-                name: 'Complex XState Machine',
-                size: 'complex',
-                code: this.generateComplexXStateMachine()
-            }
-        ];
-        
-        this.benchmarkResults = {};
-    }
+                `.trim(),
+      },
+      {
+        name: 'Medium Code Block',
+        size: 'medium',
+        code: this.generateMediumCodeBlock(),
+      },
+      {
+        name: 'Large Code Block',
+        size: 'large',
+        code: this.generateLargeCodeBlock(),
+      },
+      {
+        name: 'Complex XState Machine',
+        size: 'complex',
+        code: this.generateComplexXStateMachine(),
+      },
+    ];
 
-    generateMediumCodeBlock() {
-        return `
+    this.benchmarkResults = {};
+  }
+
+  generateMediumCodeBlock() {
+    return `
 import { createMachine, assign, spawn } from 'xstate';
 import { sendParent } from 'xstate/lib/actions';
 
@@ -218,10 +216,10 @@ const authMachine = createMachine({
 
 export default authMachine;
         `.trim();
-    }
+  }
 
-    generateLargeCodeBlock() {
-        return `
+  generateLargeCodeBlock() {
+    return `
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { createMachine, assign, spawn, interpret } from 'xstate';
 import { useMachine } from '@xstate/react';
@@ -655,10 +653,10 @@ const ShoppingCart = () => {
 
 export default ShoppingCart;
         `.trim();
-    }
+  }
 
-    generateComplexXStateMachine() {
-        return `
+  generateComplexXStateMachine() {
+    return `
 import { createMachine, assign, spawn, interpret } from 'xstate';
 import { sendParent, pure, choose } from 'xstate/lib/actions';
 
@@ -1061,292 +1059,294 @@ const homeMachine = createMachine({
 
 export { deviceMachine, roomMachine, homeMachine };
         `.trim();
+  }
+
+  async runTests() {
+    const results = [];
+    const performanceData = {
+      times: [],
+      avgTime: 0,
+      minTime: Number.POSITIVE_INFINITY,
+      maxTime: 0,
+      totalTests: 0,
+    };
+
+    for (const testCase of this.testCases) {
+      const testResult = await this.runSingleTest(testCase);
+      results.push(testResult);
+
+      // Collect performance data
+      if (testResult.performance) {
+        performanceData.times.push(...testResult.performance.times);
+        performanceData.totalTests += testResult.performance.iterations;
+      }
     }
 
-    async runTests() {
-        const results = [];
-        const performanceData = {
-            times: [],
-            avgTime: 0,
-            minTime: Infinity,
-            maxTime: 0,
-            totalTests: 0
-        };
-        
-        for (const testCase of this.testCases) {
-            const testResult = await this.runSingleTest(testCase);
-            results.push(testResult);
-            
-            // Collect performance data
-            if (testResult.performance) {
-                performanceData.times.push(...testResult.performance.times);
-                performanceData.totalTests += testResult.performance.iterations;
-            }
-        }
-
-        // Calculate overall performance metrics
-        if (performanceData.times.length > 0) {
-            performanceData.avgTime = (performanceData.times.reduce((a, b) => a + b, 0) / performanceData.times.length).toFixed(2);
-            performanceData.minTime = Math.min(...performanceData.times).toFixed(2);
-            performanceData.maxTime = Math.max(...performanceData.times).toFixed(2);
-        }
-
-        const allPassed = results.every(result => result.passed);
-        
-        return {
-            status: allPassed ? 'pass' : 'fail',
-            tests: results,
-            performance: performanceData,
-            summary: {
-                total: results.length,
-                passed: results.filter(r => r.passed).length,
-                failed: results.filter(r => !r.passed).length
-            }
-        };
+    // Calculate overall performance metrics
+    if (performanceData.times.length > 0) {
+      performanceData.avgTime = (
+        performanceData.times.reduce((a, b) => a + b, 0) / performanceData.times.length
+      ).toFixed(2);
+      performanceData.minTime = Math.min(...performanceData.times).toFixed(2);
+      performanceData.maxTime = Math.max(...performanceData.times).toFixed(2);
     }
 
-    async runSingleTest(testCase) {
-        try {
-            const benchmarks = await this.benchmarkAllHighlighters(testCase.code, testCase.size);
-            
-            const validations = [
-                this.validatePerformance(benchmarks, testCase.size),
-                this.validateMemoryUsage(benchmarks),
-                this.validateOutputConsistency(benchmarks)
-            ];
+    const allPassed = results.every((result) => result.passed);
 
-            const passed = validations.every(v => v.passed);
-            
-            return {
-                name: testCase.name,
-                passed,
-                output: this.generatePerformanceHTML(benchmarks),
-                performance: benchmarks.summary,
-                validations: validations.filter(v => !v.passed)
-            };
-        } catch (error) {
-            return {
-                name: testCase.name,
-                passed: false,
-                error: error.message
-            };
-        }
+    return {
+      status: allPassed ? 'pass' : 'fail',
+      tests: results,
+      performance: performanceData,
+      summary: {
+        total: results.length,
+        passed: results.filter((r) => r.passed).length,
+        failed: results.filter((r) => !r.passed).length,
+      },
+    };
+  }
+
+  async runSingleTest(testCase) {
+    try {
+      const benchmarks = await this.benchmarkAllHighlighters(testCase.code, testCase.size);
+
+      const validations = [
+        this.validatePerformance(benchmarks, testCase.size),
+        this.validateMemoryUsage(benchmarks),
+        this.validateOutputConsistency(benchmarks),
+      ];
+
+      const passed = validations.every((v) => v.passed);
+
+      return {
+        name: testCase.name,
+        passed,
+        output: this.generatePerformanceHTML(benchmarks),
+        performance: benchmarks.summary,
+        validations: validations.filter((v) => !v.passed),
+      };
+    } catch (error) {
+      return {
+        name: testCase.name,
+        passed: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async benchmarkAllHighlighters(code, _size) {
+    const results = {
+      original: await this.benchmarkHighlighter('original', code),
+      v2: await this.benchmarkHighlighter('v2', code),
+      simple: await this.benchmarkHighlighter('simple', code),
+    };
+
+    // Calculate summary statistics
+    const allTimes = Object.values(results).flatMap((r) => r.times);
+    const summary = {
+      times: allTimes,
+      avgTime: (allTimes.reduce((a, b) => a + b, 0) / allTimes.length).toFixed(2),
+      minTime: Math.min(...allTimes).toFixed(2),
+      maxTime: Math.max(...allTimes).toFixed(2),
+      iterations: Object.values(results)[0].iterations,
+      codeSize: code.length,
+    };
+
+    return { ...results, summary };
+  }
+
+  async benchmarkHighlighter(type, code) {
+    const iterations = this.getIterationsForSize(code.length);
+    const times = [];
+    let memoryBefore;
+    let memoryAfter;
+
+    for (let i = 0; i < iterations; i++) {
+      // Measure memory before
+      if (performance.memory) {
+        memoryBefore = performance.memory.usedJSHeapSize;
+      }
+
+      const startTime = performance.now();
+
+      try {
+        await this.runHighlighter(type, code);
+      } catch (_error) {
+        times.push(Number.POSITIVE_INFINITY); // Mark as failed
+        continue;
+      }
+
+      const endTime = performance.now();
+      times.push(endTime - startTime);
+
+      // Measure memory after
+      if (performance.memory) {
+        memoryAfter = performance.memory.usedJSHeapSize;
+      }
+
+      // Force garbage collection if available (for more accurate memory measurements)
+      if (window.gc) {
+        window.gc();
+      }
     }
 
-    async benchmarkAllHighlighters(code, size) {
-        const results = {
-            original: await this.benchmarkHighlighter('original', code),
-            v2: await this.benchmarkHighlighter('v2', code),
-            simple: await this.benchmarkHighlighter('simple', code)
-        };
+    return {
+      type,
+      times,
+      avgTime: (times.reduce((a, b) => a + b, 0) / times.length).toFixed(2),
+      minTime: Math.min(...times).toFixed(2),
+      maxTime: Math.max(...times).toFixed(2),
+      iterations,
+      memoryDelta: memoryAfter && memoryBefore ? memoryAfter - memoryBefore : null,
+    };
+  }
 
-        // Calculate summary statistics
-        const allTimes = Object.values(results).flatMap(r => r.times);
-        const summary = {
-            times: allTimes,
-            avgTime: (allTimes.reduce((a, b) => a + b, 0) / allTimes.length).toFixed(2),
-            minTime: Math.min(...allTimes).toFixed(2),
-            maxTime: Math.max(...allTimes).toFixed(2),
-            iterations: Object.values(results)[0].iterations,
-            codeSize: code.length
-        };
-
-        return { ...results, summary };
+  async runHighlighter(type, code) {
+    // Wait for highlighters to be loaded
+    if (window.highlightersLoaded) {
+      await window.highlightersLoaded;
     }
 
-    async benchmarkHighlighter(type, code) {
-        const iterations = this.getIterationsForSize(code.length);
-        const times = [];
-        let memoryBefore, memoryAfter;
+    let element;
 
-        for (let i = 0; i < iterations; i++) {
-            // Measure memory before
-            if (performance.memory) {
-                memoryBefore = performance.memory.usedJSHeapSize;
-            }
-
-            const startTime = performance.now();
-            
-            try {
-                await this.runHighlighter(type, code);
-            } catch (error) {
-                console.error(`Error in ${type} highlighter:`, error);
-                times.push(Infinity); // Mark as failed
-                continue;
-            }
-            
-            const endTime = performance.now();
-            times.push(endTime - startTime);
-
-            // Measure memory after
-            if (performance.memory) {
-                memoryAfter = performance.memory.usedJSHeapSize;
-            }
-
-            // Force garbage collection if available (for more accurate memory measurements)
-            if (window.gc) {
-                window.gc();
-            }
-        }
-
-        return {
-            type,
-            times,
-            avgTime: (times.reduce((a, b) => a + b, 0) / times.length).toFixed(2),
-            minTime: Math.min(...times).toFixed(2),
-            maxTime: Math.max(...times).toFixed(2),
-            iterations,
-            memoryDelta: memoryAfter && memoryBefore ? memoryAfter - memoryBefore : null
-        };
+    switch (type) {
+      case 'original':
+        element = document.createElement('syntax-highlighter');
+        break;
+      case 'v2':
+        element = document.createElement('syntax-highlighter-v2');
+        break;
+      case 'simple':
+        element = document.createElement('code-highlight');
+        break;
+      default:
+        throw new Error(`Unknown highlighter type: ${type}`);
     }
 
-    async runHighlighter(type, code) {
-        // Wait for highlighters to be loaded
-        if (window.highlightersLoaded) {
-            await window.highlightersLoaded;
-        }
-        
-        let element;
-        
-        switch (type) {
-            case 'original':
-                element = document.createElement('syntax-highlighter');
-                break;
-            case 'v2':
-                element = document.createElement('syntax-highlighter-v2');
-                break;
-            case 'simple':
-                element = document.createElement('code-highlight');
-                break;
-            default:
-                throw new Error(`Unknown highlighter type: ${type}`);
-        }
+    element.textContent = code;
+    document.body.appendChild(element);
 
-        element.textContent = code;
-        document.body.appendChild(element);
-        
-        // Wait for highlighting to complete
-        await new Promise(resolve => setTimeout(resolve, 10));
-        
-        document.body.removeChild(element);
-        return element.innerHTML;
-    }
+    // Wait for highlighting to complete
+    await new Promise((resolve) => setTimeout(resolve, 10));
 
-    getIterationsForSize(codeLength) {
-        if (codeLength < 1000) return 10;       // Small code
-        if (codeLength < 5000) return 5;        // Medium code
-        if (codeLength < 20000) return 3;       // Large code
-        return 1;                               // Very large code
-    }
+    document.body.removeChild(element);
+    return element.innerHTML;
+  }
 
-    validatePerformance(benchmarks, size) {
-        const checks = [];
-        const performanceThresholds = {
-            small: 50,   // 50ms max for small code
-            medium: 200, // 200ms max for medium code
-            large: 1000, // 1s max for large code
-            complex: 2000 // 2s max for complex code
-        };
+  getIterationsForSize(codeLength) {
+    if (codeLength < 1000) return 10; // Small code
+    if (codeLength < 5000) return 5; // Medium code
+    if (codeLength < 20000) return 3; // Large code
+    return 1; // Very large code
+  }
 
-        const threshold = performanceThresholds[size] || 1000;
+  validatePerformance(benchmarks, size) {
+    const checks = [];
+    const performanceThresholds = {
+      small: 50, // 50ms max for small code
+      medium: 200, // 200ms max for medium code
+      large: 1000, // 1s max for large code
+      complex: 2000, // 2s max for complex code
+    };
 
-        Object.entries(benchmarks).forEach(([type, result]) => {
-            if (type === 'summary') return;
-            
-            if (result.avgTime > threshold) {
-                checks.push({
-                    type,
-                    avgTime: result.avgTime,
-                    threshold,
-                    issue: `Average time (${result.avgTime}ms) exceeds threshold (${threshold}ms)`
-                });
-            }
+    const threshold = performanceThresholds[size] || 1000;
 
-            // Check for outliers (times much slower than average)
-            const avgTime = parseFloat(result.avgTime);
-            const outliers = result.times.filter(time => time > avgTime * 3);
-            if (outliers.length > 0) {
-                checks.push({
-                    type,
-                    outliers: outliers.length,
-                    issue: `${outliers.length} performance outliers detected`
-                });
-            }
+    Object.entries(benchmarks).forEach(([type, result]) => {
+      if (type === 'summary') return;
+
+      if (result.avgTime > threshold) {
+        checks.push({
+          type,
+          avgTime: result.avgTime,
+          threshold,
+          issue: `Average time (${result.avgTime}ms) exceeds threshold (${threshold}ms)`,
         });
+      }
 
-        return {
-            name: 'Performance Validation',
-            passed: checks.length === 0,
-            issues: checks
-        };
-    }
-
-    validateMemoryUsage(benchmarks) {
-        const checks = [];
-        const memoryThreshold = 1024 * 1024; // 1MB
-
-        Object.entries(benchmarks).forEach(([type, result]) => {
-            if (type === 'summary' || !result.memoryDelta) return;
-            
-            if (result.memoryDelta > memoryThreshold) {
-                checks.push({
-                    type,
-                    memoryDelta: result.memoryDelta,
-                    threshold: memoryThreshold,
-                    issue: `Memory usage (${(result.memoryDelta / 1024 / 1024).toFixed(2)}MB) exceeds threshold`
-                });
-            }
+      // Check for outliers (times much slower than average)
+      const avgTime = Number.parseFloat(result.avgTime);
+      const outliers = result.times.filter((time) => time > avgTime * 3);
+      if (outliers.length > 0) {
+        checks.push({
+          type,
+          outliers: outliers.length,
+          issue: `${outliers.length} performance outliers detected`,
         });
+      }
+    });
 
-        return {
-            name: 'Memory Usage Validation',
-            passed: checks.length === 0,
-            issues: checks
-        };
-    }
+    return {
+      name: 'Performance Validation',
+      passed: checks.length === 0,
+      issues: checks,
+    };
+  }
 
-    validateOutputConsistency(benchmarks) {
-        const checks = [];
-        
-        // All highlighters should produce some output
-        Object.entries(benchmarks).forEach(([type, result]) => {
-            if (type === 'summary') return;
-            
-            if (result.times.includes(Infinity)) {
-                checks.push({
-                    type,
-                    issue: 'Highlighter failed to produce output'
-                });
-            }
+  validateMemoryUsage(benchmarks) {
+    const checks = [];
+    const memoryThreshold = 1024 * 1024; // 1MB
+
+    Object.entries(benchmarks).forEach(([type, result]) => {
+      if (type === 'summary' || !result.memoryDelta) return;
+
+      if (result.memoryDelta > memoryThreshold) {
+        checks.push({
+          type,
+          memoryDelta: result.memoryDelta,
+          threshold: memoryThreshold,
+          issue: `Memory usage (${(result.memoryDelta / 1024 / 1024).toFixed(2)}MB) exceeds threshold`,
         });
+      }
+    });
 
-        return {
-            name: 'Output Consistency',
-            passed: checks.length === 0,
-            issues: checks
-        };
-    }
+    return {
+      name: 'Memory Usage Validation',
+      passed: checks.length === 0,
+      issues: checks,
+    };
+  }
 
-    generatePerformanceHTML(benchmarks) {
-        const chartData = Object.entries(benchmarks)
-            .filter(([type]) => type !== 'summary')
-            .map(([type, result]) => ({
-                type,
-                avgTime: parseFloat(result.avgTime),
-                minTime: parseFloat(result.minTime),
-                maxTime: parseFloat(result.maxTime)
-            }));
+  validateOutputConsistency(benchmarks) {
+    const checks = [];
 
-        // For performance, show the benchmark data in each column
-        return `
+    // All highlighters should produce some output
+    Object.entries(benchmarks).forEach(([type, result]) => {
+      if (type === 'summary') return;
+
+      if (result.times.includes(Number.POSITIVE_INFINITY)) {
+        checks.push({
+          type,
+          issue: 'Highlighter failed to produce output',
+        });
+      }
+    });
+
+    return {
+      name: 'Output Consistency',
+      passed: checks.length === 0,
+      issues: checks,
+    };
+  }
+
+  generatePerformanceHTML(benchmarks) {
+    const chartData = Object.entries(benchmarks)
+      .filter(([type]) => type !== 'summary')
+      .map(([type, result]) => ({
+        type,
+        avgTime: Number.parseFloat(result.avgTime),
+        minTime: Number.parseFloat(result.minTime),
+        maxTime: Number.parseFloat(result.maxTime),
+      }));
+
+    // For performance, show the benchmark data in each column
+    return `
             <div class="highlighter-output">
                 <div style="padding: 15px; text-align: center;">
                     <h5 style="margin: 0 0 10px 0; color: #0ea5e9;">ORIGINAL</h5>
                     <div style="font-size: 28px; font-weight: 600; color: #4ade80; margin-bottom: 5px;">
-                        ${chartData.find(d => d.type === 'original')?.avgTime || 'N/A'}ms
+                        ${chartData.find((d) => d.type === 'original')?.avgTime || 'N/A'}ms
                     </div>
                     <div style="font-size: 12px; color: #888;">
-                        ${chartData.find(d => d.type === 'original')?.minTime || 'N/A'}ms - ${chartData.find(d => d.type === 'original')?.maxTime || 'N/A'}ms
+                        ${chartData.find((d) => d.type === 'original')?.minTime || 'N/A'}ms - ${chartData.find((d) => d.type === 'original')?.maxTime || 'N/A'}ms
                     </div>
                 </div>
             </div>
@@ -1354,10 +1354,10 @@ export { deviceMachine, roomMachine, homeMachine };
                 <div style="padding: 15px; text-align: center;">
                     <h5 style="margin: 0 0 10px 0; color: #0ea5e9;">V2</h5>
                     <div style="font-size: 28px; font-weight: 600; color: #4ade80; margin-bottom: 5px;">
-                        ${chartData.find(d => d.type === 'v2')?.avgTime || 'N/A'}ms
+                        ${chartData.find((d) => d.type === 'v2')?.avgTime || 'N/A'}ms
                     </div>
                     <div style="font-size: 12px; color: #888;">
-                        ${chartData.find(d => d.type === 'v2')?.minTime || 'N/A'}ms - ${chartData.find(d => d.type === 'v2')?.maxTime || 'N/A'}ms
+                        ${chartData.find((d) => d.type === 'v2')?.minTime || 'N/A'}ms - ${chartData.find((d) => d.type === 'v2')?.maxTime || 'N/A'}ms
                     </div>
                 </div>
             </div>
@@ -1365,13 +1365,13 @@ export { deviceMachine, roomMachine, homeMachine };
                 <div style="padding: 15px; text-align: center;">
                     <h5 style="margin: 0 0 10px 0; color: #0ea5e9;">SIMPLE</h5>
                     <div style="font-size: 28px; font-weight: 600; color: #4ade80; margin-bottom: 5px;">
-                        ${chartData.find(d => d.type === 'simple')?.avgTime || 'N/A'}ms
+                        ${chartData.find((d) => d.type === 'simple')?.avgTime || 'N/A'}ms
                     </div>
                     <div style="font-size: 12px; color: #888;">
-                        ${chartData.find(d => d.type === 'simple')?.minTime || 'N/A'}ms - ${chartData.find(d => d.type === 'simple')?.maxTime || 'N/A'}ms
+                        ${chartData.find((d) => d.type === 'simple')?.minTime || 'N/A'}ms - ${chartData.find((d) => d.type === 'simple')?.maxTime || 'N/A'}ms
                     </div>
                 </div>
             </div>
         `;
-    }
+  }
 }
