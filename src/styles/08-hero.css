@@ -1,0 +1,726 @@
+/* ========================================
+   Hero Section Styles
+   Heavy-metal gradient background with animated orbs
+   ======================================== */
+
+/* Tailwind color matches (static) */
+:root {
+  /* Background gradient: zinc-950 → neutral-900 → black */
+  --zinc-950: #09090b;
+  --neutral-900: #171717;
+  --black: #000000;
+
+  /* Reds & Oranges from mock */
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+  --red-800: #991b1b;
+  --red-900: #7f1d1d;
+  --red-950: #450a0a;
+  --red-500: #ef4444;
+  --red-400: #f87171;
+
+  --orange-600: #ea580c;
+  --orange-700: #c2410c;
+  --orange-400: #fb923c;
+
+  /* Neutrals */
+  --zinc-900: #18181b;
+  --zinc-700: #3f3f46;
+  --zinc-600: #52525b;
+  --zinc-500: #71717a;
+  --zinc-400: #a1a1aa;
+  --zinc-300: #d4d4d8;
+  --white: #ffffff;
+}
+
+/* Hero container - now uses unified canvas */
+.hero {
+  position: relative;
+  isolation: isolate; /* make the hero its own stacking context */
+  z-index: 0; /* keep the whole hero context behind following sections */
+  min-height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Remove background - using unified canvas from section class */
+}
+
+/* Hero content wrapper */
+.hero__content {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  padding: 112px 24px 80px; /* pt-28 pb-20 at mobile */
+  max-width: 1060px; /* max-w-[1060px] for comfortable reading width */
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .hero__content {
+    padding: 128px 24px 112px; /* md:pt-32 md:pb-28 */
+  }
+}
+
+/* Background gradient - removed, using unified canvas */
+/* .bg-grad - removed in favor of unified theme */
+
+/* Animated orbs (red/orange with metallic feel) */
+.glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(64px);
+  opacity: 0.18; /* baseline; individual layers tweak below */
+  z-index: 1;
+}
+
+.glow-left {
+  top: 128px;
+  right: 128px;
+  width: 384px;
+  height: 384px;
+  background-image: linear-gradient(
+    to right,
+    oklab(0.577 0.217662 0.112464 / 0.2) 0%,
+    oklab(0.646 0.16725 0.145984 / 0.2) 100%
+  );
+  animation: orbA 12s ease-in-out infinite;
+  opacity: 0.225; /* from snippet */
+}
+
+.glow-right {
+  bottom: 160px;
+  left: 80px;
+  width: 320px;
+  height: 320px;
+  background-image: linear-gradient(
+    to right,
+    oklab(0.646 0.16725 0.145984 / 0.15) 0%,
+    oklab(0.577 0.217662 0.112464 / 0.15) 100%
+  );
+  animation: orbB 15s ease-in-out infinite 2s;
+  opacity: 0.122; /* from snippet */
+}
+
+@keyframes orbA {
+  0% {
+    opacity: 0.15;
+    transform: translateX(-50px) scale(0.8);
+  }
+  33% {
+    opacity: 0.3;
+    transform: translateX(50px) scale(1.2);
+  }
+  66% {
+    opacity: 0.15;
+    transform: translateX(-25px) scale(0.9);
+  }
+  100% {
+    opacity: 0.15;
+    transform: translateX(-50px) scale(0.8);
+  }
+}
+
+@keyframes orbB {
+  0% {
+    opacity: 0.12;
+    transform: translateY(80px) scale(0.6);
+  }
+  33% {
+    opacity: 0.25;
+    transform: translateY(-60px) scale(1.1);
+  }
+  66% {
+    opacity: 0.12;
+    transform: translateY(100px) scale(0.7);
+  }
+  100% {
+    opacity: 0.12;
+    transform: translateY(80px) scale(0.6);
+  }
+}
+
+/* Metallic grid - scoped to hero to avoid collision with layout .grid */
+.hero__grid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  /* Ultra-faint grid with screen blend */
+  background-image:
+    linear-gradient(rgba(239, 68, 68, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(239, 68, 68, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mix-blend-mode: screen;
+  opacity: 0.5; /* Combined with mix-blend for ultra-faint effect */
+}
+
+/* Additional metallic overlay with warm center glow */
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    radial-gradient(1200px 600px at 50% 30%, rgba(255, 110, 60, 0.1), transparent 60%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  pointer-events: none;
+}
+
+/* Badge */
+.badge {
+  display: inline-block;
+  padding: 4px 12px; /* py-1 px-3 - slimmer */
+  background: rgba(255, 255, 255, 0.07); /* bg-white/7 */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* border-white/10 */
+  border-radius: 999px;
+  font-size: 11px; /* smaller text */
+  font-weight: 500;
+  letter-spacing: 0.05em; /* tracking-wide */
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9); /* text-white/90 */
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
+  margin-bottom: 20px;
+}
+
+/* Name */
+.name {
+  margin: 0 0 2rem;
+  /* Match exact computed values from mock */
+  font-size: 96px;
+  line-height: 120px; /* 96 * 1.25 = 120 */
+  letter-spacing: -0.02em; /* tracking-tight */
+  font-weight: 600; /* semibold for lighter feel */
+  text-shadow: none;
+}
+
+.name .first {
+  color: var(--white);
+  font-weight: 600; /* semibold */
+  /* drop-shadow-2xl from the mock */
+  filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));
+  display: inline;
+}
+
+/* Apply gradient to FLORES text */
+.name .gradient {
+  /* Red to orange to red gradient - using token for consistency */
+  background-image: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600; /* semibold */
+  letter-spacing: inherit; /* don't override H1 tracking */
+  filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));
+  display: inline;
+}
+/* subtle inner/outer glow to match the mock's dimensional "FLORES" */
+/* Commented out - may be interfering with gradient color
+.name .gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 60% at 55% 45%, rgba(234,88,12,.10), transparent 60%),
+    linear-gradient( to bottom, rgba(0,0,0,.18), transparent 40% );
+  -webkit-mask: linear-gradient(#000 0 0) text;
+          mask: linear-gradient(#000 0 0) text;
+}
+*/
+
+/* Value proposition / Subtitle */
+.subtitle {
+  color: oklch(0.871 0.006 286.286); /* text-zinc-300 */
+  font-size: 24px; /* exact computed value */
+  line-height: 32px; /* leading-8 for tighter spacing */
+  font-weight: 300; /* font-light */
+  margin: 0.5rem auto;
+  max-width: 48rem; /* max-w-3xl for better readability */
+}
+/* hairline rule under the first line (present in the mock) */
+.subtitle:first-of-type {
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* White emphasis within subtitle */
+.subtitle .strong {
+  color: rgb(255, 255, 255);
+  font-weight: 500;
+  display: inline;
+}
+
+/* When subtitle itself has .strong class */
+.subtitle.strong {
+  color: rgb(255, 255, 255);
+  font-weight: 600; /* semibold for emphasis */
+  margin-top: 0.5rem;
+}
+
+/* Divider */
+.divider {
+  /* Hero-only: render the em-dash character, not the global 1px rule */
+  margin: 0.75rem auto;
+  color: #9ca3af;
+  opacity: 0.7;
+  font-size: 1.1rem;
+  line-height: 1;
+  height: auto !important;
+  background: none !important;
+  border: 0 !important;
+}
+
+/* CTAs */
+.cta-row {
+  margin-top: 32px; /* mt-8 */
+  margin-bottom: 48px;
+  display: flex;
+  gap: 12px; /* gap-3 */
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* gap-2 */
+  padding: 12px 20px; /* py-3 px-5 */
+  border-radius: 12px; /* rounded-xl */
+  text-decoration: none;
+  font-weight: 500; /* font-medium */
+  font-size: 16px;
+  line-height: 24px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: auto;
+}
+
+.arrow {
+  width: 20px;
+  height: 20px;
+}
+
+/* Button inner span wrapper */
+.btn span {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  color: rgb(255, 255, 255); /* Ensure pure white text */
+  /* Calm resting gradient, not neon */
+  background: linear-gradient(
+    90deg,
+    oklch(0.67 0.23 28) 0%,
+    oklch(0.72 0.22 48) 50%,
+    oklch(0.67 0.23 28) 100%
+  );
+  border: 1px solid transparent;
+  box-shadow: 0 8px 24px rgba(255, 100, 60, 0.2);
+  overflow: hidden;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  color: rgb(255, 255, 255); /* Keep text white on hover */
+  transform: translateY(-0.5px);
+  box-shadow:
+    inset 0 0 0 9999px rgba(255, 255, 255, 0.04),
+    0 10px 28px rgba(255, 100, 60, 0.28);
+}
+
+.btn-primary:active {
+  transform: translateY(0.5px);
+}
+
+.btn-primary:focus-visible {
+  outline: none;
+  box-shadow:
+    0 8px 24px rgba(255, 100, 60, 0.2),
+    0 0 0 2px rgba(255, 255, 255, 0.7),
+    0 0 0 4px rgba(0, 0, 0, 1);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Sheen effect for primary button */
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    oklab(0 0 0 / 0) 0%,
+    oklab(0.999994 0.0000455678 0.0000200868 / 0.1) 50%,
+    oklab(0 0 0 / 0) 100%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.6s ease;
+}
+
+.btn-primary:hover::before {
+  transform: translateX(120%);
+}
+
+.btn-secondary {
+  color: rgba(229, 229, 229, 0.95); /* text-neutral-200/95 */
+  background: rgba(255, 255, 255, 0.04); /* bg-white/[.04] */
+  border: 1px solid rgba(255, 255, 255, 0.12); /* border-white/12 */
+  backdrop-filter: blur(8px);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.06); /* bg-white/[.06] */
+  border-color: rgba(255, 255, 255, 0.18); /* border-white/18 */
+  transform: translateY(-0.5px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0.5px);
+}
+
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.7),
+    0 0 0 4px rgba(0, 0, 0, 1);
+}
+
+/* Trust section */
+.hero__trust {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px; /* space-y-6 */
+  margin-top: 48px; /* mt-12 */
+  opacity: 0.7; /* Lower contrast for supporting role */
+}
+
+.hero__trust-label {
+  color: rgba(255, 255, 255, 0.6); /* text-white/60 */
+  font-size: 12px; /* text-xs */
+  font-weight: 400;
+  letter-spacing: 0.1em; /* tracking-wider */
+  line-height: 16px;
+  margin-bottom: 12px; /* mb-3 */
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.hero__trust-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px; /* gap-10 - generous spacing */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  opacity: 0.6; /* Lower opacity for logos */
+}
+
+@media (min-width: 768px) {
+  .hero__trust-logos {
+    gap: 48px; /* md:gap-12 */
+  }
+}
+
+.trust-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space-x-2 */
+  color: rgba(255, 255, 255, 0.7); /* Lighter color */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.8;
+}
+
+.trust-logo:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.trust-logo span {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.trust-logo svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+}
+
+.trust-logo svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Scroll indicator */
+.scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  z-index: 6;
+}
+
+.mouse {
+  width: 24px;
+  height: 40px;
+  border-radius: 999px;
+  border: 2px solid rgba(82, 82, 91, 0.5); /* border-zinc-600/50 */
+  display: flex;
+  justify-content: center;
+}
+
+.dot {
+  width: 4px;
+  height: 12px;
+  border-radius: 999px;
+  background-color: oklab(0.637 0.214213 0.1014 / 0.7); /* bg-red-500/70 */
+  animation: bounce 2s infinite;
+  margin-top: 8px;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(12px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .glow-left {
+    right: 2rem;
+    top: 6rem;
+    width: 18rem;
+    height: 18rem;
+  }
+
+  .glow-right {
+    left: 1rem;
+    bottom: 8rem;
+    width: 16rem;
+    height: 16rem;
+  }
+
+  .name {
+    font-size: clamp(2.25rem, 8vw, 3rem);
+    font-size: var(--h1-mobile, clamp(2.25rem, 8vw, 3rem));
+    line-height: 1.15;
+  }
+
+  .subtitle {
+    font-size: 1.125rem;
+    max-width: 36ch; /* improve readability on narrow screens */
+  }
+
+  .cta-row {
+    flex-direction: column;
+    gap: 12px;
+    width: 90%;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .btn {
+    min-height: 44px; /* ensure 44px tap target */
+  }
+
+  /* Trusted logos: 2-col grid + desaturation until interaction */
+  .hero__trust-logos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 24px;
+  }
+  .trust-logo {
+    justify-content: center;
+    filter: grayscale(35%) opacity(0.85);
+    transition:
+      filter 0.2s ease,
+      transform 0.2s ease;
+  }
+  .trust-logo:hover,
+  .trust-logo:active,
+  .trust-logo:focus-visible {
+    filter: none;
+    opacity: 1;
+  }
+
+  /* Lower orb intensity on small screens */
+  .glow-left,
+  .glow-right {
+    opacity: 0.12;
+  }
+  .vignette {
+    background:
+      radial-gradient(1200px 600px at 50% 30%, rgba(255, 110, 60, 0.08), transparent 60%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  }
+}
+
+/* Ensure no hidden "card" background from other stylesheets */
+#hero,
+#hero .container,
+#hero header {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Rhythm tweaks to match spacing in target */
+.subtitle {
+  max-width: 68ch;
+}
+
+/* Safety: if any global style draws a rule under first subtitle */
+.subtitle + .divider {
+  border-top: 0 !important;
+}
+
+/* Be explicit: only hero's divider becomes the dash */
+#hero .divider {
+  background: none !important;
+  height: auto !important;
+}
+
+/* --- Hero mobile balance pass --- */
+@media (max-width: 640px) {
+  /* Pull content toward center of the viewport */
+  .hero__content {
+    padding-top: 64px; /* was 112px */
+    padding-bottom: 64px; /* was 80px */
+  }
+
+  /* Give the name a calmer, more compact presence */
+  .name {
+    /* keep your clamp but tighten rhythm */
+    line-height: 1.05; /* was 1.15 */
+    letter-spacing: -0.02em; /* keep tight, reinforces brand */
+    margin-bottom: 14px; /* was 2rem via .name margin; reduce */
+  }
+
+  /* Simplify the first subtitle block (no hairline on mobile) */
+  .subtitle:first-of-type {
+    border-bottom: 0;
+    padding-bottom: 0;
+    margin-bottom: 6px;
+  }
+
+  /* Subtitle sizing & measure */
+  .subtitle {
+    font-size: 1.0625rem; /* ~17px, friendlier on narrow screens */
+    line-height: 1.45;
+    max-width: 32ch; /* was 36ch; centers the column */
+  }
+
+  /* CTA stack: clear primary → subdued secondary */
+  .cta-row {
+    gap: 10px;
+    width: 100%;
+    max-width: 340px; /* slightly narrower for balance */
+  }
+  .btn {
+    width: 100%;
+    min-height: 48px; /* comfortable tap target */
+    border-radius: 14px;
+    font-size: 15px;
+  }
+  .btn-primary {
+    box-shadow: 0 8px 22px rgba(255, 100, 60, 0.22);
+  }
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(229, 229, 229, 0.9);
+  }
+
+  /* Reduce ambient noise even more on phones */
+  .glow-left,
+  .glow-right {
+    opacity: 0.1; /* was 0.12 */
+    filter: blur(56px); /* soften the edges slightly */
+  }
+  .hero__grid {
+    opacity: 0.35;
+  } /* lighter grid */
+  .vignette {
+    background:
+      radial-gradient(900px 480px at 50% 32%, rgba(255, 110, 60, 0.06), transparent 58%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.7));
+  }
+
+  /* Trust strip: give breathing room and lower contrast */
+  .hero__trust {
+    margin-top: 40px;
+    opacity: 0.6;
+  }
+  .hero__trust-logos {
+    gap: 14px 18px;
+  }
+  .trust-logo span {
+    font-size: 13px;
+  }
+
+  /* Scroll mouse: nudge down so it doesn’t crowd CTAs */
+  .scroll {
+    bottom: 24px;
+  }
+}
+
+/* Mobile: stack name on two rows and make logos a single scrolling row */
+@media (max-width: 640px) {
+  /* Larger name when stacked */
+  .name {
+    font-size: clamp(2.75rem, 14vw, 4rem);
+  }
+  .name .first,
+  .name .gradient {
+    display: block; /* Force each name to its own row */
+  }
+  .name .first {
+    margin-bottom: 2px;
+  }
+
+  /* Trust: single horizontal row with scroll */
+  .hero__trust-logos {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 14px;
+    padding-bottom: 2px; /* avoid scrollbar overlap on some devices */
+  }
+  .trust-logo {
+    flex: 0 0 auto;
+  }
+}

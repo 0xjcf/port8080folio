@@ -1,0 +1,835 @@
+/* ========================================
+   Services Section Styles
+   Premium Dark Theme - Aligned with Hero/About
+   ======================================== */
+
+/* Services Section Container - now uses unified canvas */
+#services {
+  position: relative;
+  z-index: 1;
+  /* Remove padding - handled by .section class */
+  /* Remove background - using unified canvas */
+  overflow: hidden;
+}
+
+/* Padding handled by .section class */
+
+/* Background Effects - Matching Hero/About */
+#services::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(239, 68, 68, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(239, 68, 68, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mix-blend-mode: screen;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* Micro-noise overlay */
+#services .noise-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='64' height='64' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+}
+
+/* Warm vignette glow */
+#services::after {
+  content: "";
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(251, 146, 60, 0.05) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Content wrapper */
+#services .container {
+  position: relative;
+  z-index: 2;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+/* Section Header */
+.services__header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.services__title {
+  font-size: clamp(3.5rem, 7vw, 5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.25em;
+}
+
+.services__title .text-white {
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));
+  display: inline;
+}
+
+.services__title .gradient {
+  background-image: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600;
+  text-shadow: none;
+  display: inline;
+}
+
+/* Gradient underline divider - matching Hero/About */
+.services__header::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: var(--brand-grad-text);
+  opacity: 0.45; /* Consistent with About section */
+  border-radius: 999px;
+}
+
+/* Subheading */
+.services__subheading {
+  font-size: 18px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 58ch;
+  margin: 0 auto 64px; /* More breathing room before KPI tiles */
+  text-align: center;
+}
+
+/* KPI Tiles Section */
+.services__kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 80px;
+}
+
+@media (max-width: 1024px) {
+  .services__kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .services__kpis {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile refinements for KPIs, cards, and why list */
+@media (max-width: 768px) {
+  .services__kpis {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Provide subtle separation when stacked */
+  .services__kpis .kpi-tile + .kpi-tile {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .service-card {
+    padding: 24px;
+    box-shadow: none; /* reduce elevation on mobile */
+  }
+
+  .services__grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .services__why {
+    padding: 28px 20px;
+  }
+  .why-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .why-list li {
+    width: 100%;
+    padding: 14px 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .kpi-value {
+    font-size: 22px;
+  }
+  .kpi-label {
+    font-size: 11px;
+  }
+}
+
+/* --- Services: mobile UX pass --- */
+@media (max-width: 640px) {
+  /* 1) Shorter header stack */
+  .services__header {
+    margin-bottom: 36px;
+  }
+  .services__title {
+    margin: 0 0 12px 0;
+  }
+  .services__subheading {
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 40ch;
+    margin: 0 auto 28px;
+  }
+
+  /* 2) KPI tiles: two-up (most phones) */
+  .services__kpis {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .kpi-tile {
+    padding: 16px;
+  }
+  .kpi-value {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .kpi-label {
+    font-size: 10px;
+  }
+
+  /* 3) Swipeable cards: horizontal grid with scroll snap */
+  .services__grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 85%;
+    overflow-x: auto;
+    gap: 16px;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .service-card {
+    scroll-snap-align: start;
+    box-shadow: none;
+    padding: 24px;
+  }
+
+  /* 4) Compact contents inside cards */
+  .service-card > p {
+    max-height: 2.4em;
+  } /* ~2 lines */
+  .service-card__metrics {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* 5) Why section condensed */
+  .services__why {
+    margin-top: 40px;
+    padding: 20px;
+  }
+  .services__why h3 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  .why-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .why-list li {
+    padding: 12px 20px;
+    font-size: 13px;
+  }
+
+  /* 6) Soften background effects to reduce visual weight */
+  #services::before {
+    opacity: 0.12;
+  }
+  #services::after {
+    width: 720px;
+    height: 540px;
+    top: 36%;
+  }
+}
+
+/* Very small phones: KPI tiles fall back to 1-column */
+@media (max-width: 360px) {
+  .services__kpis {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Narrow phones: metrics stack to 1 column inside cards */
+@media (max-width: 400px) {
+  .service-card__metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile: ensure Services header matches Hero/About and doesn't overflow */
+@media (max-width: 640px) {
+  .services__title {
+    font-size: clamp(2.25rem, 9.5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    display: block; /* override base flex layout */
+    text-align: center;
+    margin: 0 0 12px 0; /* align with hero/about spacing */
+  }
+  .services__title .text-white,
+  .services__title .gradient {
+    display: block; /* force each word to its own row */
+  }
+}
+
+/* --- Fix: mobile carousel shows a "slim" first card --- */
+/* Hide progress dots by default (desktop/tablet) */
+.services__dots {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  /* One source of truth for the mobile carousel */
+  .services__grid {
+    /* horizontal cards with gutters */
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(92% - 40px); /* equal cards with a slight peek */
+    gap: 16px;
+
+    /* scrolling */
+    overflow-x: auto;
+    padding-inline: 20px; /* create symmetrical gutters */
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 20px; /* ensure card #1 starts fully visible */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  /* each card fills its track and snaps cleanly */
+  .service-card {
+    width: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    box-shadow: none;
+    padding: 24px;
+    transform: scale(0.97);
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease,
+      opacity 200ms ease;
+    opacity: 0.96;
+  }
+  .service-card:focus-within,
+  .service-card:focus-visible {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 16px 32px rgba(255, 100, 60, 0.12);
+  }
+
+  /* Edge fades to hint more content */
+  .services__grid::before,
+  .services__grid::after {
+    content: "";
+    position: sticky;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* Swipe hint indicator (mobile only) */
+@media (max-width: 640px) {
+  /* Progress dots */
+  .services__dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0 12px;
+  }
+  .services__dots .dot {
+    inline-size: 8px;
+    block-size: 8px;
+    min-inline-size: 8px;
+    min-block-size: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.28);
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    animation: none !important; /* override hero .dot bounce */
+  }
+  /* CSS-only active dot via :has(:target) */
+  #services:has(#svc-1:target) .services__dots .dot[href="#svc-1"],
+  #services:has(#svc-2:target) .services__dots .dot[href="#svc-2"],
+  #services:has(#svc-3:target) .services__dots .dot[href="#svc-3"] {
+    background: var(--brand-grad-cta);
+  }
+  /* Default to first dot highlighted when no target */
+  #services:not(:has(.service-card:target)) .services__dots .dot[href="#svc-1"] {
+    background: var(--brand-grad-cta);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services__dots .dot {
+    transition: none;
+  }
+}
+
+/* Remove earlier mobile grid overrides that conflict */
+@media (max-width: 640px) {
+  .services__grid {
+    grid-template-columns: unset;
+  } /* kill 1-col rule */
+}
+
+/* Optional: prevent glow/border clipping at section edge */
+@media (max-width: 640px) {
+  #services {
+    overflow: hidden;
+  }
+}
+
+/* Ensure no explicit column overrides fight the carousel (final override) */
+@media (max-width: 640px) {
+  .services__grid {
+    grid-template-columns: none !important; /* avoid first-card sizing mismatch */
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(92% - 40px); /* equal cards with a slight peek */
+    overflow-x: auto;
+    gap: 16px;
+    padding-inline: 20px;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 20px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+  .service-card {
+    width: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    transform: scale(0.97);
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease,
+      opacity 200ms ease;
+  }
+  .service-card:focus-within,
+  .service-card:focus-visible {
+    transform: scale(1);
+  }
+  .services__grid::before,
+  .services__grid::after {
+    content: "";
+    position: sticky;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .services__grid::before {
+    left: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.75), transparent);
+  }
+  .services__grid::after {
+    right: 0;
+    background: linear-gradient(270deg, rgba(0, 0, 0, 0.75), transparent);
+  }
+}
+
+/* Prevent viewport from panning and showing background when swiping carousel */
+@media (max-width: 640px) {
+  #services {
+    overflow: hidden !important; /* keep section edges tight */
+  }
+  #services .container {
+    overflow: hidden; /* clip internal over-scroll */
+  }
+  .services__grid {
+    overscroll-behavior-x: contain; /* stop page from panning */
+    touch-action: pan-x; /* allow only horizontal within grid */
+  }
+}
+
+.kpi-tile {
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--elev-1); /* Use unified elevation */
+}
+
+/* Gradient top accent - matches service cards */
+.kpi-tile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--brand-grad-cta);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.kpi-tile:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: var(--elev-3); /* Use unified elevation on hover */
+}
+
+.kpi-tile:hover::before {
+  opacity: 1; /* Show gradient accent on hover */
+}
+
+.kpi-tile:focus-visible {
+  outline: 2px solid color-mix(in oklch, oklch(0.704 0.191 22.216) 70%, rgba(255, 255, 255, 0.8));
+  outline-offset: 2px;
+}
+
+.kpi-value {
+  display: block;
+  font-size: clamp(22px, 3vw, 24px);
+  font-weight: 600;
+  background: var(--brand-grad-text); /* Using gradient token */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.kpi-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em; /* Consistent with tags */
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 500;
+  font-variant-caps: small-caps; /* Small caps for consistency */
+}
+
+/* Service Cards Grid */
+.services__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 1024px) {
+  .services__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .services__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Enhanced Service Card */
+.service-card {
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.14); /* Increased from 0.12 */
+  border-radius: 18px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--elev-2); /* Use unified elevation for cards */
+}
+
+/* Gradient top accent */
+.service-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--brand-grad-cta);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.service-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.18); /* Sharper border on hover */
+  box-shadow: var(--elev-3); /* Use unified elevation on hover */
+}
+
+.service-card:hover::before {
+  opacity: 1;
+}
+
+.service-card:focus-visible {
+  outline: 2px solid color-mix(in oklch, oklch(0.704 0.191 22.216) 70%, rgba(255, 255, 255, 0.8));
+  outline-offset: 2px;
+}
+
+/* Icon Chip */
+.service-card__icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Gradient stroke ring */
+.service-card__icon::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 10px;
+  padding: 1px;
+  background: var(--brand-grad-cta);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.6;
+}
+
+.service-card__icon svg {
+  width: 24px;
+  height: 24px;
+  color: oklch(0.75 0.183 55.934);
+  position: relative;
+  z-index: 1;
+}
+
+/* Card Title */
+.service-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: rgb(255, 255, 255);
+  margin: 0 0 12px;
+}
+
+/* Card Description */
+.service-card > p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 20px;
+  max-height: 3.2em; /* Limit to ~2 lines */
+  overflow: hidden;
+}
+
+/* Features List as Metrics */
+.service-card__metrics {
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06); /* Subtle divider */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.metric {
+  min-width: 120px;
+}
+
+.metric-value {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  background: var(--brand-grad-text); /* Gradient for consistency */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  margin-bottom: 4px;
+}
+
+.metric-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em; /* Consistent with tags */
+  color: rgba(255, 255, 255, 0.62);
+  font-variant-caps: small-caps; /* Small caps for system consistency */
+}
+
+/* Legacy features list - hide for now */
+.service-card__features {
+  display: none;
+}
+
+/* Why Work With Me Section */
+.services__why {
+  margin-top: 80px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle glow behind why section */
+.services__why::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(circle, rgba(251, 146, 60, 0.04), transparent 60%);
+  filter: blur(40px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.services__why h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  margin: 0 0 32px;
+  position: relative;
+  z-index: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.why-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.why-list li {
+  padding: 16px 36px 16px 36px; /* Static padding - space for arrow at all times */
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle border */
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  line-height: 1.5;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.2s; /* Specific transitions */
+  position: relative;
+  overflow: hidden;
+}
+
+.why-list li::before {
+  content: "→";
+  position: absolute;
+  left: 12px;
+  color: oklch(0.75 0.183 55.934);
+  font-weight: bold;
+  opacity: 0;
+  transform: translateX(-8px); /* Slightly less movement needed */
+  transition:
+    opacity 0.2s,
+    transform 0.2s; /* Smooth arrow animation */
+}
+
+.why-list li:hover {
+  /* No padding change - text stays stable */
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1); /* Brightened border */
+  transform: translateY(-2px); /* Subtle lift */
+}
+
+.why-list li:hover::before {
+  opacity: 1;
+  transform: translateX(0); /* Arrow slides into place */
+}
+
+/* Focus states for accessibility */
+.kpi-tile:focus-visible,
+.service-card:focus-visible,
+.why-list li:focus-visible {
+  outline: 2px solid color-mix(in oklch, oklch(0.704 0.191 22.216) 70%, rgba(255, 255, 255, 0.8));
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .services__title {
+    font-size: clamp(2.5rem, 10vw, 3.5rem);
+  }
+
+  .services__kpis {
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  .services__grid {
+    gap: 20px;
+  }
+
+  .service-card {
+    padding: 24px;
+  }
+
+  .services__why {
+    padding: 32px 24px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .kpi-tile,
+  .service-card,
+  .why-list li {
+    transition: none;
+  }
+
+  .service-card:hover,
+  .kpi-tile:hover {
+    transform: none;
+  }
+}

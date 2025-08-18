@@ -1,0 +1,56 @@
+{
+  "name": "Actor-SPA CSS Template Injection",
+  "scopeName": "actor-spa.css.injection",
+  "injectionSelector": "L:source.ts -comment -string, L:source.js -comment -string, L:source.tsx -comment -string, L:source.jsx -comment -string",
+  "patterns": [
+    {
+      "name": "string.template.css.tagged",
+      "contentName": "meta.embedded.block.css",
+      "begin": "(\\b(?:css)\\s*)(`)",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.tagged-template.css"
+        },
+        "2": {
+          "name": "punctuation.definition.string.template.begin.js"
+        }
+      },
+      "end": "`",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.template.end.js"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#template-substitution-element"
+        },
+        {
+          "include": "source.css"
+        }
+      ]
+    }
+  ],
+  "repository": {
+    "template-substitution-element": {
+      "name": "meta.template.expression.ts",
+      "begin": "\\$\\{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.template-expression.begin.ts"
+        }
+      },
+      "end": "\\}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.template-expression.end.ts"
+        }
+      },
+      "patterns": [
+        {
+          "include": "source.ts"
+        }
+      ]
+    }
+  }
+}

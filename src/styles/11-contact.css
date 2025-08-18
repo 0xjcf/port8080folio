@@ -1,0 +1,362 @@
+/* ========================================
+   Contact Section Styles
+   Premium Dark Theme - Aligned with Hero/About/Services
+   ======================================== */
+
+/* Contact Section Container - chapter break design */
+#contact {
+  position: relative;
+  z-index: 1;
+  isolation: isolate; /* Contain blend modes & z-index locally */
+  /* Padding handled by .section class */
+  overflow: hidden;
+  /* Chapter gradient (mirrors #about) */
+  background: linear-gradient(
+    to bottom right,
+    oklch(0.141 0.005 285.823) /* zinc-950 */,
+    oklch(0.205 0 0) /* neutral-900 */,
+    rgb(0, 0, 0) /* black */
+  );
+}
+
+/* Background Effects - Grid overlay */
+#contact::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(239, 68, 68, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(239, 68, 68, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mix-blend-mode: screen;
+  opacity: 0.18; /* match About chapter */
+  pointer-events: none;
+}
+
+/* Micro-noise overlay to reduce banding (like ABOUT) */
+#contact::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.03; /* match About micro-noise */
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='64' height='64' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+}
+
+/* Warm spotlight behind CTAs – keep but lighten now that card is gone */
+.contact__spotlight {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 110, 60, 0.045) 0%,
+    rgba(249, 115, 22, 0.03) 35%,
+    transparent 60%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Contact layout now mirrors About: no glass card, just content on the chapter bg */
+#contact .container {
+  position: relative;
+  z-index: 2;
+  max-width: 1060px; /* match About container width */
+  margin: 0 auto;
+  padding: 56px 24px 64px; /* section padding only */
+  text-align: left; /* body copy aligns like About */
+  background: transparent; /* remove glass card */
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  #contact .container {
+    padding: 32px 16px 40px;
+    margin: 0 auto;
+    max-width: 720px;
+  }
+}
+
+/* Section Title */
+.contact__title {
+  font-size: clamp(2.5rem, 6vw, 5rem); /* scale closer to About's headline */
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 40px 0;
+  position: relative;
+  text-align: center; /* title centered like About */
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.25em;
+}
+
+.contact__title .text-white {
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  display: inline;
+}
+
+.contact__title .gradient {
+  background-image: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600;
+  display: inline;
+}
+
+/* Gradient divider - matching system */
+.contact__title::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--brand-grad-text);
+  opacity: 0.45;
+}
+
+/* Lede paragraph matches About intro */
+.contact__supporting {
+  font-size: 18px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 58ch;
+  margin: 0 auto 40px;
+  text-align: left; /* body copy aligns like About */
+}
+
+/* CTA Actions Container */
+.contact__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+/* Base button styles - extending existing */
+.contact__actions .button {
+  min-width: 220px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Primary button - gradient fill */
+.contact__actions .button--primary {
+  background: var(--brand-grad-cta);
+  color: rgb(255, 255, 255);
+  border: 1px solid transparent;
+  box-shadow: 0 8px 24px rgba(255, 100, 60, 0.2);
+}
+
+.contact__actions .button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 0 0 9999px rgba(255, 255, 255, 0.04),
+    0 10px 28px rgba(255, 100, 60, 0.28);
+}
+
+/* Secondary button - glass with gradient stroke */
+.contact__actions .button--secondary {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding-right: 36px; /* Reserve space for arrow so text never shifts */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient stroke effect */
+.contact__actions .button--secondary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: var(--brand-grad-cta);
+  opacity: 0.4;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.contact__actions .button--secondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
+}
+
+.contact__actions .button--secondary:hover::after {
+  opacity: 0.6;
+}
+
+/* Arrow animation for secondary button */
+.button--secondary .arrow {
+  display: inline-block;
+  width: 1em; /* Reserve width for arrow glyph */
+  transform: translateX(0);
+  transition: transform 0.2s ease;
+}
+
+.button--secondary:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Focus states */
+.contact__actions .button:focus-visible {
+  outline: 2px solid color-mix(in oklch, oklch(0.704 0.191 22.216) 70%, rgba(255, 255, 255, 0.8));
+  outline-offset: 3px;
+}
+
+/* Info block becomes simple text rows (no card) like About's metadata */
+.contact__info {
+  margin: 28px auto 0;
+  max-width: 58ch;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Info rows with dividers */
+.contact__info p {
+  margin: 0;
+  padding: 12px 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  line-height: 1.6;
+  position: relative;
+  text-align: left;
+}
+
+.contact__info p + p {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 16px;
+  margin-top: 4px;
+}
+
+/* Email label chip - semantic span */
+.contact__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.78);
+  font-weight: 500;
+  font-variant-caps: small-caps;
+}
+
+/* Email link */
+.contact__info a {
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+  transition: all 0.2s;
+}
+
+.contact__info a:hover {
+  color: rgb(255, 255, 255);
+  border-bottom-color: rgba(239, 68, 68, 0.6);
+}
+
+.contact__info a:focus-visible {
+  outline: 2px solid color-mix(in oklch, oklch(0.704 0.191 22.216) 70%, rgba(255, 255, 255, 0.8));
+  outline-offset: 3px;
+  border-bottom-color: transparent; /* Avoid double emphasis */
+}
+
+/* Availability highlight */
+.contact__availability {
+  color: oklch(0.85 0.12 70); /* Soft amber */
+  font-weight: 600;
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(251, 146, 60, 0.08);
+  border-radius: 6px;
+  margin-left: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .contact__actions {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .contact__actions .button {
+    width: 100%;
+    min-height: 44px; /* ensure tap target */
+  }
+
+  .contact__info {
+    padding: 0;
+    backdrop-filter: blur(6px); /* Reduce GPU cost on mobile */
+    -webkit-backdrop-filter: blur(6px);
+    margin: 24px auto 0; /* tighter rhythm */
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .contact__actions .button,
+  .button--secondary .arrow {
+    transition: none;
+  }
+
+  .contact__actions .button:hover {
+    transform: none;
+  }
+
+  .button--secondary:hover .arrow {
+    transform: none;
+  }
+}

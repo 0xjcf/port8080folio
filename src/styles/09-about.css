@@ -1,0 +1,673 @@
+/* ========================================
+   About Section Styles
+   Cohesive with Hero - Premium Dark Theme
+   ======================================== */
+
+/* About Section Container */
+#about {
+  position: relative;
+  z-index: 1; /* ensure this section paints above the hero context */
+  padding: 96px 24px; /* Slightly more generous base padding */
+  background: linear-gradient(
+    to bottom right,
+    oklch(0.141 0.005 285.823) /* zinc-950 */,
+    oklch(0.205 0 0) /* neutral-900 */,
+    rgb(0, 0, 0) /* black */
+  );
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  #about {
+    padding: 128px 24px; /* Match hero's inner padding for rhythm parity */
+  }
+}
+
+/* Background Effects - Matching Hero */
+#about::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(239, 68, 68, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(239, 68, 68, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mix-blend-mode: screen;
+  opacity: 0.18; /* Match Hero's ultra-faint grid */
+  pointer-events: none;
+}
+
+/* Micro-noise overlay to reduce banding */
+#about .noise-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='64' height='64' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+}
+
+/* Soft radial glow behind content */
+#about::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255, 110, 60, 0.06) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Localized warm vignette behind headshot */
+.about__current::before {
+  content: "";
+  position: absolute;
+  left: 90px; /* Center on avatar */
+  top: 90px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(251, 146, 60, 0.04),
+    rgba(239, 68, 68, 0.02),
+    transparent 70%
+  );
+  filter: blur(40px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Content wrapper */
+#about .container {
+  position: relative;
+  z-index: 2;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+/* Section Title */
+.about__header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+/* Optional subtle gradient underline */
+.about__header::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: var(--brand-grad-text); /* Use token instead of hardcoded */
+  opacity: 0.45; /* Reduced from 0.6 for subtler effect */
+  border-radius: 999px;
+}
+
+.about__title {
+  font-size: clamp(3.5rem, 7vw, 5rem); /* Proportionally smaller than Hero's 96px */
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 40px 0; /* Add proper spacing below */
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.25em; /* Tightened from 0.3em for better visual rhythm */
+}
+
+.about__title .text-white {
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15)); /* Match Hero */
+  display: inline;
+}
+
+/* Higher specificity to override dark theme h2 rule */
+body.dark-theme .about__title .gradient,
+.about__title .gradient {
+  background-image: var(--brand-grad-text); /* Use token for consistency */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent; /* Ensures gradient shows */
+  color: transparent; /* Override inherited color */
+  font-weight: 600;
+  text-shadow: none; /* Remove inherited text-shadow */
+  display: inline;
+}
+
+/* Body Copy */
+.about__intro {
+  font-size: 18px;
+  line-height: 1.75; /* Optimized for readability */
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 58ch; /* Premium readability width */
+  margin: 0 auto 48px;
+  text-align: left; /* Left-aligned for better readability */
+}
+
+.about__intro p {
+  margin: 0 0 20px; /* More spacing between paragraphs */
+  color: inherit; /* Keep the softer tone from parent container */
+}
+
+.about__intro p:last-child {
+  margin-bottom: 0;
+}
+
+.about__intro li {
+  color: inherit; /* Keep consistent with paragraph tone */
+}
+
+.about__intro strong {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.about__intro .highlight {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  /* Brand-tinted underline using color-mix for restrained accent */
+  border-bottom: 1px solid
+    color-mix(in oklch, oklch(0.704 0.191 22.216) 40%, rgba(255, 255, 255, 0.8));
+  transition: border-color 0.2s;
+}
+
+.about__intro .highlight:hover {
+  border-color: color-mix(in oklch, oklch(0.75 0.183 55.934) 60%, rgba(255, 255, 255, 0.8));
+}
+
+/* Headshot & Role Block - Side by side layout */
+.about__current {
+  display: grid;
+  grid-template-columns: 180px 1fr; /* Fixed width for avatar, flex for content */
+  align-items: start; /* Align top of headshot with first paragraph */
+  gap: 48px;
+  margin-bottom: 60px;
+  position: relative;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Headshot Container - Glowing Card */
+.about__avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 20, 0.95),
+    rgba(127, 29, 29, 0.08),
+    rgba(234, 88, 12, 0.05)
+  );
+  padding: 2px; /* Space for glow border */
+  box-shadow: 0 22px 38px rgba(255, 100, 60, 0.12); /* Softer, unified glow */
+}
+
+/* Outer glow frame */
+.about__avatar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: var(--brand-grad-cta); /* Use token for consistency */
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5; /* Reduced from 0.6 for calmer effect */
+  transition: opacity 0.3s ease;
+}
+
+/* Glow effect behind avatar */
+.about__avatar::after {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  border-radius: 16px;
+  background: radial-gradient(
+    circle,
+    rgba(239, 68, 68, 0.15),
+    rgba(251, 146, 60, 0.1),
+    transparent 60%
+  );
+  z-index: -1;
+  opacity: 0.7;
+  filter: blur(16px); /* Reduced from 20px for less neon effect */
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
+.about__avatar:hover::before {
+  opacity: 0.8;
+}
+
+.about__avatar:hover::after {
+  animation-duration: 2s;
+}
+
+/* Motion-safe tilt effect on hover */
+@media (prefers-reduced-motion: no-preference) {
+  .about__avatar {
+    transition: transform 0.3s ease;
+  }
+
+  .about__avatar:hover {
+    transform: perspective(600px) rotateY(-2deg) rotateX(1deg);
+  }
+}
+
+.about__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px; /* Slightly less than container for border effect */
+  display: block;
+}
+
+/* Optional decorative pins */
+.about__avatar .pin {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, oklch(0.67 0.23 28), oklch(0.72 0.22 48));
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  opacity: 0.8;
+}
+
+.about__avatar .pin.top-left {
+  top: 8px;
+  left: 8px;
+}
+
+.about__avatar .pin.bottom-right {
+  bottom: 8px;
+  right: 8px;
+}
+
+.about__current-content h3 {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 8px;
+}
+
+.about__current-content p {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+/* Specific styling for roles metadata paragraph - replaces inline styles */
+.about__roles-meta {
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Role Highlights with Accent Colors - Moderate saturation */
+.role-primary {
+  background: var(--brand-grad-cta); /* Use unified token */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.role-green {
+  color: var(--role-green); /* Use token */
+}
+
+.role-yellow {
+  color: var(--role-yellow); /* Use token */
+}
+
+.role-purple {
+  color: var(--role-purple); /* Use token */
+}
+
+.about__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.tag {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.07); /* Translucent pill */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.9);
+  transition: all 0.2s;
+}
+
+.tag:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.14); /* Increased from 0.15 for better contrast */
+  transform: translateY(-0.5px); /* Very subtle lift */
+}
+
+.tag:focus-visible {
+  outline: 2px solid rgba(239, 68, 68, 0.5);
+  outline-offset: 2px;
+}
+
+/* Focus-visible for accessibility */
+.tag:focus-visible,
+.about__avatar:focus-visible {
+  outline: 2px solid rgba(239, 68, 68, 0.5);
+  outline-offset: 2px;
+}
+
+/* Removed highlight cards - now in Services section as service cards */
+
+/* Responsive title sizing */
+@media (max-width: 768px) {
+  .about__title {
+    font-size: clamp(2.5rem, 10vw, 3.5rem); /* Scale down on mobile */
+    gap: 0.2em;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .about__current {
+    grid-template-columns: 1fr; /* Stack on mobile */
+    text-align: left;
+    gap: 32px;
+  }
+
+  .about__avatar {
+    width: 96px;
+    height: 96px;
+    margin: 24px auto;
+  }
+
+  .about__tags {
+    justify-content: flex-start;
+  }
+
+  .about__intro {
+    text-align: left; /* Left align for readability */
+    max-width: 34ch;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+
+  /* Adjust vignette position for mobile */
+  .about__current::before {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 90px;
+  }
+
+  .about__current-content p {
+    margin-bottom: 14px;
+  }
+  .about__roles-meta {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .role-green,
+  .role-yellow,
+  .role-purple {
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+/* Removed achievements section - now in Services section as KPI tiles */
+
+@media (max-width: 480px) {
+  .about__intro {
+    max-width: 32ch;
+  }
+}
+
+/* --- About mobile balance pass --- */
+@media (max-width: 640px) {
+  /* Match hero's lighter vertical rhythm */
+  #about {
+    padding: 72px 20px;
+  }
+
+  /* Title: slightly smaller, tighter, less gap below */
+  .about__title {
+    font-size: clamp(2.25rem, 9.5vw, 3rem);
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  /* Remove decorative underline on phones */
+  .about__header::after {
+    display: none;
+  }
+
+  /* Body copy: tighten rhythm & measure */
+  .about__intro {
+    font-size: 1.0625rem; /* ~17px */
+    line-height: 1.7;
+    max-width: 33ch; /* keep a tidy column */
+    margin-bottom: 40px;
+  }
+  .about__intro p {
+    margin-bottom: 16px;
+  }
+
+  /* Calm the highlight style (less noisy than a full border) */
+  .about__intro .highlight {
+    border-bottom: 0;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  /* Avatar block: smaller, quieter glow, less gap */
+  .about__current {
+    gap: 24px;
+    margin-bottom: 44px;
+  }
+  .about__avatar {
+    width: 88px;
+    height: 88px;
+    margin: 16px auto 16px;
+    box-shadow: 0 16px 28px rgba(255, 100, 60, 0.1);
+  }
+  .about__avatar::before {
+    opacity: 0.38;
+  }
+  .about__avatar::after {
+    opacity: 0.55;
+    filter: blur(14px);
+  }
+
+  /* Tags: friendlier tap targets */
+  .tag {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  /* Background effects: reduce ambient noise */
+  #about::before {
+    opacity: 0.12;
+  } /* faint grid */
+  #about .noise-overlay {
+    opacity: 0.02;
+  }
+
+  /* Reorder: place avatar block right below title on mobile */
+  #about .container {
+    display: flex;
+    flex-direction: column;
+  }
+  .about__header {
+    order: 0;
+  }
+  .about__current {
+    order: 1;
+  }
+  .about__intro {
+    order: 2;
+  }
+
+  /* Center the avatar under the title; keep content readable */
+  .about__current {
+    text-align: left;
+  }
+  .about__avatar {
+    align-self: center;
+  }
+
+  /* Preserve desktop accent colors on mobile */
+  .role-green {
+    color: var(--role-green);
+  }
+  .role-yellow {
+    color: var(--role-yellow);
+  }
+  .role-purple {
+    color: var(--role-purple);
+  }
+}
+
+/* Tablet polish to keep hierarchy with hero */
+@media (min-width: 641px) and (max-width: 768px) {
+  #about {
+    padding-top: 88px;
+    padding-bottom: 88px;
+  }
+  .about__title {
+    margin-bottom: 28px;
+  }
+  .about__current {
+    gap: 32px;
+  }
+}
+
+/* --- About: tighten heading→avatar gap & clean role lines --- */
+@media (max-width: 640px) {
+  /* Less space under the section header */
+  .about__header {
+    margin-bottom: 22px;
+  } /* was 60px */
+
+  /* Pull the avatar up and keep the “credentials card” compact */
+  .about__current {
+    margin-top: 0;
+    gap: 18px;
+  } /* smaller internal gap */
+  .about__avatar {
+    margin: 8px auto 6px;
+  } /* was ~24px */
+
+  /* Role lines stay on their own rows, but remove stray comma line-breaks */
+  .about__current-content .role-primary,
+  .about__current-content .role-green,
+  .about__current-content .role-yellow,
+  .about__current-content .role-purple {
+    display: block;
+    line-height: 1.18;
+    margin-top: 2px;
+  }
+
+  /* If a comma is present between yellow and purple, hide it on mobile */
+  .about__roles-meta .comma {
+    display: none;
+  }
+}
+
+/* --- About: mobile layout polish (append) --- */
+@media (max-width: 640px) {
+  /* 1) Avatar: slightly larger, softer glow, tighter spacing */
+  .about__avatar {
+    width: 128px;
+    height: 128px;
+    margin: 14px auto 8px;
+    box-shadow: 0 18px 32px rgba(255, 100, 60, 0.14);
+  }
+  .about__avatar::before {
+    opacity: 0.44;
+  }
+  .about__avatar::after {
+    opacity: 0.6;
+    filter: blur(16px);
+  }
+
+  /* 2) Role block: treat as a compact “credentials card” */
+  .about__current {
+    gap: 40px;
+    margin-bottom: 36px;
+    max-width: 36ch;
+  }
+  .about__current-content h3 {
+    margin-bottom: 6px; /* “Currently working as” */
+    letter-spacing: 0.09em;
+  }
+  .about__current-content p {
+    font-size: 1.0625rem; /* ~17px to match hero subtitle size */
+    line-height: 1.45;
+    margin: 8px 0;
+  }
+
+  /* 3) Put the colored phrases on their own lines for clarity */
+  .about__current-content .role-primary,
+  .about__current-content .role-green,
+  .about__current-content .role-yellow,
+  .about__current-content .role-purple {
+    display: block; /* each accent becomes its own row */
+    line-height: 1.18;
+    margin-top: 2px;
+    font-weight: 600;
+  }
+
+  /* Optional: downplay the inline labels that precede colored phrases */
+  .about__current-content .role-label {
+    opacity: 0.85;
+  }
+
+  /* 4) Tags: nudge closer to the role block, friendlier taps */
+  .about__tags {
+    margin-top: 12px;
+    gap: 8px 10px;
+  }
+  .tag {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  /* 5) Intro copy: slightly narrower column for balance */
+  .about__intro {
+    max-width: 33ch;
+    margin-top: 8px;
+  }
+}

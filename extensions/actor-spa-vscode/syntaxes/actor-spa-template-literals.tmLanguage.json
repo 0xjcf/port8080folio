@@ -1,0 +1,440 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Actor-SPA Template Literals",
+  "scopeName": "source.actor-spa.template-literals",
+  "injectionSelector": "L:source.ts -comment -string, L:source.js -comment -string, L:source.tsx -comment -string, L:source.jsx -comment -string",
+  "patterns": [
+    {
+      "include": "#html-template-literal"
+    },
+    {
+      "include": "#css-template-literal"
+    }
+  ],
+  "repository": {
+    "html-template-literal": {
+      "name": "string.template.html.actor-spa",
+      "begin": "(\\b(?:html)\\s*)(`)",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.tagged-template.html.actor-spa"
+        },
+        "2": {
+          "name": "punctuation.definition.string.template.begin.js"
+        }
+      },
+      "end": "`",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.template.end.js"
+        }
+      },
+      "contentName": "meta.embedded.block.html",
+      "patterns": [
+        {
+          "include": "#template-substitution"
+        },
+        {
+          "include": "#actor-spa-html-attributes"
+        },
+        {
+          "include": "text.html.basic"
+        }
+      ]
+    },
+    "css-template-literal": {
+      "name": "string.template.css.actor-spa",
+      "begin": "(\\b(?:css)\\s*)(`)",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.tagged-template.css.actor-spa"
+        },
+        "2": {
+          "name": "punctuation.definition.string.template.begin.js"
+        }
+      },
+      "end": "`",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.template.end.js"
+        }
+      },
+      "contentName": "meta.embedded.block.css",
+      "patterns": [
+        {
+          "include": "#template-substitution"
+        },
+        {
+          "include": "source.css"
+        }
+      ]
+    },
+    "template-substitution": {
+      "name": "meta.template.expression.js",
+      "begin": "\\$\\{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.template-expression.begin.js"
+        }
+      },
+      "end": "\\}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.template-expression.end.js"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#expression-content"
+        }
+      ]
+    },
+    "expression-content": {
+      "patterns": [
+        {
+          "comment": "Short circuit with nested template literal",
+          "name": "meta.logical-expression.short-circuit.actor-spa",
+          "begin": "(?=.*&&\\s*html`)",
+          "end": "(?=\\})",
+          "patterns": [
+            {
+              "name": "meta.logical-condition.actor-spa",
+              "begin": "^|(?<=\\{)",
+              "end": "(?=&&)",
+              "patterns": [
+                {
+                  "include": "#state-access-patterns"
+                },
+                {
+                  "include": "source.ts#expression"
+                }
+              ]
+            },
+            {
+              "match": "(&&)",
+              "name": "keyword.operator.logical.and.actor-spa"
+            },
+            {
+              "include": "#nested-html-template"
+            },
+            {
+              "include": "#nested-css-template"
+            },
+            {
+              "include": "source.ts#expression"
+            }
+          ]
+        },
+        {
+          "comment": "Logical OR with nested template literal",
+          "name": "meta.logical-expression.or.actor-spa",
+          "begin": "(?=.*\\|\\|.*html`)",
+          "end": "(?=\\})",
+          "patterns": [
+            {
+              "match": "(\\|\\|)",
+              "name": "keyword.operator.logical.or.actor-spa"
+            },
+            {
+              "include": "#nested-html-template"
+            },
+            {
+              "include": "#nested-css-template"
+            },
+            {
+              "include": "source.ts#expression"
+            }
+          ]
+        },
+        {
+          "comment": "Ternary expression with template literals",
+          "name": "meta.conditional-expression.ternary.actor-spa",
+          "begin": "(?=.*\\?.*html`)",
+          "end": "(?=\\})",
+          "patterns": [
+            {
+              "name": "meta.ternary-condition.actor-spa",
+              "begin": "^|(?<=\\{)",
+              "end": "(?=\\?)",
+              "patterns": [
+                {
+                  "include": "#state-access-patterns"
+                },
+                {
+                  "include": "source.ts#expression"
+                }
+              ]
+            },
+            {
+              "match": "(\\?)",
+              "name": "keyword.operator.ternary.question.actor-spa"
+            },
+            {
+              "name": "meta.ternary-true-branch.actor-spa",
+              "begin": "(?<=\\?)",
+              "end": "(?=:)",
+              "patterns": [
+                {
+                  "include": "#nested-html-template"
+                },
+                {
+                  "include": "#nested-css-template"
+                },
+                {
+                  "include": "source.ts#expression"
+                }
+              ]
+            },
+            {
+              "match": "(:)",
+              "name": "keyword.operator.ternary.colon.actor-spa"
+            },
+            {
+              "name": "meta.ternary-false-branch.actor-spa",
+              "begin": "(?<=:)",
+              "end": "(?=\\})",
+              "patterns": [
+                {
+                  "include": "#nested-html-template"
+                },
+                {
+                  "include": "#nested-css-template"
+                },
+                {
+                  "include": "source.ts#expression"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "comment": "Complex nested logical expressions",
+          "name": "meta.complex-logical-expression.actor-spa",
+          "begin": "(?=\\(.*(?:&&|\\|\\|).*\\).*html`)",
+          "end": "(?=\\})",
+          "patterns": [
+            {
+              "name": "meta.grouped-condition.actor-spa",
+              "begin": "\\(",
+              "end": "\\)",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.group.begin.actor-spa"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.group.end.actor-spa"
+                }
+              },
+              "patterns": [
+                {
+                  "match": "(&&|\\|\\|)",
+                  "name": "keyword.operator.logical.actor-spa"
+                },
+                {
+                  "include": "#state-access-patterns"
+                },
+                {
+                  "include": "source.ts#expression"
+                }
+              ]
+            },
+            {
+              "match": "(&&|\\|\\|)",
+              "name": "keyword.operator.logical.actor-spa"
+            },
+            {
+              "include": "#nested-html-template"
+            },
+            {
+              "include": "#nested-css-template"
+            },
+            {
+              "include": "source.ts#expression"
+            }
+          ]
+        },
+        {
+          "include": "source.ts#expression"
+        },
+        {
+          "include": "#nested-html-template"
+        },
+        {
+          "include": "#nested-css-template"
+        }
+      ]
+    },
+    "state-access-patterns": {
+      "patterns": [
+        {
+          "name": "meta.state-access.matches.actor-spa",
+          "match": "\\b(state)\\.(matches)\\s*\\(\\s*(['\"])([^'\"]*)(\\3)\\s*\\)",
+          "captures": {
+            "1": {
+              "name": "variable.other.object.actor-spa"
+            },
+            "2": {
+              "name": "support.function.state.matches.actor-spa"
+            },
+            "3": {
+              "name": "punctuation.definition.string.begin.js"
+            },
+            "4": {
+              "name": "string.quoted.state-value.actor-spa"
+            },
+            "5": {
+              "name": "punctuation.definition.string.end.js"
+            }
+          }
+        },
+        {
+          "name": "meta.state-access.context.actor-spa",
+          "match": "\\b(state)\\.(context)\\b",
+          "captures": {
+            "1": {
+              "name": "variable.other.object.actor-spa"
+            },
+            "2": {
+              "name": "support.property.state.context.actor-spa"
+            }
+          }
+        },
+        {
+          "name": "meta.state-access.property.actor-spa",
+          "match": "\\b(state)\\.(\\w+)",
+          "captures": {
+            "1": {
+              "name": "variable.other.object.actor-spa"
+            },
+            "2": {
+              "name": "support.property.state.actor-spa"
+            }
+          }
+        }
+      ]
+    },
+    "nested-html-template": {
+      "name": "string.template.html.nested.actor-spa",
+      "begin": "(\\b(?:html)\\s*)(`)",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.tagged-template.html.nested.actor-spa"
+        },
+        "2": {
+          "name": "punctuation.definition.string.template.begin.nested.js"
+        }
+      },
+      "end": "`",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.template.end.nested.js"
+        }
+      },
+      "contentName": "meta.embedded.block.html.nested",
+      "patterns": [
+        {
+          "include": "#template-substitution"
+        },
+        {
+          "include": "#actor-spa-html-attributes"
+        },
+        {
+          "include": "text.html.basic"
+        }
+      ]
+    },
+    "nested-css-template": {
+      "name": "string.template.css.nested.actor-spa",
+      "begin": "(\\b(?:css)\\s*)(`)",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.tagged-template.css.nested.actor-spa"
+        },
+        "2": {
+          "name": "punctuation.definition.string.template.begin.nested.js"
+        }
+      },
+      "end": "`",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.template.end.nested.js"
+        }
+      },
+      "contentName": "meta.embedded.block.css.nested",
+      "patterns": [
+        {
+          "include": "#template-substitution"
+        },
+        {
+          "include": "source.css"
+        }
+      ]
+    },
+    "actor-spa-html-attributes": {
+      "patterns": [
+        {
+          "name": "meta.attribute.actor-spa.send",
+          "match": "\\b(send)(?:(:)(\\w+))?\\s*(=)\\s*([\"'])([^\"']*)(\\5)",
+          "captures": {
+            "1": {
+              "name": "entity.other.attribute-name.actor-spa.send"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.actor-spa"
+            },
+            "3": {
+              "name": "entity.other.attribute-name.actor-spa.event-modifier"
+            },
+            "4": {
+              "name": "punctuation.separator.key-value.html"
+            },
+            "5": {
+              "name": "punctuation.definition.string.begin.html"
+            },
+            "6": {
+              "name": "constant.language.actor-spa.event-name"
+            },
+            "7": {
+              "name": "punctuation.definition.string.end.html"
+            }
+          }
+        },
+        {
+          "name": "meta.attribute.actor-spa.payload",
+          "match": "\\b(payload)\\s*(=)\\s*([\"'])([^\"']*)(\\3)",
+          "captures": {
+            "1": {
+              "name": "entity.other.attribute-name.actor-spa.payload"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.html"
+            },
+            "3": {
+              "name": "punctuation.definition.string.begin.html"
+            },
+            "4": {
+              "name": "string.quoted.actor-spa.payload-json"
+            },
+            "5": {
+              "name": "punctuation.definition.string.end.html"
+            }
+          }
+        },
+        {
+          "name": "meta.attribute.actor-spa.state",
+          "match": "\\b(data-state|data-context)\\s*(=)",
+          "captures": {
+            "1": {
+              "name": "entity.other.attribute-name.actor-spa.state"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.html"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

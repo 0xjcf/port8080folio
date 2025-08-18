@@ -22,7 +22,7 @@
     "lint:dev": "biome check *.ts src/ tests/ docs/ intake/ examples/ --diagnostic-level=error",
     "lint:fix": "biome check --write *.ts src/ extensions/*/src/ extensions/*/package.json tests/ docs/ intake/ examples/",
     "lint:fix:dev": "biome check --write *.ts src/ tests/ docs/ intake/ examples/ --diagnostic-level=error",
-    "format": "biome format --write *.ts src/ extensions/*/src/ extensions/*/package.json tests/ docs/ intake/ examples/",
+    "format": "biome format --write *.ts src/",
     "check": "biome check *.ts src/ extensions/*/src/ extensions/*/package.json tests/ docs/ intake/ examples/",
     "check:reactive": "node scripts/check-reactive-patterns.js",
     "check:reactive:ast": "cd extensions/reactive-lint && pnpm run dev",

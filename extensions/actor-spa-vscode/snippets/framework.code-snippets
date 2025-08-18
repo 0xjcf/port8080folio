@@ -1,0 +1,125 @@
+{
+  "Actor-SPA Component": {
+    "prefix": "actor-component",
+    "body": [
+      "import { createComponent, html } from '@framework/core';",
+      "import { createMachine } from 'xstate';",
+      "",
+      "const ${1:componentName}Machine = createMachine({",
+      "  id: '${1:componentName}',",
+      "  initial: 'idle',",
+      "  context: {",
+      "    ${2:// Add context properties}",
+      "  },",
+      "  states: {",
+      "    idle: {",
+      "      on: {",
+      "        ${3:CLICK}: 'active'",
+      "      }",
+      "    },",
+      "    active: {",
+      "      on: {",
+      "        RESET: 'idle'",
+      "      }",
+      "    }",
+      "  }",
+      "});",
+      "",
+      "export const ${1:componentName} = createComponent({",
+      "  machine: ${1:componentName}Machine,",
+      "  template: (state) => html`",
+      "    <div class=\"${1:componentName}\" data-state=\"\\${state.value}\">",
+      "      ${4:<!-- Component content -->}",
+      "      <button send=\"${3:CLICK}\">Click me</button>",
+      "    </div>",
+      "  `",
+      "});",
+      ""
+    ],
+    "description": "Create a new Actor-SPA component with XState machine"
+  },
+  "HTML Template": {
+    "prefix": "html-template",
+    "body": ["html`", "  ${1:<!-- Template content -->}", "`"],
+    "description": "HTML tagged template literal"
+  },
+  "Send Event": {
+    "prefix": "send",
+    "body": ["send=\"${1:EVENT_NAME}\""],
+    "description": "Send event attribute"
+  },
+  "Send Event with Modifier": {
+    "prefix": "send-mod",
+    "body": ["send:${1:click}=\"${2:EVENT_NAME}\""],
+    "description": "Send event with modifier (click, input, change, etc.)"
+  },
+  "Send with Payload": {
+    "prefix": "send-payload",
+    "body": ["send=\"${1:EVENT_NAME}\" payload='${2:{\"key\": \"value\"}}'"],
+    "description": "Send event with payload"
+  },
+  "State Machine": {
+    "prefix": "xstate-machine",
+    "body": [
+      "const ${1:machineName} = createMachine({",
+      "  id: '${1:machineName}',",
+      "  initial: '${2:initial}',",
+      "  context: {",
+      "    ${3:// context properties}",
+      "  },",
+      "  states: {",
+      "    ${2:initial}: {",
+      "      on: {",
+      "        ${4:EVENT}: '${5:nextState}'",
+      "      }",
+      "    },",
+      "    ${5:nextState}: {",
+      "      // state configuration",
+      "    }",
+      "  }",
+      "});"
+    ],
+    "description": "Create XState machine"
+  },
+  "State with Actions": {
+    "prefix": "xstate-actions",
+    "body": [
+      "${1:stateName}: {",
+      "  entry: '${2:entryAction}',",
+      "  exit: '${3:exitAction}',",
+      "  on: {",
+      "    ${4:EVENT}: {",
+      "      target: '${5:nextState}',",
+      "      actions: '${6:actionName}'",
+      "    }",
+      "  }",
+      "}"
+    ],
+    "description": "XState state with actions"
+  },
+  "Conditional Rendering": {
+    "prefix": "html-if",
+    "body": [
+      "\\${state.matches('${1:stateName}') ? html`",
+      "  ${2:<!-- Show when in state -->}",
+      "` : html`",
+      "  ${3:<!-- Show otherwise -->}",
+      "`}"
+    ],
+    "description": "Conditional rendering in template"
+  },
+  "List Rendering": {
+    "prefix": "html-map",
+    "body": [
+      "\\${state.context.${1:items}.map((${2:item}) => html`",
+      "  <li>${3:\\${${2:item}}}</li>",
+      "`)}"
+    ],
+    "description": "Map over array in template"
+  },
+  "Aria Attributes": {
+    "prefix": "aria",
+    "body": ["aria-label=\"${1:Label}\" aria-${2:pressed}=\"\\${state.matches('${3:active}')}\""],
+    "description": "ARIA attributes with state"
+  }
+}
