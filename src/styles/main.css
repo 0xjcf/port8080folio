@@ -3,52 +3,52 @@
    Import all CSS modules in the correct order
    ================================================ */
 
+/* Establish cascade layer order */
+@layer base, tokens, layout, typography, components, sections, utilities, overrides;
+
 /* Layer 2: Visual Design System */
 
 /* 0. Unified Theme - Page canvas and section system */
-@import "./00-unified-theme.css";
+@import "./00-unified-theme.css" layer(base);
 
 /* 1. Reset - Foundation normalization */
-@import "./01-reset.css";
+@import "./01-reset.css" layer(base);
 
 /* 2. Design Tokens - All variables */
-@import "./02-tokens.css";
+@import "./02-tokens.css" layer(tokens);
 
 /* 3. Layout - Grid and structure */
-@import "./03-layout.css";
+@import "./03-layout.css" layer(layout);
 
 /* 4. Typography - Text styles */
-@import "./04-typography.css";
+@import "./04-typography.css" layer(typography);
 
 /* 5. Components - UI elements */
-@import "./05-components.css";
+@import "./05-components.css" layer(components);
 
 /* 6. Utilities - Helper classes */
-@import "./06-utilities.css";
+@import "./06-utilities.css" layer(utilities);
 
 /* 7. Dark Theme - Aggressive black/red/orange theme */
-@import "./07-dark-theme.css";
+@import "./07-dark-theme.css" layer(overrides);
 
 /* 8. Hero Section - Dramatic above-the-fold design */
-@import "./08-hero.css";
+@import "./08-hero.css" layer(sections);
 
 /* 9. About Section - Premium dark theme matching Hero */
-@import "./09-about.css";
+@import "./09-about.css" layer(sections);
 
 /* 10. Services Section - Notable achievements and service cards */
-@import "./10-services.css";
+@import "./10-services.css" layer(sections);
 
 /* 11. Contact Section - CTA and contact info */
-@import "./11-contact.css";
+@import "./11-contact.css" layer(sections);
 
 /* 12. Contact Forms Section - Dual card forms */
-@import "./12-contact-forms.css";
+@import "./12-contact-forms.css" layer(sections);
 
 /* 13. Footer Section - Links and legal info */
-@import "./13-footer.css";
-
-/* 14. Sticky CTA - Mobile call-to-action */
-@import "./14-sticky-cta.css";
+@import "./13-footer.css" layer(sections);
 
 /* ================================================
    Root Styles

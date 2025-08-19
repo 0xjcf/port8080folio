@@ -27,7 +27,7 @@ tmp/
 temp/
 
 # Build outputs (if build process added)
-dist/
+# dist/ - Commented out: we commit dist for GitHub Pages
 build/
 
 # Logs

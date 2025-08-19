@@ -1,0 +1,398 @@
+---
+alwaysApply: true
+---
+# Workflow Rule: Requirements → Design → Task List → Implementation
+
+## Purpose
+Enforce a systematic approach to development through structured planning that ensures clear understanding before implementation. The workflow uses a simple three-document structure: Requirements for scope, Design for architecture, and Task List for execution.
+
+## Project Context
+
+### **XState Challenge Categories** (Development Focus)
+1. **Foundation Challenges** (Weeks 1-8) - Core state machine concepts
+2. **Actor System Challenges** (Weeks 9-16) - Actor model & communication
+3. **Advanced Patterns** (Weeks 17-24) - Complex workflows & integrations
+4. **Real-World Applications** (Weeks 25-32) - Production patterns & performance
+5. **Framework Integration** (Weeks 33-40) - Cross-platform & tooling
+6. **Professional Mastery** (Weeks 41-52) - Advanced topics & portfolio
+
+### **XState Best Practices Requirements**
+- ✅ **Pure State Machines**: Predictable, deterministic state transitions
+- ✅ **Type Safety**: Complete TypeScript integration with XState v5
+- ✅ **Actor Model Patterns**: Proper spawning, communication, supervision
+- ✅ **Testable Design**: Model-based testing and state verification
+- ✅ **Performance Awareness**: Efficient state machines and memory usage
+- ✅ **Zero `any` Types**: Complete TypeScript safety
+- ✅ **Educational Value**: Clear progression and learning objectives
+
+---
+
+## Planning Structure
+
+### **Project Plan** (`project-planning/IN-PROGRESS/[project-name]/`)
+**Purpose**: Complete project planning with requirements, design, and task breakdown
+
+**Plan Components**:
+1. **requirements.md**: Project scope, objectives, and success criteria
+2. **design.md**: Technical architecture and implementation approach
+3. **task-list.md**: Actionable tasks with progress tracking
+4. **layered-development-workflow.md** (optional): For complex multi-layer projects
+
+**Planning Focus**:
+- **Clear Scope Definition**: What needs to be built and why
+- **Technical Architecture**: How it will be built
+- **Task Breakdown**: Step-by-step implementation plan
+- **Progress Tracking**: Current status and completed work
+
+---
+
+## Workflow Process
+
+### **Step 1: Requirements Document**
+Create requirements.md with:
+
+**1.1 Project Overview**
+- **Product/Component Description**: What is being built
+- **Purpose**: Why it's needed
+- **Current State**: Existing functionality (if any)
+
+**1.2 Objectives**
+- **Primary Goals**: Core functionality to deliver
+- **Success Criteria**: Measurable outcomes
+- **User Benefits**: Who benefits and how
+
+**1.3 Scope**
+- **Included Features**: What will be built
+- **Excluded Features**: What won't be built (MVP exclusions)
+- **Dependencies**: Required components or systems
+
+**1.4 Constraints**
+- **Technical**: Platform/framework limitations
+- **Timeline**: Deadlines and milestones
+- **Resources**: Team, budget, tools
+- **Performance**: Speed/size requirements
+
+**1.5 Success Metrics**
+- **Performance Targets**: Specific benchmarks
+- **Quality Gates**: Testing requirements
+- **User Experience**: UX criteria
+
+### **Step 2: Design Document**
+Create design.md with:
+
+**2.1 Architecture Overview**
+- **High-Level Design**: System architecture diagram (Mermaid)
+- **Component Structure**: Module organization
+- **Data Flow**: How information moves through the system
+
+```mermaid
+graph TD
+    A[User Input] --> B[Component]
+    B --> C[State Machine]
+    C --> D[UI Update]
+```
+
+**2.2 Technical Design**
+- **Core Components**: Key modules and their responsibilities
+- **API Design**: Interfaces and contracts
+- **State Management**: XState machines and actors
+- **Styling Approach**: CSS architecture
+
+**2.3 Implementation Details**
+- **Technology Stack**: Languages, frameworks, libraries
+- **Design Patterns**: Architectural patterns used
+- **Performance Strategy**: Optimization approach
+- **Testing Strategy**: Unit, integration, E2E
+
+**2.4 Component Examples**
+- **Code Samples**: Key implementation patterns
+- **Usage Examples**: How components will be used
+- **Configuration**: Setup and options
+
+### **Step 3: Task List**
+Create task-list.md with:
+
+**3.1 Task Organization**
+```markdown
+## Current Sprint Tasks
+
+### ✅ Completed Tasks
+- [x] Task description
+  - [x] Subtask 1
+  - [x] Subtask 2
+
+### 🚧 In Progress
+- [ ] Current task being worked on
+  - [x] Completed subtask
+  - [ ] Remaining subtask
+
+### 📋 Next Priority Tasks
+- [ ] Upcoming task 1
+- [ ] Upcoming task 2
+```
+
+**3.2 Task Structure**
+- **Clear Descriptions**: What needs to be done
+- **Subtasks**: Break down complex tasks
+- **Dependencies**: Prerequisites for each task
+- **Time Estimates**: Optional but helpful
+
+**3.3 Progress Tracking**
+- **Status Indicators**: ✅ Completed, 🚧 In Progress, 📋 Next
+- **Regular Updates**: Keep task list current
+- **Blockers**: Note any impediments
+
+---
+
+## Template Structure
+
+### **requirements.md Template**
+```markdown
+# [Project Name] Requirements
+
+## Project Overview
+**Component**: [Name of component/feature]
+**Purpose**: [Why this is needed]
+**Current State**: [Existing functionality if any]
+
+## Objectives
+- Primary goal 1
+- Primary goal 2
+- Primary goal 3
+
+## Scope
+### Included
+- Feature 1
+- Feature 2
+- Feature 3
+
+### Excluded (MVP)
+- Future feature 1
+- Future feature 2
+
+## Dependencies
+- Required component 1
+- Required system 2
+
+## Constraints
+- **Technical**: [Framework/platform limitations]
+- **Timeline**: [Deadlines]
+- **Resources**: [Team/budget]
+- **Performance**: [Speed/size requirements]
+
+## Success Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
+
+## User Stories (Optional)
+As a [user type], I want [feature] so that [benefit]
+```
+
+### **design.md Template**
+```markdown
+# [Project Name] Design
+
+## Architecture Overview
+[High-level description]
+
+\```mermaid
+graph TD
+    A[Component A] --> B[Component B]
+    B --> C[Component C]
+\```
+
+## Technical Design
+
+### Core Components
+#### Component 1
+- **Purpose**: [What it does]
+- **Responsibilities**: [Key functions]
+- **Interface**: [API/Props]
+
+#### Component 2
+- **Purpose**: [What it does]
+- **Responsibilities**: [Key functions]
+- **Interface**: [API/Props]
+
+### State Management
+[XState machines, actors, or other state approach]
+
+### Data Flow
+1. Step 1: [Description]
+2. Step 2: [Description]
+3. Step 3: [Description]
+
+## Implementation Details
+
+### Technology Stack
+- Language: TypeScript
+- Framework: React
+- State: XState v5
+- Styling: CSS Modules
+- Testing: Vitest
+
+### Component Examples
+\```typescript
+// Example implementation
+interface ComponentProps {
+  // ...
+}
+\```
+
+### API Design
+\```typescript
+// Interface definitions
+\```
+
+## Testing Strategy
+- Unit tests: [Approach]
+- Integration tests: [Approach]
+- Visual tests: [Approach]
+
+## Performance Considerations
+- [Optimization 1]
+- [Optimization 2]
+```
+
+### **task-list.md Template**
+```markdown
+# [Project Name] Task List
+
+## Current Sprint: [Sprint Name/Date]
+
+### ✅ Completed Tasks
+- [x] Set up project structure
+  - [x] Create component directories
+  - [x] Configure TypeScript
+  - [x] Set up testing framework
+
+### 🚧 In Progress
+
+#### Task Group: [Current Focus Area]
+- [ ] **Main Task 1** (2 hours)
+  - [x] Subtask 1
+  - [ ] Subtask 2
+  - [ ] Subtask 3
+
+### 📋 Next Priority Tasks
+
+#### Task Group: [Next Focus Area]
+- [ ] **Task 1**: Description
+- [ ] **Task 2**: Description
+- [ ] **Task 3**: Description
+
+### 🔄 Backlog (Optional)
+- [ ] Future task 1
+- [ ] Future task 2
+
+## Success Metrics
+- [ ] All tests passing
+- [ ] Performance targets met
+- [ ] Zero TypeScript errors
+- [ ] Documentation complete
+
+## Dependencies & Blockers
+- **Blocker**: [Description]
+- **Waiting on**: [External dependency]
+
+## Notes
+- Important consideration 1
+- Important consideration 2
+```
+
+---
+
+## Enforcement Rules
+
+### 1. Sequential Execution
+- **Requirements MUST be complete** before starting design
+- **Design MUST be complete** before creating task list
+- **Task list MUST exist** before starting implementation
+- **Documentation MUST be updated** as tasks complete
+
+### 2. Document Completeness
+- **Requirements**: Clear scope, objectives, and success criteria
+- **Design**: Technical architecture with diagrams
+- **Task List**: Actionable tasks with clear descriptions
+
+### 3. Progress Tracking
+- **Update task list regularly**: Mark completed items
+- **Move tasks between sections**: Completed → In Progress → Next
+- **Note blockers immediately**: Don't let issues linger
+
+### 4. Quality Standards
+- **TypeScript**: Zero `any` types, strict mode
+- **Testing**: Comprehensive test coverage
+- **Documentation**: Clear, up-to-date docs
+- **Performance**: Meet defined targets
+
+---
+
+## Benefits
+
+This workflow ensures:
+
+### **Planning Benefits**
+- **Clear understanding**: Know what and why before how
+- **Reduced rework**: Better design prevents mistakes
+- **Better estimates**: Task breakdown improves accuracy
+- **Traceable decisions**: Documentation explains choices
+
+### **Development Benefits**
+- **Focused implementation**: Clear tasks to complete
+- **Progress visibility**: Always know current status
+- **Reduced scope creep**: Defined boundaries
+- **Better collaboration**: Team knows the plan
+
+### **Quality Benefits**
+- **Consistent architecture**: Design guides implementation
+- **Comprehensive testing**: Planned from the start
+- **Performance targets**: Defined and measured
+- **Maintainable code**: Well-documented decisions
+
+---
+
+## Examples from Current Project
+
+### Website MVP Infrastructure
+Successfully used this workflow to:
+1. Define clear MVP scope (Week 1-2 deliverables)
+2. Design CSS-first architecture with minimal JS
+3. Track progress through organized task lists
+4. Deliver working components incrementally
+
+### Custom State Visualizer
+Applying this workflow to:
+1. Define visualization requirements
+2. Design robust parsing and rendering architecture
+3. Break down into manageable implementation tasks
+4. Track progress through completion
+
+---
+
+## Quick Reference
+
+### When Starting a New Project
+1. Create `project-planning/IN-PROGRESS/[project-name]/` directory
+2. Write `requirements.md` first (scope and objectives)
+3. Design `design.md` second (architecture and approach)
+4. Create `task-list.md` third (actionable tasks)
+5. Begin implementation with clear plan
+6. Update task list as you progress
+7. Archive to `COMPLETED/` when done
+
+### Task List Symbols
+- ✅ **Completed**: Fully done and tested
+- 🚧 **In Progress**: Currently working on
+- 📋 **Next Priority**: Up next
+- 🔄 **Backlog**: Future considerations
+- ⚠️ **Blocked**: Waiting on dependency
+- 🐛 **Bug**: Issue to fix
+
+### Document Quality Checklist
+- [ ] Requirements: Scope clearly defined?
+- [ ] Design: Architecture diagram included?
+- [ ] Task List: Tasks actionable and specific?
+- [ ] Progress: Regular updates happening?
+- [ ] Quality: Tests and docs included?

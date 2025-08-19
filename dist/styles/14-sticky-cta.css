@@ -7,24 +7,28 @@
 .sticky-cta {
   position: fixed;
   left: 50%;
-  transform: translateX(-50%);
   bottom: 16px;
   z-index: 50;
   display: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
   pointer-events: none;
+  /* Use transform for smoother animations and prevent CLS */
+  transform: translateX(-50%) translateY(100px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  /* Ensure it doesn't affect layout */
+  contain: layout style paint;
+  will-change: transform, opacity;
 }
 
 /* Show on mobile after hero scrolls away */
 @media (max-width: 768px) {
-  .sticky-cta {
-    display: block;
-  }
-
   .sticky-cta.visible {
+    display: block;
     opacity: 1;
     pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
   }
 }
 
@@ -32,7 +36,7 @@
 .sticky-cta__button {
   padding: 12px 24px;
   background: var(--brand-grad-cta);
-  color: rgb(255, 255, 255);
+  color: oklch(1 0 0);
   border: none;
   border-radius: 999px;
   font-size: 14px;
@@ -42,9 +46,9 @@
   align-items: center;
   gap: 8px;
   box-shadow:
-    0 4px 16px rgba(255, 100, 60, 0.25),
-    0 1px 3px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+    0 4px 16px oklch(0.75 0.18 55 / 0.25),
+    0 1px 3px oklch(0 0 0 / 0.3);
+  backdrop-filter: blur(var(--backdrop-blur-lg));
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
@@ -52,8 +56,8 @@
 .sticky-cta__button:hover {
   transform: scale(1.05);
   box-shadow:
-    0 6px 20px rgba(255, 100, 60, 0.35),
-    0 2px 4px rgba(0, 0, 0, 0.3);
+    0 6px 20px oklch(0.75 0.18 55 / 0.35),
+    0 2px 4px oklch(0 0 0 / 0.3);
 }
 
 .sticky-cta__button:active {
@@ -73,7 +77,7 @@
 
 /* Focus state */
 .sticky-cta__button:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline: 2px solid oklch(1 0 0 / 0.8);
   outline-offset: 3px;
 }
 
