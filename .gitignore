@@ -13,12 +13,15 @@ Thumbs.db
 *.swp
 *.swo
 *~
+.cursor/
 
-# Dependencies (if any added later)
+# Dependencies
 node_modules/
 npm-debug.log*
+pnpm-lock.yaml
+yarn.lock
 
-# Environment variables (if needed)
+# Environment variables
 .env
 .env.local
 
@@ -26,9 +29,23 @@ npm-debug.log*
 tmp/
 temp/
 
-# Build outputs (if build process added)
-# dist/ - Commented out: we commit dist for GitHub Pages
-build/
+# Build outputs - GitHub Actions will build these
+dist/
+/index.html
+/contact-thanks.html
+/newsletter-*.html
+/styles/
+/scripts/
+/*.css
+/*.webp
+/*.png
+!favicon.ico
+
+# Test files
+performance-test*.html
+lighthouse-test.sh
+web-vitals-test.html
+detect-fouc.js
 
 # Logs
 *.log
