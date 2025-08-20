@@ -39,7 +39,7 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Lint (Biome)
+      - name: Lint & Format Check (Biome)
         run: npm run check:ci
 
       - name: Build site
