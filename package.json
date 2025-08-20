@@ -9,15 +9,21 @@
     "lint": "biome lint --write src/",
     "check": "biome check --write src/",
     "check:ci": "biome check src/",
+    "clean": "rm -rf dist",
+    "copy:html": "cp src/*.html dist/",
+    "copy:assets": "mkdir -p dist/assets && cp -r src/assets/* dist/assets/ 2>/dev/null || true",
+    "copy:scripts": "mkdir -p dist/scripts && cp src/scripts/pe-min-v3.js dist/scripts/ 2>/dev/null || true",
     "build:css": "mkdir -p dist/styles && lightningcss --minify --bundle --targets '>= 0.25%' src/styles/main.css -o dist/styles/main.css",
+    "build:html": "npx html-minifier-terser --input-dir dist --output-dir dist --file-ext html --collapse-whitespace --remove-comments --minify-css true --minify-js true",
+    "build": "npm run clean && mkdir -p dist && npm run copy:html && npm run copy:assets && npm run copy:scripts && npm run build:css && npm run build:html",
     "watch:css": "mkdir -p dist/styles && lightningcss --bundle --targets '>= 0.25%' --watch --sourcemap src/styles/main.css -o dist/styles/main.css",
-    "build": "mkdir -p dist && cp -r src/* dist/ && npm run build:css",
     "test:lighthouse": "lighthouse http://localhost:8080 --output=json,html --output-path=./lighthouse-report --preset=perf --view",
     "test:fouc": "lighthouse http://localhost:8080 --output=json --output-path=./fouc-test --only-categories=performance --throttling.cpuSlowdownMultiplier=6"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",
-    "lightningcss-cli": "^1.30.1"
+    "lightningcss-cli": "^1.30.1",
+    "html-minifier-terser": "^7.2.0"
   },
   "keywords": [
     "portfolio",
