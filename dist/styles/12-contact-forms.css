@@ -13,7 +13,6 @@
   white-space: nowrap;
   clip-path: inset(50%);
 }
-
 /* Contact Forms Section Container - now uses unified canvas */
 #contact-forms {
   position: relative;
@@ -99,11 +98,6 @@
   margin: 0 auto;
 }
 
-/* Tab Navigation Container */
-.form-tabs-container {
-  position: relative;
-}
-
 /* Tab Navigation for Mobile */
 .form-tabs {
   display: none;
@@ -116,7 +110,6 @@
   border: 1px solid oklch(0.985 0 0 / 0.08);
 }
 
-/* Tab labels styled as buttons */
 .form-tab {
   flex: 1;
   padding: 12px 20px;
@@ -134,12 +127,6 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-}
-
-/* Focus styles for keyboard navigation */
-.form-tab:focus-visible {
-  outline: 2px solid oklch(0.704 0.191 22.216);
-  outline-offset: 2px;
 }
 
 .form-tab:hover {
@@ -211,21 +198,13 @@
   opacity: 1;
 }
 
-/* CSS-only panel visibility control */
-/* Keep both panels visible on desktop */
-@media (min-width: 769px) {
-  .forms-grid .form-card {
-    display: block;
-  }
-}
-
 @media (max-width: 768px) {
   /* Show tabs on mobile */
   .form-tabs {
     display: flex;
   }
 
-  /* Stack forms */
+  /* Stack forms and hide inactive one */
   .forms-grid {
     grid-template-columns: 1fr;
     gap: 0;
@@ -237,13 +216,8 @@
     display: none;
   }
 
-  /* Show panel based on radio button selection */
-  #tab-contact:checked ~ .forms-grid #panel-contact {
-    display: block;
-    animation: fadeIn 0.3s ease-in-out;
-  }
-
-  #tab-newsletter:checked ~ .forms-grid #panel-newsletter {
+  /* Show only the active form card */
+  .forms-grid .form-card.active {
     display: block;
     animation: fadeIn 0.3s ease-in-out;
   }
@@ -855,9 +829,8 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
 }
 
 @media (max-width: 480px) {
-  /* Apply flex to visible cards based on radio selection */
-  #tab-contact:checked ~ .forms-grid #panel-contact,
-  #tab-newsletter:checked ~ .forms-grid #panel-newsletter {
+  /* Only apply flex to active cards to maintain tab switching */
+  .forms-grid .form-card.active {
     display: flex;
     flex-direction: column;
     overflow: visible; /* allow sticky child */
