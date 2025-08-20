@@ -1,0 +1,140 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rule: Prefer Explicit Names Over Abbreviations and Acronyms
+
+## Purpose
+To enhance code readability and maintainability by using clear, descriptive, and unambiguous names for variables, functions, classes, types, and other identifiers. Avoid excessive use of abbreviations, acronyms, or overly short names that might obscure meaning, especially for readers unfamiliar with the specific context.
+
+## Rationale
+- **Readability:** Explicit names make code easier to understand at a glance, reducing cognitive load.
+- **Maintainability:** Clear names make it easier for developers (including future self) to modify or debug code without having to decipher cryptic identifiers.
+- **Reduced Ambiguity:** Avoids potential confusion that can arise from abbreviations or acronyms having multiple meanings.
+- **Searchability:** Full words are generally easier to search for within a codebase than abbreviations.
+
+## Guidelines
+
+### Avoid:
+
+1.  **Single-letter variables (except in very localized contexts like loop counters):**
+    ```ts
+    // Bad: What do 'd', 't', 'i' mean outside the loop?
+    function process(d, t) {
+      for (let i = 0; i < d.length; i++) {
+        // ... use d[i] and t ...
+      }
+    }
+
+    // Better:
+    function processData(data: SomeType[], threshold: number) {
+      for (let index = 0; index < data.length; index++) {
+        const item = data[index];
+        // ... use item and threshold ...
+      }
+    }
+    ```
+
+2.  **Uncommon or ambiguous abbreviations/acronyms:**
+    ```ts
+    // Bad: Is 'svc' service? Is 'cfg' config? Not universally clear.
+    const usrSvc = getUserService();
+    const appCfg = loadConfig();
+    let res = await usrSvc.get(id); // Response? Result? Resource?
+
+    // Better:
+    const userService = getUserService();
+    const appConfig = loadConfig();
+    let userResponse = await userService.getUserById(id);
+    ```
+
+3.  **Overly generic names without context:**
+    ```ts
+    // Bad: What kind of item? What kind of data?
+    let item = getItem();
+    let data = process();
+
+    // Better:
+    let selectedProduct = getProductById(productId);
+    let validationResults = validateFormData(formData);
+    ```
+
+4.  **Complex conditions directly within control flow statements:** Placing multi-part boolean expressions directly inside `if`, `while`, or ternary operators can obscure the *intent* of the condition.
+    ```ts
+    // Bad: Less clear intent in the 'if' statement:
+    if (user && user.isActive && user.permissions.includes('admin') && !user.isLocked) {
+      // ... perform admin action ...
+    }
+
+    // Bad: Harder to grasp the condition quickly
+    return (state.matches('loading') || state.matches('submitting'))
+        ? <Spinner />
+        : (state.matches('idle') && state.context.data !== null)
+            ? <DisplayData data={state.context.data} />
+            : <EmptyState />;
+
+    ```
+
+### Prefer:
+
+1.  **Full words that accurately describe the entity:**
+    ```ts
+    // Good: Clear and descriptive
+    const maximumLoginAttempts = 3;
+    const authenticatedUser = getAuthenticatedUser();
+    function calculateTotalPrice(items: CartItem[]): number { /* ... */ }
+    interface UserProfileSettings { /* ... */ }
+    ```
+
+2.  **Contextual clarity:** Names should make sense within their scope.
+    ```ts
+    // Good: `user` is clear within the function scope
+    function displayUserGreeting(user: User) {
+      console.log(`Hello, ${user.name}!`);
+    }
+    ```
+
+3.  **Established domain-specific acronyms (use judiciously):** If an acronym is extremely common and universally understood within the project's domain (e.g., `URL`, `API`, `HTML`, `DB` in specific contexts), it *might* be acceptable, but prefer the full term if there's any doubt.
+    ```ts
+    // Acceptable (if DB is well-understood contextually):
+    const dbConnection = connectToDatabase();
+
+    // Often Better:
+    const databaseConnection = connectToDatabase();
+    ```
+
+4.  **Named boolean variables for complex conditions:** Assign complex boolean logic (involving multiple variables or comparisons) to a well-named constant *before* using it in an `if`, `while`, or ternary statement. This clarifies the *intent* of the condition (see related item in `Avoid`).
+    ```ts
+    // Better: Intent is clear immediately
+    const isEligibleAdmin = user &&
+                             user.isActive &&
+                             user.permissions.includes('admin') &&
+                             !user.isLocked;
+
+    if (isEligibleAdmin) {
+      // ... perform admin action ...
+    }
+
+    // Better: Conditions are clearly named
+    const state = useSelector(someActor, /* ... */);
+    const showLoadingIndicator = state.matches('loading') || state.matches('submitting');
+    const showData = state.matches('idle') && state.context.data !== null;
+
+    if (showLoadingIndicator) {
+        return <Spinner />;
+    } else if (showData) {
+        return <DisplayData data={state.context.data} />;
+    } else {
+        return <EmptyState />;
+    }
+    ```
+
+## Exceptions
+- **Loop counters:** `i`, `j`, `k` are conventional and acceptable for simple loops where the scope is very small.
+- **Mathematical formulas:** Single letters are standard in mathematical notation (e.g., `x`, `y`, `z` for coordinates).
+- **Generated code:** Sometimes generated code might use shorter names; focus on clarity in handwritten code.
+- **Trivially simple conditions:** For conditions involving only a single variable or a very simple comparison (e.g., `if (count > 0)`, `if (user)`) directly using the condition in the `if` statement is acceptable if a named variable adds little clarity. Use judgment based on context.
+
+
+Prioritize clarity and reduce ambiguity. If an abbreviation saves only a few characters but requires a moment of thought to understand, it's usually not worth it.

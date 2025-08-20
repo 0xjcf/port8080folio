@@ -1,0 +1,651 @@
+/* ========================================
+   Hero Section Styles
+   Heavy-metal gradient background with animated orbs
+   ======================================== */
+
+/* Tailwind color matches (static) */
+:root {
+  /* Background gradient: zinc-950 → neutral-900 → black */
+  --zinc-950: oklch(7.5% 0.004 265);
+  --neutral-900: oklch(13.5% 0 0);
+  --black: oklch(0% 0 0);
+
+  /* Reds & Oranges from mock */
+  --red-600: oklch(54.3% 0.225 29);
+  --red-700: oklch(47.4% 0.215 27);
+  --red-800: oklch(42.7% 0.199 27);
+  --red-900: oklch(38.5% 0.17 25);
+  --red-950: oklch(25.4% 0.133 27);
+  --red-500: oklch(63.7% 0.214 16);
+  --red-400: oklch(70.8% 0.181 16);
+
+  --orange-600: oklch(59.7% 0.202 42);
+  --orange-700: oklch(50.8% 0.189 38);
+  --orange-400: oklch(73.5% 0.164 50);
+
+  /* Neutrals */
+  --zinc-900: oklch(14.5% 0.004 265);
+  --zinc-700: oklch(32.4% 0.006 265);
+  --zinc-600: oklch(39.5% 0.007 265);
+  --zinc-500: oklch(52.8% 0.008 265);
+  --zinc-400: oklch(71.1% 0.008 265);
+  --zinc-300: oklch(86.5% 0.005 265);
+  --white: oklch(100% 0 0);
+}
+
+/* Hero container - now uses unified canvas */
+.hero {
+  position: relative;
+  isolation: isolate; /* make the hero its own stacking context */
+  z-index: 0; /* keep the whole hero context behind following sections */
+  min-height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Remove background - using unified canvas from section class */
+}
+
+/* Hero content wrapper */
+.hero__content {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  padding: 112px 24px 80px; /* pt-28 pb-20 at mobile */
+  max-width: 1060px; /* max-w-[1060px] for comfortable reading width */
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .hero__content {
+    padding: 128px 24px 112px; /* md:pt-32 md:pb-28 */
+  }
+}
+
+/* Background gradient - removed, using unified canvas */
+/* .bg-grad - removed in favor of unified theme */
+
+/* Animated orbs (red/orange with metallic feel) */
+.glow {
+  position: absolute;
+  border-radius: 999px;
+  /* Tokenized to allow mobile reduction */
+  filter: blur(var(--hero-glow-blur, 64px));
+  opacity: 0.18; /* baseline; individual layers tweak below */
+  z-index: 1;
+}
+
+.glow-left {
+  top: 128px;
+  right: 128px;
+  width: 384px;
+  height: 384px;
+  background-image: linear-gradient(
+    to right,
+    oklab(0.577 0.217662 0.112464 / 0.2) 0%,
+    oklab(0.646 0.16725 0.145984 / 0.2) 100%
+  );
+  animation: orbA 12s ease-in-out infinite;
+  opacity: 0.225; /* from snippet */
+}
+
+.glow-right {
+  bottom: 160px;
+  left: 80px;
+  width: 320px;
+  height: 320px;
+  background-image: linear-gradient(
+    to right,
+    oklab(0.646 0.16725 0.145984 / 0.15) 0%,
+    oklab(0.577 0.217662 0.112464 / 0.15) 100%
+  );
+  animation: orbB 15s ease-in-out infinite 2s;
+  opacity: 0.122; /* from snippet */
+}
+
+@keyframes orbA {
+  0% {
+    opacity: 0.15;
+    transform: translateX(-50px) scale(0.8);
+  }
+  33% {
+    opacity: 0.3;
+    transform: translateX(50px) scale(1.2);
+  }
+  66% {
+    opacity: 0.15;
+    transform: translateX(-25px) scale(0.9);
+  }
+  100% {
+    opacity: 0.15;
+    transform: translateX(-50px) scale(0.8);
+  }
+}
+
+@keyframes orbB {
+  0% {
+    opacity: 0.12;
+    transform: translateY(80px) scale(0.6);
+  }
+  33% {
+    opacity: 0.25;
+    transform: translateY(-60px) scale(1.1);
+  }
+  66% {
+    opacity: 0.12;
+    transform: translateY(100px) scale(0.7);
+  }
+  100% {
+    opacity: 0.12;
+    transform: translateY(80px) scale(0.6);
+  }
+}
+
+/* Grid overlay removed: handled by unified theme canvas */
+
+/* Additional metallic overlay with warm center glow */
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    radial-gradient(1200px 600px at 50% 30%, oklch(0.75 0.18 55 / 0.1), transparent 60%),
+    linear-gradient(180deg, oklch(0 0 0 / 0.4), oklch(0 0 0 / 0.7));
+  pointer-events: none;
+}
+
+/* Badge */
+.badge {
+  display: inline-block;
+  padding: 4px 12px; /* py-1 px-3 - slimmer */
+  background: oklch(1 0 0 / 0.07); /* bg-white/7 */
+  border: 1px solid oklch(1 0 0 / 0.1); /* border-white/10 */
+  border-radius: 999px;
+  font-size: 11px; /* smaller text */
+  font-weight: 500;
+  letter-spacing: 0.05em; /* tracking-wide */
+  text-transform: uppercase;
+  color: oklch(1 0 0 / 0.9); /* text-white/90 */
+  backdrop-filter: blur(var(--backdrop-blur-md));
+  box-shadow: 0 0 0 1px oklch(1 0 0 / 0.04);
+  margin-bottom: 20px;
+}
+
+/* Name */
+.name {
+  margin: 0 0 2rem;
+  /* Match exact computed values from mock */
+  font-size: 96px;
+  line-height: 120px; /* 96 * 1.25 = 120 */
+  letter-spacing: -0.02em; /* tracking-tight */
+  font-weight: 600; /* semibold for lighter feel */
+  text-shadow: none;
+}
+
+.name .first {
+  color: var(--white);
+  font-weight: 600; /* semibold */
+  /* drop-shadow-2xl from the mock */
+  filter: drop-shadow(0 25px 25px oklch(0 0 0 / 0.15));
+  display: inline;
+}
+
+/* Apply gradient to FLORES text */
+.name .gradient {
+  /* Red to orange to red gradient - using token for consistency */
+  background-image: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600; /* semibold */
+  letter-spacing: inherit; /* don't override H1 tracking */
+  filter: drop-shadow(0 25px 25px oklch(0 0 0 / 0.15));
+  display: inline;
+}
+/* subtle inner/outer glow to match the mock's dimensional "FLORES" */
+/* Commented out - may be interfering with gradient color
+.name .gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 60% at 55% 45%, oklch(0.75 0.18 55 / 0.10), transparent 60%),
+    linear-gradient( to bottom, oklch(0 0 0 / 0.18), transparent 40% );
+  -webkit-mask: linear-gradient(oklch(0 0 0) 0 0) text;
+          mask: linear-gradient(oklch(0 0 0) 0 0) text;
+}
+*/
+
+/* Value proposition / Subtitle */
+.subtitle {
+  color: oklch(0.871 0.006 286.286); /* text-zinc-300 */
+  font-size: 24px; /* exact computed value */
+  line-height: 32px; /* leading-8 for tighter spacing */
+  font-weight: 300; /* font-light */
+  margin: 0.5rem auto;
+  max-width: 48rem; /* max-w-3xl for better readability */
+}
+/* hairline rule under the first line (present in the mock) */
+.subtitle:first-of-type {
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* White emphasis within subtitle */
+.subtitle .strong {
+  color: oklch(100% 0 0);
+  font-weight: 500;
+  display: inline;
+}
+
+/* When subtitle itself has .strong class */
+.subtitle.strong {
+  color: oklch(100% 0 0);
+  font-weight: 600; /* semibold for emphasis */
+  margin-top: 0.5rem;
+}
+
+/* Divider */
+.divider {
+  /* Hero-only: render the em-dash character, not the global 1px rule */
+  margin: 0.75rem auto;
+  color: oklch(70.9% 0.01 247);
+  opacity: 0.7;
+  font-size: 1.1rem;
+  line-height: 1;
+  height: auto;
+  background: none;
+  border: 0;
+}
+
+/* CTAs */
+.cta-row {
+  margin-top: 32px; /* mt-8 */
+  margin-bottom: 48px;
+  display: flex;
+  gap: 12px; /* gap-3 */
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* gap-2 */
+  padding: 12px 20px; /* py-3 px-5 */
+  border-radius: 12px; /* rounded-xl */
+  text-decoration: none;
+  font-weight: 500; /* font-medium */
+  font-size: 16px;
+  line-height: 24px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: auto;
+}
+
+.arrow {
+  width: 20px;
+  height: 20px;
+}
+
+/* Button inner span wrapper */
+.btn span {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  color: oklch(100% 0 0); /* Ensure pure white text */
+  /* Calm resting gradient, not neon */
+  background: linear-gradient(
+    90deg,
+    oklch(0.67 0.23 28) 0%,
+    oklch(0.72 0.22 48) 50%,
+    oklch(0.67 0.23 28) 100%
+  );
+  border: 1px solid transparent;
+  box-shadow: 0 8px 24px oklch(0.75 0.18 55 / 0.2);
+  overflow: hidden;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  color: oklch(100% 0 0); /* Keep text white on hover */
+  transform: translateY(-0.5px);
+  box-shadow:
+    inset 0 0 0 9999px oklch(1 0 0 / 0.04),
+    0 10px 28px oklch(0.75 0.18 55 / 0.28);
+}
+
+.btn-primary:active {
+  transform: translateY(0.5px);
+}
+
+.btn-primary:focus-visible {
+  outline: none;
+  box-shadow:
+    0 8px 24px oklch(0.75 0.18 55 / 0.2),
+    0 0 0 2px oklch(1 0 0 / 0.7),
+    0 0 0 4px oklch(0 0 0 / 1);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Sheen effect for primary button */
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    oklab(0 0 0 / 0) 0%,
+    oklab(0.999994 0.0000455678 0.0000200868 / 0.1) 50%,
+    oklab(0 0 0 / 0) 100%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.6s ease;
+}
+
+.btn-primary:hover::before {
+  transform: translateX(120%);
+}
+
+.btn-secondary {
+  color: color-mix(in oklch, oklch(1 0 0) 95%, oklch(0 0 0)); /* near-white */
+  background: oklch(1 0 0 / 0.04); /* bg-white/[.04] */
+  border: 1px solid oklch(1 0 0 / 0.12); /* border-white/12 */
+  backdrop-filter: blur(var(--backdrop-blur-md));
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: oklch(1 0 0 / 0.06); /* bg-white/[.06] */
+  border-color: oklch(1 0 0 / 0.18); /* border-white/18 */
+  transform: translateY(-0.5px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0.5px);
+}
+
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px oklch(1 0 0 / 0.7),
+    0 0 0 4px oklch(0 0 0 / 1);
+}
+
+/* Trust section */
+.hero__trust {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px; /* space-y-6 */
+  margin-top: 48px; /* mt-12 */
+  opacity: 0.7; /* Lower contrast for supporting role */
+}
+
+.hero__trust-label {
+  color: oklch(1 0 0 / 0.6); /* text-white/60 */
+  font-size: 12px; /* text-xs */
+  font-weight: 400;
+  letter-spacing: 0.1em; /* tracking-wider */
+  line-height: 16px;
+  margin-bottom: 12px; /* mb-3 */
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.hero__trust-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px; /* gap-10 - generous spacing */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  opacity: 0.6; /* Lower opacity for logos */
+}
+
+@media (min-width: 768px) {
+  .hero__trust-logos {
+    gap: 48px; /* md:gap-12 */
+  }
+}
+
+.trust-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space-x-2 */
+  color: oklch(1 0 0 / 0.7); /* Lighter color */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.8;
+}
+
+.trust-logo:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.trust-logo span {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.trust-logo svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+}
+
+.trust-logo svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Scroll indicator */
+.scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  z-index: 6;
+}
+
+.mouse {
+  width: 24px;
+  height: 40px;
+  border-radius: 999px;
+  border: 2px solid color-mix(in oklch, var(--color-neutral-600) 50%, transparent); /* border-zinc-600/50 */
+  display: flex;
+  justify-content: center;
+}
+
+.mouse .dot {
+  width: 4px;
+  height: 12px;
+  border-radius: 999px;
+  background-color: oklab(0.637 0.214213 0.1014 / 0.7); /* bg-red-500/70 */
+  animation: bounce 2s infinite;
+  margin-top: 8px;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(12px);
+  }
+}
+
+/* Responsive (consolidated mobile block) */
+@media (max-width: 640px) {
+  .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .glow-left {
+    right: 2rem;
+    top: 6rem;
+    width: 18rem;
+    height: 18rem;
+  }
+
+  .glow-right {
+    left: 1rem;
+    bottom: 8rem;
+    width: 16rem;
+    height: 16rem;
+  }
+
+  .name {
+    font-size: clamp(2.75rem, 14vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .name .first,
+  .name .gradient {
+    display: block;
+  }
+  .name .first {
+    margin-bottom: 2px;
+  }
+
+  .subtitle {
+    font-size: 1.0625rem;
+    line-height: 1.45;
+    max-width: 32ch;
+  }
+  .subtitle:first-of-type {
+    border-bottom: 0;
+    padding-bottom: 0;
+    margin-bottom: 6px;
+  }
+
+  .cta-row {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .btn {
+    min-height: 48px;
+    border-radius: 14px;
+    font-size: 15px;
+  }
+  .btn-primary {
+    box-shadow: var(--elev-1);
+  }
+  .btn-secondary {
+    background: oklch(1 0 0 / 0.03);
+    border-color: oklch(1 0 0 / 0.1);
+    color: color-mix(in oklch, oklch(1 0 0) 90%, oklch(0 0 0));
+  }
+  /* Reduce GPU cost of backdrop-filter on mobile */
+  .btn-secondary {
+    backdrop-filter: blur(var(--backdrop-blur-sm));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+  }
+
+  /* Trust: single horizontal row with scroll */
+  .hero__trust {
+    margin-top: 40px;
+    opacity: 0.6;
+  }
+  .hero__trust-logos {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 14px;
+    padding-bottom: 2px;
+  }
+  .trust-logo {
+    flex: 0 0 auto;
+  }
+
+  /* Lower orb intensity on small screens; reduce orb blur via token */
+  #hero {
+    --hero-glow-blur: 40px;
+  }
+  .glow-left,
+  .glow-right {
+    opacity: 0.1;
+  }
+  .hero__grid {
+    opacity: 0.35;
+  }
+  .vignette {
+    background:
+      radial-gradient(900px 480px at 50% 32%, oklch(0.75 0.18 55 / 0.06), transparent 58%),
+      linear-gradient(180deg, oklch(0 0 0 / 0.35), oklch(0 0 0 / 0.7));
+  }
+
+  /* Remove badge backdrop blur; compensate slightly with alpha */
+  .badge {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: oklch(1 0 0 / 0.1);
+  }
+
+  /* Scroll mouse: nudge down so it doesn’t crowd CTAs */
+  .scroll {
+    bottom: 24px;
+  }
+}
+
+/* Ensure no hidden "card" background from other stylesheets */
+#hero,
+#hero .container,
+#hero header {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Rhythm tweaks to match spacing in target */
+.subtitle {
+  max-width: 68ch;
+}
+
+/* Safety: if any global style draws a rule under first subtitle */
+.subtitle + .divider {
+  border-top: 0;
+}
+
+/* Be explicit: only hero's divider becomes the dash */
+#hero .divider {
+  background: none;
+  height: auto;
+}
+
+/* consolidated into single mobile block */
+
+/* consolidated into single mobile block */

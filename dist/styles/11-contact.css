@@ -1,0 +1,396 @@
+/* ========================================
+   Contact Section Styles
+   Premium Dark Theme - Aligned with Hero/About/Services
+   ======================================== */
+
+/* Contact Section Container - chapter break design */
+#contact {
+  position: relative;
+  z-index: 1;
+  isolation: isolate; /* Contain blend modes & z-index locally */
+  /* Padding handled by .section class */
+  overflow: hidden;
+}
+
+/* Background Effects - Grid overlay */
+/* Background grid handled by unified theme */
+
+/* Micro-noise overlay to reduce banding (like ABOUT) */
+/* Noise overlay handled by unified theme */
+
+/* Warm spotlight behind CTAs – keep but lighten now that card is gone */
+.contact__spotlight {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    oklch(0.75 0.18 55 / 0.045) 0%,
+    oklch(0.75 0.18 55 / 0.03) 35%,
+    transparent 60%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Contact layout now mirrors About: no glass card, just content on the chapter bg */
+#contact .container {
+  position: relative;
+  z-index: 2;
+  max-width: 1060px; /* match About container width */
+  margin: 0 auto;
+  padding: 56px 24px 64px; /* section padding only */
+  text-align: left; /* body copy aligns like About */
+  background: transparent; /* remove glass card */
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  #contact .container {
+    padding: 32px 16px 40px;
+    margin: 0 auto;
+    max-width: 720px;
+  }
+}
+
+/* Section Title */
+.contact__title {
+  font-size: clamp(2.5rem, 6vw, 5rem); /* scale closer to About's headline */
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 40px 0;
+  position: relative;
+  text-align: center; /* title centered like About */
+  display: flex;
+  flex-direction: column; /* stack READY TO GET / STARTED on two rows */
+  justify-content: center;
+  align-items: center;
+  gap: 0; /* no horizontal gap needed when stacked */
+}
+
+.contact__title .text-white {
+  color: oklch(1 0 0);
+  font-weight: 600;
+  display: inline;
+}
+
+.contact__title .gradient {
+  background-image: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600;
+  display: inline;
+}
+
+/* Gradient divider - matching system */
+.contact__title::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--brand-grad-text);
+  opacity: 0.45;
+}
+
+/* Lede paragraph matches About intro */
+.contact__supporting {
+  font-size: 18px;
+  line-height: 1.75;
+  color: oklch(1 0 0 / 0.8);
+  max-width: 58ch;
+  margin: 0 auto 40px;
+  text-align: left; /* body copy aligns like About */
+}
+
+/* CTA Actions Container */
+.contact__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+/* Base button styles - extending existing */
+.contact__actions .button {
+  min-width: 220px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Primary button - gradient fill */
+.contact__actions .button--primary {
+  background: var(--brand-grad-cta);
+  color: oklch(1 0 0);
+  border: 1px solid transparent;
+  box-shadow: 0 8px 24px oklch(0.75 0.18 55 / 0.2);
+}
+
+.contact__actions .button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 0 0 9999px oklch(1 0 0 / 0.04),
+    0 10px 28px oklch(0.75 0.18 55 / 0.28);
+}
+
+/* Secondary button - glass with gradient stroke */
+.contact__actions .button--secondary {
+  background: oklch(1 0 0 / 0.04);
+  color: oklch(1 0 0 / 0.95);
+  border: 1px solid oklch(1 0 0 / 0.12);
+  backdrop-filter: blur(var(--backdrop-blur-md));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur-md));
+  padding-right: 36px; /* Reserve space for arrow so text never shifts */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient stroke effect */
+.contact__actions .button--secondary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: var(--brand-grad-cta);
+  opacity: 0.4;
+  -webkit-mask:
+    linear-gradient(oklch(1 0 0) 0 0) content-box,
+    linear-gradient(oklch(1 0 0) 0 0);
+  mask:
+    linear-gradient(oklch(1 0 0) 0 0) content-box,
+    linear-gradient(oklch(1 0 0) 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.contact__actions .button--secondary:hover {
+  background: oklch(1 0 0 / 0.06);
+  border-color: oklch(1 0 0 / 0.16);
+  transform: translateY(-2px);
+}
+
+.contact__actions .button--secondary:hover::after {
+  opacity: 0.6;
+}
+
+/* Arrow animation for secondary button */
+.button--secondary .arrow {
+  display: inline-block;
+  width: 1em; /* Reserve width for arrow glyph */
+  transform: translateX(0);
+  transition: transform 0.2s ease;
+}
+
+.button--secondary:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Focus states */
+.contact__actions .button:focus-visible {
+  outline: 2px solid color-mix(in oklch, oklch(0.704 0.191 22.216) 70%, oklch(1 0 0 / 0.8));
+  outline-offset: 3px;
+}
+
+/* Info block becomes simple text rows (no card) like About's metadata */
+.contact__info {
+  margin: 48px auto 0;
+  max-width: 58ch;
+  padding: 32px;
+  background: oklch(0.985 0 0 / 0.02);
+  border: 1px solid oklch(0.985 0 0 / 0.08);
+  border-radius: 16px;
+  box-shadow: none;
+  backdrop-filter: blur(var(--backdrop-blur-sm));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+  text-align: center;
+}
+
+/* Info rows with better spacing */
+.contact__info p {
+  margin: 0;
+  padding: 8px 0;
+  color: oklch(0.985 0 0 / 0.9);
+  font-size: 15px;
+  line-height: 1.6;
+  position: relative;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.contact__info p + p {
+  border-top: 1px solid oklch(0.985 0 0 / 0.06);
+  padding-top: 12px;
+  margin-top: 8px;
+}
+
+/* Email label chip - semantic span */
+.contact__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 6px 12px;
+  margin: 0;
+  border-radius: 999px;
+  background: oklch(0.985 0 0 / 0.06);
+  border: 1px solid oklch(0.985 0 0 / 0.1);
+  color: oklch(0.985 0 0 / 0.65);
+  font-weight: 600;
+  font-variant-caps: small-caps;
+}
+
+/* Email link */
+.contact__info a {
+  color: oklch(0.985 0 0 / 0.95);
+  text-decoration: none;
+  border-bottom: 1px solid oklch(0.704 0.191 22.216 / 0.3);
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.contact__info a:hover {
+  color: oklch(0.985 0 0);
+  border-bottom-color: oklch(0.704 0.191 22.216 / 0.6);
+}
+
+.contact__info a:focus-visible {
+  outline: 2px solid color-mix(in oklch, oklch(0.704 0.191 22.216) 70%, oklch(1 0 0 / 0.8));
+  outline-offset: 3px;
+  border-bottom-color: transparent; /* Avoid double emphasis */
+}
+
+/* Availability highlight */
+.contact__availability {
+  color: oklch(0.85 0.12 70); /* Soft amber */
+  font-weight: 600;
+  display: inline-block;
+  padding: 2px 8px;
+  background: oklch(0.75 0.18 55 / 0.08);
+  border-radius: 6px;
+  margin-left: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .contact__actions {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .contact__actions .button {
+    width: 100%;
+    min-height: 48px; /* Better tap target */
+  }
+
+  /* Reduce blur cost for secondary button on mobile */
+  .contact__actions .button--secondary {
+    backdrop-filter: blur(var(--backdrop-blur-sm));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+  }
+
+  /* Soften primary elevation on mobile */
+  .contact__actions .button--primary {
+    box-shadow: var(--elev-1);
+  }
+  .contact__actions .button--primary:hover {
+    box-shadow: var(--elev-1);
+    transform: none;
+  }
+
+  .contact__info {
+    padding: 24px 20px;
+    margin: 32px auto 0;
+    max-width: calc(100% - 40px);
+  }
+
+  .contact__info p {
+    font-size: 14px;
+    padding: 6px 0;
+  }
+
+  .contact__info p + p {
+    padding-top: 10px;
+    margin-top: 6px;
+  }
+
+  /* Adjust label and email layout for mobile */
+  .contact__label {
+    font-size: 9px;
+    padding: 5px 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .contact__info a {
+    font-size: 15px;
+  }
+
+  /* Reduce spotlight strength on mobile */
+  .contact__spotlight {
+    mix-blend-mode: normal;
+    opacity: 0.6;
+  }
+
+  /* Stack availability text on its own line on very small screens */
+  @media (max-width: 380px) {
+    .contact__availability {
+      display: block;
+      margin-top: 4px;
+      margin-left: 0;
+    }
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .contact__actions .button,
+  .button--secondary .arrow {
+    transition: none;
+  }
+
+  .contact__actions .button:hover {
+    transform: none;
+  }
+
+  .button--secondary:hover .arrow {
+    transform: none;
+  }
+}

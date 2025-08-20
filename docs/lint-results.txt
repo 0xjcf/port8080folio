@@ -1,0 +1,8 @@
+
+> port8080folio-landing@1.0.0 lint /Users/joseflores/Development/port8080folio
+> biome lint --write src/
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 205.
+Checked 16 files in 29ms. No fixes applied.
+Found 225 warnings.

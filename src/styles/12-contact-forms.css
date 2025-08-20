@@ -1,0 +1,689 @@
+/* ========================================
+   Contact Forms Section Styles
+   Premium Dark Theme - Dual Card Layout
+   ======================================== */
+
+/* Contact Forms Section Container - now uses unified canvas */
+#contact-forms {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  /* Remove padding - handled by .section class */
+  /* Remove background - using unified canvas */
+  overflow: hidden;
+  padding-bottom: 60px; /* Reduced padding for seamless transition to footer */
+}
+
+@media (min-width: 768px) {
+  #contact-forms {
+    padding-bottom: 80px; /* Reduced space before footer */
+  }
+}
+
+/* Background effects handled by unified theme */
+
+/* Content wrapper */
+#contact-forms .container {
+  position: relative;
+  z-index: 2;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+/* Section Header */
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.forms__title {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 40px 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.25em;
+}
+
+.forms__title .text-white {
+  color: oklch(1 0 0);
+  font-weight: 600;
+  display: inline;
+}
+
+.forms__title .gradient {
+  background-image: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600;
+  display: inline;
+}
+
+/* Gradient divider */
+.forms__title::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--brand-grad-text);
+  opacity: 0.45;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  line-height: 1.75;
+  color: oklch(1 0 0 / 0.8);
+  max-width: 70ch;
+  margin: 0 auto;
+}
+
+/* Tab Navigation for Mobile */
+.form-tabs {
+  display: none;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding: 8px;
+  background: oklch(0.985 0 0 / 0.02);
+  border-radius: 12px;
+  border: 1px solid oklch(0.985 0 0 / 0.08);
+}
+
+.form-tab {
+  flex: 1;
+  padding: 12px 20px;
+  background: transparent;
+  border: 1px solid oklch(0.985 0 0 / 0.1);
+  border-radius: 8px;
+  color: oklch(0.985 0 0 / 0.7);
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.form-tab:hover {
+  background: oklch(0.985 0 0 / 0.05);
+  border-color: oklch(0.985 0 0 / 0.15);
+  color: oklch(0.985 0 0 / 0.9);
+}
+
+.form-tab.active {
+  background: var(--brand-grad-cta);
+  border-color: transparent;
+  color: oklch(0.985 0 0);
+  box-shadow: 0 4px 12px oklch(0.704 0.191 22.216 / 0.2);
+}
+
+.form-tab svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Forms Grid */
+.forms-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  margin-top: 48px;
+}
+
+/* Form Cards (scoped to grid for consistent specificity) */
+.forms-grid .form-card {
+  padding: 32px;
+  background: oklch(1 0 0 / 0.04);
+  backdrop-filter: blur(var(--panel-blur));
+  -webkit-backdrop-filter: blur(var(--panel-blur));
+  border: 1px solid oklch(1 0 0 / 0.12);
+  border-radius: 16px; /* unify radius with CTA/About language */
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 22px 38px oklch(0.75 0.18 55 / 0.12); /* match elevation */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.forms-grid .form-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--brand-grad-cta);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.forms-grid .form-card:hover {
+  transform: translateY(-2px);
+  border-color: oklch(1 0 0 / 0.14);
+  box-shadow: 0 28px 48px oklch(0.75 0.18 55 / 0.14);
+}
+
+.forms-grid .form-card:hover::before {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  /* Show tabs on mobile */
+  .form-tabs {
+    display: flex;
+  }
+
+  /* Stack forms and hide inactive one */
+  .forms-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 0;
+  }
+
+  /* Hide all form cards by default on mobile */
+  .forms-grid .form-card {
+    display: none;
+  }
+
+  /* Show only the active form card */
+  .forms-grid .form-card.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .forms-grid {
+    gap: 24px;
+  }
+}
+
+/* Removed duplicate - form switching is handled in the 768px query above */
+
+/* Icon Chip */
+.form-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 24px;
+  padding: 12px;
+  background: oklch(1 0 0 / 0.05);
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.form-icon svg {
+  width: 24px;
+  height: 24px;
+  color: oklch(0.75 0.183 55.934);
+  position: relative;
+  z-index: 1;
+}
+
+/* Form Title */
+.form-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: oklch(1 0 0);
+  margin: 0 0 20px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Labels - visually hidden but accessible */
+.form-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Visible label style for newsletter */
+.form-label--visible {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0 0 8px;
+  clip: auto;
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: oklch(1 0 0 / 0.65);
+  font-weight: 500;
+  font-variant-caps: small-caps;
+}
+
+/* Input and Textarea Styles */
+.form-input,
+.form-textarea {
+  width: 100%;
+  height: 48px;
+  padding: 12px 16px;
+  background: oklch(1 0 0 / 0.03);
+  border: 1px solid oklch(1 0 0 / 0.1);
+  border-radius: 8px;
+  color: oklch(1 0 0 / 0.95);
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.form-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: oklch(1 0 0 / 0.65);
+}
+
+/* Focus States */
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px color-mix(in oklch, oklch(0.704 0.191 22.216) 70%, oklch(1 0 0 / 0.8));
+  background: oklch(1 0 0 / 0.05);
+}
+
+/* Error States */
+.form-input--error,
+.form-textarea--error {
+  border-color: oklch(0.65 0.22 30);
+}
+
+.form-error {
+  display: none; /* Hidden by default */
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: oklch(0.75 0.2 30);
+}
+
+/* Show error when not hidden */
+.form-error:not([hidden]) {
+  display: flex;
+}
+
+.form-error svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Newsletter Description */
+.newsletter-description {
+  margin-bottom: 24px;
+}
+
+.newsletter-description p {
+  font-size: 14px;
+  color: oklch(1 0 0 / 0.78);
+  margin: 0 0 12px;
+}
+
+.newsletter-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.newsletter-benefits li {
+  padding: 8px 0;
+  padding-left: 20px;
+  position: relative;
+  color: oklch(1 0 0 / 0.78);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.newsletter-benefits li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: oklch(0.75 0.183 55.934);
+  font-weight: bold;
+}
+
+/* Button Styles */
+.button--full {
+  width: 100%;
+  min-width: 220px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Primary button for contact form */
+.contact-form-card .button--primary {
+  background: var(--brand-grad-cta);
+  color: oklch(1 0 0);
+  box-shadow: 0 8px 24px oklch(0.75 0.18 55 / 0.2);
+}
+
+.contact-form-card .button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 0 0 9999px oklch(1 0 0 / 0.04),
+    0 10px 28px oklch(0.75 0.18 55 / 0.28);
+}
+
+/* Secondary button for newsletter */
+.newsletter-form-card .button--secondary {
+  background: oklch(1 0 0 / 0.04);
+  color: oklch(1 0 0 / 0.95);
+  border: 1px solid oklch(1 0 0 / 0.12);
+  backdrop-filter: blur(var(--backdrop-blur-md));
+  padding-right: 32px;
+}
+
+/* Gradient stroke for secondary */
+.newsletter-form-card .button--secondary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: var(--brand-grad-cta);
+  opacity: 0.4;
+  -webkit-mask:
+    linear-gradient(oklch(1 0 0) 0 0) content-box,
+    linear-gradient(oklch(1 0 0) 0 0);
+  mask:
+    linear-gradient(oklch(1 0 0) 0 0) content-box,
+    linear-gradient(oklch(1 0 0) 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.newsletter-form-card .button--secondary:hover {
+  background: oklch(1 0 0 / 0.06);
+  border-color: oklch(1 0 0 / 0.16);
+  transform: translateY(-2px);
+}
+
+.newsletter-form-card .button--secondary:hover::after {
+  opacity: 0.6;
+}
+
+/* Arrow icon */
+.button-icon {
+  width: 1em;
+  display: inline-block;
+  transform: translateX(0);
+  transition: transform 0.2s ease;
+}
+
+.button--primary:hover .button-icon,
+.button--secondary:hover .button-icon {
+  transform: translateX(4px);
+}
+
+/* Loading State */
+.button--loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.button--loading .button-text {
+  opacity: 0;
+}
+
+.button--loading::before {
+  content: "Sending...";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newsletter-form-card .button--loading::before {
+  content: "Subscribing...";
+}
+
+/* Focus States */
+.button--primary:focus-visible,
+.button--secondary:focus-visible {
+  outline: 2px solid color-mix(in oklch, oklch(0.704 0.191 22.216) 70%, oklch(1 0 0 / 0.8));
+  outline-offset: 3px;
+}
+
+/* Helper Text */
+.form-note {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: oklch(1 0 0 / 0.6); /* Softened further */
+  opacity: 0.9; /* Extra softening */
+}
+
+/* Success State - Card Glow */
+.form-card--success {
+  animation: successGlow 1s ease-out;
+}
+
+.form-card--success::before {
+  /* Show gradient bar on success */
+  opacity: 1;
+  animation: successPulse 2s ease-out;
+}
+
+@keyframes successGlow {
+  0% {
+    box-shadow: 0 24px 40px oklch(0.75 0.18 55 / 0.1);
+  }
+  50% {
+    box-shadow:
+      0 24px 40px oklch(0.75 0.18 55 / 0.1),
+      0 0 0 2px oklch(0.61 0.24 25 / 0.35);
+  }
+  100% {
+    box-shadow: 0 24px 40px oklch(0.75 0.18 55 / 0.1);
+  }
+}
+
+@keyframes successPulse {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.25;
+  }
+}
+
+/* Success message styles */
+.form-success {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: oklch(0.8 0.17 155 / 0.08);
+  border: 1px solid oklch(0.8 0.17 155 / 0.2);
+  border-radius: 8px;
+  color: oklch(0.8 0.17 155 / 0.95);
+  font-size: 14px;
+  font-weight: 500;
+  display: none; /* Hidden by default */
+  align-items: center;
+  gap: 8px;
+}
+
+/* Show success when not hidden */
+.form-success:not([hidden]) {
+  display: flex;
+  animation: slideInFade 0.3s ease-out;
+}
+
+.form-success::before {
+  content: "✓";
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+  background: oklch(0.8 0.17 155 / 0.15);
+  border-radius: 50%;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+@keyframes slideInFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Performance */
+@media (max-width: 640px) {
+  .forms-grid .form-card {
+    padding: 24px;
+    backdrop-filter: blur(var(--backdrop-blur-sm));
+    box-shadow: var(--elev-1);
+  }
+
+  /* Reduce blur cost for the newsletter secondary button */
+  .newsletter-form-card .button--secondary {
+    backdrop-filter: blur(var(--backdrop-blur-sm));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+  }
+
+  /* Soften button elevations inside forms on mobile */
+  .contact-form-card .button--primary,
+  .newsletter-form-card .button--secondary {
+    box-shadow: var(--elev-1);
+  }
+  .contact-form-card .button--primary:hover,
+  .newsletter-form-card .button--secondary:hover {
+    box-shadow: var(--elev-1);
+    transform: none;
+  }
+}
+
+/* Ensure consistent vertical rhythm for forms */
+.contact-form,
+.newsletter-form {
+  display: grid;
+  gap: 16px;
+}
+
+.form-error {
+  font-size: 14px; /* clearer feedback below fields on mobile */
+}
+
+@media (max-width: 480px) {
+  /* Only apply flex to active cards to maintain tab switching */
+  .forms-grid .form-card.active {
+    display: flex;
+    flex-direction: column;
+    overflow: visible; /* allow sticky child */
+  }
+
+  /* Remove hover elevation on small touch devices */
+  .forms-grid .form-card:hover {
+    box-shadow: var(--elev-1);
+    transform: none;
+  }
+
+  .contact-form-card .button--primary.button--full {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 8px;
+  }
+
+  /* Stronger contrast CTA on mobile sunlight */
+  .contact-form-card .button--primary {
+    background: oklch(0.7 0.2 45);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .forms-grid .form-card,
+  .contact-form-card .button--primary,
+  .newsletter-form-card .button--secondary,
+  .button-icon {
+    transition: none;
+  }
+
+  .forms-grid .form-card:hover,
+  .contact-form-card .button--primary:hover,
+  .newsletter-form-card .button--secondary:hover {
+    transform: none;
+  }
+
+  .button-icon,
+  .button--primary:hover .button-icon,
+  .button--secondary:hover .button-icon {
+    transform: none;
+  }
+
+  @keyframes successGlow {
+    0%,
+    100% {
+      box-shadow: 0 24px 40px oklch(0.75 0.18 55 / 0.1);
+    }
+  }
+}
