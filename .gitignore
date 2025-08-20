@@ -29,6 +29,9 @@ yarn.lock
 tmp/
 temp/
 
+# Project planning (local only)
+project-planning/
+
 # Build outputs - GitHub Actions will build these
 dist/
 /index.html
