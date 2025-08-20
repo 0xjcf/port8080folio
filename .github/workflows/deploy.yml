@@ -36,8 +36,8 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Install deps
-        run: npm ci
+      - name: Install deps (include dev)
+        run: npm ci --include=dev --no-audit --no-fund
 
       - name: Lint & Format Check (Biome)
         run: npm run check:ci

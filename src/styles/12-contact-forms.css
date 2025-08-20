@@ -348,7 +348,7 @@
 /* For browsers without :user-valid support, don't show validation until touched */
 html.js-enabled .form-input:not(.touched):invalid,
 html.js-enabled .form-textarea:not(.touched):invalid {
-  border-color: oklch(1 0 0 / 0.12);  /* Default border, not red */
+  border-color: oklch(1 0 0 / 0.12); /* Default border, not red */
   box-shadow: none;
 }
 
@@ -361,44 +361,57 @@ html.js-enabled .form-textarea:not(.touched):invalid:focus {
 
 /* Validation Color Tokens */
 :root {
-  --valid: oklch(69.5% 0.15 162);  /* Using --color-emerald-500 from design system */
+  --valid: oklch(69.5% 0.15 162); /* Using --color-emerald-500 from design system */
   --valid-ring: color-mix(in oklch, var(--valid) 22%, transparent);
-  --invalid: oklch(0.61 0.24 25);  /* Using --color-primary from dark theme */
+  --invalid: oklch(0.61 0.24 25); /* Using --color-primary from dark theme */
   --invalid-ring: color-mix(in oklch, var(--invalid) 22%, transparent);
 }
 
 /* ===========================
    JS ON — after user interaction OR failed submit
    =========================== */
-html.js-enabled :is(.form-input,.form-textarea).touched:is(:valid,:user-valid),
-html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):is(:valid,:user-valid),
-body.dark-theme html.js-enabled :is(.form-input,.form-textarea).touched:is(:valid,:user-valid),
-body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):is(:valid,:user-valid) {
+html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid),
+html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):is(:valid, :user-valid),
+body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid),
+body.dark-theme
+  html.js-enabled
+  .pe-form.was-validated
+  :is(.form-input, .form-textarea):is(:valid, :user-valid) {
   border-color: var(--valid);
   box-shadow: 0 0 0 2px var(--valid-ring);
 }
 
-html.js-enabled :is(.form-input,.form-textarea).touched:is(:valid,:user-valid):focus,
-html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):is(:valid,:user-valid):focus,
-body.dark-theme html.js-enabled :is(.form-input,.form-textarea).touched:is(:valid,:user-valid):focus,
-body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):is(:valid,:user-valid):focus {
-  border-color: var(--valid);                 /* override the base transparent border on focus */
-  box-shadow: 0 0 0 3px var(--valid-ring);    /* stronger focus ring when valid */
+html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid):focus,
+html.js-enabled
+  .pe-form.was-validated
+  :is(.form-input, .form-textarea):is(:valid, :user-valid):focus,
+body.dark-theme
+  html.js-enabled
+  :is(.form-input, .form-textarea).touched:is(:valid, :user-valid):focus,
+body.dark-theme
+  html.js-enabled
+  .pe-form.was-validated
+  :is(.form-input, .form-textarea):is(:valid, :user-valid):focus {
+  border-color: var(--valid); /* override the base transparent border on focus */
+  box-shadow: 0 0 0 3px var(--valid-ring); /* stronger focus ring when valid */
 }
 
 /* Invalid (JS on) */
-html.js-enabled :is(.form-input,.form-textarea).touched:invalid,
-html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):invalid,
-body.dark-theme html.js-enabled :is(.form-input,.form-textarea).touched:invalid,
-body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):invalid {
+html.js-enabled :is(.form-input, .form-textarea).touched:invalid,
+html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid,
+body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:invalid,
+body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid {
   border-color: var(--invalid);
   box-shadow: 0 0 0 2px var(--invalid-ring);
 }
 
-html.js-enabled :is(.form-input,.form-textarea).touched:invalid:focus,
-html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):invalid:focus,
-body.dark-theme html.js-enabled :is(.form-input,.form-textarea).touched:invalid:focus,
-body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):invalid:focus {
+html.js-enabled :is(.form-input, .form-textarea).touched:invalid:focus,
+html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid:focus,
+body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:invalid:focus,
+body.dark-theme
+  html.js-enabled
+  .pe-form.was-validated
+  :is(.form-input, .form-textarea):invalid:focus {
   border-color: var(--invalid);
   box-shadow: 0 0 0 3px var(--invalid-ring);
 }
@@ -406,21 +419,21 @@ body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input,.form-tex
 /* Modern browsers: react immediately to user edits without needing .touched */
 @supports selector(input:user-invalid) {
   /* Valid state while typing */
-  html.js-enabled :is(.form-input,.form-textarea):user-valid:not(:placeholder-shown) {
+  html.js-enabled :is(.form-input, .form-textarea):user-valid:not(:placeholder-shown) {
     border-color: var(--valid);
     box-shadow: 0 0 0 2px var(--valid-ring);
   }
-  html.js-enabled :is(.form-input,.form-textarea):user-valid:not(:placeholder-shown):focus {
+  html.js-enabled :is(.form-input, .form-textarea):user-valid:not(:placeholder-shown):focus {
     border-color: var(--valid);
     box-shadow: 0 0 0 3px var(--valid-ring);
   }
-  
+
   /* Invalid state while typing */
-  html.js-enabled :is(.form-input,.form-textarea):user-invalid {
+  html.js-enabled :is(.form-input, .form-textarea):user-invalid {
     border-color: var(--invalid);
     box-shadow: 0 0 0 2px var(--invalid-ring);
   }
-  html.js-enabled :is(.form-input,.form-textarea):user-invalid:focus {
+  html.js-enabled :is(.form-input, .form-textarea):user-invalid:focus {
     border-color: var(--invalid);
     box-shadow: 0 0 0 3px var(--invalid-ring);
   }
@@ -429,19 +442,19 @@ body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input,.form-tex
 /* ===========================
    JS OFF — pure HTML/CSS
    =========================== */
-html:not(.js-enabled) :is(.form-input,.form-textarea):valid:not(:placeholder-shown) {
+html:not(.js-enabled) :is(.form-input, .form-textarea):valid:not(:placeholder-shown) {
   border-color: var(--valid);
   box-shadow: 0 0 0 2px var(--valid-ring);
 }
-html:not(.js-enabled) :is(.form-input,.form-textarea):valid:not(:placeholder-shown):focus {
+html:not(.js-enabled) :is(.form-input, .form-textarea):valid:not(:placeholder-shown):focus {
   border-color: var(--valid);
   box-shadow: 0 0 0 3px var(--valid-ring);
 }
-html:not(.js-enabled) :is(.form-input,.form-textarea):invalid:not(:placeholder-shown) {
+html:not(.js-enabled) :is(.form-input, .form-textarea):invalid:not(:placeholder-shown) {
   border-color: var(--invalid);
   box-shadow: 0 0 0 2px var(--invalid-ring);
 }
-html:not(.js-enabled) :is(.form-input,.form-textarea):invalid:not(:placeholder-shown):focus {
+html:not(.js-enabled) :is(.form-input, .form-textarea):invalid:not(:placeholder-shown):focus {
   border-color: var(--invalid);
   box-shadow: 0 0 0 3px var(--invalid-ring);
 }
@@ -493,13 +506,13 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   html.js-enabled .form-group textarea.blurred:user-invalid ~ .form-error {
     display: flex;
   }
-  
+
   html.js-enabled .form-group input:user-invalid,
   html.js-enabled .form-group textarea:user-invalid {
     border-color: var(--invalid);
     box-shadow: 0 0 0 2px var(--invalid-ring);
   }
-  
+
   /* Success state for user-valid (modern browsers) */
   html.js-enabled .form-group input:user-valid:not(:placeholder-shown),
   html.js-enabled .form-group textarea:user-valid:not(:placeholder-shown) {

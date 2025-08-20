@@ -5,8 +5,15 @@
 		"clientKind": "git",
 		"useIgnoreFile": true
 	},
-	"files": {
-		"includes": ["src/**/*.html", "src/**/*.css", "src/**/*.js", "!**/*.min.css", "!**/*.min.js"]
+    "files": {
+		"includes": [
+			"src/**/*.html",
+			"src/**/*.css",
+			"src/**/*.js",
+			"!**/*.min.css",
+			"!**/*.min.js",
+			"!**/*-min*.js"
+		]
 	},
 	"formatter": {
 		"enabled": true,
