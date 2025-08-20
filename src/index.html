@@ -30,7 +30,7 @@
         "name": "Jose Flores Technical Advisory",
         "description": "Technical advisor helping teams align architecture, process, and product",
         "url": "https://0xjcf.github.io/port8080folio/",
-        "email": "consult@joseflores.dev",
+        "email": "bluejf.llc@gmail.com",
         "founder": {
             "@type": "Person",
             "name": "Jose Flores",
@@ -49,7 +49,7 @@
     <!-- Styles will be added in Layer 2 -->
     <link rel="stylesheet" href="styles/main.css">
 </head>
-<body class="dark-theme">
+<body class="dark-theme no-js">
     
     <main id="main" role="main">
         <!-- Hero Section -->
@@ -322,12 +322,12 @@
                 </p>
                 
                 <div class="contact__actions">
-                    <a href="mailto:consult@joseflores.dev?subject=Consulting%20Inquiry" 
+                    <a href="mailto:bluejf.llc@gmail.com?subject=Consulting%20Inquiry" 
                        class="button button--primary"
                        aria-label="Schedule a call - opens email client">
                         Schedule a Call
                     </a>
-                    <a href="https://0xjcf.github.io/port8080folio/" 
+                    <a href="https://github.com/0xjcf" 
                        class="button button--secondary"
                        rel="noopener noreferrer"
                        aria-label="View portfolio - opens portfolio page">
@@ -339,8 +339,8 @@
                 <div class="contact__info" role="complementary" aria-label="Contact details">
                     <p>
                         <span class="contact__label" role="text">Email</span>
-                        <a href="mailto:consult@joseflores.dev?subject=Intro%20Call" 
-                           aria-label="Email Jose Flores">consult@joseflores.dev</a>
+                        <a href="mailto:bluejf.llc@gmail.com?subject=Intro%20Call" 
+                           aria-label="Email Jose Flores">bluejf.llc@gmail.com</a>
                     </p>
                     <p aria-live="polite">I typically reply within 24 hours.</p>
                     <p>Available for projects starting <span class="contact__availability">September 2025</span></p>
@@ -386,18 +386,27 @@
                             </svg>
                         </div>
                         <h3 class="form-title">Send a Message</h3>
-                        <form class="contact-form" action="#" method="POST" novalidate>
-                            <div class="form-group">
-                                <label for="name" class="form-label">Your Name</label>
-                                <input type="text" 
-                                       id="name" 
-                                       name="name" 
-                                       class="form-input" 
-                                       placeholder="Your Name" 
-                                       required
-                                       aria-required="true"
-                                       aria-describedby="name-error">
-                                <div class="form-error" id="name-error" role="alert" aria-live="assertive" hidden>
+                        <!-- Contact Form with Server Endpoint - Works without JavaScript -->
+                        <form class="contact-form pe-form pe-form--contact" 
+                              action="/api/contact" 
+                              method="POST">
+                            <fieldset style="border: none; padding: 0; margin: 0;">
+                                <legend class="visually-hidden">Contact Information</legend>
+                                
+                                <div class="form-group">
+                                    <label for="name" class="form-label">Your Name</label>
+                                    <input type="text" 
+                                           id="name" 
+                                           name="name" 
+                                           class="form-input" 
+                                           placeholder="Your Name" 
+                                           required
+                                           autocomplete="name"
+                                           minlength="2"
+                                           maxlength="70"
+                                           aria-required="true"
+                                           aria-describedby="name-error">
+                                <div class="form-error" id="name-error" role="alert" aria-live="assertive">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                                     </svg>
@@ -405,16 +414,22 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="email" class="form-label">Email Address</label>
+                                <label for="contact-email" class="form-label">Email Address</label>
                                 <input type="email" 
-                                       id="email" 
+                                       id="contact-email" 
                                        name="email" 
                                        class="form-input" 
-                                       placeholder="Email Address" 
+                                       placeholder="your@email.com" 
                                        required
+                                       autocomplete="email"
+                                       inputmode="email"
+                                       spellcheck="false"
+                                       autocapitalize="off"
+                                       title="Use a full email like name@example.com"
+                                       pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                                        aria-required="true"
-                                       aria-describedby="email-error">
-                                <div class="form-error" id="email-error" role="alert" aria-live="assertive" hidden>
+                                       aria-describedby="contact-email-error">
+                                <div class="form-error" id="contact-email-error" role="alert" aria-live="assertive">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                                     </svg>
@@ -428,15 +443,29 @@
                                           class="form-textarea" 
                                           placeholder="Your Message" 
                                           required
+                                          minlength="10"
+                                          maxlength="5000"
                                           aria-required="true"
                                           aria-describedby="message-error"></textarea>
-                                <div class="form-error" id="message-error" role="alert" aria-live="assertive" hidden>
+                                <div class="form-error" id="message-error" role="alert" aria-live="assertive">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                                     </svg>
                                     Enter a message
                                 </div>
                             </div>
+                            
+                            <!-- Honeypot field for spam protection (hidden from users) -->
+                            <div class="visually-hidden" aria-hidden="true">
+                                <label for="website">Leave this field empty</label>
+                                <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+                            </div>
+                            
+                            <!-- Timestamp for additional bot detection -->
+                            <input type="hidden" name="timestamp" value="">
+                            
+                            </fieldset>
+                            
                             <button type="submit" 
                                     class="button button--primary button--full"
                                     aria-label="Send message to Jose Flores">
@@ -444,6 +473,15 @@
                                 <span class="button-icon" aria-hidden="true">→</span>
                             </button>
                         </form>
+                        
+                        <!-- No-JS fallback message -->
+                        <noscript>
+                            <p class="form-note" style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                                📬 On submit you'll be taken to a confirmation page.<br>
+                                Or email directly: <a href="mailto:bluejf.llc@gmail.com" style="color: oklch(0.75 0.18 55);">bluejf.llc@gmail.com</a>
+                            </p>
+                        </noscript>
+                        
                         <div class="form-success" role="status" aria-live="polite" hidden>
                             Thanks! I'll reply within 24 hours.
                         </div>
@@ -466,32 +504,62 @@
                                 <li>Early access to new content</li>
                             </ul>
                         </div>
-                        <form class="newsletter-form" action="#" method="POST" novalidate>
+                        <!-- Mailchimp Newsletter Form - Works without JavaScript -->
+                        <form class="newsletter-form pe-form pe-form--newsletter" 
+                              action="https://gmail.us15.list-manage.com/subscribe/post?u=a5d21e2e22f61cf619c8acfb4&amp;id=09a07976e0&amp;f_id=004d9ee1f0"
+                              method="post" 
+                              id="mc-embedded-subscribe-form" 
+                              name="mc-embedded-subscribe-form" 
+                              target="_self">
                             <div class="form-group">
-                                <label for="newsletter-email" class="form-label">Email Address</label>
+                                <label for="mce-EMAIL" class="form-label">Email Address</label>
                                 <input type="email" 
-                                       id="newsletter-email" 
-                                       name="newsletter-email" 
+                                       id="mce-EMAIL" 
+                                       name="EMAIL" 
                                        class="form-input" 
-                                       placeholder="Email Address" 
+                                       placeholder="your@email.com" 
                                        required
+                                       autocomplete="email"
+                                       inputmode="email"
+                                       spellcheck="false"
+                                       autocapitalize="off"
+                                       title="Use a full email like name@example.com"
+                                       pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                                        aria-required="true"
-                                       aria-describedby="newsletter-error">
-                                <div class="form-error" id="newsletter-error" role="alert" aria-live="assertive" hidden>
+                                       aria-describedby="newsletter-help newsletter-error">
+                                
+                                <!-- Mailchimp honeypot field (bot protection) -->
+                                <div class="visually-hidden" aria-hidden="true">
+                                    <label for="b_a5d21e2e22f61cf619c8acfb4_09a07976e0">Leave this field empty</label>
+                                    <input type="text" name="b_a5d21e2e22f61cf619c8acfb4_09a07976e0" id="b_a5d21e2e22f61cf619c8acfb4_09a07976e0" tabindex="-1" value="">
+                                </div>
+                                
+                                <div class="form-error" id="newsletter-error" role="alert" aria-live="assertive">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                                     </svg>
                                     Enter a valid email address
                                 </div>
                             </div>
+                            
                             <button type="submit" 
+                                    name="subscribe"
+                                    id="mc-embedded-subscribe"
                                     class="button button--secondary button--full"
                                     aria-label="Subscribe to weekly insights newsletter">
                                 <span class="button-text">Subscribe to Newsletter</span>
                                 <span class="button-icon" aria-hidden="true">→</span>
                             </button>
+                            
+                            <p id="newsletter-help" class="form-note">We'll send occasional updates. Unsubscribe anytime.</p>
+                            
+                            <!-- No-JS fallback message -->
+                            <noscript>
+                                <p class="form-note" style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                                    📧 After submitting, you'll be redirected to Mailchimp to confirm your subscription.
+                                </p>
+                            </noscript>
                         </form>
-                        <p class="form-note">No spam. Unsubscribe anytime.</p>
                         <div class="form-success" role="status" aria-live="polite" hidden>
                             Welcome! Check your inbox for confirmation.
                         </div>
@@ -505,7 +573,7 @@
     <footer role="contentinfo" class="footer section">
         <div class="container">
             <nav class="footer__links" aria-label="Footer navigation">
-                <a href="mailto:consult@joseflores.dev" aria-label="Email Jose Flores">Email</a>
+                <a href="mailto:bluejf.llc@gmail.com" aria-label="Email Jose Flores">Email</a>
                 <span aria-hidden="true">•</span>
                 <a href="https://www.linkedin.com/in/joseflores-io" rel="noopener noreferrer" target="_blank" aria-label="LinkedIn Profile">LinkedIn</a>
                 <span aria-hidden="true">•</span>
@@ -528,40 +596,20 @@
     
     
     
-    <!-- Form Tabs JavaScript -->
+    <!-- Inline Critical JS for immediate feature detection -->
     <script>
-        (function() {
-            const tabs = document.querySelectorAll('.form-tab');
-            const forms = document.querySelectorAll('.form-card');
-            
-            if (tabs.length === 0) return; // Exit if no tabs (desktop view)
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const targetTab = this.dataset.tab;
-                    
-                    // Update tabs
-                    tabs.forEach(t => {
-                        t.classList.remove('active');
-                        t.setAttribute('aria-selected', 'false');
-                    });
-                    this.classList.add('active');
-                    this.setAttribute('aria-selected', 'true');
-                    
-                    // Update forms
-                    forms.forEach(form => {
-                        if (targetTab === 'contact' && form.classList.contains('contact-form-card')) {
-                            form.classList.add('active');
-                        } else if (targetTab === 'newsletter' && form.classList.contains('newsletter-form-card')) {
-                            form.classList.add('active');
-                        } else {
-                            form.classList.remove('active');
-                        }
-                    });
-                });
-            });
+        // Minimal critical path JavaScript (< 200 bytes)
+        (function(){
+            var d=document.documentElement;
+            if('classList' in d){
+                d.classList.remove('no-js');
+                d.classList.add('js-enabled');
+            }
         })();
     </script>
+    
+    <!-- Deferred Progressive Enhancement Script (1.5KB minified) - Now with real-time validation -->
+    <script defer src="scripts/pe-min-v3.js"></script>
     
     <!-- Removed JS dots/active logic per request: CSS/HTML only -->
 </body>

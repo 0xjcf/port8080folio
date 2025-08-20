@@ -144,12 +144,19 @@
   overflow: hidden;
 }
 
-/* Primary button - gradient fill */
+/* Primary button - match hero button gradient exactly */
 .contact__actions .button--primary {
-  background: var(--brand-grad-cta);
-  color: oklch(1 0 0);
+  background: linear-gradient(
+    90deg,
+    oklch(0.67 0.23 28) 0%,
+    oklch(0.72 0.22 48) 50%,
+    oklch(0.67 0.23 28) 100%
+  );
+  color: oklch(100% 0 0);
   border: 1px solid transparent;
   box-shadow: 0 8px 24px oklch(0.75 0.18 55 / 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
 .contact__actions .button--primary:hover {
@@ -157,6 +164,26 @@
   box-shadow:
     inset 0 0 0 9999px oklch(1 0 0 / 0.04),
     0 10px 28px oklch(0.75 0.18 55 / 0.28);
+}
+
+/* Add sheen effect like hero button */
+.contact__actions .button--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    oklab(0 0 0 / 0) 0%,
+    oklab(0.999994 0.0000455678 0.0000200868 / 0.1) 50%,
+    oklab(0 0 0 / 0) 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.contact__actions .button--primary:hover::before {
+  transform: translateX(120%);
 }
 
 /* Secondary button - glass with gradient stroke */

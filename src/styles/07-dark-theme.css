@@ -131,7 +131,6 @@ body.dark-theme .hero {
 
 body.dark-theme section:not(.hero) {
   background: transparent;
-  border-top: 1px solid var(--color-border);
 }
 
 /* Chapter sections own their canvas—no generic divider */
@@ -308,19 +307,26 @@ body.dark-theme .form-textarea {
   width: 100%;
   padding: 0.75rem 1rem;
   background: oklch(0 0 0 / 0.5);
-  border: 2px solid oklch(0.61 0.24 25 / 0.2);
+  border-width: 2px;
+  border-style: solid;
   border-radius: 8px;
   color: oklch(100% 0 0);
   font-size: 1rem;
   transition: all 0.3s ease;
 }
 
+/* Dark theme focus - only set background, let validation styles handle borders */
 body.dark-theme .form-input:focus,
 body.dark-theme .form-textarea:focus {
   outline: none;
+  background: oklch(0 0 0 / 0.7);
+}
+
+/* Default focus for empty/untouched fields in dark theme */
+body.dark-theme .form-input:focus:placeholder-shown:not(.touched),
+body.dark-theme .form-textarea:focus:placeholder-shown:not(.touched) {
   border-color: oklch(0.61 0.24 25);
   box-shadow: 0 0 0 3px oklch(0.61 0.24 25 / 0.1);
-  background: oklch(0 0 0 / 0.7);
 }
 
 body.dark-theme .form-input::placeholder,

@@ -3,6 +3,17 @@
    Premium Dark Theme - Dual Card Layout
    ======================================== */
 
+/* Visually Hidden Helper Class */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
 /* Contact Forms Section Container - now uses unified canvas */
 #contact-forms {
   position: relative;
@@ -88,6 +99,11 @@
   margin: 0 auto;
 }
 
+/* Tab Navigation Container */
+.form-tabs-container {
+  position: relative;
+}
+
 /* Tab Navigation for Mobile */
 .form-tabs {
   display: none;
@@ -100,6 +116,7 @@
   border: 1px solid oklch(0.985 0 0 / 0.08);
 }
 
+/* Tab labels styled as buttons */
 .form-tab {
   flex: 1;
   padding: 12px 20px;
@@ -119,17 +136,30 @@
   gap: 8px;
 }
 
+/* Focus styles for keyboard navigation */
+.form-tab:focus-visible {
+  outline: 2px solid oklch(0.704 0.191 22.216);
+  outline-offset: 2px;
+}
+
 .form-tab:hover {
   background: oklch(0.985 0 0 / 0.05);
   border-color: oklch(0.985 0 0 / 0.15);
   color: oklch(0.985 0 0 / 0.9);
 }
 
-.form-tab.active {
-  background: var(--brand-grad-cta);
+/* Active state based on radio button :checked - match hero button gradient */
+#tab-contact:checked ~ .form-tabs label[for="tab-contact"],
+#tab-newsletter:checked ~ .form-tabs label[for="tab-newsletter"] {
+  background: linear-gradient(
+    90deg,
+    oklch(0.67 0.23 28) 0%,
+    oklch(0.72 0.22 48) 50%,
+    oklch(0.67 0.23 28) 100%
+  );
   border-color: transparent;
-  color: oklch(0.985 0 0);
-  box-shadow: 0 4px 12px oklch(0.704 0.191 22.216 / 0.2);
+  color: oklch(100% 0 0);
+  box-shadow: 0 4px 12px oklch(0.75 0.18 55 / 0.2);
 }
 
 .form-tab svg {
@@ -181,13 +211,21 @@
   opacity: 1;
 }
 
+/* CSS-only panel visibility control */
+/* Keep both panels visible on desktop */
+@media (min-width: 769px) {
+  .forms-grid .form-card {
+    display: block;
+  }
+}
+
 @media (max-width: 768px) {
   /* Show tabs on mobile */
   .form-tabs {
     display: flex;
   }
 
-  /* Stack forms and hide inactive one */
+  /* Stack forms */
   .forms-grid {
     grid-template-columns: 1fr;
     gap: 0;
@@ -199,8 +237,13 @@
     display: none;
   }
 
-  /* Show only the active form card */
-  .forms-grid .form-card.active {
+  /* Show panel based on radio button selection */
+  #tab-contact:checked ~ .forms-grid #panel-contact {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  #tab-newsletter:checked ~ .forms-grid #panel-newsletter {
     display: block;
     animation: fadeIn 0.3s ease-in-out;
   }
@@ -317,13 +360,125 @@
   color: oklch(1 0 0 / 0.65);
 }
 
-/* Focus States */
+/* Focus States - Enhanced visibility */
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: transparent;
-  box-shadow: 0 0 0 2px color-mix(in oklch, oklch(0.704 0.191 22.216) 70%, oklch(1 0 0 / 0.8));
-  background: oklch(1 0 0 / 0.05);
+  border-color: oklch(0.61 0.24 25);
+  box-shadow: 0 0 0 3px oklch(0.61 0.24 25 / 0.1);
+  background: oklch(1 0 0 / 0.06);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* For browsers without :user-valid support, don't show validation until touched */
+html.js-enabled .form-input:not(.touched):invalid,
+html.js-enabled .form-textarea:not(.touched):invalid {
+  border-color: oklch(1 0 0 / 0.12);  /* Default border, not red */
+  box-shadow: none;
+}
+
+/* Focus state for untouched invalid fields - use neutral focus */
+html.js-enabled .form-input:not(.touched):invalid:focus,
+html.js-enabled .form-textarea:not(.touched):invalid:focus {
+  border-color: oklch(0.61 0.24 25);
+  box-shadow: 0 0 0 3px oklch(0.61 0.24 25 / 0.1);
+}
+
+/* Validation Color Tokens */
+:root {
+  --valid: oklch(69.5% 0.15 162);  /* Using --color-emerald-500 from design system */
+  --valid-ring: color-mix(in oklch, var(--valid) 22%, transparent);
+  --invalid: oklch(0.61 0.24 25);  /* Using --color-primary from dark theme */
+  --invalid-ring: color-mix(in oklch, var(--invalid) 22%, transparent);
+}
+
+/* ===========================
+   JS ON — after user interaction OR failed submit
+   =========================== */
+html.js-enabled :is(.form-input,.form-textarea).touched:is(:valid,:user-valid),
+html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):is(:valid,:user-valid),
+body.dark-theme html.js-enabled :is(.form-input,.form-textarea).touched:is(:valid,:user-valid),
+body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):is(:valid,:user-valid) {
+  border-color: var(--valid);
+  box-shadow: 0 0 0 2px var(--valid-ring);
+}
+
+html.js-enabled :is(.form-input,.form-textarea).touched:is(:valid,:user-valid):focus,
+html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):is(:valid,:user-valid):focus,
+body.dark-theme html.js-enabled :is(.form-input,.form-textarea).touched:is(:valid,:user-valid):focus,
+body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):is(:valid,:user-valid):focus {
+  border-color: var(--valid);                 /* override the base transparent border on focus */
+  box-shadow: 0 0 0 3px var(--valid-ring);    /* stronger focus ring when valid */
+}
+
+/* Invalid (JS on) */
+html.js-enabled :is(.form-input,.form-textarea).touched:invalid,
+html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):invalid,
+body.dark-theme html.js-enabled :is(.form-input,.form-textarea).touched:invalid,
+body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):invalid {
+  border-color: var(--invalid);
+  box-shadow: 0 0 0 2px var(--invalid-ring);
+}
+
+html.js-enabled :is(.form-input,.form-textarea).touched:invalid:focus,
+html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):invalid:focus,
+body.dark-theme html.js-enabled :is(.form-input,.form-textarea).touched:invalid:focus,
+body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input,.form-textarea):invalid:focus {
+  border-color: var(--invalid);
+  box-shadow: 0 0 0 3px var(--invalid-ring);
+}
+
+/* Modern browsers: react immediately to user edits without needing .touched */
+@supports selector(input:user-invalid) {
+  /* Valid state while typing */
+  html.js-enabled :is(.form-input,.form-textarea):user-valid:not(:placeholder-shown) {
+    border-color: var(--valid);
+    box-shadow: 0 0 0 2px var(--valid-ring);
+  }
+  html.js-enabled :is(.form-input,.form-textarea):user-valid:not(:placeholder-shown):focus {
+    border-color: var(--valid);
+    box-shadow: 0 0 0 3px var(--valid-ring);
+  }
+  
+  /* Invalid state while typing */
+  html.js-enabled :is(.form-input,.form-textarea):user-invalid {
+    border-color: var(--invalid);
+    box-shadow: 0 0 0 2px var(--invalid-ring);
+  }
+  html.js-enabled :is(.form-input,.form-textarea):user-invalid:focus {
+    border-color: var(--invalid);
+    box-shadow: 0 0 0 3px var(--invalid-ring);
+  }
+}
+
+/* ===========================
+   JS OFF — pure HTML/CSS
+   =========================== */
+html:not(.js-enabled) :is(.form-input,.form-textarea):valid:not(:placeholder-shown) {
+  border-color: var(--valid);
+  box-shadow: 0 0 0 2px var(--valid-ring);
+}
+html:not(.js-enabled) :is(.form-input,.form-textarea):valid:not(:placeholder-shown):focus {
+  border-color: var(--valid);
+  box-shadow: 0 0 0 3px var(--valid-ring);
+}
+html:not(.js-enabled) :is(.form-input,.form-textarea):invalid:not(:placeholder-shown) {
+  border-color: var(--invalid);
+  box-shadow: 0 0 0 2px var(--invalid-ring);
+}
+html:not(.js-enabled) :is(.form-input,.form-textarea):invalid:not(:placeholder-shown):focus {
+  border-color: var(--invalid);
+  box-shadow: 0 0 0 3px var(--invalid-ring);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .form-input:focus,
+  .form-textarea:focus {
+    outline: 3px solid oklch(0.75 0.18 55);
+    outline-offset: 2px;
+  }
 }
 
 /* Error States */
@@ -332,18 +487,58 @@
   border-color: oklch(0.65 0.22 30);
 }
 
+/* ---- Form errors: Progressive Enhancement ---- */
+
+/* Base: Always hide inline errors (no-JS fallback uses native tooltips) */
 .form-error {
-  display: none; /* Hidden by default */
+  display: none;
   align-items: center;
   gap: 6px;
-  margin-top: 6px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
   font-size: 12px;
-  color: oklch(0.75 0.2 30);
+  line-height: 1.3;
+  color: var(--invalid);
+  background: color-mix(in oklch, var(--invalid) 8%, transparent);
+  border: 1px solid color-mix(in oklch, var(--invalid) 20%, transparent);
 }
 
-/* Show error when not hidden */
-.form-error:not([hidden]) {
+/* Only show inline errors after blur or failed submission (JS enabled) */
+/* This prevents double errors (native tooltip + inline) when JS is off */
+html.js-enabled .form-group .blurred:invalid ~ .form-error,
+html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   display: flex;
+}
+
+/* (Removed duplicate validation styles - now handled above with proper focus overrides) */
+
+/* Progressive enhancement: user-invalid (modern browsers with JS) */
+@supports selector(input:user-invalid) {
+  html.js-enabled .form-group input.blurred:user-invalid ~ .form-error,
+  html.js-enabled .form-group textarea.blurred:user-invalid ~ .form-error {
+    display: flex;
+  }
+  
+  html.js-enabled .form-group input:user-invalid,
+  html.js-enabled .form-group textarea:user-invalid {
+    border-color: var(--invalid);
+    box-shadow: 0 0 0 2px var(--invalid-ring);
+  }
+  
+  /* Success state for user-valid (modern browsers) */
+  html.js-enabled .form-group input:user-valid:not(:placeholder-shown),
+  html.js-enabled .form-group textarea:user-valid:not(:placeholder-shown) {
+    border-color: var(--valid);
+    box-shadow: 0 0 0 2px var(--valid-ring);
+  }
+}
+
+/* (Removed duplicate no-JS validation styles - now handled above with proper focus overrides) */
+
+/* Reserve space for form alerts to prevent CLS */
+.form-success {
+  min-height: 1.5rem;
 }
 
 .form-error svg {
@@ -406,11 +601,19 @@
   font-family: inherit;
 }
 
-/* Primary button for contact form */
+/* Primary button for contact form - match hero button exactly */
 .contact-form-card .button--primary {
-  background: var(--brand-grad-cta);
-  color: oklch(1 0 0);
+  background: linear-gradient(
+    90deg,
+    oklch(0.67 0.23 28) 0%,
+    oklch(0.72 0.22 48) 50%,
+    oklch(0.67 0.23 28) 100%
+  );
+  color: oklch(100% 0 0);
+  border: 1px solid transparent;
   box-shadow: 0 8px 24px oklch(0.75 0.18 55 / 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
 .contact-form-card .button--primary:hover {
@@ -418,6 +621,26 @@
   box-shadow:
     inset 0 0 0 9999px oklch(1 0 0 / 0.04),
     0 10px 28px oklch(0.75 0.18 55 / 0.28);
+}
+
+/* Add sheen effect like hero button */
+.contact-form-card .button--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    oklab(0 0 0 / 0) 0%,
+    oklab(0.999994 0.0000455678 0.0000200868 / 0.1) 50%,
+    oklab(0 0 0 / 0) 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.contact-form-card .button--primary:hover::before {
+  transform: translateX(120%);
 }
 
 /* Secondary button for newsletter */
@@ -632,8 +855,9 @@
 }
 
 @media (max-width: 480px) {
-  /* Only apply flex to active cards to maintain tab switching */
-  .forms-grid .form-card.active {
+  /* Apply flex to visible cards based on radio selection */
+  #tab-contact:checked ~ .forms-grid #panel-contact,
+  #tab-newsletter:checked ~ .forms-grid #panel-newsletter {
     display: flex;
     flex-direction: column;
     overflow: visible; /* allow sticky child */
@@ -651,11 +875,6 @@
     width: 100%;
     min-height: 44px;
     margin-top: 8px;
-  }
-
-  /* Stronger contrast CTA on mobile sunlight */
-  .contact-form-card .button--primary {
-    background: oklch(0.7 0.2 45);
   }
 }
 
