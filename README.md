@@ -47,6 +47,25 @@ src/
 - **Mobile First**: Responsive design with mobile-optimized interactions
 - **Dark Theme**: Aggressive black/red/orange premium aesthetic
 
+## Development
+
+### Worker Development
+```bash
+# Start Wrangler dev server for forms
+npm run dev:worker
+
+# To disable Wrangler metrics collection, set environment variable:
+WRANGLER_SEND_METRICS=false npm run dev:worker
+
+# Or create a .env file (see .env.example) with:
+# WRANGLER_SEND_METRICS=false
+```
+
+### Available Scripts
+- `npm run dev` - Static file server for frontend
+- `npm run dev:worker` - Wrangler dev server for form handling
+- `npm run deploy:worker` - Deploy worker to Cloudflare
+
 ## Documentation
 
 - `css-audit.md` - Comprehensive CSS audit and recommendations

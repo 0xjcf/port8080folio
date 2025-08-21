@@ -10,6 +10,53 @@
     docElement.classList.remove('no-js');
     docElement.classList.add('js-enabled');
 
+    // Fallback for browsers without :has() support
+    const hasSupport = typeof CSS !== 'undefined' && 
+                      typeof CSS.supports === 'function' && 
+                      CSS.supports('selector(:has(*))');
+                      
+    if (!hasSupport) {
+      // Add fallback for form validation visual feedback
+      document.querySelectorAll('form').forEach((form) => {
+        const submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+        if (submitButtons.length === 0) return;
+
+        const createSubmitUpdater = (submitButton) => {
+          return () => {
+            const isValid = form.checkValidity();
+            submitButton.disabled = !isValid;
+            if (isValid) {
+              submitButton.classList.remove('is-submit-disabled');
+            } else {
+              submitButton.classList.add('is-submit-disabled');
+            }
+          };
+        };
+
+        // Create updaters for each submit button
+        const updaters = Array.from(submitButtons).map(createSubmitUpdater);
+        
+        const updateAllSubmits = () => {
+          updaters.forEach((updater) => {
+            updater();
+          });
+        };
+
+        // Listen for input and change events on form
+        form.addEventListener('input', updateAllSubmits);
+        form.addEventListener('change', updateAllSubmits);
+        
+        // Listen for form reset events
+        form.addEventListener('reset', () => {
+          // Use requestAnimationFrame to allow browser to complete reset
+          requestAnimationFrame(updateAllSubmits);
+        });
+        
+        // Initial state check
+        updateAllSubmits();
+      });
+    }
+
     // Process forms
     document.querySelectorAll('form.pe-form').forEach((form) => {
       // Disable native validation
@@ -57,14 +104,9 @@
           submitBtn.disabled = true;
           submitBtn.setAttribute('aria-busy', 'true');
           submitBtn.classList.add('button--loading');
-
-          const btnText = submitBtn.querySelector('.button-text');
-          if (btnText) {
-            btnText.dataset.orig = btnText.textContent;
-            btnText.textContent = form.classList.contains('pe-form--newsletter')
-              ? 'Subscribing...'
-              : 'Sending...';
-          }
+          
+          // Don't change the text content - let CSS handle the loading text
+          // The CSS ::after pseudo-element will show the loading message
         }
       });
 

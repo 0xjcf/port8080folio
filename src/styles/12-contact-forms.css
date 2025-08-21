@@ -686,24 +686,92 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
 /* Loading State */
 .button--loading {
   pointer-events: none;
-  opacity: 0.7;
+  opacity: 0.8;
+  position: relative;
 }
 
+/* Hide the text during loading */
 .button--loading .button-text {
   opacity: 0;
 }
 
-.button--loading::before {
+/* Hide the arrow during loading */
+.button--loading .button-icon {
+  opacity: 0;
+}
+
+/* Loading indicator overlay - positioned above the gradient but below text */
+.button--loading::after {
   content: "Sending...";
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  z-index: 2;
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
-.newsletter-form-card .button--loading::before {
+.newsletter-form-card .button--loading::after {
   content: "Subscribing...";
+}
+
+/* Pulse animation for loading text */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Ensure the gradient sheen effect is preserved during loading */
+.contact-form-card .button--primary.button--loading::before {
+  /* Keep the sheen effect intact */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    120deg,
+    transparent 20%,
+    oklch(1 0 0 / 0.1) 50%,
+    transparent 80%
+  );
+  transform: translateX(-100%);
+  z-index: 1;
+  animation: loadingSheen 2s ease-in-out infinite;
+}
+
+/* Continuous sheen animation during loading */
+@keyframes loadingSheen {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* No-JS - Simple button press feedback only (honest UX) */
+html:not(.js-enabled) .button--primary:active,
+html:not(.js-enabled) .button--secondary:active {
+  transform: translateY(1px);
+  opacity: 0.9;
+  transition: all 0.1s ease;
+}
+
+/* No-JS form validation affordance - disable submit when invalid */
+@supports(selector(:has(*))) {
+  html:not(.js-enabled) form:has(:invalid) [type="submit"] {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+}
+
+/* JS fallback for browsers without :has() support */
+.is-submit-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 /* Focus States */

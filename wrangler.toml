@@ -1,0 +1,79 @@
+name = "website-forms"
+main = "worker.js"
+compatibility_date = "2025-08-01"
+workers_dev = true
+
+# ---------- Default (local/dev) ----------
+[vars]
+# Dev mode: worker.js treats ENV!="prod" as mock (no external API calls)
+ENV = "dev"
+
+# Your local static server origin used in same-origin checks
+SITE_URL = "http://127.0.0.1:8080"
+
+# Card-specific anchors so error redirects open the right form card
+CONTACT_FORM_URL = "http://127.0.0.1:8080/#contact-form"
+CONTACT_THANKS_URL = "http://127.0.0.1:8080/contact-thanks.html"
+
+NEWSLETTER_FORM_URL = "http://127.0.0.1:8080/#newsletter-form"
+NEWSLETTER_THANKS_URL = "http://127.0.0.1:8080/newsletter-thanks.html"
+
+# Email routing used by contact form
+FROM_EMAIL = "Website <noreply@resend.dev>"
+TO_EMAIL = "bluejf.llc@gmail.com"
+
+# (Optional for dev) RESEND_AUDIENCE_ID not required in dev
+
+# ---------- Production ----------
+[env.production]
+name = "website-forms-production"
+workers_dev = true
+
+# Vars used by your deployed site on GitHub Pages
+[env.production.vars]
+ENV = "prod"
+SITE_URL = "https://0xjcf.github.io/port8080folio"
+CONTACT_FORM_URL = "https://0xjcf.github.io/port8080folio/#contact-form"
+CONTACT_THANKS_URL = "https://0xjcf.github.io/port8080folio/contact-thanks.html"
+NEWSLETTER_FORM_URL = "https://0xjcf.github.io/port8080folio/#newsletter-form"
+NEWSLETTER_THANKS_URL = "https://0xjcf.github.io/port8080folio/newsletter-thanks.html"
+FROM_EMAIL = "Website <noreply@resend.dev>"
+TO_EMAIL = "bluejf.llc@gmail.com"
+# RESEND_AUDIENCE_ID - Set via secret (see instructions below)
+
+# ---------- Secrets Configuration ----------
+# Required secrets (use wrangler secret put):
+#   RESEND_API_KEY           - Required for both dev/prod live email sending
+#   RESEND_AUDIENCE_ID       - Required for prod newsletter, optional for dev testing
+#
+# Set secrets per environment:
+#   wrangler secret put RESEND_API_KEY --env production
+#   wrangler secret put RESEND_AUDIENCE_ID --env production
+#   wrangler secret put RESEND_API_KEY              (for dev environment)
+#   wrangler secret put RESEND_AUDIENCE_ID          (optional, for dev testing)
+#
+# Inspect/update secrets:
+#   wrangler secret list --env production
+#   wrangler secret put <NAME> --env production
+#
+# ---------- Redirect Documentation ----------
+# Redirect URLs are configured via vars above:
+# - Dev:  http://127.0.0.1:8080/
+# - Prod: https://0xjcf.github.io/port8080folio/
+#
+# Success pages:
+#   contact-thanks.html
+#   newsletter-thanks.html
+# Error pages:
+#   contact-error.html
+#   newsletter-error.html
+
+# Development
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "f42bdaa4d8544c3a8ef4c6f3efe936de"
+
+# Production  
+[[env.production.kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "6fd8370c0307443f827e7b66ede74e53"
