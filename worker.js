@@ -109,9 +109,9 @@ function isValidEmail(e) {
   if (!e || e.length > 254) return false;
   // Disallow newlines to avoid header injection and weird parsing
   if (/\r|\n/.test(e)) return false;
-  // RFC 5322-ish (ASCII-only): local@domain with nested labels & hyphens.
-  // NOTE: This rejects internationalized/Unicode emails. If you need IDNs,
-  // consider punycode for the domain and a looser local-part policy.
+  // NOTE: ASCII-only validation for security/simplicity.
+  // If you need internationalized email (IDNs/Unicode local parts),
+  // consider punycode for the domain and a dedicated validation lib.
   const re =
     /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   return re.test(e);
@@ -139,8 +139,13 @@ export default {
     }
     const { SITE_URL, CONTACT_THANKS, CONTACT_FORM, NEWSLETTER_THANKS, NEWSLETTER_FORM } = urls;
 
+    // Handle CORS preflight requests
+    if (request.method === 'OPTIONS') {
+      return handleCORSPreflight(env);
+    }
+
     if (request.method !== 'POST') {
-      return new Response('Method Not Allowed', { status: 405, headers: { 'Allow': 'POST' } });
+      return new Response('Method Not Allowed', { status: 405, headers: { 'Allow': 'POST, OPTIONS' } });
     }
 
     // Optional rate limit: only check for POST requests to form endpoints
@@ -181,15 +186,52 @@ export default {
 
     // Route POSTs:
     if (url.pathname === '/api/newsletter') {
-      return handleNewsletter(request, env);
+      const response = await handleNewsletter(request, env);
+      return addCORSHeaders(response, env);
     }
     if (url.pathname === '/api/contact' || url.pathname === '/' || url.pathname === '') {
-      return handleContact(request, env);
+      const response = await handleContact(request, env);
+      return addCORSHeaders(response, env);
     }
 
     return new Response('Not Found', { status: 404 });
   }
 };
+
+// Add CORS headers to responses
+function addCORSHeaders(response, env) {
+  const newResponse = new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers
+  });
+  
+  const { SITE_URL } = getUrls(env);
+  const allowedOrigin = new URL(SITE_URL).origin;
+  
+  newResponse.headers.set('Access-Control-Allow-Origin', allowedOrigin);
+  newResponse.headers.set('Access-Control-Allow-Methods', 'POST');
+  newResponse.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+  newResponse.headers.set('Access-Control-Max-Age', '86400');
+  
+  return newResponse;
+}
+
+// Handle CORS preflight requests
+function handleCORSPreflight(env) {
+  const { SITE_URL } = getUrls(env);
+  const allowedOrigin = new URL(SITE_URL).origin;
+  
+  return new Response(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': allowedOrigin,
+      'Access-Control-Allow-Methods': 'POST',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '86400',
+    }
+  });
+}
 
 // -------------------- Contact (unchanged behavior) --------------------
 async function handleContact(request, env) {
@@ -218,7 +260,8 @@ async function handleContact(request, env) {
 
     if (timestamp) {
       const elapsed = Date.now() - parseInt(timestamp, 10);
-      if (!Number.isNaN(elapsed) && elapsed < 3000) {
+      const minTime = parseInt(env.CONTACT_MIN_TIME || '3000', 10);
+      if (!Number.isNaN(elapsed) && elapsed < minTime) {
         return Response.redirect(CONTACT_ERROR, 303);
       }
     }
@@ -300,7 +343,8 @@ async function handleNewsletter(request, env) {
     // Light bot timing (optional)
     if (timestamp) {
       const elapsed = Date.now() - parseInt(timestamp, 10);
-      if (!Number.isNaN(elapsed) && elapsed < 1500) {
+      const minTime = parseInt(env.NEWSLETTER_MIN_TIME || '1500', 10);
+      if (!Number.isNaN(elapsed) && elapsed < minTime) {
         // Too fast → block submission
         return Response.redirect(NEWSLETTER_ERROR, 303);
       }
@@ -359,7 +403,7 @@ async function addContactToAudience(env, email) {
     }
     return false;
   } catch (error) {
-    console.error(`Failed to add contact to audience: audienceId=${audienceId}, email=${email}`, error);
+    console.error(`Failed to add contact to audience: audienceId=${audienceId}`, error);
     return false;
   }
 }

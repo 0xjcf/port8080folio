@@ -177,5 +177,43 @@
         });
       });
     }
+
+    // Sticky CTA functionality
+    const initStickyCTA = () => {
+      const stickyCTA = document.querySelector('.services__sticky-cta');
+      const servicesSection = document.getElementById('services');
+      
+      if (!stickyCTA || !servicesSection) return;
+
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: [0, 0.1, 0.9]
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.target === servicesSection) {
+            // Show CTA when services section is visible, hide when fully out of view
+            if (entry.intersectionRatio > 0.1 && entry.intersectionRatio < 0.9) {
+              stickyCTA.classList.add('visible');
+            } else {
+              stickyCTA.classList.remove('visible');
+            }
+          }
+        });
+      }, observerOptions);
+
+      observer.observe(servicesSection);
+    };
+
+    // Initialize sticky CTA
+    if (typeof IntersectionObserver !== 'undefined') {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initStickyCTA);
+      } else {
+        initStickyCTA();
+      }
+    }
   }
 })();

@@ -309,30 +309,56 @@
 
 .btn-primary {
   color: oklch(100% 0 0); /* Ensure pure white text */
-  /* Calm resting gradient, not neon */
+  /* Enhanced gradient with stronger contrast */
   background: linear-gradient(
     90deg,
-    oklch(0.67 0.23 28) 0%,
-    oklch(0.72 0.22 48) 50%,
-    oklch(0.67 0.23 28) 100%
+    oklch(0.65 0.25 28) 0%,
+    oklch(0.70 0.24 48) 50%,
+    oklch(0.65 0.25 28) 100%
   );
   border: 1px solid transparent;
-  box-shadow: 0 8px 24px oklch(0.75 0.18 55 / 0.2);
+  box-shadow: 
+    0 8px 24px oklch(0.75 0.18 55 / 0.25),
+    0 0 0 1px oklch(1 0 0 / 0.05) inset;
   overflow: hidden;
-  font-weight: 500;
+  font-weight: 600; /* Stronger font weight */
   cursor: pointer;
+  font-size: 17px; /* Slightly larger text */
+  min-height: 48px; /* Ensure consistent height */
+  min-width: 200px; /* Ensure consistent width */
+  position: relative;
 }
 
 .btn-primary:hover {
   color: oklch(100% 0 0); /* Keep text white on hover */
-  transform: translateY(-0.5px);
+  transform: translateY(-2px); /* More pronounced lift */
   box-shadow:
-    inset 0 0 0 9999px oklch(1 0 0 / 0.04),
-    0 10px 28px oklch(0.75 0.18 55 / 0.28);
+    inset 0 0 0 9999px oklch(1 0 0 / 0.06),
+    0 12px 32px oklch(0.75 0.18 55 / 0.35),
+    0 0 0 1px oklch(1 0 0 / 0.08) inset;
+  /* Add subtle glow animation */
+  animation: ctaGlow 2s ease-in-out infinite alternate;
 }
 
 .btn-primary:active {
-  transform: translateY(0.5px);
+  transform: translateY(0px);
+}
+
+/* Add subtle glow animation for primary CTAs */
+@keyframes ctaGlow {
+  0% {
+    box-shadow:
+      inset 0 0 0 9999px oklch(1 0 0 / 0.06),
+      0 12px 32px oklch(0.75 0.18 55 / 0.35),
+      0 0 0 1px oklch(1 0 0 / 0.08) inset;
+  }
+  100% {
+    box-shadow:
+      inset 0 0 0 9999px oklch(1 0 0 / 0.06),
+      0 12px 32px oklch(0.75 0.18 55 / 0.45),
+      0 0 0 1px oklch(1 0 0 / 0.12) inset,
+      0 0 20px oklch(0.75 0.18 55 / 0.15);
+  }
 }
 
 .btn-primary:focus-visible {
@@ -461,6 +487,26 @@
 .trust-logo svg {
   width: 20px;
   height: 20px;
+}
+
+/* Social Proof Counter */
+.social-proof {
+  margin-top: 16px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.social-proof-text {
+  font-size: 13px;
+  color: oklch(1 0 0 / 0.6);
+  margin: 0;
+  padding: 4px 12px;
+  background: oklch(1 0 0 / 0.03);
+  border: 1px solid oklch(1 0 0 / 0.08);
+  border-radius: 20px;
+  display: inline-block;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* Scroll indicator */

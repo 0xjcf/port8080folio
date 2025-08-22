@@ -109,9 +109,9 @@
             <div class="bg glow glow-left"></div>
             <div class="bg glow glow-right"></div>
 
-            <header class="hero__content" role="banner" aria-label="Intro">
-                <!-- Badge -->
-                <p class="badge">SOFTWARE ENGINEER</p>
+            <header class="hero__content" aria-label="Intro">
+                <!-- Enhanced credibility badge -->
+                <p class="badge badge--enhanced">SOFTWARE ENGINEER</p>
 
                 <!-- Name: split into two spans -->
                 <h1 class="name">
@@ -119,55 +119,94 @@
                     <span class="last gradient">FLORES</span>
                 </h1>
 
-                <!-- Updated subtitles -->
-                <p class="subtitle">
-                    Helping local businesses use AI and modern web to grow revenue and cut busywork
-                </p>
-                <div class="divider" aria-hidden="true">—</div>
-                <p class="subtitle strong">
-                    Websites & apps that convert · AI audits & automations · Live workshops · Ongoing advisory
+                <!-- Enhanced value proposition -->
+                <p class="subtitle subtitle--primary">
+                    Grow your local business with AI-powered websites & automation
                 </p>
 
                 <!-- CTAs -->
                 <nav class="cta-row" aria-label="primary actions">
-                    <a class="btn btn-primary" href="#contact">
-                        <span>Book Your Free Strategy Call</span>
+                    <a class="btn btn-primary cta-animated" href="#contact"
+                        title="Get a tailored plan for your business in 30 minutes">
+                        <span>Book a Free AI Strategy Call</span>
                         <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M5 12h12M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-                    <a class="btn btn-secondary" href="#services">See Services</a>
+                    <a class="btn btn-secondary d-none d-sm-flex" href="#services">Explore Services</a>
                 </nav>
 
-                <!-- Trust signals (unchanged) -->
-                <div class="hero__trust">
-                    <p class="hero__trust-label">TRUSTED BY TEAMS AT</p>
+                <!-- Micro-testimonial for trust -->
+                <div class="hero__testimonial d-none d-sm-block">
+                    <p class="testimonial-text">"Jose helped us automate our lead follow-up process and we've seen 40%
+                        more conversions with half the manual work."</p>
+                    <p class="testimonial-attribution">— Sarah M., Local Marketing Agency</p>
+                </div>
+
+                <!-- Trust logos restored for desktop above-the-fold credibility -->
+                <div class="hero__trust d-none d-sm-flex">
+                    <p class="hero__trust-label">BUILT PRODUCTS AT</p>
                     <div class="hero__trust-logos">
                         <div class="trust-logo">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                 <path
                                     d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                             </svg>
-                            <span>TechCorp</span>
+                            <span>Availity</span>
                         </div>
                         <div class="trust-logo">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                 <path
                                     d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
                             </svg>
-                            <span>InnovateLabs</span>
+                            <span>Get More Math</span>
                         </div>
                         <div class="trust-logo">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                 <path
                                     d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                             </svg>
-                            <span>ScaleUp Inc</span>
+                            <span>BlueJF LLC</span>
                         </div>
                     </div>
                 </div>
             </header>
+
+            <!-- Mobile-only: social proof moved below the fold -->
+            <div class="hero-mobile-proof d-sm-none" aria-label="Trusted by">
+                <div class="hero__testimonial">
+                    <p class="testimonial-text">"Jose helped us automate our lead follow-up process and we've seen 40%
+                        more conversions with half the manual work."</p>
+                    <p class="testimonial-attribution">— Sarah M., Local Marketing Agency</p>
+                </div>
+                <div class="hero__trust">
+                    <p class="hero__trust-label">BUILT PRODUCTS AT</p>
+                    <div class="hero__trust-logos">
+                        <div class="trust-logo">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                            </svg>
+                            <span>Availity</span>
+                        </div>
+                        <div class="trust-logo">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
+                            </svg>
+                            <span>Get More Math</span>
+                        </div>
+                        <div class="trust-logo">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <span>BlueJF LLC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Scroll indicator -->
             <div class="scroll">
@@ -243,6 +282,20 @@
         <!-- Services Section (renamed + new cards) -->
         <section id="services" class="services section" aria-label="Services">
             <div class="noise-overlay" aria-hidden="true"></div>
+
+            <!-- Sticky CTA Button -->
+            <div class="services__sticky-cta" role="complementary" aria-label="Quick action">
+                <a href="#contact-forms" class="button button--sticky" aria-label="Book your free AI audit"
+                    title="You'll get your first insights in 24h">
+                    Book Free Audit
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </a>
+                <div class="sticky-cta__tooltip">You'll get your first insights in 24h</div>
+            </div>
+
             <div class="container">
                 <header class="services__header">
                     <h2 class="services__title">
@@ -256,6 +309,51 @@
                     Start simple: <strong>AI Mini‑Audit</strong> → <strong>Website/App Sprint</strong> →
                     <strong>Workshop</strong> → <strong>Ongoing Advisory</strong>.
                 </p>
+
+                <!-- Quick-Fire Wins Section -->
+                <div class="services__quick-wins" aria-labelledby="quick-wins-heading">
+                    <h3 id="quick-wins-heading" class="quick-wins__title">Recent Client Wins</h3>
+                    <div class="quick-wins__grid">
+                        <div class="quick-win-badge">
+                            <div class="quick-win-badge__icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                </svg>
+                            </div>
+                            <div class="quick-win-badge__content">
+                                <span class="quick-win-badge__stat">+30%</span>
+                                <span class="quick-win-badge__label">More inquiries in 1st month</span>
+                            </div>
+                        </div>
+
+                        <div class="quick-win-badge">
+                            <div class="quick-win-badge__icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                </svg>
+                            </div>
+                            <div class="quick-win-badge__content">
+                                <span class="quick-win-badge__stat">$50k</span>
+                                <span class="quick-win-badge__label">Saved on tech decisions</span>
+                            </div>
+                        </div>
+
+                        <div class="quick-win-badge">
+                            <div class="quick-win-badge__icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="quick-win-badge__content">
+                                <span class="quick-win-badge__stat">8+ hrs</span>
+                                <span class="quick-win-badge__label">Saved weekly via automation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- KPI Tiles (kept) -->
                 <div class="services__kpis">
@@ -280,21 +378,26 @@
                 <!-- Service Cards Grid (4 cards) -->
                 <div class="services__grid">
                     <!-- AI for Local Business -->
+                    <!-- AI Enablement for Local Business -->
                     <article id="svc-ai" class="service-card" tabindex="0">
                         <div class="service-card__icon" aria-hidden="true">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 3v18m9-9H3" />
+                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                         </div>
-                        <h3>AI Enablement (Local Business)</h3>
-                        <p>Identify quick wins: lead capture, follow‑ups, proposals, intake, and content—automated with
-                            AI.</p>
+                        <h3>Save Hours Every Week on Admin Tasks</h3>
+                        <p>Get automated lead capture, follow-ups, and data insights that free up 10-30% of your team's
+                            time in just 2-4 weeks.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">2–4 wks</span><span class="metric-label">to
-                                    first ROI</span></div>
-                            <div class="metric"><span class="metric-value">10–30%</span><span class="metric-label">Ops
-                                    time saved</span></div>
+                            <div class="metric"><span class="metric-value">2–4 wks</span><span class="metric-label">To
+                                    see results</span></div>
+                            <div class="metric"><span class="metric-value">10–30%</span><span class="metric-label">Time
+                                    back to you</span></div>
+                        </div>
+                        <div class="service-card__social-proof">
+                            <p class="testimonial-mini">"Saved us 8 hours a week on quote requests alone" — Local
+                                restaurant owner</p>
                         </div>
                     </article>
 
@@ -306,14 +409,18 @@
                                     d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </div>
-                        <h3>Websites & Applications</h3>
-                        <p>High‑performance sites and lightweight apps with clear funnels, accessibility, and measurable
-                            outcomes.</p>
+                        <h3>Get a Website That Brings You Customers</h3>
+                        <p>Lightning-fast, mobile-ready websites optimized to convert visitors into paying customers.
+                            Built for SEO and accessibility.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">&lt;1s</span><span class="metric-label">Core
-                                    page LCP</span></div>
+                            <div class="metric"><span class="metric-value">&lt;1s</span><span class="metric-label">Load
+                                    time</span></div>
                             <div class="metric"><span class="metric-value">A+</span><span
-                                    class="metric-label">Accessibility</span></div>
+                                    class="metric-label">Accessibility score</span></div>
+                        </div>
+                        <div class="service-card__social-proof">
+                            <p class="testimonial-mini">"30% more inquiries in the first month" — Service business owner
+                            </p>
                         </div>
                     </article>
 
@@ -325,14 +432,18 @@
                                     d="M8 7h8M8 11h8M5 19l7-3 7 3" />
                             </svg>
                         </div>
-                        <h3>Live Workshops</h3>
-                        <p>Hands‑on sessions for teams: AI use‑cases, statecharts & actor model, and delivery playbooks.
-                        </p>
+                        <h3>Train Your Team to Work Smarter</h3>
+                        <p>Practical workshops on AI tools, efficient processes, and modern delivery methods. Walk away
+                            with strategies you can use immediately.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">3 hrs</span><span
-                                    class="metric-label">Focused training</span></div>
-                            <div class="metric"><span class="metric-value">100%</span><span class="metric-label">Team
-                                    ready‑to‑apply</span></div>
+                            <div class="metric"><span class="metric-value">3-hour</span><span
+                                    class="metric-label">Intensive session</span></div>
+                            <div class="metric"><span class="metric-value">100%</span><span class="metric-label">Ready
+                                    to apply</span></div>
+                        </div>
+                        <div class="service-card__social-proof">
+                            <p class="testimonial-mini">"Finally understand how to use AI effectively" — Product manager
+                            </p>
                         </div>
                     </article>
 
@@ -344,14 +455,18 @@
                                     d="M12 6l-8 4 8 4 8-4-8-4zM4 14l8 4 8-4" />
                             </svg>
                         </div>
-                        <h3>Advisory & Technical Architecture</h3>
-                        <p>Translate goals into system design: pick the right stack, model behavior, and de‑risk
-                            delivery.</p>
+                        <h3>Get Clear Roadmaps That Save Budget</h3>
+                        <p>Actionable system designs and technology guidance that prevent costly mistakes and align with
+                            your business goals.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">1–2 wks</span><span
-                                    class="metric-label">Decision framework</span></div>
-                            <div class="metric"><span class="metric-value">Zero‑waste</span><span
-                                    class="metric-label">Roadmaps</span></div>
+                            <div class="metric"><span class="metric-value">1–2 wk</span><span
+                                    class="metric-label">Delivery time</span></div>
+                            <div class="metric"><span class="metric-value">Zero-waste</span><span
+                                    class="metric-label">Roadmap saves money</span></div>
+                        </div>
+                        <div class="service-card__social-proof">
+                            <p class="testimonial-mini">"Saved us $50k by avoiding the wrong tech stack" — Startup
+                                founder</p>
                         </div>
                     </article>
                 </div>
@@ -363,6 +478,89 @@
                     <a class="services__dot" href="#svc-workshops" aria-label="Live Workshops"></a>
                     <a class="services__dot" href="#svc-advisory" aria-label="Advisory & Technical Architecture"></a>
                 </nav>
+
+                <!-- How It Works Process Preview -->
+                <div class="services__process" aria-labelledby="process-heading">
+                    <header class="process__header">
+                        <h3 id="process-heading">How It Works</h3>
+                        <p class="process__subtitle">Simple, transparent process. No surprises.</p>
+                    </header>
+
+                    <div class="process__steps">
+                        <div class="process__step">
+                            <div class="process__step-icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div class="process__step-content">
+                                <h4>1. Book a Free Audit</h4>
+                                <p>15-minute call to understand your goals and current challenges</p>
+                                <div class="process__step-feedback">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" aria-hidden="true">
+                                        <path d="M3 8l4-4m0 0l4 4m-4-4v12" />
+                                    </svg>
+                                    <span>Confirmation email within minutes</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="process__step">
+                            <div class="process__step-icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <div class="process__step-content">
+                                <h4>2. Get a 1-Page Plan</h4>
+                                <p>Clear roadmap with priorities, timeline, and expected outcomes</p>
+                                <div class="process__step-feedback">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" aria-hidden="true">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12,6 12,12 16,14" />
+                                    </svg>
+                                    <span>Delivered in 24 hours</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="process__step">
+                            <div class="process__step-icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                            <div class="process__step-content">
+                                <h4>3. Launch & Grow</h4>
+                                <p>Implement the plan with regular check-ins and measurable results</p>
+                                <div class="process__step-feedback">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" aria-hidden="true">
+                                        <path d="M9 11l3 3l8-8" />
+                                    </svg>
+                                    <span>First review checkpoint at 30 days</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="process__cta">
+                        <a href="#contact-forms" class="button button--primary button--large"
+                            aria-label="Start with free audit">
+                            Start Your Free Audit Today
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <path d="m9 18 6-6-6-6" />
+                            </svg>
+                        </a>
+                        <p class="process__cta-note">No commitment required. Get actionable insights in 24 hours.</p>
+                    </div>
+                </div>
 
                 <!-- Why Work With Me Section -->
                 <div class="services__why">
@@ -396,10 +594,12 @@
                     <a href="mailto:bluejf.llc@gmail.com?subject=Consulting%20Inquiry" class="button button--primary"
                         aria-label="Schedule a call - opens email client">
                         Schedule a Call
+                        <span class="button-subtext">15 min · Free · Calls available this week</span>
                     </a>
                     <a href="#contact-forms" class="button button--secondary" aria-label="Start AI mini-audit">
-                        Free AI Mini‑Audit
+                        Start a Free AI Mini‑Audit
                         <span class="arrow" aria-hidden="true">→</span>
+                        <span class="button-subtext">Receive a custom 1-page plan in 24 hours</span>
                     </a>
                 </div>
 
@@ -426,10 +626,25 @@
                     </h2>
                     <p class="section-subtitle">Ready to transform your business? Send me a message or join my
                         newsletter for insights.</p>
+
+                    <!-- Social Proof for Forms -->
+                    <div class="forms-social-proof">
+                        <p class="forms-social-proof-text">✨ Join 250+ founders already subscribed</p>
+                        <div class="forms-social-stats">
+                            <div class="social-stat">
+                                <span class="social-stat__number">80%</span>
+                                <span class="social-stat__label">of clients see ROI within 30 days</span>
+                            </div>
+                            <div class="social-stat">
+                                <span class="social-stat__number">65%</span>
+                                <span class="social-stat__label">of my clients are small businesses like yours</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Tab Navigation (Mobile Only) -->
-                <div class="form-tabs" role="tablist">
+                <!-- Tab Navigation (Desktop Only) -->
+                <div class="form-tabs d-none d-md-flex" role="tablist">
                     <button class="form-tab active" role="tab" aria-selected="true" aria-controls="contact-form"
                         data-tab="contact">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -451,7 +666,7 @@
 
                 <div class="forms-grid">
                     <!-- Contact Form (unchanged actions) -->
-                    <div class="form-card contact-form-card active" id="contact-form" tabindex="-1">
+                    <div class="form-card contact-form-card" id="contact-form" tabindex="-1">
                         <div class="form-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
@@ -460,9 +675,7 @@
                             </svg>
                         </div>
                         <h3 class="form-title">Send a Message</h3>
-                        <form class="contact-form pe-form pe-form--contact"
-                            action="https://website-forms-production.bluejf-llc.workers.dev/api/contact"
-                            data-dev-action="http://127.0.0.1:8787/api/contact" method="POST">
+                        <form class="contact-form pe-form pe-form--contact" action="{{CONTACT_API_URL}}" method="POST">
                             <fieldset style="border: none; padding: 0; margin: 0;">
                                 <legend class="visually-hidden">Contact Information</legend>
 
@@ -476,7 +689,7 @@
                                             <path
                                                 d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                                         </svg>
-                                        Enter your name
+                                        Please enter at least 2 characters
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -492,7 +705,7 @@
                                             <path
                                                 d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                                         </svg>
-                                        Enter a valid email address
+                                        Enter a valid email address (name@example.com)
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -537,8 +750,19 @@
                         </noscript>
 
                         <div class="form-success" role="status" aria-live="polite" hidden>
-                            Thanks! I'll reply within 24 hours.
+                            ✅ Thanks! Expect next steps in your inbox shortly.
                         </div>
+
+                        <div class="form-error-fallback" role="alert" aria-live="assertive" hidden>
+                            ⚠️ Something went wrong, but I'll reach out manually within 24h.
+                        </div>
+                    </div>
+
+                    <!-- Mobile form divider -->
+                    <div class="form-divider d-md-none">
+                        <div class="form-divider-line"></div>
+                        <span class="form-divider-text">OR</span>
+                        <div class="form-divider-line"></div>
                     </div>
 
                     <!-- Newsletter Signup -->
@@ -550,8 +774,10 @@
                                 </path>
                             </svg>
                         </div>
-                        <h3 class="form-title">Weekly Insights</h3>
+                        <h3 class="form-title">Subscribe for Weekly AI Tips</h3>
                         <div class="newsletter-description">
+                            <p class="newsletter-helper-text">Get case studies, templates, and insights — unsubscribe
+                                anytime.</p>
                             <p>Get exclusive insights on:</p>
                             <ul class="newsletter-benefits">
                                 <li>Practical AI for local business</li>
@@ -560,10 +786,8 @@
                                 <li>Workshop invites & templates</li>
                             </ul>
                         </div>
-                        <form class="newsletter-form pe-form pe-form--newsletter"
-                            action="https://website-forms-production.bluejf-llc.workers.dev/api/newsletter"
-                            data-dev-action="http://127.0.0.1:8787/api/newsletter" method="post"
-                            id="newsletter-subscribe-form">
+                        <form class="newsletter-form pe-form pe-form--newsletter" action="{{NEWSLETTER_API_URL}}"
+                            method="POST" id="newsletter-subscribe-form">
                             <div class="form-group">
                                 <label for="newsletter-email" class="form-label">Email Address</label>
                                 <input type="email" id="newsletter-email" name="email" class="form-input"
@@ -587,18 +811,18 @@
                                         <path
                                             d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                                     </svg>
-                                    Enter a valid email address
+                                    Enter a valid email address (name@example.com)
                                 </div>
                             </div>
 
                             <button type="submit" class="button button--secondary button--full"
                                 aria-label="Subscribe to weekly insights newsletter">
-                                <span class="button-text">Subscribe to Newsletter</span>
+                                <span class="button-text">Subscribe for Weekly Insights</span>
                                 <span class="button-icon" aria-hidden="true">→</span>
                             </button>
 
-                            <p id="newsletter-help" class="form-note">We'll send occasional updates. Unsubscribe
-                                anytime.</p>
+                            <p id="newsletter-help" class="form-note">Get weekly AI tips, case studies, and
+                                resources—unsubscribe anytime.</p>
 
                             <noscript>
                                 <p class="form-note"
@@ -608,7 +832,7 @@
                             </noscript>
                         </form>
                         <div class="form-success" role="status" aria-live="polite" hidden>
-                            Welcome! Check your inbox for confirmation.
+                            🎉 You're subscribed! Check your inbox for confirmation.
                         </div>
                     </div>
                 </div>
@@ -651,26 +875,6 @@
             if ('classList' in d) {
                 d.classList.remove('no-js');
                 d.classList.add('js-enabled');
-            }
-        })();
-    </script>
-
-    <!-- Development environment form action detection -->
-    <script>
-        (function () {
-            var isLocalDev = location.hostname === 'localhost' ||
-                location.hostname === '127.0.0.1' ||
-                location.hostname === '0.0.0.0';
-
-            if (isLocalDev) {
-                var forms = document.querySelectorAll('form[data-dev-action]');
-                for (var i = 0; i < forms.length; i++) {
-                    var form = forms[i];
-                    var devAction = form.getAttribute('data-dev-action');
-                    if (devAction) {
-                        form.action = devAction;
-                    }
-                }
             }
         })();
     </script>

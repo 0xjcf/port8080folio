@@ -1,6 +1,6 @@
 name = "website-forms"
 main = "worker.js"
-compatibility_date = "2025-08-01"
+compatibility_date = "2025-08-21"
 workers_dev = true
 
 # ---------- Default (local/dev) ----------
@@ -22,6 +22,14 @@ NEWSLETTER_THANKS_URL = "http://127.0.0.1:8080/newsletter-thanks.html"
 FROM_EMAIL = "Website <noreply@resend.dev>"
 TO_EMAIL = "bluejf.llc@gmail.com"
 
+# Anti-bot timing thresholds (milliseconds)
+CONTACT_MIN_TIME = "3000"
+NEWSLETTER_MIN_TIME = "1500"
+
+# API endpoints for forms
+CONTACT_API_URL = "http://127.0.0.1:8787/api/contact"
+NEWSLETTER_API_URL = "http://127.0.0.1:8787/api/newsletter"
+
 # (Optional for dev) RESEND_AUDIENCE_ID not required in dev
 
 # ---------- Production ----------
@@ -39,6 +47,15 @@ NEWSLETTER_FORM_URL = "https://0xjcf.github.io/port8080folio/#newsletter-form"
 NEWSLETTER_THANKS_URL = "https://0xjcf.github.io/port8080folio/newsletter-thanks.html"
 FROM_EMAIL = "Website <noreply@resend.dev>"
 TO_EMAIL = "bluejf.llc@gmail.com"
+
+# Anti-bot timing thresholds (milliseconds)
+CONTACT_MIN_TIME = "3000"
+NEWSLETTER_MIN_TIME = "1500"
+
+# API endpoints for forms
+CONTACT_API_URL = "https://website-forms-production.bluejf-llc.workers.dev/api/contact"
+NEWSLETTER_API_URL = "https://website-forms-production.bluejf-llc.workers.dev/api/newsletter"
+
 # RESEND_AUDIENCE_ID - Set via secret (see instructions below)
 
 # ---------- Secrets Configuration ----------
