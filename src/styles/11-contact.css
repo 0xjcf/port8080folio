@@ -196,6 +196,18 @@
   padding-right: 36px; /* Reserve space for arrow so text never shifts */
   position: relative;
   overflow: hidden;
+  flex-direction: column; /* Stack text and subtext */
+  min-width: 280px; /* Wider to accommodate subtext */
+}
+
+/* Button subtext styling */
+.button-subtext {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.7;
+  margin-top: 2px;
+  line-height: 1.2;
+  text-align: center;
 }
 
 /* Gradient stroke effect */

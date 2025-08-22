@@ -95,7 +95,27 @@
   line-height: 1.75;
   color: oklch(1 0 0 / 0.8);
   max-width: 70ch;
-  margin: 0 auto;
+  margin: 0 auto 16px;
+}
+
+/* Forms Social Proof */
+.forms-social-proof {
+  margin: 20px auto 0;
+  text-align: center;
+}
+
+.forms-social-proof-text {
+  font-size: 14px;
+  color: oklch(0.75 0.18 55);
+  background: oklch(0.75 0.18 55 / 0.08);
+  border: 1px solid oklch(0.75 0.18 55 / 0.15);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  margin: 0;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* Tab Navigation for Mobile */
@@ -542,6 +562,19 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   font-size: 14px;
   color: oklch(1 0 0 / 0.78);
   margin: 0 0 12px;
+}
+
+/* Newsletter helper text - prominent styling */
+.newsletter-description .newsletter-helper-text {
+  font-size: 15px;
+  color: oklch(0.75 0.18 55);
+  font-weight: 500;
+  margin: 0 0 16px;
+  text-align: center;
+  padding: 8px 12px;
+  background: oklch(0.75 0.18 55 / 0.08);
+  border-radius: 8px;
+  border: 1px solid oklch(0.75 0.18 55 / 0.15);
 }
 
 .newsletter-benefits {

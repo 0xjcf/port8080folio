@@ -130,15 +130,21 @@
 
                 <!-- CTAs -->
                 <nav class="cta-row" aria-label="primary actions">
-                    <a class="btn btn-primary" href="#contact">
-                        <span>Book Your Free Strategy Call</span>
+                    <a class="btn btn-primary" href="#contact"
+                        title="Get a tailored plan for your business in 30 minutes">
+                        <span>Book a Free AI Strategy Call</span>
                         <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M5 12h12M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-                    <a class="btn btn-secondary" href="#services">See Services</a>
+                    <a class="btn btn-secondary" href="#services">Explore Services</a>
                 </nav>
+
+                <!-- Social Proof Counter -->
+                <div class="social-proof">
+                    <p class="social-proof-text">Join 200+ businesses who've booked an AI audit</p>
+                </div>
 
                 <!-- Trust signals (unchanged) -->
                 <div class="hero__trust">
@@ -280,19 +286,19 @@
                 <!-- Service Cards Grid (4 cards) -->
                 <div class="services__grid">
                     <!-- AI for Local Business -->
+                    <!-- AI Enablement for Local Business -->
                     <article id="svc-ai" class="service-card" tabindex="0">
                         <div class="service-card__icon" aria-hidden="true">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 3v18m9-9H3" />
+                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                         </div>
-                        <h3>AI Enablement (Local Business)</h3>
-                        <p>Identify quick wins: lead capture, follow‑ups, proposals, intake, and content—automated with
-                            AI.</p>
+                        <h3>Turn Your Data into Results</h3>
+                        <p>Capture leads, automate follow‑ups, and save 10–30% of your team's time in 2–4 weeks.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">2–4 wks</span><span class="metric-label">to
-                                    first ROI</span></div>
+                            <div class="metric"><span class="metric-value">2–4 wks</span><span
+                                    class="metric-label">Quick ROI</span></div>
                             <div class="metric"><span class="metric-value">10–30%</span><span class="metric-label">Ops
                                     time saved</span></div>
                         </div>
@@ -306,14 +312,14 @@
                                     d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </div>
-                        <h3>Websites & Applications</h3>
-                        <p>High‑performance sites and lightweight apps with clear funnels, accessibility, and measurable
-                            outcomes.</p>
+                        <h3>Websites That Convert</h3>
+                        <p>Fast, mobile‑ready, and designed to turn visitors into customers. Optimized for SEO, UX, and
+                            accessibility.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">&lt;1s</span><span class="metric-label">Core
-                                    page LCP</span></div>
+                            <div class="metric"><span class="metric-value">&lt;1s</span><span class="metric-label">Load
+                                    time</span></div>
                             <div class="metric"><span class="metric-value">A+</span><span
-                                    class="metric-label">Accessibility</span></div>
+                                    class="metric-label">Accessibility grade</span></div>
                         </div>
                     </article>
 
@@ -325,14 +331,14 @@
                                     d="M8 7h8M8 11h8M5 19l7-3 7 3" />
                             </svg>
                         </div>
-                        <h3>Live Workshops</h3>
-                        <p>Hands‑on sessions for teams: AI use‑cases, statecharts & actor model, and delivery playbooks.
-                        </p>
+                        <h3>Hands‑On Training for Your Team</h3>
+                        <p>Practical AI, statecharts, and delivery workshops. Leave with strategies you can apply
+                            immediately.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">3 hrs</span><span
-                                    class="metric-label">Focused training</span></div>
-                            <div class="metric"><span class="metric-value">100%</span><span class="metric-label">Team
-                                    ready‑to‑apply</span></div>
+                            <div class="metric"><span class="metric-value">3-hour</span><span
+                                    class="metric-label">Intensive</span></div>
+                            <div class="metric"><span class="metric-value">100%</span><span
+                                    class="metric-label">Ready‑to‑apply</span></div>
                         </div>
                     </article>
 
@@ -344,14 +350,14 @@
                                     d="M12 6l-8 4 8 4 8-4-8-4zM4 14l8 4 8-4" />
                             </svg>
                         </div>
-                        <h3>Advisory & Technical Architecture</h3>
-                        <p>Translate goals into system design: pick the right stack, model behavior, and de‑risk
-                            delivery.</p>
+                        <h3>Clear Roadmaps, Zero Waste</h3>
+                        <p>Get actionable system designs, risk planning, and technology guidance that fit your business
+                            goals.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">1–2 wks</span><span
-                                    class="metric-label">Decision framework</span></div>
+                            <div class="metric"><span class="metric-value">1–2 wk</span><span
+                                    class="metric-label">Framework</span></div>
                             <div class="metric"><span class="metric-value">Zero‑waste</span><span
-                                    class="metric-label">Roadmaps</span></div>
+                                    class="metric-label">Roadmaps save budget</span></div>
                         </div>
                     </article>
                 </div>
@@ -398,8 +404,9 @@
                         Schedule a Call
                     </a>
                     <a href="#contact-forms" class="button button--secondary" aria-label="Start AI mini-audit">
-                        Free AI Mini‑Audit
+                        Start a Free AI Mini‑Audit
                         <span class="arrow" aria-hidden="true">→</span>
+                        <span class="button-subtext">Receive a custom 1-page report within 24 hours</span>
                     </a>
                 </div>
 
@@ -426,6 +433,12 @@
                     </h2>
                     <p class="section-subtitle">Ready to transform your business? Send me a message or join my
                         newsletter for insights.</p>
+
+                    <!-- Social Proof for Forms -->
+                    <div class="forms-social-proof">
+                        <p class="forms-social-proof-text">✨ I typically reply within 24 hours with actionable next
+                            steps</p>
+                    </div>
                 </div>
 
                 <!-- Tab Navigation (Mobile Only) -->
@@ -460,9 +473,7 @@
                             </svg>
                         </div>
                         <h3 class="form-title">Send a Message</h3>
-                        <form class="contact-form pe-form pe-form--contact"
-                            action="https://website-forms-production.bluejf-llc.workers.dev/api/contact"
-                            data-dev-action="http://127.0.0.1:8787/api/contact" method="POST">
+                        <form class="contact-form pe-form pe-form--contact" action="{{CONTACT_API_URL}}" method="POST">
                             <fieldset style="border: none; padding: 0; margin: 0;">
                                 <legend class="visually-hidden">Contact Information</legend>
 
@@ -476,7 +487,7 @@
                                             <path
                                                 d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                                         </svg>
-                                        Enter your name
+                                        Please enter at least 2 characters
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -492,7 +503,7 @@
                                             <path
                                                 d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                                         </svg>
-                                        Enter a valid email address
+                                        Enter a valid email address (name@example.com)
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -537,7 +548,7 @@
                         </noscript>
 
                         <div class="form-success" role="status" aria-live="polite" hidden>
-                            Thanks! I'll reply within 24 hours.
+                            ✅ Thanks! I'll reply within 24 hours with next steps.
                         </div>
                     </div>
 
@@ -550,8 +561,10 @@
                                 </path>
                             </svg>
                         </div>
-                        <h3 class="form-title">Weekly Insights</h3>
+                        <h3 class="form-title">Subscribe for Weekly AI Tips</h3>
                         <div class="newsletter-description">
+                            <p class="newsletter-helper-text">Get case studies, templates, and insights — unsubscribe
+                                anytime.</p>
                             <p>Get exclusive insights on:</p>
                             <ul class="newsletter-benefits">
                                 <li>Practical AI for local business</li>
@@ -560,10 +573,8 @@
                                 <li>Workshop invites & templates</li>
                             </ul>
                         </div>
-                        <form class="newsletter-form pe-form pe-form--newsletter"
-                            action="https://website-forms-production.bluejf-llc.workers.dev/api/newsletter"
-                            data-dev-action="http://127.0.0.1:8787/api/newsletter" method="post"
-                            id="newsletter-subscribe-form">
+                        <form class="newsletter-form pe-form pe-form--newsletter" action="{{NEWSLETTER_API_URL}}"
+                            method="POST" id="newsletter-subscribe-form">
                             <div class="form-group">
                                 <label for="newsletter-email" class="form-label">Email Address</label>
                                 <input type="email" id="newsletter-email" name="email" class="form-input"
@@ -587,18 +598,18 @@
                                         <path
                                             d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                                     </svg>
-                                    Enter a valid email address
+                                    Enter a valid email address (name@example.com)
                                 </div>
                             </div>
 
                             <button type="submit" class="button button--secondary button--full"
                                 aria-label="Subscribe to weekly insights newsletter">
-                                <span class="button-text">Subscribe to Newsletter</span>
+                                <span class="button-text">Subscribe for Weekly Insights</span>
                                 <span class="button-icon" aria-hidden="true">→</span>
                             </button>
 
-                            <p id="newsletter-help" class="form-note">We'll send occasional updates. Unsubscribe
-                                anytime.</p>
+                            <p id="newsletter-help" class="form-note">Get weekly AI tips, case studies, and
+                                resources—unsubscribe anytime.</p>
 
                             <noscript>
                                 <p class="form-note"
@@ -608,7 +619,7 @@
                             </noscript>
                         </form>
                         <div class="form-success" role="status" aria-live="polite" hidden>
-                            Welcome! Check your inbox for confirmation.
+                            🎉 You're subscribed! Check your inbox for confirmation.
                         </div>
                     </div>
                 </div>
@@ -651,26 +662,6 @@
             if ('classList' in d) {
                 d.classList.remove('no-js');
                 d.classList.add('js-enabled');
-            }
-        })();
-    </script>
-
-    <!-- Development environment form action detection -->
-    <script>
-        (function () {
-            var isLocalDev = location.hostname === 'localhost' ||
-                location.hostname === '127.0.0.1' ||
-                location.hostname === '0.0.0.0';
-
-            if (isLocalDev) {
-                var forms = document.querySelectorAll('form[data-dev-action]');
-                for (var i = 0; i < forms.length; i++) {
-                    var form = forms[i];
-                    var devAction = form.getAttribute('data-dev-action');
-                    if (devAction) {
-                        form.action = devAction;
-                    }
-                }
             }
         })();
     </script>
