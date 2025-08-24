@@ -31,7 +31,7 @@ tmp/
 temp/
 
 # Project planning (local only)
-# project-planning/
+project-planning/
 
 # Build outputs - GitHub Actions will build these
 dist/
@@ -58,4 +58,4 @@ logs/
 # Cache
 .cache/
 
-# audit-results/
+audit-results/

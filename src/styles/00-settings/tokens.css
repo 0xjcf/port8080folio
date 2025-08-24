@@ -91,13 +91,27 @@
 
   --color-success: var(--color-emerald-500);
   --color-warning: var(--color-amber-500);
-  --color-error: var(--color-rose-500);
+  --color-error: var(--color-rose-500); /* General error state (system/server errors) */
 
   /* Form validation colors (from contact-forms) */
-  --color-valid: var(--color-emerald-500);
+  --color-valid: var(--color-emerald-500); /* Client-side form validation success */
   --color-valid-ring: color-mix(in oklch, var(--color-valid) 22%, transparent);
-  --color-invalid: oklch(0.61 0.24 25);
+  --color-invalid: oklch(0.61 0.24 25); /* Client-side form validation invalid */
   --color-invalid-ring: color-mix(in oklch, var(--color-invalid) 22%, transparent);
+
+  /* Form validation aliases for backward compatibility */
+  --valid: var(--color-valid);
+  --valid-ring: var(--color-valid-ring);
+  --invalid: var(--color-invalid);
+  --invalid-ring: var(--color-invalid-ring);
+
+  /* Focus outline colors - centralized for consistency */
+  --color-focus-outline: color-mix(
+    in oklch,
+    var(--color-brand-secondary) 70%,
+    var(--color-text-light)
+  );
+  --color-focus-outline-alt: color-mix(in oklch, var(--color-brand-primary) 50%, transparent);
 
   /* ======================
      Gradients
@@ -172,7 +186,8 @@
   --space-4: 1rem; /* 16px */
   --space-4-5: 1.125rem; /* 18px */
   --space-5: 1.25rem; /* 20px */
-  --space-5-5: 1.375rem; /* 22px */  --space-6: 1.5rem; /* 24px */
+  --space-5-5: 1.375rem; /* 22px */
+  --space-6: 1.5rem; /* 24px */
   --space-7: 1.75rem; /* 28px */
   --space-8: 2rem; /* 32px */
   --space-9: 2.25rem; /* 36px */
@@ -196,7 +211,7 @@
      Container Widths
      Common max-width values for layout containers
      ====================== */
-  
+
   --container-xs: 20rem; /* 320px - mobile */
   --container-sm: 24rem; /* 384px - small mobile */
   --container-md: 36rem; /* 576px - tablet */
@@ -204,13 +219,13 @@
   --container-xl: 66.25rem; /* 1060px - wide content */
   --container-2xl: 87.5rem; /* 1400px - full width */
   --container-prose: 65ch; /* Optimal reading width */
-  
+
   /* Grid and component specific widths */
   --grid-min-card: 15.625rem; /* 250px - minimum card width */
   --grid-min-tile: 17.5rem; /* 280px - minimum tile width */
   --grid-min-feature: 21.875rem; /* 350px - feature card */
   --component-modal: 22.5rem; /* 360px - modal/dialog width */
-  
+
   /* Animation & Transform distances */
   --transform-distance-xs: 1px;
   --transform-distance-sm: 12px;
@@ -219,10 +234,10 @@
   --transform-distance-xl: 60px;
   --transform-distance-2xl: 80px;
   --transform-distance-3xl: 100px;
-  
+
   /* Special font sizes */
   --font-size-17: 17px; /* Specific size used in forms */
-  
+
   /* Blur effects */
   --blur-sm: 8px;
   --blur-md: 16px;
@@ -431,7 +446,7 @@
   /* Mobile typography */
   --h1-mobile: clamp(2.25rem, 8vw, 3rem);
   --body-mobile: var(--text-base);
-  
+
   /* Mobile panel blur for performance */
   --panel-blur: var(--backdrop-blur-sm);
 }

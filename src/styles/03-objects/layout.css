@@ -12,6 +12,24 @@ html {
   font-size: var(--space-4);
   color: var(--color-text);
   background-color: var(--color-background);
+  color-scheme: light;
+}
+
+/* Dark theme color-scheme */
+html.dark-theme {
+  color-scheme: dark;
+}
+
+/* Light theme color-scheme - explicit opt-in (redundant with html default, but explicit for clarity) */
+html.light-theme {
+  color-scheme: light;
+}
+
+/* Auto dark mode fallback - respects system preference */
+@media (prefers-color-scheme: dark) {
+  html:not(.light-theme) {
+    color-scheme: dark;
+  }
 }
 
 body {
@@ -107,7 +125,7 @@ section {
   .grid--2 {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .grid--3,
   .grid--4 {
     grid-template-columns: repeat(2, 1fr);
@@ -119,7 +137,7 @@ section {
   .grid--3 {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .grid--4 {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -416,7 +434,7 @@ body > header[role="banner"] {
 /* Desktop adjustments */
 @media (min-width: 1024px) {
   /* About intro styles moved to about.css */
-  
+
   .highlights-grid {
     grid-template-columns: repeat(3, 1fr);
   }

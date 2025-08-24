@@ -182,7 +182,8 @@ body.dark-theme .about__title .gradient {
     color-mix(in oklch, var(--color-brand-primary) 5%, transparent)
   );
   padding: var(--space-0-5); /* Space for glow border */
-  box-shadow: 0 var(--space-4-5) var(--space-8) color-mix(in oklch, var(--color-brand-primary) 14%, transparent); /* Mobile optimized glow */
+  box-shadow: 0 var(--space-4-5) var(--space-8)
+    color-mix(in oklch, var(--color-brand-primary) 14%, transparent); /* Mobile optimized glow */
   margin: var(--space-3-5) auto var(--space-2);
   align-self: center;
 }
@@ -354,15 +355,10 @@ body.dark-theme .about__title .gradient {
   transform: translateY(calc(var(--space-0-5) * -0.25)); /* Very subtle lift */
 }
 
-.tag:focus-visible {
-  outline: var(--space-0-5) solid color-mix(in oklch, var(--color-brand-primary) 50%, transparent);
-  outline-offset: var(--space-0-5);
-}
-
 /* Focus-visible for accessibility */
 .tag:focus-visible,
 .about__avatar:focus-visible {
-  outline: var(--space-0-5) solid color-mix(in oklch, var(--color-brand-primary) 50%, transparent);
+  outline: var(--space-0-5) solid var(--focus-outline-alt, var(--color-focus-outline-alt));
   outline-offset: var(--space-0-5);
 }
 
@@ -542,7 +538,8 @@ body.dark-theme .about__title .gradient {
   width: var(--space-32);
   height: var(--space-32);
   margin: var(--space-3-5) auto var(--space-2);
-  box-shadow: 0 var(--space-4-5) var(--space-8) color-mix(in oklch, var(--color-brand-primary) 14%, transparent);
+  box-shadow: 0 var(--space-4-5) var(--space-8)
+    color-mix(in oklch, var(--color-brand-primary) 14%, transparent);
   align-self: center;
 }
 
@@ -768,4 +765,3 @@ body.dark-theme .about__title .gradient {
     padding: var(--space-32) var(--space-6);
   }
 }
-

@@ -32,7 +32,7 @@
 }
 
 .forms__title {
-  font: 600 clamp(2.5rem, 6vw, 5rem)/1.2 inherit;
+  font: 600 clamp(2.5rem, 6vw, 5rem) / 1.2 inherit;
   letter-spacing: -0.02em;
   margin: 0 0 var(--space-10);
   position: relative;
@@ -72,7 +72,7 @@
 }
 
 .section-subtitle {
-  font: var(--text-lg)/1.75 inherit;
+  font: var(--text-lg) / 1.75 inherit;
   color: var(--color-text-light);
   max-width: 70ch;
   margin: 0 auto var(--space-4);
@@ -134,10 +134,16 @@
 }
 #tab-contact:checked ~ .form-tabs label[for="tab-contact"],
 #tab-newsletter:checked ~ .form-tabs label[for="tab-newsletter"] {
-  background: linear-gradient(90deg, var(--color-brand-primary) 0%, var(--color-amber-600) 50%, var(--color-brand-secondary) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-primary) 0%,
+    var(--color-amber-600) 50%,
+    var(--color-brand-secondary) 100%
+  );
   border-color: transparent;
   color: var(--color-neutral-000);
-  box-shadow: 0 var(--space-1) var(--space-3) color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
+  box-shadow: 0 var(--space-1) var(--space-3)
+    color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
 }
 
 .form-tab svg {
@@ -185,7 +191,8 @@
 .forms-grid .form-card:hover {
   transform: var(--transform-lift-sm);
   border-color: var(--color-border-dark);
-  box-shadow: 0 var(--space-7) var(--space-12) color-mix(in oklch, var(--color-brand-primary) 14%, transparent);
+  box-shadow: 0 var(--space-7) var(--space-12)
+    color-mix(in oklch, var(--color-brand-primary) 14%, transparent);
 }
 
 .forms-grid .form-card:hover::before {
@@ -193,12 +200,22 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(var(--space-2-5)); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2-5));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @media (min-width: 768px) {
-  #contact-forms { padding-bottom: var(--space-20); }
-  .form-tabs { display: none; }
+  #contact-forms {
+    padding-bottom: var(--space-20);
+  }
+  .form-tabs {
+    display: none;
+  }
   .forms-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-6);
@@ -211,10 +228,14 @@
     -webkit-backdrop-filter: blur(var(--panel-blur));
     box-shadow: 0 22px 38px color-mix(in oklch, var(--color-brand-primary) 12%, transparent);
   }
-  .forms-grid .form-card.active { animation: none; }
+  .forms-grid .form-card.active {
+    animation: none;
+  }
 }
 @media (min-width: 1024px) {
-  .forms-grid { gap: var(--space-10); }
+  .forms-grid {
+    gap: var(--space-10);
+  }
 }
 
 .form-icon {
@@ -268,7 +289,8 @@
 .form-textarea:focus {
   outline: none;
   border-color: var(--color-brand-primary);
-  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) color-mix(in oklch, var(--color-brand-primary) 10%, transparent);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75)
+    color-mix(in oklch, var(--color-brand-primary) 10%, transparent);
   background: var(--color-surface);
   transform: translateY(calc(var(--transform-distance-xs) * -1));
   transition: var(--transition-fast) ease;
@@ -282,75 +304,89 @@ html.js-enabled .form-textarea:not(.touched):invalid {
 html.js-enabled .form-input:not(.touched):invalid:focus,
 html.js-enabled .form-textarea:not(.touched):invalid:focus {
   border-color: var(--color-invalid);
-  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) color-mix(in oklch, var(--color-invalid) 10%, transparent);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75)
+    color-mix(in oklch, var(--color-invalid) 10%, transparent);
 }
 
 html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid),
 html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):is(:valid, :user-valid),
-body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid),
-body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):is(:valid, :user-valid) {
-  border-color: var(--valid);
-  box-shadow: 0 0 0 var(--space-0-5) var(--valid-ring);
+html.js-enabled body.dark-theme :is(.form-input, .form-textarea).touched:is(:valid, :user-valid),
+html.js-enabled
+  body.dark-theme
+  .pe-form.was-validated
+  :is(.form-input, .form-textarea):is(:valid, :user-valid) {
+  border-color: var(--color-valid);
+  box-shadow: 0 0 0 var(--space-0-5) var(--color-valid-ring);
 }
 
 html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid):focus,
-html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):is(:valid, :user-valid):focus,
-body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid):focus,
-body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):is(:valid, :user-valid):focus {
-  border-color: var(--valid);
-  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--valid-ring);
+html.js-enabled
+  .pe-form.was-validated
+  :is(.form-input, .form-textarea):is(:valid, :user-valid):focus,
+html.js-enabled
+  body.dark-theme
+  :is(.form-input, .form-textarea).touched:is(:valid, :user-valid):focus,
+html.js-enabled
+  body.dark-theme
+  .pe-form.was-validated
+  :is(.form-input, .form-textarea):is(:valid, :user-valid):focus {
+  border-color: var(--color-valid);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--color-valid-ring);
 }
 
 html.js-enabled :is(.form-input, .form-textarea).touched:invalid,
 html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid,
-body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:invalid,
-body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid {
-  border-color: var(--invalid);
-  box-shadow: 0 0 0 var(--space-0-5) var(--invalid-ring);
+html.js-enabled body.dark-theme :is(.form-input, .form-textarea).touched:invalid,
+html.js-enabled body.dark-theme .pe-form.was-validated :is(.form-input, .form-textarea):invalid {
+  border-color: var(--color-invalid);
+  box-shadow: 0 0 0 var(--space-0-5) var(--color-invalid-ring);
 }
 
 html.js-enabled :is(.form-input, .form-textarea).touched:invalid:focus,
 html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid:focus,
-body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:invalid:focus,
-body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid:focus {
-  border-color: var(--invalid);
-  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--invalid-ring);
+html.js-enabled body.dark-theme :is(.form-input, .form-textarea).touched:invalid:focus,
+html.js-enabled
+  body.dark-theme
+  .pe-form.was-validated
+  :is(.form-input, .form-textarea):invalid:focus {
+  border-color: var(--color-invalid);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--color-invalid-ring);
 }
 
 @supports selector(input:user-invalid) {
   html.js-enabled :is(.form-input, .form-textarea):user-valid:not(:placeholder-shown) {
-    border-color: var(--valid);
-    box-shadow: 0 0 0 var(--space-0-5) var(--valid-ring);
+    border-color: var(--color-valid);
+    box-shadow: 0 0 0 var(--space-0-5) var(--color-valid-ring);
   }
   html.js-enabled :is(.form-input, .form-textarea):user-valid:not(:placeholder-shown):focus {
-    border-color: var(--valid);
-    box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--valid-ring);
+    border-color: var(--color-valid);
+    box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--color-valid-ring);
   }
   html.js-enabled :is(.form-input, .form-textarea):user-invalid {
-    border-color: var(--invalid);
-    box-shadow: 0 0 0 var(--space-0-5) var(--invalid-ring);
+    border-color: var(--color-invalid);
+    box-shadow: 0 0 0 var(--space-0-5) var(--color-invalid-ring);
   }
   html.js-enabled :is(.form-input, .form-textarea):user-invalid:focus {
-    border-color: var(--invalid);
-    box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--invalid-ring);
+    border-color: var(--color-invalid);
+    box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--color-invalid-ring);
   }
 }
 
 html:not(.js-enabled) :is(.form-input, .form-textarea):valid:not(:placeholder-shown) {
-  border-color: var(--valid);
-  box-shadow: 0 0 0 var(--space-0-5) var(--valid-ring);
+  border-color: var(--color-valid);
+  box-shadow: 0 0 0 var(--space-0-5) var(--color-valid-ring);
 }
 html:not(.js-enabled) :is(.form-input, .form-textarea):valid:not(:placeholder-shown):focus {
-  border-color: var(--valid);
-  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--valid-ring);
+  border-color: var(--color-valid);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--color-valid-ring);
 }
 html:not(.js-enabled) :is(.form-input, .form-textarea):invalid:not(:placeholder-shown) {
-  border-color: var(--invalid);
-  box-shadow: 0 0 0 var(--space-0-5) var(--invalid-ring);
+  border-color: var(--color-invalid);
+  box-shadow: 0 0 0 var(--space-0-5) var(--color-invalid-ring);
 }
 html:not(.js-enabled) :is(.form-input, .form-textarea):invalid:not(:placeholder-shown):focus {
-  border-color: var(--invalid);
-  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--invalid-ring);
+  border-color: var(--color-invalid);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--color-invalid-ring);
 }
 
 @media (prefers-contrast: high) {
@@ -360,7 +396,10 @@ html:not(.js-enabled) :is(.form-input, .form-textarea):invalid:not(:placeholder-
     outline-offset: var(--space-0-5);
   }
 }
-.form-input--error, .form-textarea--error { border-color: var(--color-error); }
+.form-input--error,
+.form-textarea--error {
+  border-color: var(--color-invalid);
+}
 
 .form-error {
   display: none;
@@ -368,12 +407,12 @@ html:not(.js-enabled) :is(.form-input, .form-textarea):invalid:not(:placeholder-
   gap: var(--space-1-5);
   margin-top: var(--space-2);
   padding: var(--space-2) var(--space-2-5);
-  border: var(--space-px) solid color-mix(in oklch, var(--invalid) 20%, transparent);
+  border: var(--space-px) solid color-mix(in oklch, var(--color-invalid) 20%, transparent);
   border-radius: var(--radius-lg);
   font-size: var(--text-xs);
   line-height: 1.3;
-  color: var(--invalid);
-  background: color-mix(in oklch, var(--invalid) 8%, transparent);
+  color: var(--color-invalid);
+  background: color-mix(in oklch, var(--color-invalid) 8%, transparent);
 }
 
 html.js-enabled .form-group .blurred:invalid ~ .form-error,
@@ -387,20 +426,27 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   }
   html.js-enabled .form-group input:user-invalid,
   html.js-enabled .form-group textarea:user-invalid {
-    border-color: var(--invalid);
-    box-shadow: 0 0 0 var(--space-0-5) var(--invalid-ring);
+    border-color: var(--color-invalid);
+    box-shadow: 0 0 0 var(--space-0-5) var(--color-invalid-ring);
   }
   html.js-enabled .form-group input:user-valid:not(:placeholder-shown),
   html.js-enabled .form-group textarea:user-valid:not(:placeholder-shown) {
-    border-color: var(--valid);
-    box-shadow: 0 0 0 var(--space-0-5) var(--valid-ring);
+    border-color: var(--color-valid);
+    box-shadow: 0 0 0 var(--space-0-5) var(--color-valid-ring);
   }
 }
 
-.form-success { min-height: 1.5rem; }
+.form-success {
+  min-height: 1.5rem;
+}
 
-.form-error svg { width: var(--space-3-5); height: var(--space-3-5); }
-.newsletter-description { margin-bottom: var(--space-6); }
+.form-error svg {
+  width: var(--space-3-5);
+  height: var(--space-3-5);
+}
+.newsletter-description {
+  margin-bottom: var(--space-6);
+}
 
 .newsletter-description p {
   font-size: var(--text-sm);
@@ -419,7 +465,11 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   text-align: center;
 }
 
-.newsletter-benefits { list-style: none; padding: 0; margin: 0; }
+.newsletter-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
 .newsletter-benefits li {
   position: relative;
@@ -429,21 +479,36 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   color: color-mix(in oklch, var(--color-text) 78%, transparent);
 }
 
-.newsletter-benefits li::before { content: "→"; position: absolute; left: 0; color: var(--color-brand-primary); font-weight: bold; }
+.newsletter-benefits li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--color-brand-primary);
+  font-weight: bold;
+}
 
 /* Primary button for contact form */
 .contact-form-card .button--primary {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(90deg, var(--color-brand-primary) 0%, var(--color-amber-600) 50%, var(--color-brand-secondary) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-primary) 0%,
+    var(--color-amber-600) 50%,
+    var(--color-brand-secondary) 100%
+  );
   color: var(--color-neutral-000);
   border: var(--space-px) solid transparent;
-  box-shadow: 0 var(--space-2) var(--space-6) color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
+  box-shadow: 0 var(--space-2) var(--space-6)
+    color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
 }
 
 .contact-form-card .button--primary:hover {
   transform: var(--transform-lift-sm);
-  box-shadow: inset 0 0 0 9999px color-mix(in oklch, var(--color-text) 4%, transparent), 0 var(--space-2-5) var(--space-7) color-mix(in oklch, var(--color-brand-primary) 28%, transparent);
+  box-shadow:
+    inset 0 0 0 9999px color-mix(in oklch, var(--color-text) 4%, transparent),
+    0 var(--space-2-5) var(--space-7)
+    color-mix(in oklch, var(--color-brand-primary) 28%, transparent);
 }
 
 .contact-form-card .button--primary::before {
@@ -451,12 +516,19 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(to right, oklab(0 0 0 / 0) 0%, oklab(0.999994 0.0000455678 0.0000200868 / 0.1) 50%, oklab(0 0 0 / 0) 100%);
+  background: linear-gradient(
+    to right,
+    oklab(0 0 0 / 0) 0%,
+    oklab(0.999994 0.0000455678 0.0000200868 / 0.1) 50%,
+    oklab(0 0 0 / 0) 100%
+  );
   transform: translateX(-100%);
   transition: transform var(--duration-slower) ease;
 }
 
-.contact-form-card .button--primary:hover::before { transform: translateX(120%); }
+.contact-form-card .button--primary:hover::before {
+  transform: translateX(120%);
+}
 .newsletter-form-card .button--secondary {
   background: var(--color-surface);
   color: color-mix(in oklch, var(--color-text) 95%, transparent);
@@ -473,8 +545,12 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   padding: var(--space-px);
   background: var(--brand-grad-cta);
   opacity: 0.4;
-  -webkit-mask: linear-gradient(var(--color-text) 0 0) content-box, linear-gradient(var(--color-text) 0 0);
-  mask: linear-gradient(var(--color-text) 0 0) content-box, linear-gradient(var(--color-text) 0 0);
+  -webkit-mask:
+    linear-gradient(var(--color-text) 0 0) content-box,
+    linear-gradient(var(--color-text) 0 0);
+  mask:
+    linear-gradient(var(--color-text) 0 0) content-box,
+    linear-gradient(var(--color-text) 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -486,13 +562,17 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   border-color: color-mix(in oklch, var(--color-text) 16%, transparent);
   transform: var(--transform-lift-sm);
 }
-.newsletter-form-card .button--secondary:hover::after { opacity: 0.6; }
+.newsletter-form-card .button--secondary:hover::after {
+  opacity: 0.6;
+}
 
 .button--primary:hover .button-icon,
 .button--secondary:hover .button-icon {
   transform: translateX(var(--space-1));
 }
-.button--loading .button-icon { opacity: 0; }
+.button--loading .button-icon {
+  opacity: 0;
+}
 
 .button--loading::after {
   content: "Sending...";
@@ -508,10 +588,17 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-.newsletter-form-card .button--loading::after { content: "Subscribing..."; }
+.newsletter-form-card .button--loading::after {
+  content: "Subscribing...";
+}
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 .contact-form-card .button--primary.button--loading::before {
@@ -519,16 +606,27 @@ html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(120deg, transparent 20%, color-mix(in oklch, var(--color-text) 10%, transparent) 50%, transparent 80%);
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    color-mix(in oklch, var(--color-text) 10%, transparent) 50%,
+    transparent 80%
+  );
   transform: translateX(-100%);
   z-index: var(--z-elevated);
   animation: loadingSheen 2s ease-in-out infinite;
 }
 
 @keyframes loadingSheen {
-  0% { transform: translateX(-100%); }
-  50% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 html:not(.js-enabled) .button--primary:active,
@@ -552,7 +650,7 @@ html:not(.js-enabled) .button--secondary:active {
 
 .button--primary:focus-visible,
 .button--secondary:focus-visible {
-  outline: var(--space-0-5) solid color-mix(in oklch, var(--color-brand-secondary) 70%, var(--color-text-light));
+  outline: var(--space-0-5) solid var(--focus-outline, var(--color-focus-outline));
   outline-offset: calc(var(--space-1) * 0.75);
 }
 .form-note {
@@ -563,20 +661,42 @@ html:not(.js-enabled) .button--secondary:active {
   opacity: 0.9;
 }
 
-.form-card--success { animation: successGlow 1s ease-out; }
+.form-card--success {
+  animation: successGlow 1s ease-out;
+}
 
-.form-card--success::before { opacity: 1; animation: successPulse 2s ease-out; }
+.form-card--success::before {
+  opacity: 1;
+  animation: successPulse 2s ease-out;
+}
 
 @keyframes successGlow {
-  0% { box-shadow: 0 var(--space-6) var(--space-10) color-mix(in oklch, var(--color-brand-primary) 10%, transparent); }
-  50% { box-shadow: 0 var(--space-6) var(--space-10) color-mix(in oklch, var(--color-brand-primary) 10%, transparent), 0 0 0 var(--space-0-5) color-mix(in oklch, var(--color-invalid) 35%, transparent); }
-  100% { box-shadow: 0 var(--space-6) var(--space-10) color-mix(in oklch, var(--color-brand-primary) 10%, transparent); }
+  0% {
+    box-shadow: 0 var(--space-6) var(--space-10)
+      color-mix(in oklch, var(--color-brand-primary) 10%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 var(--space-6) var(--space-10)
+      color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
+      0 0 0 var(--space-0-5) color-mix(in oklch, var(--color-valid) 35%, transparent);
+  }
+  100% {
+    box-shadow: 0 var(--space-6) var(--space-10)
+      color-mix(in oklch, var(--color-brand-primary) 10%, transparent);
+  }
 }
 
 @keyframes successPulse {
-  0% { opacity: 0; }
-  15% { opacity: 1; }
-  100% { opacity: 0.25; }
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.25;
+  }
 }
 
 .form-success {
@@ -593,7 +713,10 @@ html:not(.js-enabled) .button--secondary:active {
   font-weight: 500;
 }
 
-.form-success:not([hidden]) { display: flex; animation: slideInFade var(--duration-base) ease-out; }
+.form-success:not([hidden]) {
+  display: flex;
+  animation: slideInFade var(--duration-base) ease-out;
+}
 
 .form-success::before {
   content: "✓";
@@ -609,36 +732,66 @@ html:not(.js-enabled) .button--secondary:active {
 }
 
 @keyframes slideInFade {
-  from { opacity: 0; transform: var(--transform-lift-lg); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: var(--transform-lift-lg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.newsletter-form-card .button--secondary { backdrop-filter: blur(var(--backdrop-blur-sm)); -webkit-backdrop-filter: blur(var(--backdrop-blur-sm)); }
+.newsletter-form-card .button--secondary {
+  backdrop-filter: blur(var(--backdrop-blur-sm));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+}
 
-.contact-form-card .button--primary, .newsletter-form-card .button--secondary { box-shadow: var(--elev-1); }
-.contact-form-card .button--primary:hover, .newsletter-form-card .button--secondary:hover { box-shadow: var(--elev-1); transform: none; }
+.contact-form-card .button--primary,
+.newsletter-form-card .button--secondary {
+  box-shadow: var(--elev-1);
+}
+.contact-form-card .button--primary:hover,
+.newsletter-form-card .button--secondary:hover {
+  box-shadow: var(--elev-1);
+  transform: none;
+}
 @media (min-width: 640px) {
   .newsletter-form-card .button--secondary {
     backdrop-filter: blur(var(--backdrop-blur-md));
     -webkit-backdrop-filter: blur(var(--backdrop-blur-md));
   }
   .contact-form-card .button--primary {
-    box-shadow: 0 var(--space-2) var(--space-6) color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
+    box-shadow: 0 var(--space-2) var(--space-6)
+      color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
   }
   .contact-form-card .button--primary:hover,
   .newsletter-form-card .button--secondary:hover {
     transform: var(--transform-lift-sm);
   }
   .contact-form-card .button--primary:hover {
-    box-shadow: inset 0 0 0 9999px color-mix(in oklch, var(--color-text) 4%, transparent), 0 var(--space-2-5) var(--space-7) color-mix(in oklch, var(--color-brand-primary) 28%, transparent);
+    box-shadow:
+      inset 0 0 0 9999px color-mix(in oklch, var(--color-text) 4%, transparent),
+      0 var(--space-2-5) var(--space-7)
+      color-mix(in oklch, var(--color-brand-primary) 28%, transparent);
   }
 }
 
-.contact-form, .newsletter-form { display: grid; gap: var(--space-4); }
+.contact-form,
+.newsletter-form {
+  display: grid;
+  gap: var(--space-4);
+}
 
-.form-error { font-size: var(--text-sm); }
+.form-error {
+  font-size: var(--text-sm);
+}
 
-.forms-grid .form-card.active { display: flex; flex-direction: column; overflow: visible; }
+.forms-grid .form-card.active {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
 
 .contact-form-card .button--primary.button--full {
   position: sticky;
@@ -675,6 +828,10 @@ html:not(.js-enabled) .button--secondary:active {
     transform: none;
   }
   @keyframes successGlow {
-    0%, 100% { box-shadow: 0 var(--space-6) var(--space-10) color-mix(in oklch, var(--color-brand-primary) 10%, transparent); }
+    0%,
+    100% {
+      box-shadow: 0 var(--space-6) var(--space-10)
+        color-mix(in oklch, var(--color-brand-primary) 10%, transparent);
+    }
   }
 }

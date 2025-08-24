@@ -142,7 +142,8 @@
   );
   color: var(--color-neutral-000);
   border: var(--space-px) solid transparent;
-  box-shadow: 0 var(--space-2) var(--space-6) color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
+  box-shadow: 0 var(--space-2) var(--space-6)
+    color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
   position: relative;
   overflow: hidden;
 }
@@ -151,7 +152,8 @@
   transform: var(--transform-lift-sm);
   box-shadow:
     inset 0 0 0 9999px color-mix(in oklch, var(--color-text) 4%, transparent),
-    0 var(--space-2-5) var(--space-7) color-mix(in oklch, var(--color-brand-primary) 28%, transparent);
+    0 var(--space-2-5) var(--space-7)
+    color-mix(in oklch, var(--color-brand-primary) 28%, transparent);
 }
 
 /* Add sheen effect like hero button */
@@ -231,7 +233,7 @@
 
 /* Focus states */
 .contact__actions .button:focus-visible {
-  outline: var(--space-0-5) solid color-mix(in oklch, var(--color-brand-secondary) 70%, var(--color-text-light));
+  outline: var(--space-0-5) solid var(--focus-outline, var(--color-focus-outline));
   outline-offset: calc(var(--space-1) * 0.75);
 }
 
@@ -305,7 +307,7 @@
 }
 
 .contact__info a:focus-visible {
-  outline: var(--space-0-5) solid color-mix(in oklch, var(--color-brand-secondary) 70%, var(--color-text-light));
+  outline: var(--space-0-5) solid var(--focus-outline, var(--color-focus-outline));
   outline-offset: calc(var(--space-1) * 0.75);
   border-bottom-color: transparent; /* Avoid double emphasis */
 }
