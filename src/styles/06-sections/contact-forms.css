@@ -1,0 +1,680 @@
+/* Contact Forms - Progressive validation & custom loading states */
+
+/* Visually Hidden Helper Class */
+.visually-hidden {
+  position: absolute;
+  width: var(--space-px);
+  height: var(--space-px);
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+#contact-forms {
+  position: relative;
+  z-index: var(--z-elevated);
+  isolation: isolate;
+  overflow: hidden;
+  padding-bottom: var(--space-15);
+}
+
+#contact-forms .container {
+  position: relative;
+  z-index: var(--z-sticky);
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-15);
+  position: relative;
+}
+
+.forms__title {
+  font: 600 clamp(2.5rem, 6vw, 5rem)/1.2 inherit;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-10);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.25em;
+}
+
+.forms__title .text-white,
+.forms__title .gradient {
+  font-weight: 600;
+  display: inline;
+}
+.forms__title .text-white {
+  color: var(--color-text);
+}
+.forms__title .gradient {
+  background: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.forms__title::after {
+  content: "";
+  position: absolute;
+  bottom: calc(var(--space-4) * -1);
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--space-10);
+  height: var(--space-0-5);
+  border-radius: var(--radius-full);
+  background: var(--brand-grad-text);
+  opacity: 0.45;
+}
+
+.section-subtitle {
+  font: var(--text-lg)/1.75 inherit;
+  color: var(--color-text-light);
+  max-width: 70ch;
+  margin: 0 auto var(--space-4);
+}
+
+.forms-social-proof {
+  margin: var(--space-5) auto 0;
+  text-align: center;
+}
+
+.forms-social-proof-text {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-brand-primary);
+  background: color-mix(in oklch, var(--color-brand-primary) 8%, transparent);
+  border: var(--space-px) solid color-mix(in oklch, var(--color-brand-primary) 15%, transparent);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--space-5);
+  backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
+  display: inline-block;
+  margin: 0;
+}
+
+.form-tabs {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+  padding: var(--space-2);
+  background: oklch(0.985 0 0 / 0.02);
+  border: var(--space-px) solid var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+.form-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: transparent;
+  border: var(--space-px) solid oklch(0.985 0 0 / 0.1);
+  border-radius: var(--radius-lg);
+  color: oklch(0.985 0 0 / 0.7);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all var(--duration-base) var(--ease-in-out);
+}
+
+.form-tab:hover {
+  background: var(--color-surface);
+  border-color: var(--color-border-dark);
+  color: var(--color-text-light);
+}
+#tab-contact:checked ~ .form-tabs label[for="tab-contact"],
+#tab-newsletter:checked ~ .form-tabs label[for="tab-newsletter"] {
+  background: linear-gradient(90deg, var(--color-brand-primary) 0%, var(--color-amber-600) 50%, var(--color-brand-secondary) 100%);
+  border-color: transparent;
+  color: var(--color-neutral-000);
+  box-shadow: 0 var(--space-1) var(--space-3) color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
+}
+
+.form-tab svg {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+.forms-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 0;
+}
+
+.forms-grid .form-card {
+  display: none;
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: var(--space-px) solid var(--color-border-dark);
+  border-radius: var(--radius-2xl);
+  backdrop-filter: blur(var(--backdrop-blur-sm));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+  box-shadow: var(--elev-1);
+  transition: all var(--duration-base) var(--ease-in-out);
+}
+
+.forms-grid .form-card.active {
+  display: block;
+  animation: fadeIn var(--duration-base) ease-in-out;
+}
+
+.forms-grid .form-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--space-0-5);
+  background: var(--brand-grad-cta);
+  opacity: 0;
+  transition: opacity var(--duration-base);
+}
+
+.forms-grid .form-card:hover {
+  transform: var(--transform-lift-sm);
+  border-color: var(--color-border-dark);
+  box-shadow: 0 var(--space-7) var(--space-12) color-mix(in oklch, var(--color-brand-primary) 14%, transparent);
+}
+
+.forms-grid .form-card:hover::before {
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(var(--space-2-5)); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (min-width: 768px) {
+  #contact-forms { padding-bottom: var(--space-20); }
+  .form-tabs { display: none; }
+  .forms-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+  }
+  .forms-grid .form-card {
+    display: block;
+    padding: var(--space-8);
+    backdrop-filter: blur(var(--panel-blur));
+    -webkit-backdrop-filter: blur(var(--panel-blur));
+    box-shadow: 0 22px 38px color-mix(in oklch, var(--color-brand-primary) 12%, transparent);
+  }
+  .forms-grid .form-card.active { animation: none; }
+}
+@media (min-width: 1024px) {
+  .forms-grid { gap: var(--space-10); }
+}
+
+.form-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-12);
+  height: var(--space-12);
+  margin-bottom: var(--space-6);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: none;
+  border-radius: var(--space-2-5);
+  position: relative;
+}
+
+.form-icon svg {
+  width: var(--space-6);
+  height: var(--space-6);
+  color: var(--color-brand-primary);
+  position: relative;
+  z-index: var(--z-elevated);
+}
+.form-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 var(--space-5);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.contact-form .form-label--visible {
+  font-size: calc(var(--space-3) * 0.917);
+  font-variant-caps: small-caps;
+  color: var(--color-text-muted);
+}
+
+.contact-form .form-input,
+.contact-form .form-textarea {
+  --input-bg: var(--section-grid-color);
+  --input-color: var(--color-text);
+  font-size: calc(var(--space-4) * 0.9375);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--color-text-muted);
+}
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) color-mix(in oklch, var(--color-brand-primary) 10%, transparent);
+  background: var(--color-surface);
+  transform: translateY(calc(var(--transform-distance-xs) * -1));
+  transition: var(--transition-fast) ease;
+}
+
+html.js-enabled .form-input:not(.touched):invalid,
+html.js-enabled .form-textarea:not(.touched):invalid {
+  border-color: var(--color-border-dark);
+  box-shadow: none;
+}
+html.js-enabled .form-input:not(.touched):invalid:focus,
+html.js-enabled .form-textarea:not(.touched):invalid:focus {
+  border-color: var(--color-invalid);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) color-mix(in oklch, var(--color-invalid) 10%, transparent);
+}
+
+html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid),
+html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):is(:valid, :user-valid),
+body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid),
+body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):is(:valid, :user-valid) {
+  border-color: var(--valid);
+  box-shadow: 0 0 0 var(--space-0-5) var(--valid-ring);
+}
+
+html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid):focus,
+html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):is(:valid, :user-valid):focus,
+body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:is(:valid, :user-valid):focus,
+body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):is(:valid, :user-valid):focus {
+  border-color: var(--valid);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--valid-ring);
+}
+
+html.js-enabled :is(.form-input, .form-textarea).touched:invalid,
+html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid,
+body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:invalid,
+body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid {
+  border-color: var(--invalid);
+  box-shadow: 0 0 0 var(--space-0-5) var(--invalid-ring);
+}
+
+html.js-enabled :is(.form-input, .form-textarea).touched:invalid:focus,
+html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid:focus,
+body.dark-theme html.js-enabled :is(.form-input, .form-textarea).touched:invalid:focus,
+body.dark-theme html.js-enabled .pe-form.was-validated :is(.form-input, .form-textarea):invalid:focus {
+  border-color: var(--invalid);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--invalid-ring);
+}
+
+@supports selector(input:user-invalid) {
+  html.js-enabled :is(.form-input, .form-textarea):user-valid:not(:placeholder-shown) {
+    border-color: var(--valid);
+    box-shadow: 0 0 0 var(--space-0-5) var(--valid-ring);
+  }
+  html.js-enabled :is(.form-input, .form-textarea):user-valid:not(:placeholder-shown):focus {
+    border-color: var(--valid);
+    box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--valid-ring);
+  }
+  html.js-enabled :is(.form-input, .form-textarea):user-invalid {
+    border-color: var(--invalid);
+    box-shadow: 0 0 0 var(--space-0-5) var(--invalid-ring);
+  }
+  html.js-enabled :is(.form-input, .form-textarea):user-invalid:focus {
+    border-color: var(--invalid);
+    box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--invalid-ring);
+  }
+}
+
+html:not(.js-enabled) :is(.form-input, .form-textarea):valid:not(:placeholder-shown) {
+  border-color: var(--valid);
+  box-shadow: 0 0 0 var(--space-0-5) var(--valid-ring);
+}
+html:not(.js-enabled) :is(.form-input, .form-textarea):valid:not(:placeholder-shown):focus {
+  border-color: var(--valid);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--valid-ring);
+}
+html:not(.js-enabled) :is(.form-input, .form-textarea):invalid:not(:placeholder-shown) {
+  border-color: var(--invalid);
+  box-shadow: 0 0 0 var(--space-0-5) var(--invalid-ring);
+}
+html:not(.js-enabled) :is(.form-input, .form-textarea):invalid:not(:placeholder-shown):focus {
+  border-color: var(--invalid);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--invalid-ring);
+}
+
+@media (prefers-contrast: high) {
+  .form-input:focus,
+  .form-textarea:focus {
+    outline: calc(var(--space-1) * 0.75) solid var(--color-brand-primary);
+    outline-offset: var(--space-0-5);
+  }
+}
+.form-input--error, .form-textarea--error { border-color: var(--color-error); }
+
+.form-error {
+  display: none;
+  align-items: center;
+  gap: var(--space-1-5);
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-2-5);
+  border: var(--space-px) solid color-mix(in oklch, var(--invalid) 20%, transparent);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-xs);
+  line-height: 1.3;
+  color: var(--invalid);
+  background: color-mix(in oklch, var(--invalid) 8%, transparent);
+}
+
+html.js-enabled .form-group .blurred:invalid ~ .form-error,
+html.js-enabled .pe-form.was-validated .form-group :invalid ~ .form-error {
+  display: flex;
+}
+@supports selector(input:user-invalid) {
+  html.js-enabled .form-group input.blurred:user-invalid ~ .form-error,
+  html.js-enabled .form-group textarea.blurred:user-invalid ~ .form-error {
+    display: flex;
+  }
+  html.js-enabled .form-group input:user-invalid,
+  html.js-enabled .form-group textarea:user-invalid {
+    border-color: var(--invalid);
+    box-shadow: 0 0 0 var(--space-0-5) var(--invalid-ring);
+  }
+  html.js-enabled .form-group input:user-valid:not(:placeholder-shown),
+  html.js-enabled .form-group textarea:user-valid:not(:placeholder-shown) {
+    border-color: var(--valid);
+    box-shadow: 0 0 0 var(--space-0-5) var(--valid-ring);
+  }
+}
+
+.form-success { min-height: 1.5rem; }
+
+.form-error svg { width: var(--space-3-5); height: var(--space-3-5); }
+.newsletter-description { margin-bottom: var(--space-6); }
+
+.newsletter-description p {
+  font-size: var(--text-sm);
+  color: color-mix(in oklch, var(--color-text) 78%, transparent);
+  margin: 0 0 var(--space-3);
+}
+.newsletter-description .newsletter-helper-text {
+  font-size: calc(var(--space-4) * 0.9375);
+  font-weight: 500;
+  color: var(--color-brand-primary);
+  background: color-mix(in oklch, var(--color-brand-primary) 8%, transparent);
+  border: var(--space-px) solid color-mix(in oklch, var(--color-brand-primary) 15%, transparent);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-4);
+  text-align: center;
+}
+
+.newsletter-benefits { list-style: none; padding: 0; margin: 0; }
+
+.newsletter-benefits li {
+  position: relative;
+  padding: var(--space-2) 0 var(--space-2) var(--space-5);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: color-mix(in oklch, var(--color-text) 78%, transparent);
+}
+
+.newsletter-benefits li::before { content: "→"; position: absolute; left: 0; color: var(--color-brand-primary); font-weight: bold; }
+
+/* Primary button for contact form */
+.contact-form-card .button--primary {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, var(--color-brand-primary) 0%, var(--color-amber-600) 50%, var(--color-brand-secondary) 100%);
+  color: var(--color-neutral-000);
+  border: var(--space-px) solid transparent;
+  box-shadow: 0 var(--space-2) var(--space-6) color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
+}
+
+.contact-form-card .button--primary:hover {
+  transform: var(--transform-lift-sm);
+  box-shadow: inset 0 0 0 9999px color-mix(in oklch, var(--color-text) 4%, transparent), 0 var(--space-2-5) var(--space-7) color-mix(in oklch, var(--color-brand-primary) 28%, transparent);
+}
+
+.contact-form-card .button--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to right, oklab(0 0 0 / 0) 0%, oklab(0.999994 0.0000455678 0.0000200868 / 0.1) 50%, oklab(0 0 0 / 0) 100%);
+  transform: translateX(-100%);
+  transition: transform var(--duration-slower) ease;
+}
+
+.contact-form-card .button--primary:hover::before { transform: translateX(120%); }
+.newsletter-form-card .button--secondary {
+  background: var(--color-surface);
+  color: color-mix(in oklch, var(--color-text) 95%, transparent);
+  border: var(--space-px) solid var(--color-border-dark);
+  backdrop-filter: blur(var(--backdrop-blur-md));
+  padding-right: var(--space-8);
+}
+
+.newsletter-form-card .button--secondary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  padding: var(--space-px);
+  background: var(--brand-grad-cta);
+  opacity: 0.4;
+  -webkit-mask: linear-gradient(var(--color-text) 0 0) content-box, linear-gradient(var(--color-text) 0 0);
+  mask: linear-gradient(var(--color-text) 0 0) content-box, linear-gradient(var(--color-text) 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: opacity var(--duration-fast);
+}
+
+.newsletter-form-card .button--secondary:hover {
+  background: color-mix(in oklch, var(--color-text) 6%, transparent);
+  border-color: color-mix(in oklch, var(--color-text) 16%, transparent);
+  transform: var(--transform-lift-sm);
+}
+.newsletter-form-card .button--secondary:hover::after { opacity: 0.6; }
+
+.button--primary:hover .button-icon,
+.button--secondary:hover .button-icon {
+  transform: translateX(var(--space-1));
+}
+.button--loading .button-icon { opacity: 0; }
+
+.button--loading::after {
+  content: "Sending...";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  z-index: var(--z-sticky);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.newsletter-form-card .button--loading::after { content: "Subscribing..."; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.contact-form-card .button--primary.button--loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent 20%, color-mix(in oklch, var(--color-text) 10%, transparent) 50%, transparent 80%);
+  transform: translateX(-100%);
+  z-index: var(--z-elevated);
+  animation: loadingSheen 2s ease-in-out infinite;
+}
+
+@keyframes loadingSheen {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+html:not(.js-enabled) .button--primary:active,
+html:not(.js-enabled) .button--secondary:active {
+  transform: translateY(var(--transform-distance-xs));
+  opacity: 0.9;
+  transition: all 0.1s ease;
+}
+@supports (selector(:has(*))) {
+  html:not(.js-enabled) form:has(:invalid) [type="submit"] {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+}
+.is-submit-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.button--primary:focus-visible,
+.button--secondary:focus-visible {
+  outline: var(--space-0-5) solid color-mix(in oklch, var(--color-brand-secondary) 70%, var(--color-text-light));
+  outline-offset: calc(var(--space-1) * 0.75);
+}
+.form-note {
+  margin-top: var(--space-4);
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  opacity: 0.9;
+}
+
+.form-card--success { animation: successGlow 1s ease-out; }
+
+.form-card--success::before { opacity: 1; animation: successPulse 2s ease-out; }
+
+@keyframes successGlow {
+  0% { box-shadow: 0 var(--space-6) var(--space-10) color-mix(in oklch, var(--color-brand-primary) 10%, transparent); }
+  50% { box-shadow: 0 var(--space-6) var(--space-10) color-mix(in oklch, var(--color-brand-primary) 10%, transparent), 0 0 0 var(--space-0-5) color-mix(in oklch, var(--color-invalid) 35%, transparent); }
+  100% { box-shadow: 0 var(--space-6) var(--space-10) color-mix(in oklch, var(--color-brand-primary) 10%, transparent); }
+}
+
+@keyframes successPulse {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  100% { opacity: 0.25; }
+}
+
+.form-success {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  background: oklch(0.8 0.17 155 / 0.08);
+  border: var(--space-px) solid oklch(0.8 0.17 155 / 0.2);
+  border-radius: var(--radius-lg);
+  color: oklch(0.8 0.17 155 / 0.95);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.form-success:not([hidden]) { display: flex; animation: slideInFade var(--duration-base) ease-out; }
+
+.form-success::before {
+  content: "✓";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-4-5);
+  height: var(--space-4-5);
+  background: oklch(0.8 0.17 155 / 0.15);
+  border-radius: 50%;
+  font-size: var(--text-xs);
+  flex-shrink: 0;
+}
+
+@keyframes slideInFade {
+  from { opacity: 0; transform: var(--transform-lift-lg); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.newsletter-form-card .button--secondary { backdrop-filter: blur(var(--backdrop-blur-sm)); -webkit-backdrop-filter: blur(var(--backdrop-blur-sm)); }
+
+.contact-form-card .button--primary, .newsletter-form-card .button--secondary { box-shadow: var(--elev-1); }
+.contact-form-card .button--primary:hover, .newsletter-form-card .button--secondary:hover { box-shadow: var(--elev-1); transform: none; }
+@media (min-width: 640px) {
+  .newsletter-form-card .button--secondary {
+    backdrop-filter: blur(var(--backdrop-blur-md));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-md));
+  }
+  .contact-form-card .button--primary {
+    box-shadow: 0 var(--space-2) var(--space-6) color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
+  }
+  .contact-form-card .button--primary:hover,
+  .newsletter-form-card .button--secondary:hover {
+    transform: var(--transform-lift-sm);
+  }
+  .contact-form-card .button--primary:hover {
+    box-shadow: inset 0 0 0 9999px color-mix(in oklch, var(--color-text) 4%, transparent), 0 var(--space-2-5) var(--space-7) color-mix(in oklch, var(--color-brand-primary) 28%, transparent);
+  }
+}
+
+.contact-form, .newsletter-form { display: grid; gap: var(--space-4); }
+
+.form-error { font-size: var(--text-sm); }
+
+.forms-grid .form-card.active { display: flex; flex-direction: column; overflow: visible; }
+
+.contact-form-card .button--primary.button--full {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  min-height: var(--space-11);
+  margin-top: var(--space-2);
+}
+
+@media (min-width: 480px) {
+  .contact-form-card .button--primary.button--full {
+    position: static;
+  }
+  .forms-grid .form-card.active {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .forms-grid .form-card,
+  .contact-form-card .button--primary,
+  .newsletter-form-card .button--secondary,
+  .button-icon {
+    transition: none;
+  }
+  .forms-grid .form-card:hover,
+  .contact-form-card .button--primary:hover,
+  .newsletter-form-card .button--secondary:hover {
+    transform: none;
+  }
+  .button-icon,
+  .button--primary:hover .button-icon,
+  .button--secondary:hover .button-icon {
+    transform: none;
+  }
+  @keyframes successGlow {
+    0%, 100% { box-shadow: 0 var(--space-6) var(--space-10) color-mix(in oklch, var(--color-brand-primary) 10%, transparent); }
+  }
+}

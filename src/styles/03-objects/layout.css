@@ -9,7 +9,7 @@
 
 html {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: var(--space-4);
   color: var(--color-text);
   background-color: var(--color-background);
 }
@@ -41,11 +41,11 @@ main {
 }
 
 .container--narrow {
-  max-width: 800px;
+  max-width: var(--container-lg);
 }
 
 .container--wide {
-  max-width: 1400px;
+  max-width: var(--container-2xl);
 }
 
 /* ======================
@@ -91,22 +91,37 @@ section {
 
 /* Auto-fit responsive grid */
 .grid--auto {
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-min-tile), 1fr));
 }
 
-/* Responsive grids */
-@media (max-width: 767px) {
-  .grid--2,
-  .grid--3,
-  .grid--4 {
-    grid-template-columns: 1fr;
+/* Mobile-first responsive grids */
+/* Mobile base: single column */
+.grid--2,
+.grid--3,
+.grid--4 {
+  grid-template-columns: 1fr;
+}
+
+/* Tablet: restore 2 columns for grid--2, add 2 columns for grid--3/4 */
+@media (min-width: 768px) {
+  .grid--2 {
+    grid-template-columns: repeat(2, 1fr);
   }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
+  
   .grid--3,
   .grid--4 {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: restore full columns */
+@media (min-width: 1024px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .grid--4 {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -209,10 +224,10 @@ body > header[role="banner"] {
   position: sticky;
   top: 0;
   background: var(--color-background);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: var(--space-px) solid var(--color-border);
   z-index: var(--z-40);
-  backdrop-filter: blur(var(--backdrop-blur-lg));
-  background-color: oklch(1 0 0 / 0.9);
+  /* backdrop-filter set in responsive section for performance */
+  background-color: color-mix(in oklch, var(--color-text) 90%, transparent);
 }
 
 nav[role="navigation"] {
@@ -221,11 +236,12 @@ nav[role="navigation"] {
 
 nav ul {
   display: flex;
-  gap: var(--space-6);
+  gap: var(--space-2); /* Mobile base gap */
   list-style: none;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  flex-direction: column; /* Mobile base: vertical */
 }
 
 nav a {
@@ -259,23 +275,12 @@ nav a:focus-visible {
 
 /* ======================
    About Section Layout
+   Note: Specific about styles moved to about.css
    ====================== */
-
-.about__intro {
-  max-width: 80ch;
-  margin-inline: auto;
-  margin-bottom: var(--space-12);
-}
-
-.about__current,
-.about__achievements,
-.about__highlights {
-  margin-top: var(--space-12);
-}
 
 .highlights-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-min-card), 1fr));
   gap: var(--space-6);
   margin-top: var(--space-8);
 }
@@ -288,18 +293,7 @@ nav a:focus-visible {
   background: linear-gradient(to bottom, var(--color-neutral-050), var(--color-primary-50));
 }
 
-.services__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-8);
-  margin-top: var(--space-12);
-}
-
-@media (min-width: 768px) {
-  .services__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+/* Services grid styles moved to services.css */
 
 /* ======================
    Contact Section Layout
@@ -353,7 +347,7 @@ nav a:focus-visible {
 .footer__legal {
   text-align: center;
   padding-top: var(--space-8);
-  border-top: 1px solid var(--color-neutral-800);
+  border-top: var(--space-px) solid var(--color-neutral-800);
 }
 
 .back-to-top {
@@ -377,37 +371,43 @@ nav a:focus-visible {
 }
 
 /* ======================
-   Responsive Layout Adjustments
+   Mobile-First Responsive Layout
    ====================== */
 
-/* Mobile adjustments */
-@media (max-width: 640px) {
+/* Mobile base styles */
+.hero {
+  min-height: 100svh;
+}
+
+/* Mobile: reduce sticky header GPU cost */
+body > header[role="banner"] {
+  backdrop-filter: blur(var(--backdrop-blur-sm));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+}
+
+/* Services grid mobile override moved to services.css */
+
+.highlights-grid {
+  grid-template-columns: 1fr;
+}
+
+/* Small tablet adjustments (641px+) */
+@media (min-width: 640px) {
   .hero {
-    min-height: 100svh;
+    min-height: 100vh;
   }
 
-  /* Reduce sticky header GPU cost on mobile */
+  /* Restore header blur */
   body > header[role="banner"] {
-    backdrop-filter: blur(var(--backdrop-blur-sm));
-    -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+    backdrop-filter: blur(var(--backdrop-blur-lg));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-lg));
   }
 
   nav ul {
-    flex-direction: column;
-    gap: var(--space-2);
+    flex-direction: row;
+    gap: var(--space-6);
   }
 
-  .services__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .highlights-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Tablet adjustments */
-@media (min-width: 641px) and (max-width: 1023px) {
   .highlights-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -415,8 +415,10 @@ nav a:focus-visible {
 
 /* Desktop adjustments */
 @media (min-width: 1024px) {
-  .about__intro {
-    font-size: var(--text-lg);
+  /* About intro styles moved to about.css */
+  
+  .highlights-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

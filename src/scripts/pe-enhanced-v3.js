@@ -11,10 +11,11 @@
     docElement.classList.add('js-enabled');
 
     // Fallback for browsers without :has() support
-    const hasSupport = typeof CSS !== 'undefined' && 
-                      typeof CSS.supports === 'function' && 
-                      CSS.supports('selector(:has(*))');
-                      
+    const hasSupport =
+      typeof CSS !== 'undefined' &&
+      typeof CSS.supports === 'function' &&
+      CSS.supports('selector(:has(*))');
+
     if (!hasSupport) {
       // Add fallback for form validation visual feedback
       document.querySelectorAll('form').forEach((form) => {
@@ -35,7 +36,7 @@
 
         // Create updaters for each submit button
         const updaters = Array.from(submitButtons).map(createSubmitUpdater);
-        
+
         const updateAllSubmits = () => {
           updaters.forEach((updater) => {
             updater();
@@ -45,13 +46,13 @@
         // Listen for input and change events on form
         form.addEventListener('input', updateAllSubmits);
         form.addEventListener('change', updateAllSubmits);
-        
+
         // Listen for form reset events
         form.addEventListener('reset', () => {
           // Use requestAnimationFrame to allow browser to complete reset
           requestAnimationFrame(updateAllSubmits);
         });
-        
+
         // Initial state check
         updateAllSubmits();
       });
@@ -104,7 +105,7 @@
           submitBtn.disabled = true;
           submitBtn.setAttribute('aria-busy', 'true');
           submitBtn.classList.add('button--loading');
-          
+
           // Don't change the text content - let CSS handle the loading text
           // The CSS ::after pseudo-element will show the loading message
         }
@@ -182,13 +183,13 @@
     const initStickyCTA = () => {
       const stickyCTA = document.querySelector('.services__sticky-cta');
       const servicesSection = document.getElementById('services');
-      
+
       if (!stickyCTA || !servicesSection) return;
 
       const observerOptions = {
         root: null,
         rootMargin: '0px',
-        threshold: [0, 0.1, 0.9]
+        threshold: [0, 0.1, 0.9],
       };
 
       const observer = new IntersectionObserver((entries) => {

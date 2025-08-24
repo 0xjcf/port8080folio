@@ -10,15 +10,18 @@
 
 /* Prevent white overscroll on all devices */
 html {
-  background: oklch(0.06 0 0); /* Match darkest body color */
+  background: var(--color-background); /* Match darkest body color */
   /* Modern overscroll control - prevents pull-to-refresh and elastic bounce */
   overscroll-behavior-y: none;
 }
 
 body {
   background:
-    radial-gradient(1800px 900px at 50% 15%, oklch(0.75 0.18 55 / 0.1), transparent 55%),
-    linear-gradient(oklch(0.015 0 0), oklch(0.06 0 0) 35%, oklch(0.06 0 0));
+    radial-gradient(
+      1800px 900px at 50% 15%,
+      color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
+      transparent 55%
+    ), linear-gradient(oklch(0.015 0 0), var(--color-background) 35%, var(--color-background));
   position: relative;
   overflow-x: hidden;
   min-height: 100vh;
@@ -32,10 +35,15 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: -1;
+  z-index: var(--z-below);
   /* Subtle grid */
   background:
-    radial-gradient(circle at 1px 1px, oklch(1 0 0 / 0.04) 1px, transparent 1px) 0 0 / 40px 40px,
+    radial-gradient(
+      circle at var(--space-px) 1px,
+      color-mix(in oklch, var(--color-text) 4%, transparent) 1px,
+      transparent 1px
+    )
+    0 0 / var(--space-10) 40px,
     /* Noise texture */
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='64' height='64' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E") repeat;
   opacity: 0.35;
@@ -43,22 +51,16 @@ body::before {
 }
 
 /* ======================
-   Section Shell
-   Consistent scaffolding
+   Section Theme Effects
+   Spotlights and tints only - base styles in sections-base.css
    ====================== */
-
-.section {
-  position: relative;
-  padding: clamp(72px, 10vw, 128px) 24px;
-  isolation: isolate;
-}
 
 /* Section-local vignette/spotlight controlled by vars */
 .section::before {
   content: "";
   position: absolute;
-  inset: -80px 0 -80px 0;
-  z-index: -1;
+  inset: calc(var(--space-20) * -1) 0 calc(var(--space-20) * -1) 0;
+  z-index: var(--z-below);
   background:
     radial-gradient(
       600px 300px at 50% var(--spot-y, 32%),
@@ -76,7 +78,7 @@ body::before {
 
 /* Consistent gutter between all sections */
 .section + .section {
-  box-shadow: inset 0 24px 60px oklch(0 0 0 / 0.35);
+  box-shadow: inset 0 var(--space-6) var(--space-15) color-mix(in oklch, var(--color-background) 35%, transparent);
   position: relative;
 }
 
@@ -87,16 +89,16 @@ body::before {
   top: 0;
   left: 10%;
   right: 10%;
-  height: 1px;
+  height: var(--space-px);
   background: linear-gradient(
     90deg,
     transparent,
-    oklch(1 0 0 / 0.03) 20%,
-    oklch(1 0 0 / 0.03) 80%,
+    var(--section-grid-color) 20%,
+    var(--section-grid-color) 80%,
     transparent
   );
   pointer-events: none;
-  z-index: 1;
+  z-index: var(--z-elevated);
 }
 
 /* Chapter sections don't get the generic divider line */
@@ -161,7 +163,7 @@ body::before {
   --tint-alpha: 0.08;
   --spot-alpha: 0.08;
   --spot-y: 70%;
-  padding-bottom: 64px;
+  padding-bottom: var(--space-16);
 }
 
 /* ======================
@@ -169,16 +171,7 @@ body::before {
    Consistent across sections
    ====================== */
 
-/* Section titles */
-.section__title {
-  text-align: center;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  font-size: clamp(2.5rem, 6vw, 3.5rem);
-  line-height: 1.2;
-  margin: 0 0 40px 0;
-}
-
+/* Section gradient accents - base styles in sections-base.css */
 .section__title .gradient {
   background: var(--brand-grad-text);
   -webkit-background-clip: text;
@@ -191,22 +184,12 @@ body::before {
 .section__title::after {
   content: "";
   display: block;
-  width: 40px;
-  height: 2px;
-  margin: 16px auto 0;
-  border-radius: 999px;
+  width: var(--space-10);
+  height: var(--space-0-5);
+  margin: var(--space-4) auto 0;
+  border-radius: var(--radius-full);
   background: var(--brand-grad-text);
   opacity: 0.45;
-}
-
-/* Section subheadings */
-.section__subhead {
-  max-width: 70ch;
-  margin: 0 auto 48px;
-  text-align: center;
-  color: oklch(1 0 0 / 0.8);
-  font-size: 18px;
-  line-height: 1.75;
 }
 
 /* ======================
@@ -230,19 +213,19 @@ body::before {
 }
 
 .elev-hover:hover {
-  transform: translateY(-3px);
+  transform: translateY(calc(var(--space-1) * -0.75));
   box-shadow: var(--elev-3);
 }
 
 /* Hover state for cards/tiles */
 .card-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--duration-base) var(--ease-in-out);
 }
 
 .card-hover:hover {
-  transform: translateY(-3px);
+  transform: translateY(calc(var(--space-1) * -0.75));
   box-shadow: var(--elev-3);
-  border-color: oklch(1 0 0 / 0.16);
+  border-color: color-mix(in oklch, var(--color-text) 16%, transparent);
 }
 
 /* ======================
@@ -251,40 +234,75 @@ body::before {
    ====================== */
 
 .focus-ring:focus-visible {
-  outline: 2px solid color-mix(in oklch, oklch(1 0 0) 60%, oklch(0.704 0.191 22.216) 40%);
-  outline-offset: 3px;
-  border-radius: 6px;
+  outline: var(--space-0-5) solid color-mix(in oklch, var(--color-text) 60%, var(--color-brand-secondary) 40%);
+  outline-offset: calc(var(--space-1) * 0.75);
+  border-radius: var(--radius-md);
 }
 
-/* Mobile reductions for spotlight/noise intensity */
-@media (max-width: 768px) {
+/* ======================
+   Mobile-First Base Styles
+   Lower intensity for mobile performance
+   ====================== */
+
+/* Mobile base: lower noise/grid intensity */
+body::before {
+  opacity: 0.18;
+  mix-blend-mode: normal; /* avoid expensive screen blend on mobile */
+}
+
+/* Mobile base: reduced spotlight alphas */
+#hero.section {
+  --spot-alpha: 0.13;
+}
+#about.section {
+  --spot-alpha: 0.1;
+}
+#services.section {
+  --spot-alpha: 0.08;
+}
+#contact.section {
+  --spot-alpha: 0.11;
+}
+#contact-forms.section {
+  --spot-alpha: 0.1;
+}
+.footer.section {
+  --spot-alpha: 0.06;
+}
+
+/* Avoid expensive screen blending for section spotlights on mobile */
+.section::before {
+  mix-blend-mode: normal;
+}
+
+/* Desktop enhancements: restore full intensity */
+@media (min-width: 768px) {
   body::before {
-    opacity: 0.18; /* lower noise/grid intensity on mobile */
-    mix-blend-mode: normal; /* avoid expensive screen blend on mobile */
+    opacity: 0.35;
+    mix-blend-mode: screen;
   }
 
   #hero.section {
-    --spot-alpha: 0.13;
+    --spot-alpha: 0.18;
   }
   #about.section {
-    --spot-alpha: 0.1;
+    --spot-alpha: 0.14;
   }
   #services.section {
-    --spot-alpha: 0.08;
+    --spot-alpha: 0.12;
   }
   #contact.section {
-    --spot-alpha: 0.11;
+    --spot-alpha: 0.16;
   }
   #contact-forms.section {
-    --spot-alpha: 0.1;
+    --spot-alpha: 0.14;
   }
   .footer.section {
-    --spot-alpha: 0.06;
+    --spot-alpha: 0.08;
   }
 
-  /* Avoid expensive screen blending for section spotlights on mobile */
   .section::before {
-    mix-blend-mode: normal;
+    mix-blend-mode: screen;
   }
 }
 
@@ -309,10 +327,10 @@ body::before {
    ====================== */
 
 .container {
-  max-width: 1060px;
+  max-width: var(--container-xl);
   margin: 0 auto;
   position: relative;
-  z-index: 2;
+  z-index: var(--z-sticky);
 }
 
 /* ======================
@@ -331,21 +349,21 @@ body::before {
 .gradient-border::after {
   content: "";
   position: absolute;
-  inset: -1px;
+  inset: calc(var(--space-px) * -1);
   border-radius: inherit;
-  padding: 1px;
+  padding: var(--space-px);
   background: var(--brand-grad-cta);
   -webkit-mask:
-    linear-gradient(oklch(1 0 0) 0 0) content-box,
-    linear-gradient(oklch(1 0 0) 0 0);
+    linear-gradient(var(--color-text) 0 0) content-box,
+    linear-gradient(var(--color-text) 0 0);
   mask:
-    linear-gradient(oklch(1 0 0) 0 0) content-box,
-    linear-gradient(oklch(1 0 0) 0 0);
+    linear-gradient(var(--color-text) 0 0) content-box,
+    linear-gradient(var(--color-text) 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0.4;
   pointer-events: none;
-  transition: opacity 0.2s;
+  transition: opacity var(--duration-fast);
 }
 
 .gradient-border:hover::after {
@@ -356,42 +374,52 @@ body::before {
    Responsive Adjustments
    ====================== */
 
-@media (min-width: 768px) {
-  .section {
-    padding: clamp(96px, 12vw, 160px) 24px;
-  }
-}
+/* Section responsive adjustments moved to sections-base.css */
 
-@media (max-width: 640px) {
-  .section {
-    padding: 64px 20px;
-  }
+/* Small tablet responsive adjustments moved to sections-base.css */
 
-  .section__title {
-    font-size: clamp(2rem, 8vw, 2.5rem);
-  }
-}
+/* Tablet responsive adjustments moved to sections-base.css */
 
 /* ======================
    Performance Optimizations
    ====================== */
 
-/* Reduce backdrop blur on mobile for better performance */
-@media (max-width: 768px) {
+/* Mobile base: reduced effects for better performance */
+.kpi-tile,
+.service-card,
+.form-card,
+.contact__info,
+.about__avatar {
+  backdrop-filter: blur(var(--backdrop-blur-sm));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+}
+
+/* Mobile base: reduce heavy glows */
+.glow,
+.service-card::before,
+.kpi-tile::before {
+  opacity: 0.1;
+}
+
+/* Desktop: restore full effects */
+@media (min-width: 768px) {
   .kpi-tile,
   .service-card,
   .form-card,
   .contact__info,
   .about__avatar {
-    backdrop-filter: blur(var(--backdrop-blur-sm));
-    -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+    backdrop-filter: blur(var(--backdrop-blur-md));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-md));
   }
 
-  /* Reduce heavy glows on mobile */
-  .glow,
+  /* Restore glow effects */
+  .glow {
+    opacity: 0.2;
+  }
+  
   .service-card::before,
   .kpi-tile::before {
-    opacity: 0.1;
+    opacity: 0.15;
   }
 }
 
@@ -408,26 +436,7 @@ body::before {
 }
 
 /* =============  Chapter Canvas & Panel System  ============= */
-:root {
-  /* Chapter defaults (can be overridden per section) */
-  --section-bg:
-    radial-gradient(
-      1200px 800px at 50% 15%,
-      oklch(0.75 0.18 55 / 0.12) 0%,
-      oklch(0.75 0.18 55 / 0.05) 28%,
-      oklch(0 0 0 / 0) 60%
-    ), oklch(0.06 0 0);
-  --section-grid-color: oklch(1 0 0 / 0.03);
-  --section-grid-size: 56px;
-  --section-fg: var(--color-text);
-
-  /* Panel tokens */
-  --panel-bg: oklch(0.12 0 0 / 0.66);
-  --panel-stroke: oklch(1 0 0 / 0.08);
-  --panel-shadow: 0 20px 40px oklch(0 0 0 / 0.35);
-  --panel-blur: 10px;
-  --panel-glow: 0 0 0 0 oklch(0.75 0.18 55 / 0); /* be gentle by default */
-}
+/* All tokens now in 00-settings/tokens.css */
 
 .chapter {
   position: relative;
@@ -436,12 +445,7 @@ body::before {
   overflow: hidden;
 }
 
-/* Reduce panel blur on mobile to lower GPU cost */
-@media (max-width: 640px) {
-  :root {
-    --panel-blur: var(--backdrop-blur-sm);
-  }
-}
+/* Panel blur reduction handled in tokens.css */
 .chapter::after {
   content: "";
   position: absolute;
@@ -465,17 +469,17 @@ body::before {
   display: inline;
 }
 .chapter__title .text-white {
-  color: oklch(1 0 0);
+  color: var(--color-text);
   font-weight: 600;
   display: inline;
 }
 .chapter__title::after {
   content: "";
   display: block;
-  width: 40px;
-  height: 2px;
-  margin: 16px auto 0;
-  border-radius: 999px;
+  width: var(--space-10);
+  height: var(--space-0-5);
+  margin: var(--space-4) auto 0;
+  border-radius: var(--radius-full);
   background: var(--brand-grad-text);
   opacity: 0.45;
 }
@@ -483,7 +487,7 @@ body::before {
 /* Panel primitive */
 .panel {
   background: var(--panel-bg);
-  border: 1px solid var(--panel-stroke);
+  border: var(--space-px) solid var(--panel-stroke);
   border-radius: var(--radius-2xl);
   backdrop-filter: blur(var(--panel-blur));
   box-shadow: var(--panel-shadow);
@@ -493,22 +497,31 @@ body::before {
 }
 .panel:hover {
   box-shadow: var(--panel-shadow), var(--panel-glow);
-  transform: translateY(-2px);
+  transform: var(--transform-lift-sm);
 }
 
 /* Variants (tune ember strength per chapter) */
 .chapter--about {
   --section-bg:
-    radial-gradient(1100px 700px at 48% 12%, oklch(0.75 0.18 55 / 0.1), oklch(0 0 0 / 0) 60%),
-    oklch(0.06 0 0);
+    radial-gradient(
+      1100px 700px at 48% 12%,
+      color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
+      oklch(0 0 0 / 0) 60%
+    ), var(--color-background);
 }
 .chapter--cta {
   --section-bg:
-    radial-gradient(1000px 650px at 54% 12%, oklch(0.75 0.18 55 / 0.08), oklch(0 0 0 / 0) 60%),
-    oklch(0.06 0 0);
+    radial-gradient(
+      1000px 650px at 54% 12%,
+      color-mix(in oklch, var(--color-brand-primary) 8%, transparent),
+      oklch(0 0 0 / 0) 60%
+    ), var(--color-background);
 }
 .chapter--forms {
   --section-bg:
-    radial-gradient(900px 600px at 44% 10%, oklch(0.75 0.18 55 / 0.07), oklch(0 0 0 / 0) 60%),
-    oklch(0.06 0 0);
+    radial-gradient(
+      900px 600px at 44% 10%,
+      color-mix(in oklch, var(--color-brand-primary) 7%, transparent),
+      oklch(0 0 0 / 0) 60%
+    ), var(--color-background);
 }

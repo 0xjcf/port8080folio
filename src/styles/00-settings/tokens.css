@@ -1,0 +1,473 @@
+/* ================================================
+   Design System Tokens - Single Source of Truth
+   All design system variables consolidated
+   ================================================ */
+
+:root {
+  /* ======================
+     Color Palette
+     Consolidated from multiple files
+     ====================== */
+
+  /* Brand Colors (from dark theme + unified theme) */
+  --color-brand-primary: oklch(0.75 0.18 55); /* Warm amber/gold */
+  --color-brand-secondary: oklch(0.704 0.191 22.216); /* Warm orange */
+
+  /* Neutral colors (consolidated) */
+  --color-neutral-000: oklch(100% 0 0);
+  --color-neutral-050: oklch(98.5% 0.002 247);
+  --color-neutral-100: oklch(96.8% 0.004 247);
+  --color-neutral-200: oklch(92.2% 0.008 247);
+  --color-neutral-300: oklch(86.2% 0.013 247);
+  --color-neutral-400: oklch(69.5% 0.018 247);
+  --color-neutral-500: oklch(53.5% 0.019 247);
+  --color-neutral-600: oklch(41.5% 0.018 247);
+  --color-neutral-700: oklch(31.5% 0.016 247);
+  --color-neutral-800: oklch(22.8% 0.013 247);
+  --color-neutral-900: oklch(14.8% 0.013 247);
+  --color-neutral-950: oklch(6.5% 0.013 247);
+
+  /* Primary colors (blue - from original tokens) */
+  --color-primary-50: oklch(97.8% 0.012 237);
+  --color-primary-100: oklch(94.7% 0.032 237);
+  --color-primary-200: oklch(88.7% 0.073 237);
+  --color-primary-300: oklch(80.4% 0.132 237);
+  --color-primary-400: oklch(70.8% 0.183 246);
+  --color-primary-500: oklch(61.2% 0.213 255);
+  --color-primary-600: oklch(53.7% 0.237 255);
+  --color-primary-700: oklch(48.4% 0.237 255);
+  --color-primary-800: oklch(42.2% 0.217 260);
+  --color-primary-900: oklch(36.8% 0.184 262);
+
+  /* Accent colors */
+  --color-emerald-500: oklch(69.5% 0.15 162);
+  --color-emerald-600: oklch(59.2% 0.145 163);
+  --color-amber-500: oklch(75.3% 0.18 70);
+  --color-amber-600: oklch(65.5% 0.17 63);
+  --color-rose-500: oklch(59.3% 0.23 11);
+  --color-rose-600: oklch(53.5% 0.24 13);
+  --color-indigo-500: oklch(60.2% 0.22 275);
+  --color-indigo-600: oklch(53.4% 0.24 276);
+
+  /* Red palette (from hero) */
+  --color-red-400: oklch(70.8% 0.181 16);
+  --color-red-500: oklch(63.7% 0.214 16);
+  --color-red-600: oklch(54.3% 0.225 29);
+  --color-red-700: oklch(47.4% 0.215 27);
+  --color-red-800: oklch(42.7% 0.199 27);
+  --color-red-900: oklch(38.5% 0.17 25);
+  --color-red-950: oklch(25.4% 0.133 27);
+
+  /* Orange palette (from hero) */
+  --color-orange-400: oklch(73.5% 0.164 50);
+  --color-orange-600: oklch(59.7% 0.202 42);
+  --color-orange-700: oklch(50.8% 0.189 38);
+
+  /* Zinc palette (from hero) */
+  --color-zinc-300: oklch(86.5% 0.005 265);
+  --color-zinc-400: oklch(71.1% 0.008 265);
+  --color-zinc-500: oklch(52.8% 0.008 265);
+  --color-zinc-600: oklch(39.5% 0.007 265);
+  --color-zinc-700: oklch(32.4% 0.006 265);
+  --color-zinc-900: oklch(14.5% 0.004 265);
+  --color-zinc-950: oklch(7.5% 0.004 265);
+
+  /* Semantic color mappings */
+  --color-primary: var(--color-primary-500);
+  --color-primary-dark: var(--color-primary-600);
+  --color-primary-light: var(--color-primary-400);
+
+  --color-text: oklch(1 0 0); /* White text for dark theme */
+  --color-text-light: oklch(1 0 0 / 0.8);
+  --color-text-muted: oklch(1 0 0 / 0.6);
+
+  --color-background: oklch(0.06 0 0); /* Dark background */
+  --color-surface: oklch(0.12 0 0 / 0.66);
+  --color-surface-alt: var(--color-neutral-100);
+
+  --color-border: oklch(1 0 0 / 0.08);
+  --color-border-light: oklch(1 0 0 / 0.05);
+  --color-border-dark: oklch(1 0 0 / 0.12);
+
+  --color-success: var(--color-emerald-500);
+  --color-warning: var(--color-amber-500);
+  --color-error: var(--color-rose-500);
+
+  /* Form validation colors (from contact-forms) */
+  --color-valid: var(--color-emerald-500);
+  --color-valid-ring: color-mix(in oklch, var(--color-valid) 22%, transparent);
+  --color-invalid: oklch(0.61 0.24 25);
+  --color-invalid-ring: color-mix(in oklch, var(--color-invalid) 22%, transparent);
+
+  /* ======================
+     Gradients
+     Consolidated brand gradients
+     ====================== */
+
+  --brand-grad-text: linear-gradient(90deg, oklch(67.5% 0.21 16), oklch(75% 0.18 41));
+  --brand-grad-cta: linear-gradient(90deg, oklch(70% 0.2 25), oklch(82% 0.15 55));
+
+  /* ======================
+     Typography
+     System font stack
+     ====================== */
+
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+
+  /* Type scale - using clamp for responsive sizing */
+  --text-xs: clamp(0.75rem, 1.5vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 2vw, 1rem);
+  --text-base: clamp(1rem, 2.5vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 3vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 3.5vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 4vw, 2rem);
+  --text-3xl: clamp(2rem, 5vw, 3rem);
+  --text-4xl: clamp(2.5rem, 6vw, 4rem);
+  --text-5xl: clamp(3rem, 8vw, 5rem);
+  --text-6xl: clamp(3.5rem, 10vw, 6rem);
+
+  /* Font weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+
+  /* Line heights */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 1.75;
+
+  /* Letter spacing */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+
+  /* ======================
+     Spacing Scale
+     Consistent 4px base spacing system
+     ====================== */
+
+  --space-0: 0;
+  --space-px: 1px;
+  --space-0-5: 0.125rem; /* 2px */
+  --space-1: 0.25rem; /* 4px */
+  --space-1-5: 0.375rem; /* 6px */
+  --space-2: 0.5rem; /* 8px */
+  --space-2-5: 0.625rem; /* 10px */
+  --space-3: 0.75rem; /* 12px */
+  --space-3-5: 0.875rem; /* 14px */
+  --space-4: 1rem; /* 16px */
+  --space-4-5: 1.125rem; /* 18px */
+  --space-5: 1.25rem; /* 20px */
+  --space-5-5: 1.375rem; /* 22px */  --space-6: 1.5rem; /* 24px */
+  --space-7: 1.75rem; /* 28px */
+  --space-8: 2rem; /* 32px */
+  --space-9: 2.25rem; /* 36px */
+  --space-10: 2.5rem; /* 40px */
+  --space-11: 2.75rem; /* 44px */
+  --space-12: 3rem; /* 48px */
+  --space-14: 3.5rem; /* 56px */
+  --space-15: 3.75rem; /* 60px */
+  --space-16: 4rem; /* 64px */
+  --space-18: 4.5rem; /* 72px */
+  --space-20: 5rem; /* 80px */
+  --space-24: 6rem; /* 96px */
+  --space-28: 7rem; /* 112px */
+  --space-32: 8rem; /* 128px */
+  --space-36: 9rem; /* 144px */
+  --space-40: 10rem; /* 160px */
+  --space-22: 5.5rem; /* 88px - for special cases */
+  --space-30: 7.5rem; /* 120px - for special cases */
+
+  /* ======================
+     Container Widths
+     Common max-width values for layout containers
+     ====================== */
+  
+  --container-xs: 20rem; /* 320px - mobile */
+  --container-sm: 24rem; /* 384px - small mobile */
+  --container-md: 36rem; /* 576px - tablet */
+  --container-lg: 50rem; /* 800px - desktop content */
+  --container-xl: 66.25rem; /* 1060px - wide content */
+  --container-2xl: 87.5rem; /* 1400px - full width */
+  --container-prose: 65ch; /* Optimal reading width */
+  
+  /* Grid and component specific widths */
+  --grid-min-card: 15.625rem; /* 250px - minimum card width */
+  --grid-min-tile: 17.5rem; /* 280px - minimum tile width */
+  --grid-min-feature: 21.875rem; /* 350px - feature card */
+  --component-modal: 22.5rem; /* 360px - modal/dialog width */
+  
+  /* Animation & Transform distances */
+  --transform-distance-xs: 1px;
+  --transform-distance-sm: 12px;
+  --transform-distance-md: 25px;
+  --transform-distance-lg: 50px;
+  --transform-distance-xl: 60px;
+  --transform-distance-2xl: 80px;
+  --transform-distance-3xl: 100px;
+  
+  /* Special font sizes */
+  --font-size-17: 17px; /* Specific size used in forms */
+  
+  /* Blur effects */
+  --blur-sm: 8px;
+  --blur-md: 16px;
+  --blur-lg: 32px;
+  --blur-xl: 40px;
+
+  /* ======================
+     Z-index Scale
+     NEW: Consistent stacking contexts
+     ====================== */
+
+  --z-below: -1;
+  --z-base: 0;
+  --z-elevated: 1;
+  --z-sticky: 2;
+  --z-dropdown: 5;
+  --z-header: 10;
+  --z-overlay: 20;
+  --z-modal: 30;
+  --z-popover: 40;
+  --z-tooltip: 50;
+  --z-notification: 100;
+  --z-debug: 1000;
+
+  /* ======================
+     Layout
+     Container and grid settings
+     ====================== */
+
+  --container-max: 1200px;
+  --container-padding: clamp(var(--space-4), 5vw, var(--space-8));
+
+  /* ======================
+     Mobile-First Breakpoints
+     Standardized for consistency
+     ====================== */
+
+  /* Core breakpoints - use these in media queries */
+  --breakpoint-sm: 640px; /* Small tablets/large phones */
+  --breakpoint-md: 768px; /* Tablets */
+  --breakpoint-lg: 1024px; /* Desktop */
+  --breakpoint-xl: 1280px; /* Large desktop */
+  --breakpoint-2xl: 1440px; /* Extra large desktop */
+
+  /* Legacy aliases for compatibility */
+  --screen-xs: 480px;
+  --screen-sm: var(--breakpoint-sm);
+  --screen-md: var(--breakpoint-md);
+  --screen-lg: var(--breakpoint-lg);
+  --screen-xl: var(--breakpoint-xl);
+  --screen-2xl: var(--breakpoint-2xl);
+
+  /* ======================
+     Borders & Radii
+     ====================== */
+
+  --border-width: 1px;
+  --border-width-2: 2px;
+  --border-width-4: 4px;
+
+  --radius-none: 0;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* ======================
+     Shadows
+     Consolidated shadow system
+     ====================== */
+
+  --shadow-xs: 0 1px 2px 0 oklch(0% 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 oklch(0% 0 0 / 0.1), 0 1px 2px -1px oklch(0% 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px oklch(0% 0 0 / 0.1), 0 2px 4px -2px oklch(0% 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px oklch(0% 0 0 / 0.1), 0 4px 6px -4px oklch(0% 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px oklch(0% 0 0 / 0.1), 0 8px 10px -6px oklch(0% 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px oklch(0% 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 oklch(0% 0 0 / 0.05);
+  --shadow-none: 0 0 #0000;
+
+  /* Panel shadows (from unified-theme) */
+  --panel-shadow: 0 20px 40px oklch(0 0 0 / 0.35);
+
+  /* ======================
+     Elevation Scale
+     Unified shadow system
+     ====================== */
+
+  --elev-1: 0 12px 24px oklch(65% 0.18 30 / 0.08);
+  --elev-2: 0 24px 40px oklch(65% 0.18 30 / 0.1);
+  --elev-3: 0 28px 48px oklch(65% 0.18 30 / 0.14);
+
+  /* ======================
+     Transitions & Animations
+     NEW: Consolidated animation system
+     ====================== */
+
+  /* Durations */
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 350ms;
+  --duration-slower: 500ms;
+
+  /* Easing functions */
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-default: var(--ease-in-out);
+
+  /* Transitions */
+  --transition-none: none;
+  --transition-all: all var(--duration-fast) var(--ease-default);
+  --transition-fast: all var(--duration-fast) var(--ease-default);
+  --transition-base: all var(--duration-base) var(--ease-default);
+  --transition-slow: all var(--duration-slow) var(--ease-default);
+  --transition-slower: all var(--duration-slower) var(--ease-default);
+
+  /* Common transforms */
+  --transform-lift-sm: translateY(-2px);
+  --transform-lift-md: translateY(-4px);
+  --transform-lift-lg: translateY(-8px);
+
+  /* ======================
+     Opacity Scale
+     ====================== */
+
+  --opacity-0: 0;
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-25: 0.25;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-75: 0.75;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  --opacity-95: 0.95;
+  --opacity-100: 1;
+
+  /* ======================
+     Backdrop Filters
+     Unified blur levels
+     ====================== */
+
+  --backdrop-blur-sm: 6px;
+  --backdrop-blur-md: 8px;
+  --backdrop-blur-lg: 10px;
+  --backdrop-blur-xl: 12px;
+  --panel-blur: var(--backdrop-blur-lg); /* From unified-theme */
+
+  /* ======================
+     Section/Chapter System
+     From unified-theme
+     ====================== */
+
+  --section-bg:
+    radial-gradient(
+      1200px 800px at 50% 15%,
+      oklch(0.75 0.18 55 / 0.12) 0%,
+      oklch(0.75 0.18 55 / 0.05) 28%,
+      oklch(0 0 0 / 0) 60%
+    ), oklch(0.06 0 0);
+  --section-grid-color: oklch(1 0 0 / 0.03);
+  --section-grid-size: 56px;
+  --section-fg: var(--color-text);
+
+  /* Panel tokens */
+  --panel-bg: oklch(0.12 0 0 / 0.66);
+  --panel-stroke: oklch(1 0 0 / 0.08);
+  --panel-glow: 0 0 0 0 oklch(0.75 0.18 55 / 0);
+
+  /* Global Canvas Tints (from unified-theme) */
+  --tint-hue: 22;
+  --tint-alpha: 0.14;
+  --spot-alpha: 0.18;
+  --spot-y: 32%;
+
+  /* Role accent colors */
+  --role-green: oklch(0.72 0.18 142);
+  --role-yellow: oklch(0.78 0.17 90);
+  --role-purple: oklch(0.65 0.16 275);
+
+  /* Additional accent colors for why list */
+  --accent-green-bright: oklch(0.75 0.18 130);
+  --accent-yellow-green: oklch(0.82 0.16 85);
+  --accent-blue: oklch(0.7 0.14 220);
+  --accent-pink: oklch(0.72 0.17 360);
+  --accent-green-alt: oklch(0.8 0.2 140);
+  --accent-purple-alt: oklch(0.7 0.18 310);
+  --accent-yellow-alt: oklch(0.85 0.18 95);
+}
+
+/* ======================
+   Mobile-First Responsive Token Updates
+   ====================== */
+
+/* Mobile base tokens */
+:root {
+  /* Mobile typography */
+  --h1-mobile: clamp(2.25rem, 8vw, 3rem);
+  --body-mobile: var(--text-base);
+  
+  /* Mobile panel blur for performance */
+  --panel-blur: var(--backdrop-blur-sm);
+}
+
+/* Small phone enhancement (481px+) */
+@media (min-width: 480px) {
+  :root {
+    /* Restore default mobile typography */
+    --h1-mobile: var(--text-3xl);
+  }
+}
+
+/* Small tablet enhancement (640px+) */
+@media (min-width: 640px) {
+  :root {
+    --container-padding: var(--space-6);
+  }
+}
+
+/* Enhanced panel blur at 641px+ */
+@media (min-width: 640px) {
+  :root {
+    --panel-blur: var(--backdrop-blur-lg);
+  }
+}
+
+/* Tablet enhancement (768px+) */
+@media (min-width: 768px) {
+  :root {
+    --container-padding: var(--space-8);
+  }
+}
+
+/* Desktop enhancement (1024px+) */
+@media (min-width: 1024px) {
+  :root {
+    --container-padding: var(--space-12);
+  }
+}

@@ -102,7 +102,7 @@
 
     <main id="main" role="main">
         <!-- Hero Section -->
-        <section id="hero" class="hero section" aria-label="Introduction">
+        <section id="hero" class="hero section section--hero" aria-label="Introduction">
             <!-- Background layers -->
             <div class="bg hero__grid"></div>
             <div class="bg vignette"></div>
@@ -126,15 +126,16 @@
 
                 <!-- CTAs -->
                 <nav class="cta-row" aria-label="primary actions">
-                    <a class="btn btn-primary cta-animated" href="#contact"
+                    <a class="button button--primary cta-animated" href="#contact"
                         title="Get a tailored plan for your business in 30 minutes">
-                        <span>Book a Free AI Strategy Call</span>
-                        <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <span class="button__text">Book a Free AI Strategy Call</span>
+                        <svg class="button__icon arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            aria-hidden="true">
                             <path d="M5 12h12M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-                    <a class="btn btn-secondary d-none d-sm-flex" href="#services">Explore Services</a>
+                    <a class="button button--secondary d-none d-sm-flex" href="#services">Explore Services</a>
                 </nav>
 
                 <!-- Micro-testimonial for trust -->
@@ -217,7 +218,7 @@
         </section>
 
         <!-- About/Experience Section (unchanged body copy) -->
-        <section id="about" class="about section" aria-label="About and Experience">
+        <section id="about" class="about section section--about" aria-label="About and Experience">
             <div class="noise-overlay" aria-hidden="true"></div>
             <div class="container">
                 <header class="about__header">
@@ -260,7 +261,7 @@
                     <div class="about__current-content" aria-labelledby="current-role-heading">
                         <h3 id="current-role-heading">Currently Working As</h3>
                         <p>
-                            <span class="role-primary">Independent Technical Advisor & Architect</span>
+                            <span class="role-primary">Independent Technical Advisor & Software Engineer</span>
                         </p>
                         <p class="about__roles-meta">
                             Open-source maintainer: <span class="role-green">Actor-Web, Lit-Bit</span><br>
@@ -280,7 +281,7 @@
         </section>
 
         <!-- Services Section (renamed + new cards) -->
-        <section id="services" class="services section" aria-label="Services">
+        <section id="services" class="services section section--services" aria-label="Services">
             <div class="noise-overlay" aria-hidden="true"></div>
 
             <!-- Sticky CTA Button -->
@@ -578,7 +579,7 @@
         </section>
 
         <!-- Contact/CTA Section -->
-        <section id="contact" class="chapter chapter--cta contact section" aria-label="Contact">
+        <section id="contact" class="chapter chapter--cta contact section section--contact" aria-label="Contact">
             <div class="contact__spotlight" aria-hidden="true"></div>
             <div class="container">
                 <h2 class="contact__title">
@@ -616,7 +617,7 @@
         </section>
 
         <!-- Contact Forms Section -->
-        <section id="contact-forms" class="chapter chapter--forms contact-forms section"
+        <section id="contact-forms" class="chapter chapter--forms contact-forms section section--contact-forms"
             aria-label="Contact and Newsletter">
             <div class="container">
                 <div class="section-header">
@@ -841,7 +842,7 @@
     </main>
 
     <!-- Footer -->
-    <footer role="contentinfo" class="footer section">
+    <footer role="contentinfo" class="footer section section--footer">
         <div class="container">
             <nav class="footer__links" aria-label="Footer navigation">
                 <a href="mailto:bluejf.llc@gmail.com" aria-label="Email Jose Flores">Email</a>

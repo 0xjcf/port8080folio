@@ -6,19 +6,19 @@
 /* Theme toggle button styles */
 .theme-toggle {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
+  top: var(--space-5);
+  right: var(--space-5);
+  z-index: var(--z-debug);
   background: var(--color-background);
-  border: 2px solid var(--color-border);
+  border: var(--space-0-5) solid var(--color-border);
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: var(--space-12);
+  height: var(--space-12);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-base) ease;
   box-shadow: var(--shadow-md);
 }
 
@@ -28,9 +28,9 @@
 }
 
 .theme-toggle svg {
-  width: 24px;
-  height: 24px;
-  transition: all 0.3s ease;
+  width: var(--space-6);
+  height: var(--space-6);
+  transition: var(--transition-base) ease;
   color: var(--color-text-primary);
 }
 
@@ -48,13 +48,13 @@
 /* Dark theme styles (activated by class) */
 body.dark-theme {
   /* Dark theme colors */
-  --color-background: oklch(0% 0 0);
-  --color-surface-elevated: oklch(14% 0 0);
-  --color-text-primary: oklch(100% 0 0);
-  --color-text-secondary: oklch(70% 0 0);
+  --color-background: oklch(0 0 0);
+  --color-surface-elevated: var(--color-neutral-900);
+  --color-text-primary: var(--color-neutral-000);
+  --color-text-secondary: var(--color-neutral-400);
 
   /* Update all color variables */
-  --color-primary: oklch(0.61 0.24 25);
+  --color-primary: var(--color-invalid);
   --color-primary-dark: oklch(0.52 0.25 25);
   --color-primary-light: oklch(0.73 0.19 25);
 
@@ -65,29 +65,29 @@ body.dark-theme {
   --color-accent: oklch(0.86 0.18 90);
 
   /* Borders */
-  --color-border: oklch(0.61 0.24 25 / 0.2);
+  --color-border: color-mix(in oklch, var(--color-invalid) 20%, transparent);
   --color-border-hover: oklch(0.61 0.24 25 / 0.4);
 
   /* Shadows with red glow */
-  --shadow-sm: 0 1px 2px oklch(0.61 0.24 25 / 0.05);
-  --shadow-md: 0 4px 12px oklch(0.61 0.24 25 / 0.1);
-  --shadow-lg: 0 10px 25px oklch(0.61 0.24 25 / 0.15);
-  --shadow-xl: 0 25px 50px oklch(0.61 0.24 25 / 0.2);
-  --shadow-glow: 0 0 30px oklch(0.61 0.24 25 / 0.3);
+  --shadow-sm: 0 var(--space-px) var(--space-0-5) oklch(0.61 0.24 25 / 0.05);
+  --shadow-md: 0 var(--space-1) var(--space-3) color-mix(in oklch, var(--color-invalid) 10%, transparent);
+  --shadow-lg: 0 var(--space-2-5) 25px oklch(0.61 0.24 25 / 0.15);
+  --shadow-xl: 0 25px 50px color-mix(in oklch, var(--color-invalid) 20%, transparent);
+  --shadow-glow: 0 0 30px color-mix(in oklch, var(--color-invalid) 30%, transparent);
 
   /* Map dark theme to design-token keys used across the site */
   --color-text: var(--color-text-primary);
   --color-text-light: var(--color-text-secondary);
-  --color-text-muted: oklch(0.6 0 0);
+  --color-text-muted: var(--color-neutral-500);
 
   /* Keep the same neutral token NAMES as light mode so components don't break */
-  --color-neutral-000: oklch(100% 0 0);
-  --color-neutral-050: oklch(6% 0 0);
-  --color-neutral-100: oklch(14% 0 0);
+  --color-neutral-000: var(--color-neutral-000);
+  --color-neutral-050: var(--color-neutral-950);
+  --color-neutral-100: var(--color-neutral-900);
   --color-neutral-200: oklch(0.22 0 0);
   --color-neutral-300: oklch(0.33 0 0);
   --color-neutral-400: oklch(0.44 0 0);
-  --color-neutral-500: oklch(0.6 0 0);
+  --color-neutral-500: var(--color-neutral-500);
   --color-neutral-600: oklch(0.68 0 0);
   --color-neutral-700: oklch(0.76 0 0);
   --color-neutral-800: oklch(0.84 0 0);
@@ -95,11 +95,11 @@ body.dark-theme {
   --color-neutral-950: oklch(0.96 0 0);
 
   /* Also update surface colors for cards/components */
-  --color-surface: oklch(6% 0 0);
+  --color-surface: var(--color-neutral-950);
   --color-surface-alt: var(--color-neutral-100);
 
   /* Background and text color application */
-  background: oklch(0% 0 0);
+  background: oklch(0 0 0);
   color: var(--color-text-primary);
 }
 
@@ -112,16 +112,23 @@ body.dark-theme::before {
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(circle at 20% 50%, oklch(0.61 0.24 25 / 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, oklch(0.75 0.18 55 / 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 50% 20%, oklch(0.61 0.24 25 / 0.05) 0%, transparent 70%);
+    radial-gradient(
+      circle at 20% 50%,
+      color-mix(in oklch, var(--color-invalid) 10%, transparent) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      color-mix(in oklch, var(--color-brand-primary) 10%, transparent) 0%,
+      transparent 50%
+    ), radial-gradient(circle at 50% 20%, oklch(0.61 0.24 25 / 0.05) 0%, transparent 70%);
   pointer-events: none;
-  z-index: 0;
+  z-index: var(--z-base);
 }
 
 body.dark-theme > * {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-elevated);
 }
 
 /* Let the hero's own layers (bg-grad/grid/vignette/glows) render the BG */
@@ -155,67 +162,67 @@ body.dark-theme h1 {
 }
 
 body.dark-theme .hero__name {
-  background: linear-gradient(135deg, oklch(61% 0.24 25), oklch(75% 0.18 55));
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 4px oklch(0.61 0.24 25 / 0.3));
+  filter: drop-shadow(0 var(--space-0-5) var(--space-1) color-mix(in oklch, var(--color-invalid) 30%, transparent));
 }
 
 body.dark-theme .hero__title {
-  color: oklch(75% 0.18 55);
+  color: var(--color-brand-primary);
 }
 
 body.dark-theme .hero__tagline {
-  color: oklch(70% 0 0);
+  color: var(--color-neutral-400);
 }
 
 /* Dark theme cards */
 body.dark-theme .service-card,
 body.dark-theme .highlight-card,
 body.dark-theme .form-card {
-  background: oklch(14% 0 0);
-  border: 2px solid oklch(0.61 0.24 25 / 0.2);
-  box-shadow: 0 10px 25px oklch(0.61 0.24 25 / 0.15);
+  background: var(--color-neutral-900);
+  border: var(--space-0-5) solid color-mix(in oklch, var(--color-invalid) 20%, transparent);
+  box-shadow: 0 var(--space-2-5) 25px oklch(0.61 0.24 25 / 0.15);
 }
 
 body.dark-theme .service-card:hover,
 body.dark-theme .highlight-card:hover,
 body.dark-theme .form-card:hover {
   border-color: oklch(0.61 0.24 25 / 0.4);
-  box-shadow: 0 0 30px oklch(0.61 0.24 25 / 0.3);
-  transform: translateY(-4px);
+  box-shadow: 0 0 30px color-mix(in oklch, var(--color-invalid) 30%, transparent);
+  transform: var(--transform-lift-md);
 }
 
 /* Dark theme buttons */
 body.dark-theme .button--primary {
-  background: linear-gradient(135deg, oklch(61% 0.24 25), oklch(75% 0.18 55));
-  border: 2px solid oklch(0.61 0.24 25 / 0.3);
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
+  border: var(--space-0-5) solid color-mix(in oklch, var(--color-invalid) 30%, transparent);
   box-shadow:
-    0 4px 12px oklch(0.61 0.24 25 / 0.1),
-    inset 0 1px 0 oklch(1 0 0 / 0.1);
-  text-shadow: 0 1px 2px oklch(0 0 0 / 0.3);
+    0 var(--space-1) var(--space-3) color-mix(in oklch, var(--color-invalid) 10%, transparent),
+    inset 0 var(--space-px) 0 color-mix(in oklch, var(--color-text) 10%, transparent);
+  text-shadow: 0 var(--space-px) var(--space-0-5) oklch(0 0 0 / 0.3);
   font-weight: 700;
   letter-spacing: 0.05em;
 }
 
 body.dark-theme .button--primary:hover {
   box-shadow:
-    0 0 30px oklch(0.61 0.24 25 / 0.3),
-    inset 0 1px 0 oklch(1 0 0 / 0.2);
-  transform: translateY(-2px);
+    0 0 30px color-mix(in oklch, var(--color-invalid) 30%, transparent),
+    inset 0 var(--space-px) 0 color-mix(in oklch, var(--color-text) 20%, transparent);
+  transform: var(--transform-lift-sm);
 }
 
 body.dark-theme .button--secondary {
   background: transparent;
-  border: 2px solid oklch(75% 0.18 55);
-  color: oklch(75% 0.18 55);
+  border: var(--space-0-5) solid var(--color-brand-primary);
+  color: var(--color-brand-primary);
 }
 
 body.dark-theme .button--secondary:hover {
-  background: oklch(0.75 0.18 55 / 0.1);
+  background: color-mix(in oklch, var(--color-brand-primary) 10%, transparent);
   border-color: oklch(0.82 0.15 55);
-  box-shadow: 0 4px 12px oklch(0.75 0.18 55 / 0.1);
+  box-shadow: 0 var(--space-1) var(--space-3) color-mix(in oklch, var(--color-brand-primary) 10%, transparent);
 }
 
 /* Dark theme forms */
@@ -226,17 +233,17 @@ body.dark-theme .contact-forms {
 
 body.dark-theme .forms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-min-feature), 1fr));
   gap: 2rem;
   margin-top: 3rem;
 }
 
 body.dark-theme .form-card {
   padding: 2rem;
-  border-radius: 12px;
+  border-radius: var(--space-3);
   position: relative;
   overflow: hidden;
-  background: oklch(14% 0 0);
+  background: var(--color-neutral-900);
 }
 
 body.dark-theme .form-card::before {
@@ -245,12 +252,12 @@ body.dark-theme .form-card::before {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(135deg, oklch(61% 0.24 25), oklch(75% 0.18 55));
+  height: var(--space-1);
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
 }
 
 body.dark-theme .contact-form-card {
-  border-color: oklch(0.61 0.24 25 / 0.3);
+  border-color: color-mix(in oklch, var(--color-invalid) 30%, transparent);
 }
 
 body.dark-theme .newsletter-form-card {
@@ -258,19 +265,19 @@ body.dark-theme .newsletter-form-card {
 }
 
 body.dark-theme .newsletter-form-card::before {
-  background: linear-gradient(90deg, oklch(75% 0.18 55), oklch(61% 0.24 25));
+  background: linear-gradient(90deg, var(--color-brand-primary), oklch(61% 0.24 25));
 }
 
 body.dark-theme .form-icon {
-  width: 48px;
-  height: 48px;
+  width: var(--space-12);
+  height: var(--space-12);
   border-radius: 50%;
-  background: linear-gradient(135deg, oklch(61% 0.24 25), oklch(75% 0.18 55));
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  box-shadow: 0 0 30px oklch(0.61 0.24 25 / 0.3);
+  box-shadow: 0 0 30px color-mix(in oklch, var(--color-invalid) 30%, transparent);
 }
 
 body.dark-theme .form-icon svg {
@@ -285,7 +292,7 @@ body.dark-theme .form-title {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: oklch(100% 0 0);
+  color: var(--color-neutral-000);
 }
 
 body.dark-theme .form-group {
@@ -296,7 +303,7 @@ body.dark-theme .form-label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: oklch(70% 0 0);
+  color: var(--color-neutral-400);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.875rem;
@@ -307,12 +314,12 @@ body.dark-theme .form-textarea {
   width: 100%;
   padding: 0.75rem 1rem;
   background: oklch(0 0 0 / 0.5);
-  border-width: 2px;
+  border-width: var(--space-0-5);
   border-style: solid;
-  border-radius: 8px;
-  color: oklch(100% 0 0);
+  border-radius: var(--space-2);
+  color: var(--color-neutral-000);
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: var(--transition-base) ease;
 }
 
 /* Dark theme focus - only set background, let validation styles handle borders */
@@ -325,8 +332,8 @@ body.dark-theme .form-textarea:focus {
 /* Default focus for empty/untouched fields in dark theme */
 body.dark-theme .form-input:focus:placeholder-shown:not(.touched),
 body.dark-theme .form-textarea:focus:placeholder-shown:not(.touched) {
-  border-color: oklch(0.61 0.24 25);
-  box-shadow: 0 0 0 3px oklch(0.61 0.24 25 / 0.1);
+  border-color: var(--color-invalid);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) color-mix(in oklch, var(--color-invalid) 10%, transparent);
 }
 
 body.dark-theme .form-input::placeholder,
@@ -336,7 +343,7 @@ body.dark-theme .form-textarea::placeholder {
 
 body.dark-theme .form-textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: var(--space-30);
 }
 
 body.dark-theme .button--full {
@@ -355,7 +362,7 @@ body.dark-theme .newsletter-description {
 }
 
 body.dark-theme .newsletter-description p {
-  color: oklch(70% 0 0);
+  color: var(--color-neutral-400);
   margin-bottom: 1rem;
 }
 
@@ -369,7 +376,7 @@ body.dark-theme .newsletter-benefits li {
   padding: 0.5rem 0;
   padding-left: 1.5rem;
   position: relative;
-  color: oklch(0.7 0 0);
+  color: var(--color-neutral-400);
 }
 
 body.dark-theme .newsletter-benefits li::before {
@@ -383,7 +390,7 @@ body.dark-theme .newsletter-benefits li::before {
 body.dark-theme .form-note {
   margin-top: 1rem;
   text-align: center;
-  color: oklch(0.6 0 0);
+  color: var(--color-neutral-500);
   font-size: 0.875rem;
 }
 
@@ -395,13 +402,13 @@ body.dark-theme .footer {
 }
 
 body.dark-theme .footer a {
-  color: oklch(0.7 0 0);
-  transition: color 0.3s ease;
+  color: var(--color-neutral-400);
+  transition: color var(--duration-base) ease;
 }
 
 body.dark-theme .footer a:hover {
   color: oklch(61% 0.24 25);
-  text-shadow: 0 0 10px oklch(0.61 0.24 25 / 0.5);
+  text-shadow: 0 0 var(--space-2-5) oklch(0.61 0.24 25 / 0.5);
 }
 
 /* Let sections/typography decide exact tone; the body already has a base color */
@@ -417,17 +424,17 @@ body.dark-theme .name .gradient {
 }
 
 body.dark-theme .section-subtitle {
-  color: oklch(0.7 0 0);
+  color: var(--color-neutral-400);
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  body.dark-theme .forms-grid {
-    grid-template-columns: 1fr;
-  }
+/* Mobile-first: Base styles already handle mobile layout */
+/* Forms grid is 1fr by default, form-card has mobile padding */
 
+/* Desktop adjustments for dark theme */
+@media (min-width: 768px) {
   body.dark-theme .form-card {
-    padding: 1.5rem;
+    /* Desktop padding inherited from contact-forms.css */
+    padding: var(--space-8);
   }
 }
 
@@ -436,13 +443,13 @@ body.dark-theme .section-subtitle {
   /* If user hasn't explicitly chosen light theme, use dark */
   body:not(.light-theme) {
     /* Apply same dark theme styles */
-    --color-background: oklch(0% 0 0);
-    --color-surface: oklch(6% 0 0);
-    --color-surface-elevated: oklch(14% 0 0);
-    --color-text-primary: oklch(100% 0 0);
-    --color-text-secondary: oklch(70% 0 0);
+    --color-background: oklch(0 0 0);
+    --color-surface: var(--color-neutral-950);
+    --color-surface-elevated: var(--color-neutral-900);
+    --color-text-primary: var(--color-neutral-000);
+    --color-text-secondary: var(--color-neutral-400);
     --color-text-muted: oklch(60% 0 0);
-    background: oklch(0% 0 0);
-    color: oklch(100% 0 0);
+    background: oklch(0 0 0);
+    color: var(--color-neutral-000);
   }
 }

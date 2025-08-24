@@ -94,10 +94,10 @@ button {
 /* Screen reader only class */
 .sr-only {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: var(--space-px);
+  height: var(--space-px);
   padding: 0;
-  margin: -1px;
+  margin: calc(var(--space-px) * -1);
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -133,6 +133,6 @@ table {
 
 /* Focus visible for better accessibility */
 :focus-visible {
-  outline: 2px solid var(--color-primary, oklch(61.2% 0.213 255));
-  outline-offset: 2px;
+  outline: var(--space-0-5) solid var(--color-primary, oklch(61.2% 0.213 255));
+  outline-offset: var(--space-0-5);
 }

@@ -1,54 +1,57 @@
 /* ================================================
    main.css - Main CSS Aggregator
-   Import all CSS modules in the correct order
+   ITCSS Architecture with CSS Layers
    ================================================ */
 
 /* Establish cascade layer order */
-@layer base, tokens, layout, typography, components, sections, utilities, overrides;
+@layer settings, generic, elements, objects, components, utilities, sections, theme;
 
-/* Layer 2: Visual Design System */
+/* ================================================
+   0. Settings - Design tokens and configurations
+   ================================================ */
+@import "./00-settings/tokens.css" layer(settings);
 
-/* 0. Unified Theme - Page canvas and section system */
-@import "./00-unified-theme.css" layer(base);
+/* ================================================
+   1. Generic - Ground zero styles (resets, box-sizing)
+   ================================================ */
+@import "./01-generic/reset.css" layer(generic);
 
-/* 1. Reset - Foundation normalization */
-@import "./01-reset.css" layer(base);
+/* ================================================
+   2. Elements - Unclassed HTML elements
+   ================================================ */
+@import "./02-elements/typography.css" layer(elements);
 
-/* 2. Design Tokens - All variables */
-@import "./02-tokens.css" layer(tokens);
+/* ================================================
+   3. Objects - Class-based selectors for design patterns
+   ================================================ */
+@import "./03-objects/layout.css" layer(objects);
 
-/* 3. Layout - Grid and structure */
-@import "./03-layout.css" layer(layout);
+/* ================================================
+   4. Components - Specific UI components
+   ================================================ */
+@import "./04-components/components.css" layer(components);
 
-/* 4. Typography - Text styles */
-@import "./04-typography.css" layer(typography);
+/* ================================================
+   5. Utilities - Helper and override classes
+   ================================================ */
+@import "./05-utilities/utilities.css" layer(utilities);
 
-/* 5. Components - UI elements */
-@import "./05-components.css" layer(components);
+/* ================================================
+   6. Sections - Page sections and layouts
+   ================================================ */
+@import "./06-sections/sections-base.css" layer(sections);
+@import "./06-sections/hero.css" layer(sections);
+@import "./06-sections/about.css" layer(sections);
+@import "./06-sections/services.css" layer(sections);
+@import "./06-sections/contact.css" layer(sections);
+@import "./06-sections/contact-forms.css" layer(sections);
+@import "./06-sections/footer.css" layer(sections);
 
-/* 6. Utilities - Helper classes */
-@import "./06-utilities.css" layer(utilities);
-
-/* 7. Dark Theme - Aggressive black/red/orange theme */
-@import "./07-dark-theme.css" layer(overrides);
-
-/* 8. Hero Section - Dramatic above-the-fold design */
-@import "./08-hero.css" layer(sections);
-
-/* 9. About Section - Premium dark theme matching Hero */
-@import "./09-about.css" layer(sections);
-
-/* 10. Services Section - Notable achievements and service cards */
-@import "./10-services.css" layer(sections);
-
-/* 11. Contact Section - CTA and contact info */
-@import "./11-contact.css" layer(sections);
-
-/* 12. Contact Forms Section - Dual card forms */
-@import "./12-contact-forms.css" layer(sections);
-
-/* 13. Footer Section - Links and legal info */
-@import "./13-footer.css" layer(sections);
+/* ================================================
+   7. Theme - Theme-specific overrides
+   ================================================ */
+@import "./00-settings/unified-theme.css" layer(theme);
+@import "./00-settings/dark-theme.css" layer(theme);
 
 /* ================================================
    Root Styles
@@ -72,28 +75,28 @@ html {
    ================================================ */
 
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: var(--space-3);
+  height: var(--space-3);
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-neutral-100);
+  background: var(--color-background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-neutral-400);
+  background: color-mix(in oklch, var(--color-text) 30%, transparent);
   border-radius: var(--radius-full);
-  border: 3px solid var(--color-neutral-100);
+  border: 3px solid var(--color-background);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-neutral-500);
+  background: color-mix(in oklch, var(--color-text) 40%, transparent);
 }
 
 /* Firefox scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-neutral-400) var(--color-neutral-100);
+  scrollbar-color: color-mix(in oklch, var(--color-text) 30%, transparent) var(--color-background);
 }
 
 /* ================================================
@@ -101,11 +104,11 @@ html {
    ================================================ */
 
 ::selection {
-  background: var(--color-primary-200);
-  color: var(--color-primary-900);
+  background: color-mix(in oklch, var(--color-brand-primary) 30%, transparent);
+  color: var(--color-text);
 }
 
 ::-moz-selection {
-  background: var(--color-primary-200);
-  color: var(--color-primary-900);
+  background: color-mix(in oklch, var(--color-brand-primary) 30%, transparent);
+  color: var(--color-text);
 }

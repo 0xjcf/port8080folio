@@ -1,0 +1,466 @@
+/* ================================================
+   07-sections-base.css - Unified Section Patterns
+   Mobile-First Base Section Architecture
+   ================================================ */
+
+/* ======================
+   Base Section Pattern - Mobile First
+   Universal section structure for all page sections
+   ====================== */
+
+.section {
+  /* Structure */
+  position: relative;
+  isolation: isolate;
+  padding: var(--space-16) var(--space-5); /* Mobile-first padding */
+
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* Appearance */
+  background: var(--section-bg, transparent);
+  color: var(--section-color, var(--color-text));
+
+  /* Overflow */
+  overflow: var(--section-overflow, hidden);
+}
+
+/* Section container - consistent max-width wrapper */
+.section__container {
+  width: 100%;
+  max-width: var(--section-max-width, var(--container-width));
+  margin: 0 auto;
+  padding: 0 var(--space-4); /* Mobile padding */
+  position: relative;
+  z-index: var(--z-elevated);
+}
+
+/* Section header - title and subtitle group */
+.section__header {
+  text-align: var(--section-align, center);
+  margin-bottom: var(--space-8); /* Mobile spacing */
+}
+
+/* Section title - Mobile first */
+.section__title {
+  font-size: clamp(var(--font-2xl), 8vw, var(--font-3xl)); /* Mobile responsive size */
+  font-weight: var(--font-semibold);
+  letter-spacing: calc(var(--space-0-5) * -0.08); /* -0.02em equivalent */
+  line-height: var(--leading-tight);
+  margin: var(--space-0) var(--space-0) var(--space-10) var(--space-0);
+  text-align: center;
+  color: var(--section-title-color, var(--color-text));
+}
+
+/* Section subtitle/subhead - Mobile first */
+.section__subtitle,
+.section__subhead {
+  font-size: var(--text-lg);
+  color: var(--section-subtitle-color, var(--color-text-light));
+  line-height: var(--leading-loose);
+  max-width: 70ch;
+  margin: var(--space-0) auto var(--space-12);
+  text-align: center;
+}
+
+/* Section content wrapper */
+.section__content {
+  position: relative;
+  z-index: var(--z-elevated);
+}
+
+/* ======================
+   Section Variants - Mobile First
+   Minimal overrides using CSS custom properties
+   ====================== */
+
+/* Hero section variant - Mobile first */
+.section--hero {
+  padding: var(--space-16) var(--space-4);
+  background: var(--color-background);
+  min-height: calc(100vh - var(--space-15)); /* Account for mobile browser chrome */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible; /* For glow effects */
+}
+
+/* About section variant */
+.section--about {
+  padding: var(--space-16) var(--space-4);
+  background: linear-gradient(
+    to bottom,
+    var(--color-background),
+    color-mix(in oklch, var(--color-background) 98%, var(--color-brand-primary))
+  );
+}
+
+/* Services section variant */
+.section--services {
+  padding: var(--space-16) var(--space-4);
+}
+
+/* Contact section variant */
+.section--contact {
+  padding: var(--space-16) var(--space-4);
+  text-align: left;
+}
+
+.section--contact .section__container {
+  max-width: var(--container-lg);
+}
+
+/* Contact forms section variant */
+.section--contact-forms {
+  padding: var(--space-12) var(--space-4);
+  background: color-mix(in oklch, var(--color-background) 98%, var(--color-text));
+}
+
+/* Footer section variant */
+.section--footer {
+  padding: var(--space-12) var(--space-5) var(--space-10);
+  background: color-mix(in oklch, var(--color-background) 95%, var(--color-text));
+  color: var(--color-text-light);
+}
+
+/* ======================
+   Common Section Patterns - Mobile First
+   Reusable patterns across sections
+   ====================== */
+
+/* Section grid pattern - Mobile first (single column) */
+.section-grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 1fr; /* Single column on mobile */
+}
+
+/* Section with background glow effect - Mobile optimized */
+.section-glow {
+  position: relative;
+}
+
+.section-glow::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--space-20) * -1);
+  background: var(--section-glow-gradient);
+  filter: blur(var(--blur-lg)); /* Reduced blur on mobile for performance */
+  opacity: 0.1; /* Reduced opacity on mobile */
+  z-index: var(--z-below);
+  pointer-events: none;
+}
+
+/* Section with accent line */
+.section-accent {
+  position: relative;
+}
+
+.section-accent::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: var(--space-0-5);
+  background: var(--brand-grad-cta);
+  opacity: 0.6;
+  z-index: var(--z-elevated);
+}
+
+/* ======================
+   Responsive Enhancements - Mobile First
+   Progressive enhancement for larger screens
+   ====================== */
+
+/* Small tablets and large phones (640px+) */
+@media (min-width: 640px) {
+  .section {
+    padding: clamp(var(--space-18), 10vw, var(--space-32)) var(--space-6);
+  }
+
+  .section__container {
+    padding: 0 var(--space-5);
+  }
+
+  .section__header {
+    margin-bottom: var(--space-10);
+  }
+
+  .section__title {
+    font-size: var(--text-3xl);
+    line-height: var(--leading-tight);
+  }
+
+  .section__subtitle {
+    font-size: var(--text-lg);
+    max-width: 65ch;
+  }
+
+  /* Hero adjustments */
+  .section--hero {
+    min-height: 100vh;
+    padding: var(--space-20) var(--space-5);
+  }
+
+  /* Glow effect enhancement */
+  .section-glow::before {
+    filter: blur(var(--blur-xl));
+    opacity: 0.15;
+  }
+}
+
+/* Tablets (768px+) */
+@media (min-width: 768px) {
+  .section {
+    padding: clamp(var(--space-24), 12vw, var(--space-40)) var(--space-6);
+  }
+
+  .section__header {
+    margin-bottom: var(--space-12);
+  }
+
+  .section__title {
+    font-size: var(--text-4xl);
+  }
+
+  .section__subtitle {
+    font-size: var(--text-xl);
+  }
+
+  /* Grid enhancements - 2 columns */
+  .section-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section-grid--3,
+  .section-grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Section variant adjustments */
+  .section--about {
+    padding: var(--space-24) var(--space-5);
+  }
+
+  .section--services {
+    padding: var(--space-20) var(--space-5);
+  }
+
+  .section--contact {
+    padding: var(--space-24) var(--space-5);
+  }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .section {
+    padding: var(--space-24) var(--space-5);
+  }
+
+  .section__container {
+    padding: 0;
+  }
+
+  /* Hero desktop */
+  .section--hero {
+    padding: var(--space-32) var(--space-5);
+  }
+
+  /* About and services desktop */
+  .section--about,
+  .section--services {
+    padding: var(--space-32) var(--space-5);
+  }
+
+  /* Grid enhancements - 3+ columns */
+  .section-grid {
+    grid-template-columns: repeat(auto-fit, minmax(var(--grid-min-card), 1fr));
+  }
+
+  .section-grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .section-grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Services specific grid */
+  .section-grid--services {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Glow effect full strength */
+  .section-glow::before {
+    filter: blur(calc(var(--blur-xl) * 1.6));
+    opacity: 0.2;
+  }
+}
+
+/* Large desktop (1280px+) */
+@media (min-width: 1280px) {
+  .section {
+    padding: var(--space-32) var(--space-5);
+  }
+
+  .section--hero {
+    padding: var(--space-40) var(--space-5);
+  }
+}
+
+/* Extra large desktop (1440px+) */
+@media (min-width: 1440px) {
+  .section {
+    padding: var(--space-32) var(--space-8);
+  }
+
+  .section--hero {
+    padding: var(--space-40) var(--space-8);
+  }
+}
+
+/* ======================
+   Component Patterns in Sections - Mobile First
+   Shared responsive patterns for section components
+   ====================== */
+
+/* Buttons in sections - Mobile first */
+.section .button {
+  width: 100%;
+  min-height: var(--space-12);
+  box-shadow: var(--elev-1);
+}
+
+/* Cards in sections - Mobile first */
+.section .card {
+  padding: var(--space-6);
+  box-shadow: none;
+}
+
+/* Desktop button enhancements */
+@media (min-width: 640px) {
+  .section .button {
+    width: auto;
+    min-width: var(--space-40);
+  }
+
+  .section .button--primary {
+    box-shadow: var(--shadow-md);
+  }
+
+  .section .button--primary:hover {
+    transform: var(--transform-lift-sm);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* Desktop card enhancements */
+@media (min-width: 768px) {
+  .section .card {
+    padding: var(--space-8);
+    box-shadow: var(--shadow-md);
+  }
+
+  .section .card:hover {
+    transform: var(--transform-lift-md);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* ======================
+   Section Utility Classes
+   Quick modifiers for sections
+   ====================== */
+
+/* Section spacing modifiers */
+.section--compact {
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-8);
+}
+
+.section--spacious {
+  padding-top: var(--space-20);
+  padding-bottom: var(--space-20);
+}
+
+@media (min-width: 768px) {
+  .section--compact {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+
+  .section--spacious {
+    padding-top: var(--space-32);
+    padding-bottom: var(--space-32);
+  }
+}
+
+/* Section alignment modifiers */
+.section--left {
+  text-align: left;
+}
+
+.section--center {
+  text-align: center;
+}
+
+.section--right {
+  text-align: right;
+}
+
+/* Section width modifiers */
+.section--narrow .section__container {
+  max-width: var(--container-lg);
+}
+
+.section--wide .section__container {
+  max-width: var(--container-2xl);
+}
+
+.section--full {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.section--full .section__container {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ======================
+   Accessibility & Performance
+   ====================== */
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .section,
+  .section * {
+    animation: none;
+    transition: none;
+  }
+
+  .section *:hover {
+    transform: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .section {
+    page-break-inside: avoid;
+    padding: var(--space-5) 0;
+  }
+
+  .section-glow::before,
+  .section-accent::before {
+    display: none;
+  }
+}
