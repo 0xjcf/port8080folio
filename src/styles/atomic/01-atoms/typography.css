@@ -1,0 +1,340 @@
+/* ================================================
+   Atomic Design: Typography (Atoms Level)
+   Base typography styles with IDE theme support
+   ================================================ */
+
+/* Headings - Clean, modern, developer-friendly */
+h1 {
+  font-size: var(--text-5xl);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-6);
+}
+
+h2 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-5);
+}
+
+h3 {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+}
+
+h4 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-3);
+}
+
+h5 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-3);
+}
+
+h6 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+/* Paragraphs */
+p {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+/* Lead paragraph */
+.lead {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-primary);
+  font-weight: var(--font-medium);
+}
+
+/* Small text */
+small,
+.small {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* Strong emphasis */
+strong,
+b {
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+/* Emphasis */
+em,
+i {
+  font-style: italic;
+}
+
+/* Marked/highlighted text */
+mark {
+  background-color: var(--color-syntax-yellow);
+  color: var(--color-text-inverse);
+  padding: 0.125em 0.25em;
+  border-radius: var(--radius-sm);
+}
+
+/* Blockquotes - styled like IDE comments */
+blockquote {
+  border-left: 3px solid var(--color-border-active);
+  padding-left: var(--space-4);
+  margin: var(--space-6) 0;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+blockquote cite {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  font-style: normal;
+}
+
+/* Lists */
+ul,
+ol {
+  padding-left: var(--space-6);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-secondary);
+}
+
+ul li,
+ol li {
+  margin-bottom: var(--space-2);
+}
+
+/* Nested lists */
+ul ul,
+ul ol,
+ol ul,
+ol ol {
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+/* Definition lists */
+dl {
+  margin-bottom: var(--space-4);
+}
+
+dt {
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+dd {
+  color: var(--color-text-secondary);
+  margin-left: var(--space-6);
+  margin-bottom: var(--space-3);
+}
+
+/* Abbreviations */
+abbr[title] {
+  border-bottom: 1px dotted var(--color-text-muted);
+  cursor: help;
+  text-decoration: none;
+}
+
+/* Keyboard input */
+kbd {
+  display: inline-block;
+  padding: 0.125em 0.375em;
+  font-size: var(--text-sm);
+  line-height: 1;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-overlay);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 -1px 0 var(--color-border);
+  font-family: var(--font-mono);
+}
+
+/* Sample output */
+samp {
+  display: inline-block;
+  padding: 0.125em 0.25em;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+/* Variables */
+var {
+  font-style: italic;
+  color: var(--color-syntax-purple);
+  font-family: var(--font-mono);
+}
+
+/* Time */
+time {
+  color: var(--color-text-muted);
+}
+
+/* Preformatted text */
+pre {
+  font-family: var(--font-mono);
+  white-space: pre;
+  word-wrap: normal;
+  overflow-x: auto;
+}
+
+/* Text utilities */
+.text-primary {
+  color: var(--color-text-primary);
+}
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
+.text-inverse {
+  color: var(--color-text-inverse);
+}
+
+.text-syntax-yellow {
+  color: var(--color-syntax-yellow);
+}
+.text-syntax-green {
+  color: var(--color-syntax-green);
+}
+.text-syntax-orange {
+  color: var(--color-syntax-orange);
+}
+.text-syntax-purple {
+  color: var(--color-syntax-purple);
+}
+.text-syntax-pink {
+  color: var(--color-syntax-pink);
+}
+.text-syntax-blue {
+  color: var(--color-syntax-blue);
+}
+
+/* Font families */
+.font-mono {
+  font-family: var(--font-mono);
+}
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Font weights */
+.font-normal {
+  font-weight: var(--font-normal);
+}
+.font-medium {
+  font-weight: var(--font-medium);
+}
+.font-semibold {
+  font-weight: var(--font-semibold);
+}
+.font-bold {
+  font-weight: var(--font-bold);
+}
+
+/* Text alignment */
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.text-justify {
+  text-align: justify;
+}
+
+/* Text transform */
+.uppercase {
+  text-transform: uppercase;
+}
+.lowercase {
+  text-transform: lowercase;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+.normal-case {
+  text-transform: none;
+}
+
+/* Letter spacing */
+.tracking-tight {
+  letter-spacing: var(--tracking-tight);
+}
+.tracking-normal {
+  letter-spacing: var(--tracking-normal);
+}
+.tracking-wide {
+  letter-spacing: var(--tracking-wide);
+}
+
+/* Line height */
+.leading-none {
+  line-height: 1;
+}
+.leading-tight {
+  line-height: var(--leading-tight);
+}
+.leading-normal {
+  line-height: var(--leading-normal);
+}
+.leading-relaxed {
+  line-height: var(--leading-relaxed);
+}
+.leading-loose {
+  line-height: var(--leading-loose);
+}
+
+/* Text decoration */
+.no-underline {
+  text-decoration: none;
+}
+.underline {
+  text-decoration: underline;
+}
+.line-through {
+  text-decoration: line-through;
+}
+
+/* Truncate text */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Line clamp */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}

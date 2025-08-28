@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atomic Design System Showcase - Port8080folio</title>
+
+    <!-- Atomic Design System Styles -->
+    <link rel="stylesheet" href="styles/atomic/main-atomic.css">
+
+    <!-- Component Scripts -->
+    <script type="module" src="components/atoms/badge-tag.ts"></script>
+    <script type="module" src="components/atoms/code-block.ts"></script>
+    <script type="module" src="components/atoms/copy-button.ts"></script>
+    <script type="module" src="components/atoms/back-to-top.ts"></script>
+    <script type="module" src="components/atoms/char-counter.ts"></script>
+    <script type="module" src="components/atoms/progress-dots.ts"></script>
+    <script type="module" src="components/atoms/tag-element.ts"></script>
+    <script type="module" src="components/atoms/form-checkbox.ts"></script>
+
+    <style>
+        /* Showcase-specific styles */
+        .showcase {
+            background: var(--color-surface-base);
+            min-height: 100vh;
+            padding: var(--space-8) 0;
+        }
+
+        .showcase-header {
+            text-align: center;
+            margin-bottom: var(--space-16);
+            padding: var(--space-8);
+            background: var(--color-surface-raised);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border-base);
+        }
+
+        .showcase-section {
+            margin-bottom: var(--space-12);
+            padding: var(--space-6);
+            background: var(--color-surface-raised);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border-base);
+        }
+
+        .showcase-section h2 {
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-6);
+            padding-bottom: var(--space-3);
+            border-bottom: 2px solid var(--color-accent-primary);
+        }
+
+        .showcase-section h3 {
+            color: var(--color-text-secondary);
+            margin: var(--space-6) 0 var(--space-4) 0;
+            font-size: var(--font-size-lg);
+        }
+
+        .component-demo {
+            margin-bottom: var(--space-8);
+            padding: var(--space-4);
+            background: var(--color-surface-base);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-border-subtle);
+        }
+
+        .component-demo h4 {
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-3);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-md);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin-top: var(--space-4);
+        }
+
+        .demo-item {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+            align-items: flex-start;
+        }
+
+        .demo-label {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+            font-family: var(--font-mono);
+        }
+
+        .hierarchy-note {
+            background: var(--color-accent-primary-muted);
+            padding: var(--space-3);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--space-4);
+            border-left: 4px solid var(--color-accent-primary);
+        }
+
+        .composition-example {
+            background: var(--color-surface-base);
+            padding: var(--space-6);
+            border-radius: var(--radius-md);
+            border: 2px dashed var(--color-border-base);
+            margin-top: var(--space-4);
+        }
+
+        .form-demo {
+            max-width: 400px;
+        }
+
+        .form-demo input,
+        .form-demo textarea {
+            width: 100%;
+            padding: var(--space-3);
+            border: 1px solid var(--color-border-base);
+            border-radius: var(--radius-sm);
+            background: var(--color-surface-base);
+            color: var(--color-text-primary);
+            font-family: var(--font-sans);
+            margin-bottom: var(--space-2);
+        }
+
+        .code-examples {
+            background: var(--color-surface-elevated);
+            padding: var(--space-4);
+            border-radius: var(--radius-sm);
+            margin-top: var(--space-4);
+        }
+    </style>
+</head>
+
+<body class="showcase">
+    <div class="container">
+
+        <!-- Header -->
+        <header class="showcase-header">
+            <h1>Atomic Design System Showcase</h1>
+            <p>Interactive demonstration of our component library following atomic design principles</p>
+            <p class="demo-label">IDE-themed design system for developer portfolio</p>
+        </header>
+
+        <!-- Atomic Design Overview -->
+        <section class="showcase-section">
+            <h2>🔬 Atomic Design Principles</h2>
+            <div class="hierarchy-note">
+                <strong>Component Hierarchy:</strong> Atoms → Molecules → Organisms → Templates → Pages
+                <br>
+                <small>Only components with unit test coverage are showcased here</small>
+            </div>
+
+            <div class="demo-grid">
+                <div class="demo-item">
+                    <strong>⚛️ Atoms</strong>
+                    <span class="demo-label">Basic building blocks (buttons, inputs, labels)</span>
+                </div>
+                <div class="demo-item">
+                    <strong>🧪 Molecules</strong>
+                    <span class="demo-label">Groups of atoms functioning together</span>
+                </div>
+                <div class="demo-item">
+                    <strong>🦠 Organisms</strong>
+                    <span class="demo-label">Complex UI components</span>
+                </div>
+                <div class="demo-item">
+                    <strong>📄 Templates</strong>
+                    <span class="demo-label">Page-level layouts</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ATOMS SECTION -->
+        <section class="showcase-section">
+            <h2>⚛️ Atoms - Basic Building Blocks</h2>
+
+            <!-- Badge Tags -->
+            <div class="component-demo">
+                <h4>&lt;badge-tag&gt;</h4>
+                <p>Status indicators and labels</p>
+
+                <h3>Types & Sizes</h3>
+                <div class="demo-grid">
+                    <div class="demo-item">
+                        <span class="demo-label">default</span>
+                        <badge-tag>Default</badge-tag>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">primary</span>
+                        <badge-tag type="primary">Primary</badge-tag>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">success</span>
+                        <badge-tag type="success">Success</badge-tag>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">warning</span>
+                        <badge-tag type="warning">Warning</badge-tag>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">error</span>
+                        <badge-tag type="error">Error</badge-tag>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">info</span>
+                        <badge-tag type="info">Info</badge-tag>
+                    </div>
+                </div>
+
+                <h3>Sizes</h3>
+                <div class="demo-grid">
+                    <div class="demo-item">
+                        <span class="demo-label">small</span>
+                        <badge-tag size="sm" type="primary">Small</badge-tag>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">medium (default)</span>
+                        <badge-tag size="md" type="primary">Medium</badge-tag>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">large</span>
+                        <badge-tag size="lg" type="primary">Large</badge-tag>
+                    </div>
+                </div>
+
+                <h3>Variants</h3>
+                <div class="demo-grid">
+                    <div class="demo-item">
+                        <span class="demo-label">pill shape</span>
+                        <badge-tag type="success" pill>Pill Badge</badge-tag>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">clickable</span>
+                        <badge-tag type="primary" clickable>Clickable</badge-tag>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">disabled</span>
+                        <badge-tag type="primary" disabled>Disabled</badge-tag>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tag Elements -->
+            <div class="component-demo">
+                <h4>&lt;tag-element&gt;</h4>
+                <p>Interactive tags for filtering and categorization</p>
+
+                <div class="demo-grid">
+                    <div class="demo-item">
+                        <span class="demo-label">default</span>
+                        <tag-element>JavaScript</tag-element>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">removable</span>
+                        <tag-element removable>TypeScript</tag-element>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">selected</span>
+                        <tag-element selected>React</tag-element>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">disabled</span>
+                        <tag-element disabled>Vue.js</tag-element>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Dots -->
+            <div class="component-demo">
+                <h4>&lt;progress-dots&gt;</h4>
+                <p>Multi-step progress indicators</p>
+
+                <h3>Basic Progress</h3>
+                <div class="demo-grid">
+                    <div class="demo-item">
+                        <span class="demo-label">3 of 5 steps</span>
+                        <progress-dots current="3" total="5"></progress-dots>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">with text</span>
+                        <progress-dots current="2" total="4" show-text></progress-dots>
+                    </div>
+                </div>
+
+                <h3>With Labels</h3>
+                <div class="demo-item">
+                    <span class="demo-label">labeled steps</span>
+                    <progress-dots current="2" total="4" labels="Planning,Development,Testing,Deployment" show-text>
+                    </progress-dots>
+                </div>
+
+                <h3>Interactive</h3>
+                <div class="demo-item">
+                    <span class="demo-label">clickable steps</span>
+                    <progress-dots current="3" total="5" clickable labels="Concept,Design,Build,Test,Launch">
+                    </progress-dots>
+                </div>
+            </div>
+
+            <!-- Code Blocks -->
+            <div class="component-demo">
+                <h4>&lt;code-block&gt;</h4>
+                <p>Syntax-highlighted code display with copy functionality</p>
+
+                <h3>Languages</h3>
+                <div class="code-examples">
+                    <div style="margin-bottom: var(--space-4);">
+                        <span class="demo-label">JavaScript</span>
+                        <code-block language="javascript" filename="example.js">
+                            <script type="text/plain">
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+console.log(greet('Developer'));
+              </script>
+                        </code-block>
+                    </div>
+
+                    <div style="margin-bottom: var(--space-4);">
+                        <span class="demo-label">TypeScript</span>
+                        <code-block language="typescript" filename="types.ts" show-line-numbers>
+                            <script type="text/plain">
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+function createUser(data: Partial<User>): User {
+  return {
+    id: Math.random().toString(36),
+    name: 'Unknown',
+    email: '',
+    ...data
+  };
+}
+              </script>
+                        </code-block>
+                    </div>
+
+                    <div>
+                        <span class="demo-label">CSS</span>
+                        <code-block language="css" filename="styles.css" highlight-lines="2,4-6">
+                            <script type="text/plain">
+.component {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+}
+              </script>
+                        </code-block>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copy Button -->
+            <div class="component-demo">
+                <h4>&lt;copy-button&gt;</h4>
+                <p>One-click copy functionality</p>
+
+                <div class="demo-grid">
+                    <div class="demo-item">
+                        <span class="demo-label">copy text</span>
+                        <copy-button text="npm install @port8080/components">Copy Install Command</copy-button>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">copy from target</span>
+                        <input id="copy-target" value="Hello, World!" readonly>
+                        <copy-button target="#copy-target">Copy Input Value</copy-button>
+                    </div>
+                    <div class="demo-item">
+                        <span class="demo-label">custom feedback</span>
+                        <copy-button text="git clone repo.git" feedback="Repository URL copied!">Copy Git
+                            Command</copy-button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Checkbox -->
+            <div class="component-demo">
+                <h4>&lt;form-checkbox&gt;</h4>
+                <p>Accessible checkbox inputs</p>
+
+                <div class="form-demo">
+                    <h3>Basic Checkboxes</h3>
+                    <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                        <form-checkbox name="newsletter" value="yes">
+                            Subscribe to newsletter
+                        </form-checkbox>
+                        <form-checkbox name="terms" value="accepted" required>
+                            I agree to the terms and conditions *
+                        </form-checkbox>
+                        <form-checkbox name="marketing" value="yes" checked>
+                            Receive marketing emails (pre-checked)
+                        </form-checkbox>
+                        <form-checkbox name="disabled-option" value="no" disabled>
+                            This option is disabled
+                        </form-checkbox>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Character Counter -->
+            <div class="component-demo">
+                <h4>&lt;char-counter&gt;</h4>
+                <p>Real-time character counting for inputs</p>
+
+                <div class="form-demo">
+                    <h3>Input with Character Limit</h3>
+                    <input id="bio-input" type="text" placeholder="Enter your bio..." maxlength="100">
+                    <char-counter target="#bio-input" max="100"></char-counter>
+
+                    <h3>Textarea with Counter</h3>
+                    <textarea id="message-input" placeholder="Write your message..." rows="4"></textarea>
+                    <char-counter target="#message-input" max="280"></char-counter>
+
+                    <h3>Character Count Only</h3>
+                    <input id="title-input" type="text" placeholder="Article title">
+                    <char-counter target="#title-input"></char-counter>
+                </div>
+            </div>
+
+            <!-- Back to Top -->
+            <div class="component-demo">
+                <h4>&lt;back-to-top&gt;</h4>
+                <p>Scroll-to-top navigation aid</p>
+
+                <div class="demo-item">
+                    <span class="demo-label">appears on scroll</span>
+                    <back-to-top threshold="200">↑ Back to Top</back-to-top>
+                    <p
+                        style="color: var(--color-text-tertiary); font-size: var(--font-size-sm); margin-top: var(--space-2);">
+                        Scroll down to see the button appear
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPOSITION EXAMPLES -->
+        <section class="showcase-section">
+            <h2>🧪 Atomic Composition Examples</h2>
+            <div class="hierarchy-note">
+                <strong>Composition in Action:</strong> How atoms combine to create more complex UI patterns
+            </div>
+
+            <!-- Form Composition -->
+            <div class="composition-example">
+                <h3>Form with Multiple Atoms</h3>
+                <div class="form-demo">
+                    <div style="margin-bottom: var(--space-4);">
+                        <label for="username-input"
+                            style="display: block; margin-bottom: var(--space-2); font-weight: 500;">
+                            Username
+                            <badge-tag size="sm" type="info">Required</badge-tag>
+                        </label>
+                        <input id="username-input" type="text" placeholder="Enter username..." maxlength="20">
+                        <char-counter target="#username-input" max="20"></char-counter>
+                    </div>
+
+                    <div style="margin-bottom: var(--space-4);">
+                        <label for="description-input"
+                            style="display: block; margin-bottom: var(--space-2); font-weight: 500;">
+                            Project Description
+                        </label>
+                        <textarea id="description-input" placeholder="Describe your project..." rows="3"></textarea>
+                        <char-counter target="#description-input" max="500"></char-counter>
+                    </div>
+
+                    <div style="margin-bottom: var(--space-4);">
+                        <label style="display: block; margin-bottom: var(--space-3); font-weight: 500;">
+                            Technologies
+                        </label>
+                        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                            <tag-element selected>JavaScript</tag-element>
+                            <tag-element>TypeScript</tag-element>
+                            <tag-element>React</tag-element>
+                            <tag-element removable>Vue.js</tag-element>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: var(--space-4);">
+                        <form-checkbox name="public" value="yes">
+                            Make project public
+                        </form-checkbox>
+                        <form-checkbox name="featured" value="yes">
+                            Feature on portfolio
+                        </form-checkbox>
+                    </div>
+
+                    <div style="display: flex; gap: var(--space-3); align-items: center;">
+                        <badge-tag type="success">Ready to Submit</badge-tag>
+                        <copy-button text="Project configuration saved">Copy Config</copy-button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Flow -->
+            <div class="composition-example">
+                <h3>Project Development Flow</h3>
+                <div style="text-align: center;">
+                    <progress-dots current="3" total="5" labels="Planning,Design,Development,Testing,Deploy" show-text
+                        clickable>
+                    </progress-dots>
+
+                    <div
+                        style="margin-top: var(--space-4); display: flex; justify-content: center; gap: var(--space-3);">
+                        <badge-tag type="success">Planning ✓</badge-tag>
+                        <badge-tag type="success">Design ✓</badge-tag>
+                        <badge-tag type="primary">Development (Current)</badge-tag>
+                        <badge-tag type="warning">Testing (Next)</badge-tag>
+                        <badge-tag>Deploy</badge-tag>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Showcase -->
+            <div class="composition-example">
+                <h3>Code Example with Copy</h3>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+                    <span style="font-weight: 500;">Component Installation</span>
+                    <copy-button text="npm install @port8080/atomic-components" feedback="Installation command copied!">
+                        Copy Install Command
+                    </copy-button>
+                </div>
+
+                <code-block language="bash" filename="install.sh">
+                    <script type="text/plain">
+# Install the atomic design components
+npm install @port8080/atomic-components
+
+# Import individual components
+import { BadgeTag, CodeBlock, ProgressDots } from '@port8080/atomic-components';
+
+# Or import all
+import * as Components from '@port8080/atomic-components';
+          </script>
+                </code-block>
+            </div>
+        </section>
+
+        <!-- TESTING COVERAGE -->
+        <section class="showcase-section">
+            <h2>🧪 Test Coverage Status</h2>
+            <div class="hierarchy-note">
+                <strong>Quality Assurance:</strong> All showcased components have comprehensive unit test coverage
+            </div>
+
+            <div class="demo-grid">
+                <div class="demo-item">
+                    <badge-tag type="success">badge-tag</badge-tag>
+                    <span class="demo-label">✅ Unit tested</span>
+                </div>
+                <div class="demo-item">
+                    <badge-tag type="success">code-block</badge-tag>
+                    <span class="demo-label">✅ Unit tested</span>
+                </div>
+                <div class="demo-item">
+                    <badge-tag type="success">copy-button</badge-tag>
+                    <span class="demo-label">✅ Unit tested</span>
+                </div>
+                <div class="demo-item">
+                    <badge-tag type="success">back-to-top</badge-tag>
+                    <span class="demo-label">✅ Unit tested</span>
+                </div>
+                <div class="demo-item">
+                    <badge-tag type="success">char-counter</badge-tag>
+                    <span class="demo-label">✅ Unit tested</span>
+                </div>
+                <div class="demo-item">
+                    <badge-tag type="success">progress-dots</badge-tag>
+                    <span class="demo-label">✅ Unit tested</span>
+                </div>
+                <div class="demo-item">
+                    <badge-tag type="success">tag-element</badge-tag>
+                    <span class="demo-label">✅ Unit tested</span>
+                </div>
+                <div class="demo-item">
+                    <badge-tag type="success">form-checkbox</badge-tag>
+                    <span class="demo-label">✅ Unit tested</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- DESIGN TOKENS -->
+        <section class="showcase-section">
+            <h2>🎨 Design System Foundation</h2>
+            <p>All components use consistent design tokens from our atomic design system:</p>
+
+            <div class="demo-grid">
+                <div class="demo-item">
+                    <strong>Colors</strong>
+                    <span class="demo-label">Semantic color palette with IDE theming</span>
+                </div>
+                <div class="demo-item">
+                    <strong>Typography</strong>
+                    <span class="demo-label">Consistent font scales and weights</span>
+                </div>
+                <div class="demo-item">
+                    <strong>Spacing</strong>
+                    <span class="demo-label">8pt grid system for consistent spacing</span>
+                </div>
+                <div class="demo-item">
+                    <strong>Radius</strong>
+                    <span class="demo-label">Consistent border radius values</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Add some content to test back-to-top -->
+    <div style="height: 200vh; background: linear-gradient(var(--color-surface-base), var(--color-surface-raised));">
+        <div class="container">
+            <div style="padding-top: 50vh; text-align: center;">
+                <h2>Scroll Test Area</h2>
+                <p>Scroll back up to see the atomic design system showcase</p>
+                <p style="color: var(--color-text-tertiary);">The back-to-top button should appear as you scroll</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity for demonstration
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle badge clicks
+            document.querySelectorAll('badge-tag[clickable]').forEach(badge => {
+                badge.addEventListener('click', () => {
+                    console.log('Badge clicked:', badge.textContent);
+                });
+            });
+
+            // Handle tag removals
+            document.querySelectorAll('tag-element[removable]').forEach(tag => {
+                tag.addEventListener('remove', (e) => {
+                    console.log('Tag removed:', e.detail.value);
+                    e.target.style.opacity = '0.5';
+                });
+            });
+
+            // Handle progress dot clicks
+            document.querySelectorAll('progress-dots[clickable]').forEach(progress => {
+                progress.addEventListener('step-click', (e) => {
+                    console.log('Step clicked:', e.detail.step);
+                    progress.setAttribute('current', e.detail.step);
+                });
+            });
+
+            // Demo form submission
+            document.addEventListener('submit', (e) => {
+                e.preventDefault();
+                console.log('Form submission prevented for demo');
+            });
+        });
+    </script>
+</body>
+
+</html>

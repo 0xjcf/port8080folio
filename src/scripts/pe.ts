@@ -179,33 +179,125 @@
       });
     }
 
-    // Sticky CTA functionality
+    // Sticky CTA functionality - Show when hero CTA is out of view and condense on scroll
     const initStickyCTA = () => {
       const stickyCTA = document.querySelector('.services__sticky-cta');
-      const servicesSection = document.getElementById('services');
+      // Target the hero CTA button more specifically
+      const heroCTA = document.querySelector('.cta-row .button.button--primary, #hero .button--primary');
+      
+      if (!stickyCTA || !heroCTA) {
+        return;
+      }
 
-      if (!stickyCTA || !servicesSection) return;
-
-      const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: [0, 0.1, 0.9],
+      // Track if sticky CTA has been shown at least once
+      let hasBeenShown = false;
+      let scrollTicking = false;
+      
+      // Function to handle condensing based on scroll position
+      const handleCondensing = () => {
+        if (!hasBeenShown) return;
+        
+        const scrollY = window.scrollY || window.pageYOffset;
+        const viewportHeight = window.innerHeight;
+        const condenseTrigger = viewportHeight * 1.5; // Condense after 150vh of scrolling
+        
+        if (scrollY > condenseTrigger) {
+          stickyCTA.classList.add('is-condensed');
+        } else {
+          stickyCTA.classList.remove('is-condensed');
+        }
       };
+      
+      // Method 1: Try IntersectionObserver (preferred)
+      if (typeof IntersectionObserver !== 'undefined') {
+        const observerOptions = {
+          root: null,
+          rootMargin: '-100px 0px', // Trigger when hero CTA is 100px out of view
+          threshold: 0,
+        };
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.target === servicesSection) {
-            // Show CTA when services section is visible, hide when fully out of view
-            if (entry.intersectionRatio > 0.1 && entry.intersectionRatio < 0.9) {
-              stickyCTA.classList.add('visible');
-            } else {
-              stickyCTA.classList.remove('visible');
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroCTA) {
+              // Show sticky CTA when hero CTA is OUT of view
+              if (!entry.isIntersecting) {
+                stickyCTA.classList.add('is-visible');
+                hasBeenShown = true;
+                handleCondensing(); // Check if should be condensed
+              } else if (hasBeenShown) {
+                // Hide sticky CTA when hero CTA is back IN view
+                stickyCTA.classList.remove('is-visible');
+                stickyCTA.classList.remove('is-condensed');
+              }
+            }
+          });
+        }, observerOptions);
+
+        observer.observe(heroCTA);
+        
+        // Add scroll listener for condensing behavior
+        const onScrollCondense = () => {
+          if (!scrollTicking) {
+            requestAnimationFrame(() => {
+              handleCondensing();
+              scrollTicking = false;
+            });
+            scrollTicking = true;
+          }
+        };
+        
+        window.addEventListener('scroll', onScrollCondense, { passive: true });
+      } else {
+        // Method 2: Fallback to scroll event for older browsers
+        let ticking = false;
+        
+        const checkVisibility = () => {
+          const rect = heroCTA.getBoundingClientRect();
+          const isOutOfView = rect.bottom < 100; // 100px threshold
+          
+          if (isOutOfView && !stickyCTA.classList.contains('is-visible')) {
+            stickyCTA.classList.add('is-visible');
+            hasBeenShown = true;
+          } else if (!isOutOfView && hasBeenShown && stickyCTA.classList.contains('is-visible')) {
+            stickyCTA.classList.remove('is-visible');
+            stickyCTA.classList.remove('is-condensed');
+          }
+          
+          // Also handle condensing
+          if (hasBeenShown) {
+            handleCondensing();
+          }
+          
+          ticking = false;
+        };
+        
+        const onScroll = () => {
+          if (!ticking) {
+            requestAnimationFrame(checkVisibility);
+            ticking = true;
+          }
+        };
+        
+        window.addEventListener('scroll', onScroll, { passive: true });
+        // Check initial state
+        checkVisibility();
+      }
+      
+      // Add smooth scroll behavior to sticky CTA
+      const stickyButton = stickyCTA.querySelector('.button--sticky');
+      if (stickyButton) {
+        stickyButton.addEventListener('click', (e) => {
+          // If it's an internal link, smooth scroll
+          const href = stickyButton.getAttribute('href');
+          if (href && href.startsWith('#')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
           }
         });
-      }, observerOptions);
-
-      observer.observe(servicesSection);
+      }
     };
 
     // Initialize sticky CTA

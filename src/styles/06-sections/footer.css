@@ -1,306 +1,112 @@
 /* ========================================
    Footer Section Styles
-   Using unified section patterns from sections-base.css
+   Following About section pattern - Mobile First
    ======================================== */
 
-/* Footer uses .section--footer variant from base patterns */
-/* Additional footer-specific styles only */
-
-/* Footer - Mobile First */
+/* Footer Section Container - Mobile-first */
 .footer {
-  /* Inherits from .section and .section--footer */
-  text-align: center;
-  padding: var(--space-12) var(--space-5) var(--space-10); /* Mobile padding */
-}
-
-/* Content wrapper - uses standard .section__container pattern */
-.footer .container {
-  /* Inherits max-width and centering from .section__container */
   position: relative;
-  z-index: var(--z-sticky);
+  padding: var(--space-12) var(--space-5) var(--space-8);
+  background: var(--color-surface);
+  border-top: var(--space-px) solid var(--color-border);
 }
 
-/* Footer Navigation Links - Mobile First */
+@media (min-width: 768px) {
+  .footer {
+    padding: var(--space-16) var(--space-6) var(--space-10);
+  }
+}
+
+/* Content wrapper */
+.footer .container {
+  max-width: var(--container-xl);
+  margin: var(--space-0) auto;
+  text-align: center;
+}
+
+/* Footer Links Navigation - Mobile First */
 .footer__links {
   display: flex;
-  flex-direction: column; /* Stack on mobile */
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-3-5);
-  margin-bottom: var(--space-8);
-  font-size: var(--text-sm);
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+@media (min-width: 640px) {
+  .footer__links {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+  }
 }
 
 .footer__links a {
-  color: oklch(1 0 0 / 0.88);
+  color: var(--color-text-light);
   text-decoration: none;
-  padding: var(--space-2-5) var(--space-1); /* Larger tap targets on mobile */
-  position: relative;
-  transition: color var(--duration-fast);
-}
-
-/* Gradient underline on hover */
-.footer__links a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(var(--space-0-5) * -1);
-  height: var(--space-0-5);
-  transform: scaleX(0);
-  background: var(--brand-grad-text);
-  border-radius: var(--radius-full);
-  transition: transform var(--duration-fast) ease;
+  font-size: var(--text-base);
+  font-weight: 500;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
 }
 
 .footer__links a:hover {
-  color: color-mix(in oklch, var(--color-text) 95%, transparent);
+  color: var(--color-primary);
+  background: var(--color-surface-alt);
 }
 
-.footer__links a:hover::after {
-  transform: scaleX(1);
-}
-
-.footer__links a:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--space-0-5)
-    color-mix(in oklch, var(--color-text) 60%, var(--color-brand-secondary) 40%);
-  border-radius: var(--radius-md);
-}
-
-/* Link dividers - Mobile First */
+/* Link dividers - hide on mobile */
 .footer__links span[aria-hidden="true"] {
-  display: none; /* Hide on mobile */
-  color: color-mix(in oklch, var(--color-text) 20%, transparent);
-  font-size: var(--text-xs);
+  display: none;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
   user-select: none;
 }
 
-/* Legal Section - Mobile First */
-.footer__legal {
-  margin-bottom: var(--space-10);
-  padding-top: var(--space-6); /* Mobile padding */
-  border-top: var(--space-px) solid color-mix(in oklch, var(--color-text) 6%, transparent);
-}
-
-.footer__legal p {
-  margin: 0 0 var(--space-2);
-  font-size: var(--text-xs); /* Mobile size */
-  color: color-mix(in oklch, var(--color-text) 65%, transparent);
-  line-height: 1.6;
-}
-
-.footer__legal p:last-child {
-  margin-bottom: 0;
-}
-
-/* Legal links */
-.footer__legal a {
-  color: oklch(1 0 0 / 0.72);
-  text-decoration: none;
-  border-bottom: var(--space-px) solid color-mix(in oklch, var(--color-text) 20%, transparent);
-  transition: var(--transition-fast);
-}
-
-.footer__legal a:hover {
-  color: color-mix(in oklch, var(--color-text) 90%, transparent);
-  border-bottom-color: oklch(1 0 0 / 0.4);
-}
-
-.footer__legal a:focus-visible {
-  outline: var(--space-0-5) solid var(--focus-outline, var(--color-focus-outline));
-  outline-offset: var(--space-0-5);
-  border-bottom-color: transparent;
-}
-
-/* Back to Top Button - Mobile First */
-.back-to-top {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--space-11);
-  height: var(--space-11);
-  margin-top: var(--space-5);
-  background: color-mix(in oklch, var(--color-text) 4%, transparent);
-  backdrop-filter: blur(var(--backdrop-blur-sm)); /* Reduced blur on mobile */
-  -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
-  border: var(--space-px) solid color-mix(in oklch, var(--color-text) 10%, transparent);
-  border-radius: var(--radius-full);
-  color: var(--color-text-light);
-  text-decoration: none;
-  font-size: var(--text-lg);
-  transition: var(--transition-fast);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Gradient ring on hover */
-.back-to-top::after {
-  content: "";
-  position: absolute;
-  inset: calc(var(--space-px) * -1);
-  border-radius: 50%;
-  padding: var(--space-px);
-  background: var(--brand-grad-cta);
-  -webkit-mask:
-    linear-gradient(var(--color-text) 0 0) content-box,
-    linear-gradient(var(--color-text) 0 0);
-  mask:
-    linear-gradient(var(--color-text) 0 0) content-box,
-    linear-gradient(var(--color-text) 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--duration-fast);
-}
-
-.back-to-top:hover {
-  transform: var(--transform-lift-sm);
-  background: color-mix(in oklch, var(--color-text) 6%, transparent);
-  border-color: color-mix(in oklch, var(--color-text) 14%, transparent);
-  color: color-mix(in oklch, var(--color-text) 95%, transparent);
-}
-
-.back-to-top:hover::after {
-  opacity: 0.6;
-}
-
-.back-to-top:focus-visible {
-  outline: var(--space-0-5) solid var(--focus-outline, var(--color-focus-outline));
-  outline-offset: calc(var(--space-1) * 0.75);
-}
-
-/* Social Icons Grid - standardized component */
-.footer__social {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-4);
-  margin: var(--space-8) 0;
-}
-
-.social-icon {
-  width: var(--space-10);
-  height: var(--space-10);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--section-grid-color);
-  border: var(--space-px) solid var(--color-border);
-  border-radius: var(--radius-lg);
-  color: oklch(1 0 0 / 0.72);
-  transition: var(--transition-fast);
-  position: relative;
-}
-
-.social-icon:hover {
-  background: color-mix(in oklch, var(--color-text) 5%, transparent);
-  border-color: color-mix(in oklch, var(--color-text) 12%, transparent);
-  color: color-mix(in oklch, var(--color-text) 90%, transparent);
-  transform: var(--transform-lift-sm);
-}
-
-.social-icon svg {
-  width: var(--space-5);
-  height: var(--space-5);
-}
-
-.social-icon:focus-visible {
-  outline: var(--space-0-5) solid var(--focus-outline, var(--color-focus-outline));
-  outline-offset: var(--space-0-5);
-}
-
-/* Copyright Badge - optional enhancement */
-.footer__copyright {
-  display: inline-block;
-  margin-top: var(--space-6);
-  padding: var(--space-2) var(--space-4);
-  background: color-mix(in oklch, var(--color-text) 2%, transparent);
-  border: var(--space-px) solid color-mix(in oklch, var(--color-text) 6%, transparent);
-  border-radius: var(--radius-full);
-  font-size: calc(var(--space-3) * 0.917);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: oklch(1 0 0 / 0.55);
-  font-variant-caps: small-caps;
-}
-
-/* ======================
-   Small Tablets (640px+)
-   Progressive enhancements
-   ====================== */
 @media (min-width: 640px) {
-  .footer {
-    /* Desktop padding inherited from .section--footer */
-    padding: inherit;
-  }
-
-  .footer__links {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: var(--space-2) var(--space-5);
-  }
-
-  /* Show dividers on desktop */
   .footer__links span[aria-hidden="true"] {
     display: inline;
   }
+}
 
-  .footer__legal {
-    padding-top: var(--space-8);
-  }
+/* Footer Legal Section */
+.footer__legal {
+  padding-top: var(--space-6);
+  border-top: var(--space-px) solid var(--color-border);
+  color: var(--color-text-muted);
+}
 
-  /* Desktop tap targets and legal text */
+.footer__legal p {
+  margin: var(--space-0) var(--space-0) var(--space-3) var(--space-0);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.footer__legal p:last-child {
+  margin-bottom: var(--space-0);
+}
+
+.footer__legal a {
+  color: var(--color-text-light);
+  text-decoration: none;
+  transition: color var(--transition-base);
+  border-bottom: var(--space-px) solid transparent;
+}
+
+.footer__legal a:hover {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
   .footer__links a {
-    padding: var(--space-1-5) var(--space-0-5);
+    font-size: var(--text-lg);
   }
 
   .footer__legal p {
-    font-size: calc(var(--space-3) * 1.083);
-  }
-
-  /* Enhanced blur on desktop */
-  .back-to-top {
-    backdrop-filter: blur(var(--backdrop-blur-md));
-    -webkit-backdrop-filter: blur(var(--backdrop-blur-md));
-  }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .footer__links a::after,
-  .back-to-top,
-  .back-to-top::after,
-  .social-icon {
-    transition: none;
-  }
-
-  .footer__links a:hover::after {
-    transform: translateX(-50%) scaleX(1);
-  }
-
-  .back-to-top:hover,
-  .social-icon:hover {
-    transform: none;
-  }
-}
-
-/* Print styles */
-@media print {
-  .footer {
-    background: var(--color-text);
-    color: var(--color-background);
-    border-top: var(--space-px) solid var(--color-neutral-300);
-    padding: var(--space-5) 0;
-  }
-
-  .footer__links a,
-  .footer__legal,
-  .footer__legal a {
-    color: var(--color-background);
-  }
-
-  .back-to-top {
-    display: none;
+    font-size: var(--text-base);
   }
 }

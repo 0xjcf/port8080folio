@@ -1,0 +1,536 @@
+/* ================================================
+   Atomic Design: Forms (Molecules Level)
+   Form components with IDE theme support
+   ================================================ */
+
+/* Form Field Molecule (label + input + helper) */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+/* Labels */
+.form-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.form-label--required::after {
+  content: " *";
+  color: var(--color-syntax-pink);
+}
+
+/* Base Input/Textarea Styles */
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: var(--space-3) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+/* Input specific */
+.form-input {
+  height: 42px; /* Fixed height for consistency */
+}
+
+/* Textarea specific */
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Select specific */
+.form-select {
+  height: 42px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a5a5a' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  padding-right: var(--space-8);
+}
+
+/* Focus states */
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background-color: var(--color-bg-primary);
+  box-shadow: 0 0 0 3px var(--color-selection-bg);
+}
+
+/* Hover states */
+.form-input:hover:not(:focus):not(:disabled),
+.form-textarea:hover:not(:focus):not(:disabled),
+.form-select:hover:not(:focus):not(:disabled) {
+  border-color: var(--color-border-active);
+}
+
+/* Disabled state */
+.form-input:disabled,
+.form-textarea:disabled,
+.form-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--color-bg-tertiary);
+}
+
+/* Placeholder styling */
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Helper text */
+.form-helper {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+/* Validation states */
+.form-field--error .form-input,
+.form-field--error .form-textarea,
+.form-field--error .form-select {
+  border-color: var(--color-syntax-pink);
+}
+
+.form-field--error .form-helper {
+  color: var(--color-syntax-pink);
+}
+
+.form-field--success .form-input,
+.form-field--success .form-textarea,
+.form-field--success .form-select {
+  border-color: var(--color-syntax-green);
+}
+
+.form-field--success .form-helper {
+  color: var(--color-syntax-green);
+}
+
+.form-field--warning .form-input,
+.form-field--warning .form-textarea,
+.form-field--warning .form-select {
+  border-color: var(--color-syntax-orange);
+}
+
+.form-field--warning .form-helper {
+  color: var(--color-syntax-orange);
+}
+
+/* Input with icon */
+.form-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-input-group__icon {
+  position: absolute;
+  left: var(--space-3);
+  width: 1.25em;
+  height: 1.25em;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.form-input-group__icon--right {
+  left: auto;
+  right: var(--space-3);
+}
+
+.form-input-group .form-input {
+  padding-left: var(--space-10);
+}
+
+.form-input-group .form-input--icon-right {
+  padding-left: var(--space-3);
+  padding-right: var(--space-10);
+}
+
+/* Checkbox and Radio */
+.form-checkbox,
+.form-radio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.form-checkbox input[type="checkbox"],
+.form-radio input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
+.form-checkbox label,
+.form-radio label {
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Switch/Toggle */
+.form-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.form-switch__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.form-switch__track {
+  width: 44px;
+  height: 24px;
+  background-color: var(--color-bg-overlay);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  position: relative;
+  transition: all var(--transition-base);
+}
+
+.form-switch__thumb {
+  width: 18px;
+  height: 18px;
+  background-color: var(--color-text-secondary);
+  border-radius: var(--radius-full);
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all var(--transition-base);
+}
+
+.form-switch__input:checked + .form-switch__track {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.form-switch__input:checked + .form-switch__track .form-switch__thumb {
+  transform: translateX(20px);
+  background-color: var(--color-bg-primary);
+}
+
+.form-switch__label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  user-select: none;
+}
+
+/* Form Group (multiple fields) */
+.form-group {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.form-group--2cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.form-group--3cols {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 640px) {
+  .form-group--2cols,
+  .form-group--3cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Form Actions (button group for forms) */
+.form-actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+
+.form-actions--right {
+  justify-content: flex-end;
+}
+
+.form-actions--center {
+  justify-content: center;
+}
+
+.form-actions--between {
+  justify-content: space-between;
+}
+
+/* Full Form Molecule */
+.form {
+  background: var(--color-bg-primary);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.form__title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.form__description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-6);
+}
+
+/* Inline forms */
+.form--inline {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.form--inline .form-field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* Search input molecule */
+.search-input {
+  position: relative;
+}
+
+.search-input::before {
+  content: "";
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238a8a8a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.search-input .form-input {
+  padding-left: var(--space-10);
+}
+
+/* ================================================
+   Additional Form Atoms
+   Character counter, input masks, validation
+   ================================================ */
+
+/* Character Counter Atom */
+.char-counter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+}
+
+.char-counter__count {
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.char-counter__count--warning {
+  color: var(--color-syntax-orange);
+  font-weight: var(--font-medium);
+}
+
+.char-counter__count--error {
+  color: var(--color-syntax-pink);
+  font-weight: var(--font-semibold);
+}
+
+.char-counter__limit {
+  color: var(--color-text-muted);
+}
+
+.char-counter__bar {
+  flex: 1;
+  height: 2px;
+  margin: 0 var(--space-2);
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.char-counter__progress {
+  height: 100%;
+  background-color: var(--color-syntax-green);
+  transition: width var(--transition-base), background-color var(--transition-fast);
+}
+
+.char-counter__progress--warning {
+  background-color: var(--color-syntax-orange);
+}
+
+.char-counter__progress--error {
+  background-color: var(--color-syntax-pink);
+}
+
+/* Form Validation Messages Atom */
+.form-validate {
+  display: block;
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  border-radius: var(--radius-sm);
+  animation: slide-down var(--transition-base) ease-out;
+}
+
+.form-validate__message {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.form-validate__icon {
+  flex-shrink: 0;
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.form-validate--success {
+  background-color: color-mix(in oklch, var(--color-syntax-green) 10%, transparent);
+  color: var(--color-syntax-green);
+  border: 1px solid var(--color-syntax-green);
+}
+
+.form-validate--error {
+  background-color: color-mix(in oklch, var(--color-syntax-pink) 10%, transparent);
+  color: var(--color-syntax-pink);
+  border: 1px solid var(--color-syntax-pink);
+}
+
+.form-validate--warning {
+  background-color: color-mix(in oklch, var(--color-syntax-orange) 10%, transparent);
+  color: var(--color-syntax-orange);
+  border: 1px solid var(--color-syntax-orange);
+}
+
+.form-validate--info {
+  background-color: color-mix(in oklch, var(--color-syntax-blue) 10%, transparent);
+  color: var(--color-syntax-blue);
+  border: 1px solid var(--color-syntax-blue);
+}
+
+/* Input Mask Atom */
+.input-mask {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.input-mask__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  white-space: pre;
+  overflow: hidden;
+}
+
+.input-mask__placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.input-mask__value {
+  color: var(--color-text-primary);
+}
+
+.input-mask__cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background-color: var(--color-primary);
+  animation: blink 1s infinite;
+  margin-left: -1px;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Input mask with format hints */
+.input-mask--with-hint::after {
+  content: attr(data-format);
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+/* Animation for validation messages */
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accessibility improvements */
+.char-counter[aria-live="polite"] {
+  position: relative;
+}
+
+.form-validate[role="alert"] {
+  font-weight: var(--font-medium);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .char-counter {
+    font-size: 0.625rem; /* Even smaller on mobile */
+  }
+  
+  .form-validate {
+    padding: var(--space-2);
+    font-size: var(--text-xs);
+  }
+}

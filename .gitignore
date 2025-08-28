@@ -39,7 +39,8 @@ dist/
 /contact-thanks.html
 /newsletter-*.html
 /styles/
-/scripts/
+# Allow scripts directory
+# /scripts/
 /*.css
 /*.webp
 /*.png

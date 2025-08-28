@@ -1,0 +1,206 @@
+/* ================================================
+   Atomic Design: Tooltips (Atoms Level)
+   Contextual help and hover information
+   ================================================ */
+
+/* Base Tooltip Atom */
+.tooltip-tip {
+  position: relative;
+  display: inline-flex;
+  cursor: help;
+}
+
+/* Tooltip Content Container */
+.tooltip-tip__content {
+  position: absolute;
+  z-index: var(--z-tooltip);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  line-height: var(--leading-normal);
+  white-space: nowrap;
+  background-color: var(--color-bg-overlay);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), visibility var(--transition-fast);
+  pointer-events: none;
+  
+  /* Add subtle backdrop blur like IDE tooltips */
+  backdrop-filter: blur(var(--backdrop-blur-sm));
+}
+
+/* Tooltip Arrow */
+.tooltip-tip__content::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 4px;
+  border-color: transparent;
+}
+
+/* Positioning Variants */
+.tooltip-tip--top .tooltip-tip__content {
+  bottom: calc(100% + var(--space-2));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-tip--top .tooltip-tip__content::before {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--color-border);
+}
+
+.tooltip-tip--top .tooltip-tip__content::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 3px;
+  border-color: transparent;
+  border-top-color: var(--color-bg-overlay);
+  margin-top: -1px;
+}
+
+.tooltip-tip--bottom .tooltip-tip__content {
+  top: calc(100% + var(--space-2));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip-tip--bottom .tooltip-tip__content::before {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: var(--color-border);
+}
+
+.tooltip-tip--left .tooltip-tip__content {
+  right: calc(100% + var(--space-2));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tooltip-tip--left .tooltip-tip__content::before {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: var(--color-border);
+}
+
+.tooltip-tip--right .tooltip-tip__content {
+  left: calc(100% + var(--space-2));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tooltip-tip--right .tooltip-tip__content::before {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: var(--color-border);
+}
+
+/* Show on hover/focus */
+.tooltip-tip:hover .tooltip-tip__content,
+.tooltip-tip:focus .tooltip-tip__content,
+.tooltip-tip:focus-within .tooltip-tip__content,
+.tooltip-tip--visible .tooltip-tip__content {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Delay showing to prevent accidental triggers */
+.tooltip-tip__content {
+  transition-delay: 200ms;
+}
+
+.tooltip-tip:not(:hover) .tooltip-tip__content {
+  transition-delay: 0ms;
+}
+
+/* Size Variants */
+.tooltip-tip--multiline .tooltip-tip__content {
+  white-space: normal;
+  max-width: 250px;
+  text-align: left;
+}
+
+.tooltip-tip--wide .tooltip-tip__content {
+  max-width: 400px;
+  white-space: normal;
+}
+
+/* Dark variant for better contrast */
+.tooltip-tip--dark .tooltip-tip__content {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-emphasis);
+}
+
+/* Interactive variant - keeps tooltip open when hovering content */
+.tooltip-tip--interactive .tooltip-tip__content {
+  pointer-events: auto;
+}
+
+/* Tooltip Provider Wrapper */
+.tooltip-provider {
+  position: relative;
+  display: inline-block;
+}
+
+/* Accessibility - Show for keyboard navigation */
+.tooltip-tip:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  /* Disable tooltips on touch devices by default */
+  .tooltip-tip__content {
+    display: none;
+  }
+  
+  /* Show on tap/click for mobile */
+  .tooltip-tip--mobile-enabled:active .tooltip-tip__content,
+  .tooltip-tip--mobile-enabled:focus .tooltip-tip__content {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Animation for smooth appearance */
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltip-tip--animated .tooltip-tip__content {
+  animation: tooltip-fade-in var(--transition-fast) ease-out;
+}
+
+/* Z-index fix if not defined in tokens */
+:root {
+  --z-tooltip: 50;
+  --backdrop-blur-sm: 4px;
+}

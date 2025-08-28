@@ -1,0 +1,254 @@
+/* ================================================
+   Atomic Design: Reset (Atoms Level)
+   Modern CSS Reset with IDE theme support
+   ================================================ */
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Set core root defaults */
+html {
+  /* Prevent font size inflation */
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+
+  /* Smooth scrolling for same-page links */
+  scroll-behavior: smooth;
+
+  /* IDE-style antialiasing */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Theme-aware background to prevent flash */
+  background: var(--color-bg-primary);
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  line-height: var(--leading-normal);
+  font-family: var(--font-family-base);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+
+  /* IDE-style text rendering */
+  text-rendering: optimizeLegibility;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1; /* Enable ligatures */
+}
+
+/* Make images easier to work with */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Inherit fonts for form elements */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Remove built-in form typography styles */
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+/* Make sure textareas without a rows attribute are not tiny */
+textarea:not([rows]) {
+  min-height: 10em;
+}
+
+/* Clickable elements should have pointer cursor */
+button,
+[role="button"],
+[type="button"],
+[type="submit"],
+[type="reset"],
+a,
+summary {
+  cursor: pointer;
+}
+
+/* Remove button styling */
+button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+  outline: var(--focus-outline-width) solid var(--focus-outline-color);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Remove focus outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Links */
+a {
+  color: var(--color-link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Code blocks - IDE styled */
+pre,
+code,
+kbd,
+samp {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+}
+
+/* Inline code */
+code:not(pre code) {
+  padding: 0.125em 0.25em;
+  background: var(--color-bg-overlay);
+  border-radius: var(--radius-sm);
+}
+
+/* Code blocks */
+pre {
+  overflow: auto;
+  padding: var(--space-4);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  line-height: var(--leading-relaxed);
+  tab-size: 2;
+}
+
+/* Selection styles matching IDE */
+::selection {
+  background-color: var(--color-selection-bg);
+  color: var(--color-selection-text);
+}
+
+/* Remove list styles on ul, ol elements with a list role */
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+/* Balance text wrapping on headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+  font-family: var(--font-family-headings);
+  line-height: var(--leading-tight);
+}
+
+/* Prevent orphans in paragraphs */
+p {
+  text-wrap: pretty;
+  line-height: var(--leading-relaxed);
+}
+
+/* Horizontal rule */
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-8) 0;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Scrollbar styling (Webkit browsers) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  border: 3px solid var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-subtle) var(--color-bg-secondary);
+}
+
+/* Remove animations for people who've turned them off */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utility: visually hidden but accessible */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

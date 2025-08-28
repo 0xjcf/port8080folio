@@ -43,15 +43,63 @@
   margin-bottom: var(--space-8); /* Mobile spacing */
 }
 
-/* Section title - Mobile first */
+/* Section title - Mobile first - Unified style for all sections */
 .section__title {
-  font-size: clamp(var(--font-2xl), 8vw, var(--font-3xl)); /* Mobile responsive size */
-  font-weight: var(--font-semibold);
-  letter-spacing: calc(var(--space-0-5) * -0.08); /* -0.02em equivalent */
+  font-size: clamp(2.5rem, 8vw, 3.5rem); /* Mobile responsive size */
+  font-weight: 600;
+  letter-spacing: -0.02em;
   line-height: var(--leading-tight);
-  margin: var(--space-0) var(--space-0) var(--space-10) var(--space-0);
+  margin: var(--space-0) var(--space-0) var(--space-8) var(--space-0);
   text-align: center;
   color: var(--section-title-color, var(--color-text));
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  position: relative;
+  padding-bottom: var(--space-6);
+}
+
+/* Decorative underline for all section titles */
+.section__title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--space-12);
+  height: var(--space-0-5);
+  background: var(--brand-grad-text);
+  opacity: 0.4;
+  border-radius: var(--radius-full);
+}
+
+/* Desktop title size */
+@media (min-width: 768px) {
+  .section__title {
+    font-size: clamp(3rem, 6vw, 4rem);
+    margin-bottom: var(--space-10);
+  }
+}
+
+/* Common gradient text style for all section titles */
+.section__title .gradient {
+  background-image: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600;
+  text-shadow: none;
+  display: inline;
+}
+
+/* Common text-white style for all section titles */
+.section__title .text-white {
+  color: var(--color-text);
+  font-weight: 600;
+  display: inline;
 }
 
 /* Section subtitle/subhead - Mobile first */
@@ -79,7 +127,7 @@
 /* Hero section variant - Mobile first */
 .section--hero {
   padding: var(--space-16) var(--space-4);
-  background: var(--color-background);
+  /* Let base .section handle background - no override needed */
   min-height: calc(100vh - var(--space-15)); /* Account for mobile browser chrome */
   display: flex;
   align-items: center;
@@ -90,11 +138,6 @@
 /* About section variant */
 .section--about {
   padding: var(--space-16) var(--space-4);
-  background: linear-gradient(
-    to bottom,
-    var(--color-background),
-    color-mix(in oklch, var(--color-background) 98%, var(--color-brand-primary))
-  );
 }
 
 /* Services section variant */
@@ -115,13 +158,14 @@
 /* Contact forms section variant */
 .section--contact-forms {
   padding: var(--space-12) var(--space-4);
-  background: color-mix(in oklch, var(--color-background) 98%, var(--color-text));
+  background: transparent;
 }
 
 /* Footer section variant */
 .section--footer {
   padding: var(--space-12) var(--space-5) var(--space-10);
-  background: color-mix(in oklch, var(--color-background) 95%, var(--color-text));
+  background: var(--color-surface);
+  border-top: var(--space-px) solid var(--color-border);
   color: var(--color-text-light);
 }
 

@@ -64,15 +64,15 @@ body::before {
   background:
     radial-gradient(
       600px 300px at 50% var(--spot-y, 32%),
-      oklch(0.75 0.18 55 / var(--spot-alpha, 0.18)),
+      color-mix(in oklch, var(--color-brand-primary) var(--spot-alpha, 18%), transparent),
       transparent 60%
     ),
     radial-gradient(
       1200px 600px at 50% 100%,
-      hsl(var(--tint-hue, 22) 100% 50% / var(--tint-alpha, 0.14)),
+      color-mix(in oklch, var(--color-brand-secondary) var(--tint-alpha, 14%), transparent),
       transparent 70%
     );
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--section-blend-mode, screen);
   pointer-events: none;
 }
 
@@ -126,28 +126,114 @@ body::before {
   --spot-y: 30%;
 }
 
-/* About – chapter break with lower spotlight */
+/* About – chapter break with lower spotlight and accent gradient */
 #about.section {
   --tint-hue: 18;
   --tint-alpha: 0.12;
   --spot-alpha: 0.14;
   --spot-y: 46%; /* Lower spotlight for distinct "room" feel */
+  position: relative;
 }
 
-/* Services – neutral dark with warm undertone */
+/* Add subtle gradient accent for About section in dark mode */
+@media (prefers-color-scheme: dark) {
+  #about.section {
+    background:
+      radial-gradient(
+        ellipse 1200px 600px at 50% 30%,
+        color-mix(in oklch, var(--color-brand-secondary) 8%, transparent),
+        transparent 70%
+      ), var(--color-background);
+  }
+}
+
+[data-theme="dark"] #about.section {
+  background:
+    radial-gradient(
+      ellipse 1200px 600px at 50% 30%,
+      color-mix(in oklch, var(--color-brand-secondary) 8%, transparent),
+      transparent 70%
+    ), var(--color-background);
+}
+
+/* Services – neutral dark with warm undertone and accent */
 #services.section {
   --tint-hue: 24;
   --tint-alpha: 0.1;
   --spot-alpha: 0.12;
   --spot-y: 40%;
+  position: relative;
 }
 
-/* Contact CTA – gentle warm center on dark */
+/* Add subtle accent for Services section in dark mode */
+@media (prefers-color-scheme: dark) {
+  #services.section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--color-brand-secondary) 5%, transparent) 0%,
+      transparent 40%,
+      color-mix(in oklch, var(--color-brand-primary) 5%, transparent) 100%
+    );
+    pointer-events: none;
+    z-index: var(--z-base);
+  }
+}
+
+[data-theme="dark"] #services.section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--color-brand-secondary) 5%, transparent) 0%,
+    transparent 40%,
+    color-mix(in oklch, var(--color-brand-primary) 5%, transparent) 100%
+  );
+  pointer-events: none;
+  z-index: var(--z-base);
+}
+
+/* Contact CTA – gentle warm center on dark with accent */
 #contact.section {
   --tint-hue: 22;
   --tint-alpha: 0.1;
   --spot-alpha: 0.16;
   --spot-y: 45%;
+  position: relative;
+}
+
+/* Add gradient accent for Contact section in dark mode */
+@media (prefers-color-scheme: dark) {
+  #contact.section {
+    background:
+      radial-gradient(
+        ellipse 1000px 500px at 50% 40%,
+        color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
+        transparent 60%
+      ),
+      linear-gradient(
+        180deg,
+        var(--color-background),
+        color-mix(in oklch, var(--color-brand-primary) 3%, var(--color-background))
+      );
+  }
+}
+
+[data-theme="dark"] #contact.section {
+  background:
+    radial-gradient(
+      ellipse 1000px 500px at 50% 40%,
+      color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      var(--color-background),
+      color-mix(in oklch, var(--color-brand-primary) 3%, var(--color-background))
+    );
 }
 
 /* Contact Forms – move spotlight lower and cooler */

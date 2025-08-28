@@ -96,18 +96,27 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
+
+    <!-- Theme Toggle Script (inline for immediate execution) -->
+    <script>
+        // Prevent flash of unstyled content by applying saved theme immediately
+        (function() {
+            const savedTheme = localStorage.getItem('preferred-theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme === 'light' ? 'light' : 
+                          savedTheme === 'dark' ? 'dark' : 
+                          (savedTheme === 'auto' || !savedTheme) && systemPrefersDark ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 
-<body class="dark-theme no-js">
+<body class="no-js">
 
     <main id="main" role="main">
         <!-- Hero Section -->
         <section id="hero" class="hero section section--hero" aria-label="Introduction">
-            <!-- Background layers -->
-            <div class="bg hero__grid"></div>
-            <div class="bg vignette"></div>
-            <div class="bg glow glow-left"></div>
-            <div class="bg glow glow-right"></div>
+            <!-- Background layers temporarily removed for theme debugging -->
 
             <header class="hero__content" aria-label="Intro">
                 <!-- Enhanced credibility badge -->
@@ -124,6 +133,13 @@
                     Grow your local business with AI-powered websites & automation
                 </p>
 
+                <!-- Secondary tagline - Desktop only -->
+                <div class="hero__tagline" aria-label="Specialties">
+                    <span class="tag-item">Websites that convert</span>
+                    <span class="tag-item">Smart AI automations</span>
+                    <span class="tag-item">Technical strategy that scales</span>
+                </div>
+
                 <!-- CTAs -->
                 <nav class="cta-row" aria-label="primary actions">
                     <a class="button button--primary cta-animated" href="#contact"
@@ -135,51 +151,19 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-                    <a class="button button--secondary d-none d-sm-flex" href="#services">Explore Services</a>
+                    <a class="button button--secondary d-none d-sm-flex" href="#services">
+                        <span>Explore Services</span>
+                    </a>
                 </nav>
-
-                <!-- Micro-testimonial for trust -->
-                <div class="hero__testimonial d-none d-sm-block">
-                    <p class="testimonial-text">"Jose helped us automate our lead follow-up process and we've seen 40%
-                        more conversions with half the manual work."</p>
-                    <p class="testimonial-attribution">— Sarah M., Local Marketing Agency</p>
-                </div>
-
-                <!-- Trust logos restored for desktop above-the-fold credibility -->
-                <div class="hero__trust d-none d-sm-flex">
-                    <p class="hero__trust-label">BUILT PRODUCTS AT</p>
-                    <div class="hero__trust-logos">
-                        <div class="trust-logo">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                            </svg>
-                            <span>Availity</span>
-                        </div>
-                        <div class="trust-logo">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
-                            </svg>
-                            <span>Get More Math</span>
-                        </div>
-                        <div class="trust-logo">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                            </svg>
-                            <span>BlueJF LLC</span>
-                        </div>
-                    </div>
-                </div>
             </header>
 
-            <!-- Mobile-only: social proof moved below the fold -->
-            <div class="hero-mobile-proof d-sm-none" aria-label="Trusted by">
+            <!-- Social proof section - responsive placement -->
+            <div class="hero-proof" aria-label="Trusted by">
                 <div class="hero__testimonial">
-                    <p class="testimonial-text">"Jose helped us automate our lead follow-up process and we've seen 40%
-                        more conversions with half the manual work."</p>
-                    <p class="testimonial-attribution">— Sarah M., Local Marketing Agency</p>
+                    <p class="testimonial-text">"Jose architected our student wellness detection system with smart
+                        questionnaire routing and real-time alerts, turning complex requirements into a reliable,
+                        scalable solution."</p>
+                    <p class="testimonial-attribution">— Kayla Northington, Chicken Ranch Rancheria</p>
                 </div>
                 <div class="hero__trust">
                     <p class="hero__trust-label">BUILT PRODUCTS AT</p>
@@ -211,6 +195,7 @@
 
             <!-- Scroll indicator -->
             <div class="scroll">
+                <span class="scroll-text">Scroll</span>
                 <div class="mouse">
                     <div class="dot"></div>
                 </div>
@@ -222,61 +207,90 @@
             <div class="noise-overlay" aria-hidden="true"></div>
             <div class="container">
                 <header class="about__header">
-                    <h2 class="about__title">
+                    <h2 class="section__title about__title">
                         <span class="text-white">ABOUT</span>
                         <span class="gradient">ME</span>
                     </h2>
                 </header>
 
-                <div class="about__intro">
-                    <p>
-                        I'm Jose, a hands-on technical advisor who believes good systems start with <strong>clear
-                            thinking</strong> and <strong>honest tradeoffs</strong>.
-                        My approach is simple: reduce complexity, choose the smallest tool that works, and design around
-                        real constraints.
-                        I avoid buzzwords, explain decisions in plain English, and focus on changes that <span
-                            class="highlight">measurably improve delivery speed and quality</span>.
-                    </p>
-                    <p>
-                        I help founders and executives turn strategy into shipping. That means aligning product goals
-                        with architecture,
-                        introducing lightweight processes, and mentoring teams to operate with confidence. I use
-                        <strong>statecharts</strong>, the <strong>actor model</strong>,
-                        and disciplined UI patterns to make behavior explicit—so your roadmap, codebase, and KPIs stay
-                        in sync.
-                    </p>
-                </div>
+                <!-- Content wrapper for two-column layout on desktop -->
+                <div class="about__content-wrapper">
+                    <div class="about__intro">
+                        <div class="about__intro-section">
+                            <p>
+                                I'm Jose, a hands-on technical advisor who believes good systems start with
+                                <strong>clear
+                                    thinking</strong> and <strong>honest tradeoffs</strong>.
+                            </p>
+                        </div>
 
-                <div class="about__current">
-                    <div class="about__avatar">
-                        <picture>
-                            <source
-                                srcset="assets/images/gibli-pfp-200.webp 200w, assets/images/gibli-pfp-400.webp 400w"
-                                sizes="(max-width: 640px) 96px, 180px" type="image/webp">
-                            <img src="assets/images/gibli-pfp.png" srcset="assets/images/gibli-pfp.png 1024w"
-                                sizes="(max-width: 640px) 96px, 180px" alt="Jose Flores" width="400" height="400"
-                                loading="lazy">
-                        </picture>
-                    </div>
-                    <div class="about__current-content" aria-labelledby="current-role-heading">
-                        <h3 id="current-role-heading">Currently Working As</h3>
-                        <p>
-                            <span class="role-primary">Independent Technical Advisor & Software Engineer</span>
-                        </p>
-                        <p class="about__roles-meta">
-                            Open-source maintainer: <span class="role-green">Actor-Web, Lit-Bit</span><br>
-                            Specializing in: <span class="role-yellow">Architecture & Delivery</span><span
-                                class="comma">,</span> <span class="role-purple">Developer Experience</span>
-                        </p>
-                        <div class="about__tags">
-                            <span class="tag">Statecharts</span>
-                            <span class="tag">Actor Model</span>
-                            <span class="tag">Event-Driven</span>
-                            <span class="tag">TypeScript</span>
-                            <span class="tag">System Design</span>
+                        <div class="about__intro-section">
+                            <h3 class="about__subheading">My Approach</h3>
+                            <p>
+                                Reduce complexity, choose the smallest tool that works, and design around real
+                                constraints.
+                                I avoid buzzwords, explain decisions in plain English, and focus on changes that <span
+                                    class="highlight">measurably improve delivery speed and quality</span>.
+                            </p>
+                        </div>
+
+                        <div class="about__intro-section">
+                            <h3 class="about__subheading">Who I Help</h3>
+                            <p>
+                                I help founders and executives turn strategy into shipping. That means aligning product
+                                goals
+                                with architecture, introducing lightweight processes, and mentoring teams to operate
+                                with
+                                confidence.
+                            </p>
+                            <p>
+                                I use <strong>statecharts</strong>, the <strong>actor model</strong>, and disciplined UI
+                                patterns
+                                to make behavior explicit—so your roadmap, codebase, and KPIs stay in sync.
+                            </p>
+
                         </div>
                     </div>
-                </div>
+
+                    <div class="about__current">
+                        <div class="about__avatar">
+                            <picture>
+                                <source
+                                    srcset="assets/images/gibli-pfp-200.webp 200w, assets/images/gibli-pfp-400.webp 400w"
+                                    sizes="(max-width: 640px) 96px, 180px" type="image/webp">
+                                <img src="assets/images/gibli-pfp.png" srcset="assets/images/gibli-pfp.png 1024w"
+                                    sizes="(max-width: 640px) 96px, 180px" alt="Jose Flores" width="400" height="400"
+                                    loading="lazy">
+                            </picture>
+                        </div>
+                        <div class="about__current-content" aria-labelledby="current-role-heading">
+                            <h3 id="current-role-heading">Currently Working As</h3>
+                            <p class="about__role-title">
+                                <span class="role-primary">Independent Technical Advisor & Software Engineer</span>
+                            </p>
+                            <p class="about__role-subtitle">Hands-on guidance for architecture & delivery</p>
+                            <p class="about__roles-meta">
+                                Open-source maintainer: <br><span class="role-green">Actor-Web,
+                                    Ignite-Element</span><br>
+                                Specializing in: <br><span class="role-yellow">Architecture & Delivery</span><br> <span
+                                    class="role-purple">Developer
+                                    Experience</span>
+                            </p>
+                            <div class="about__tags">
+                                <a href="#services" class="tag">Statecharts</a>
+                                <a href="#services" class="tag">Actor Model</a>
+                                <a href="#services" class="tag">Event-Driven</a>
+                                <a href="#services" class="tag">TypeScript</a>
+                                <a href="#services" class="tag">System Design</a>
+                            </div>
+                        </div>
+                    </div><!-- /.about__current -->
+                    <!-- Micro CTA - visible only on desktop -->
+                    <div class="about__bridge-cta">
+                        <p>Curious how this applies to your team? <a href="#contact" class="about__cta-link">See exactly
+                                what I'd do first →</a></p>
+                    </div>
+                </div><!-- /.about__content-wrapper -->
             </div>
         </section>
 
@@ -286,21 +300,22 @@
 
             <!-- Sticky CTA Button -->
             <div class="services__sticky-cta" role="complementary" aria-label="Quick action">
-                <a href="#contact-forms" class="button button--sticky" aria-label="Book your free AI audit"
-                    title="You'll get your first insights in 24h">
-                    Book Free Audit
+                <a href="https://calendly.com/bluejf-llc/30min" class="button button--sticky"
+                    aria-label="Book a free strategy call" title="Let's discuss your business needs" target="_blank"
+                    rel="noopener noreferrer">
+                    <span class="button__text">Book Strategy Call</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
+                        aria-hidden="true" class="d-none">
                         <path d="m9 18 6-6-6-6" />
                     </svg>
                 </a>
-                <div class="sticky-cta__tooltip">You'll get your first insights in 24h</div>
+                <div class="sticky-cta__tooltip">Let's discuss your business needs</div>
             </div>
 
             <div class="container">
                 <header class="services__header">
-                    <h2 class="services__title">
-                        <span class="text-white">OUR</span>
+                    <h2 class="section__title services__title">
+                        <span class="text-white">MY</span>
                         <span class="gradient">SERVICES</span>
                     </h2>
                 </header>
@@ -311,52 +326,8 @@
                     <strong>Workshop</strong> → <strong>Ongoing Advisory</strong>.
                 </p>
 
-                <!-- Quick-Fire Wins Section -->
-                <div class="services__quick-wins" aria-labelledby="quick-wins-heading">
-                    <h3 id="quick-wins-heading" class="quick-wins__title">Recent Client Wins</h3>
-                    <div class="quick-wins__grid">
-                        <div class="quick-win-badge">
-                            <div class="quick-win-badge__icon" aria-hidden="true">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                </svg>
-                            </div>
-                            <div class="quick-win-badge__content">
-                                <span class="quick-win-badge__stat">+30%</span>
-                                <span class="quick-win-badge__label">More inquiries in 1st month</span>
-                            </div>
-                        </div>
 
-                        <div class="quick-win-badge">
-                            <div class="quick-win-badge__icon" aria-hidden="true">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                                </svg>
-                            </div>
-                            <div class="quick-win-badge__content">
-                                <span class="quick-win-badge__stat">$50k</span>
-                                <span class="quick-win-badge__label">Saved on tech decisions</span>
-                            </div>
-                        </div>
-
-                        <div class="quick-win-badge">
-                            <div class="quick-win-badge__icon" aria-hidden="true">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div class="quick-win-badge__content">
-                                <span class="quick-win-badge__stat">8+ hrs</span>
-                                <span class="quick-win-badge__label">Saved weekly via automation</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- KPI Tiles (kept) -->
+                <!-- KPI Tiles - Friendly trust indicators -->
                 <div class="services__kpis">
                     <div class="kpi-tile" tabindex="0">
                         <span class="kpi-value">7+</span>
@@ -364,121 +335,150 @@
                     </div>
                     <div class="kpi-tile" tabindex="0">
                         <span class="kpi-value">50+</span>
-                        <span class="kpi-label">Projects Delivered</span>
+                        <span class="kpi-label">Projects Shipped</span>
                     </div>
                     <div class="kpi-tile" tabindex="0">
                         <span class="kpi-value">4</span>
-                        <span class="kpi-label">Open Source Tools</span>
+                        <span class="kpi-label">Open Source Tools Built</span>
                     </div>
                     <div class="kpi-tile" tabindex="0">
                         <span class="kpi-value">100%</span>
-                        <span class="kpi-label">Client Satisfaction</span>
+                        <span class="kpi-label">Happy Clients</span>
                     </div>
                 </div>
 
+                <!-- Service Cards Carousel with Radio Buttons -->
+                <!-- Hidden radio buttons for carousel control -->
+                <input type="radio" name="service-carousel" id="service-1" class="service-radio" checked hidden>
+                <input type="radio" name="service-carousel" id="service-2" class="service-radio" hidden>
+                <input type="radio" name="service-carousel" id="service-3" class="service-radio" hidden>
+                <input type="radio" name="service-carousel" id="service-4" class="service-radio" hidden>
+
                 <!-- Service Cards Grid (4 cards) -->
-                <div class="services__grid">
+                <div class="services__grid" role="region" aria-label="Services carousel">
                     <!-- AI for Local Business -->
                     <!-- AI Enablement for Local Business -->
                     <article id="svc-ai" class="service-card" tabindex="0">
-                        <div class="service-card__icon" aria-hidden="true">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
+                        <div class="service-card__header">
+                            <div class="service-card__icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                            </div>
+                            <h3>Streamline Your Business with AI</h3>
                         </div>
-                        <h3>Save Hours Every Week on Admin Tasks</h3>
-                        <p>Get automated lead capture, follow-ups, and data insights that free up 10-30% of your team's
-                            time in just 2-4 weeks.</p>
+                        <p>Implement practical AI solutions for lead capture, customer communication, and workflow
+                            automation tailored to your business needs.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">2–4 wks</span><span class="metric-label">To
-                                    see results</span></div>
-                            <div class="metric"><span class="metric-value">10–30%</span><span class="metric-label">Time
-                                    back to you</span></div>
+                            <div class="metric"><span class="metric-value">Custom</span><span
+                                    class="metric-label">Solutions</span></div>
+                            <div class="metric"><span class="metric-value">Hands-on</span><span
+                                    class="metric-label">Implementation</span></div>
                         </div>
                         <div class="service-card__social-proof">
-                            <p class="testimonial-mini">"Saved us 8 hours a week on quote requests alone" — Local
-                                restaurant owner</p>
+                            <p class="testimonial-mini">Focus on AI tools that actually work for small businesses</p>
                         </div>
                     </article>
 
                     <!-- Websites & Applications -->
                     <article id="svc-web" class="service-card" tabindex="0">
-                        <div class="service-card__icon" aria-hidden="true">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
+                        <div class="service-card__header">
+                            <div class="service-card__icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                </svg>
+                            </div>
+                            <h3>Modern Websites Built for Results</h3>
                         </div>
-                        <h3>Get a Website That Brings You Customers</h3>
-                        <p>Lightning-fast, mobile-ready websites optimized to convert visitors into paying customers.
-                            Built for SEO and accessibility.</p>
+                        <p>Fast, accessible, and mobile-first websites designed to showcase your business and connect
+                            with customers effectively.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">&lt;1s</span><span class="metric-label">Load
-                                    time</span></div>
-                            <div class="metric"><span class="metric-value">A+</span><span
-                                    class="metric-label">Accessibility score</span></div>
+                            <div class="metric"><span class="metric-value">Fast</span><span
+                                    class="metric-label">Performance</span></div>
+                            <div class="metric"><span class="metric-value">Mobile</span><span class="metric-label">First
+                                    design</span></div>
                         </div>
                         <div class="service-card__social-proof">
-                            <p class="testimonial-mini">"30% more inquiries in the first month" — Service business owner
-                            </p>
+                            <p class="testimonial-mini">Built with modern standards and best practices</p>
                         </div>
                     </article>
 
                     <!-- Live Workshops -->
                     <article id="svc-workshops" class="service-card" tabindex="0">
-                        <div class="service-card__icon" aria-hidden="true">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7h8M8 11h8M5 19l7-3 7 3" />
-                            </svg>
+                        <div class="service-card__header">
+                            <div class="service-card__icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <h3>Learn AI Tools That Matter</h3>
                         </div>
-                        <h3>Train Your Team to Work Smarter</h3>
-                        <p>Practical workshops on AI tools, efficient processes, and modern delivery methods. Walk away
-                            with strategies you can use immediately.</p>
+                        <p>Hands-on workshops covering practical AI applications, automation basics, and tools your team
+                            can start using right away.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">3-hour</span><span
-                                    class="metric-label">Intensive session</span></div>
-                            <div class="metric"><span class="metric-value">100%</span><span class="metric-label">Ready
-                                    to apply</span></div>
+                            <div class="metric"><span class="metric-value">Practical</span><span
+                                    class="metric-label">Focus</span></div>
+                            <div class="metric"><span class="metric-value">Hands-on</span><span
+                                    class="metric-label">Training</span></div>
                         </div>
                         <div class="service-card__social-proof">
-                            <p class="testimonial-mini">"Finally understand how to use AI effectively" — Product manager
-                            </p>
+                            <p class="testimonial-mini">Customized to your team's actual needs and skill level</p>
                         </div>
                     </article>
 
                     <!-- Advisory & Technical Architecture -->
                     <article id="svc-advisory" class="service-card" tabindex="0">
-                        <div class="service-card__icon" aria-hidden="true">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6l-8 4 8 4 8-4-8-4zM4 14l8 4 8-4" />
-                            </svg>
+                        <div class="service-card__header">
+                            <div class="service-card__icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                </svg>
+                            </div>
+                            <h3>Strategic Technology Guidance</h3>
                         </div>
-                        <h3>Get Clear Roadmaps That Save Budget</h3>
-                        <p>Actionable system designs and technology guidance that prevent costly mistakes and align with
-                            your business goals.</p>
+                        <p>Clear technical roadmaps and architecture planning to help you make informed decisions about
+                            your technology investments.</p>
                         <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">1–2 wk</span><span
-                                    class="metric-label">Delivery time</span></div>
-                            <div class="metric"><span class="metric-value">Zero-waste</span><span
-                                    class="metric-label">Roadmap saves money</span></div>
+                            <div class="metric"><span class="metric-value">Detailed</span><span
+                                    class="metric-label">Planning</span></div>
+                            <div class="metric"><span class="metric-value">Practical</span><span
+                                    class="metric-label">Approach</span></div>
                         </div>
                         <div class="service-card__social-proof">
-                            <p class="testimonial-mini">"Saved us $50k by avoiding the wrong tech stack" — Startup
-                                founder</p>
+                            <p class="testimonial-mini">Honest recommendations based on your actual needs</p>
                         </div>
                     </article>
                 </div>
 
-                <!-- Progress dots for mobile carousel -->
-                <nav class="services__dots" aria-label="Service cards navigation">
-                    <a class="services__dot" href="#svc-ai" aria-label="AI Enablement"></a>
-                    <a class="services__dot" href="#svc-web" aria-label="Websites & Applications"></a>
-                    <a class="services__dot" href="#svc-workshops" aria-label="Live Workshops"></a>
-                    <a class="services__dot" href="#svc-advisory" aria-label="Advisory & Technical Architecture"></a>
+                <!-- Service navigation labels for mobile carousel -->
+                <nav class="services__dots services__labels" aria-label="Service cards navigation">
+                    <label for="service-1" class="services__dot services__label" aria-label="AI Enablement">
+                        <span class="services__label-text">AI</span>
+                    </label>
+                    <label for="service-2" class="services__dot services__label" aria-label="Websites & Applications">
+                        <span class="services__label-text">Websites</span>
+                    </label>
+                    <label for="service-3" class="services__dot services__label" aria-label="Live Workshops">
+                        <span class="services__label-text">Workshops</span>
+                    </label>
+                    <label for="service-4" class="services__dot services__label"
+                        aria-label="Advisory & Technical Architecture">
+                        <span class="services__label-text">Advisory</span>
+                    </label>
                 </nav>
+
+                <!-- Bridge CTA - Clear next step after viewing services -->
+                <div class="services__bridge-cta">
+                    <p class="services__cta-question">Not sure where to start?</p>
+                    <a href="#contact" class="button button--primary button--gradient">
+                        Book a Free Strategy Call
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
 
                 <!-- How It Works Process Preview -->
                 <div class="services__process" aria-labelledby="process-heading">
@@ -496,8 +496,8 @@
                                 </svg>
                             </div>
                             <div class="process__step-content">
-                                <h4>1. Book a Free Audit</h4>
-                                <p>15-minute call to understand your goals and current challenges</p>
+                                <h4>1. Book a Free Consultation</h4>
+                                <p>30-minute call to understand your goals and current challenges</p>
                                 <div class="process__step-feedback">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                         stroke-width="2" aria-hidden="true">
@@ -552,288 +552,225 @@
 
                     <div class="process__cta">
                         <a href="#contact-forms" class="button button--primary button--large"
-                            aria-label="Start with free audit">
-                            Start Your Free Audit Today
+                            aria-label="Start with free consultation">
+                            Start Your Free Consultation
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" aria-hidden="true">
                                 <path d="m9 18 6-6-6-6" />
                             </svg>
                         </a>
-                        <p class="process__cta-note">No commitment required. Get actionable insights in 24 hours.</p>
+                        <p class="process__cta-note">No commitment required. Let's explore how I can help.</p>
                     </div>
                 </div>
 
-                <!-- Why Work With Me Section -->
-                <div class="services__why">
-                    <h3>Why Work With Me?</h3>
-                    <ul class="why-list">
-                        <li tabindex="0">Quick wins first: revenue, leads, or time saved</li>
-                        <li tabindex="0">AI that fits your workflow (no vendor lock‑in)</li>
-                        <li tabindex="0">Websites/apps tuned for speed, SEO, and UX</li>
-                        <li tabindex="0">Clear docs and handoff—teams stay productive</li>
-                        <li tabindex="0">Modern patterns: statecharts, actor model, TypeScript</li>
-                        <li tabindex="0">Measurable outcomes, not buzzwords</li>
-                    </ul>
-                </div>
             </div>
         </section>
 
-        <!-- Contact/CTA Section -->
-        <section id="contact" class="chapter chapter--cta contact section section--contact" aria-label="Contact">
+        <!-- Contact Section (Combined) -->
+        <section id="contact" class="chapter chapter--contact contact section section--contact"
+            aria-label="Contact and Connect">
             <div class="contact__spotlight" aria-hidden="true"></div>
             <div class="container">
-                <h2 class="contact__title">
-                    <span class="text-white">READY TO GET</span>
-                    <span class="gradient">STARTED?</span>
+                <h2 class="section__title contact__title">
+                    <span class="text-white">LET'S</span>
+                    <span class="gradient">CONNECT</span>
                 </h2>
                 <p class="contact__supporting">
-                    Let's discuss goals, constraints, and timelines. If we're a fit, I'll outline a simple plan and
-                    first milestone.
+                    Ready to transform your business? Let's discuss goals, constraints, and timelines.
                 </p>
 
+
                 <div class="contact__actions">
-                    <a href="mailto:bluejf.llc@gmail.com?subject=Consulting%20Inquiry" class="button button--primary"
-                        aria-label="Schedule a call - opens email client">
-                        Schedule a Call
-                        <span class="button-subtext">15 min · Free · Calls available this week</span>
-                    </a>
-                    <a href="#contact-forms" class="button button--secondary" aria-label="Start AI mini-audit">
-                        Start a Free AI Mini‑Audit
-                        <span class="arrow" aria-hidden="true">→</span>
-                        <span class="button-subtext">Receive a custom 1-page plan in 24 hours</span>
-                    </a>
+                    <div class="contact__action-item">
+                        <a href="https://calendly.com/bluejf-llc/30min" class="button button--primary"
+                            aria-label="Schedule a call - opens Calendly" target="_blank" rel="noopener noreferrer">
+                            Schedule a Call
+                        </a>
+                        <p class="contact__action-detail">30 min · Free · Calls available this week</p>
+                    </div>
                 </div>
 
                 <div class="contact__info" role="complementary" aria-label="Contact details">
-                    <p>
-                        <span class="contact__label" role="text">Email</span>
-                        <a href="mailto:bluejf.llc@gmail.com?subject=Intro%20Call"
+                    <div class="contact__info-item">
+                        <h3 class="contact__info-label">Email</h3>
+                        <a href="mailto:bluejf.llc@gmail.com?subject=Intro%20Call" class="contact__email"
                             aria-label="Email Jose Flores">bluejf.llc@gmail.com</a>
-                    </p>
-                    <p aria-live="polite">I typically reply within 24 hours.</p>
-                    <p>Available for projects starting <span class="contact__availability">September 2025</span></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Forms Section -->
-        <section id="contact-forms" class="chapter chapter--forms contact-forms section section--contact-forms"
-            aria-label="Contact and Newsletter">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="forms__title">
-                        <span class="text-white">LETS</span>
-                        <span class="gradient">CONNECT</span>
-                    </h2>
-                    <p class="section-subtitle">Ready to transform your business? Send me a message or join my
-                        newsletter for insights.</p>
-
-                    <!-- Social Proof for Forms -->
-                    <div class="forms-social-proof">
-                        <p class="forms-social-proof-text">✨ Join 250+ founders already subscribed</p>
-                        <div class="forms-social-stats">
-                            <div class="social-stat">
-                                <span class="social-stat__number">80%</span>
-                                <span class="social-stat__label">of clients see ROI within 30 days</span>
-                            </div>
-                            <div class="social-stat">
-                                <span class="social-stat__number">65%</span>
-                                <span class="social-stat__label">of my clients are small businesses like yours</span>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="contact__info-item">
+                        <p class="contact__response-time" aria-live="polite">I typically reply within 24 hours.</p>
+                    </div>
+                    <div class="contact__info-item">
+                        <p class="contact__availability-text">Available for projects starting <span
+                                class="contact__availability">September 2025</span></p>
                     </div>
                 </div>
 
-                <!-- Tab Navigation (Desktop Only) -->
-                <div class="form-tabs d-none d-md-flex" role="tablist">
-                    <button class="form-tab active" role="tab" aria-selected="true" aria-controls="contact-form"
-                        data-tab="contact">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                            </path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        <span>Message</span>
-                    </button>
-                    <button class="form-tab" role="tab" aria-selected="false" aria-controls="newsletter-form"
-                        data-tab="newsletter">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0">
-                            </path>
-                        </svg>
-                        <span>Newsletter</span>
-                    </button>
-                </div>
+                <!-- Forms Section (formerly contact-forms) -->
+                <div class="contact__forms" id="contact-forms">
+                    <!-- Radio buttons for form toggle (CSS-only approach) -->
+                    <input type="radio" name="form-toggle" id="form-contact" class="form-radio" checked hidden>
+                    <input type="radio" name="form-toggle" id="form-newsletter" class="form-radio" hidden>
 
-                <div class="forms-grid">
-                    <!-- Contact Form (unchanged actions) -->
-                    <div class="form-card contact-form-card" id="contact-form" tabindex="-1">
-                        <div class="form-icon" aria-hidden="true">
+                    <!-- Mobile Form Toggle -->
+                    <div class="form-toggle-mobile" role="tablist">
+                        <label for="form-contact" class="form-toggle" aria-label="Show contact form">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+                                height="20">
+                                <path
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            MESSAGE
+                        </label>
+                        <label for="form-newsletter" class="form-toggle" aria-label="Show newsletter form">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+                                height="20">
+                                <path
+                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                            NEWSLETTER
+                        </label>
+                    </div>
+
+                    <!-- Tab Navigation (Desktop Only) -->
+                    <div class="form-tabs d-none d-md-flex" role="tablist">
+                        <button class="form-tab active" role="tab" aria-selected="true" aria-controls="contact-form"
+                            data-tab="contact">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
                                 </path>
                                 <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
-                        </div>
-                        <h3 class="form-title">Send a Message</h3>
-                        <form class="contact-form pe-form pe-form--contact" action="{{CONTACT_API_URL}}" method="POST">
-                            <fieldset style="border: none; padding: 0; margin: 0;">
-                                <legend class="visually-hidden">Contact Information</legend>
-
-                                <div class="form-group">
-                                    <label for="name" class="form-label">Your Name</label>
-                                    <input type="text" id="name" name="name" class="form-input" placeholder="Your Name"
-                                        required autocomplete="name" minlength="2" maxlength="70" aria-required="true"
-                                        aria-describedby="name-error">
-                                    <div class="form-error" id="name-error" role="alert" aria-live="assertive">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                            <path
-                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                        </svg>
-                                        Please enter at least 2 characters
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="contact-email" class="form-label">Email Address</label>
-                                    <input type="email" id="contact-email" name="email" class="form-input"
-                                        placeholder="your@email.com" required autocomplete="email" inputmode="email"
-                                        spellcheck="false" autocapitalize="off"
-                                        title="Use a full email like name@example.com"
-                                        pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" aria-required="true"
-                                        aria-describedby="contact-email-error">
-                                    <div class="form-error" id="contact-email-error" role="alert" aria-live="assertive">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                            <path
-                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                        </svg>
-                                        Enter a valid email address (name@example.com)
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="message" class="form-label">Your Message</label>
-                                    <textarea id="message" name="message" class="form-textarea"
-                                        placeholder="Your Message" required minlength="10" maxlength="5000"
-                                        aria-required="true" aria-describedby="message-error"></textarea>
-                                    <div class="form-error" id="message-error" role="alert" aria-live="assertive">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                            <path
-                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                        </svg>
-                                        Enter a message
-                                    </div>
-                                </div>
-
-                                <!-- Honeypot -->
-                                <div class="visually-hidden" aria-hidden="true">
-                                    <label for="website">Leave this field empty</label>
-                                    <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
-                                </div>
-
-                                <!-- Timestamp -->
-                                <input type="hidden" name="timestamp" value="">
-
-                            </fieldset>
-
-                            <button type="submit" class="button button--primary button--full"
-                                aria-label="Send message to Jose Flores">
-                                <span class="button-text">Send Message</span>
-                                <span class="button-icon" aria-hidden="true">→</span>
-                            </button>
-                        </form>
-
-                        <noscript>
-                            <p class="form-note"
-                                style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                                📬 On submit you'll be taken to a confirmation page.<br>
-                                Or email directly: <a href="mailto:bluejf.llc@gmail.com"
-                                    style="color: oklch(0.75 0.18 55);">bluejf.llc@gmail.com</a>
-                            </p>
-                        </noscript>
-
-                        <div class="form-success" role="status" aria-live="polite" hidden>
-                            ✅ Thanks! Expect next steps in your inbox shortly.
-                        </div>
-
-                        <div class="form-error-fallback" role="alert" aria-live="assertive" hidden>
-                            ⚠️ Something went wrong, but I'll reach out manually within 24h.
-                        </div>
-                    </div>
-
-                    <!-- Mobile form divider -->
-                    <div class="form-divider d-md-none">
-                        <div class="form-divider-line"></div>
-                        <span class="form-divider-text">OR</span>
-                        <div class="form-divider-line"></div>
-                    </div>
-
-                    <!-- Newsletter Signup -->
-                    <div class="form-card newsletter-form-card" id="newsletter-form" tabindex="-1">
-                        <div class="form-icon" aria-hidden="true">
+                            <span>Message</span>
+                        </button>
+                        <button class="form-tab" role="tab" aria-selected="false" aria-controls="newsletter-form"
+                            data-tab="newsletter">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path
-                                    d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                                    d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0">
                                 </path>
                             </svg>
+                            <span>Newsletter</span>
+                        </button>
+                    </div>
+
+                    <div class="forms-grid">
+                        <!-- Contact Form (unchanged actions) -->
+                        <div class="form-card" data-tab="contact">
+                            <h3>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Contact
+                            </h3>
+                            <form class="pe-form" method="POST">
+                                <div class="form-group">
+                                    <label for="name" class="form-label required">YOUR NAME</label>
+                                    <input type="text" id="name" name="name" class="form-input" placeholder="Your Name"
+                                        required minlength="2" maxlength="70">
+                                    <div id="name-error" class="form-error" role="alert">
+                                        <span>Please enter at least 2 characters</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="contact-email" class="form-label required">EMAIL ADDRESS</label>
+                                    <input type="email" id="contact-email" name="email" class="form-input"
+                                        placeholder="your@email.com" required
+                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                        title="Enter a valid email address">
+                                    <div id="contact-email-error" class="form-error" role="alert">
+                                        <span>Enter a valid email address (name@example.com)</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="message" class="form-label required">YOUR MESSAGE</label>
+                                    <textarea id="message" name="message" class="form-textarea"
+                                        placeholder="Your Message" required minlength="10" maxlength="5000"
+                                        rows="6"></textarea>
+                                    <div id="message-error" class="form-error" role="alert">
+                                        <span>Enter a message (at least 10 characters)</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-submit">
+                                    <button type="submit">
+                                        Send & I'll Reply Within 24 Hours <span aria-hidden="true">→</span>
+                                    </button>
+                                    <div class="form-success-message" aria-live="polite">
+                                        <span class="success-emoji">✅</span>
+                                        <span>Got it — I'll reply within 24 hours.</span>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <h3 class="form-title">Subscribe for Weekly AI Tips</h3>
-                        <div class="newsletter-description">
-                            <p class="newsletter-helper-text">Get case studies, templates, and insights — unsubscribe
-                                anytime.</p>
-                            <p>Get exclusive insights on:</p>
-                            <ul class="newsletter-benefits">
-                                <li>Practical AI for local business</li>
-                                <li>Architecture & delivery that ship</li>
-                                <li>Hands‑on patterns: statecharts & actor model</li>
-                                <li>Workshop invites & templates</li>
+
+                        <!-- Mobile form divider -->
+
+                        <!-- Newsletter Signup -->
+                        <div class="form-card" data-tab="newsletter">
+                            <h3>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                </svg>
+                                Newsletter
+                            </h3>
+                            <p class="newsletter__social-proof">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" aria-hidden="true" class="newsletter__icon">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Join other readers getting insights
+                            </p>
+                            <p class="newsletter__intro">Get exclusive insights on:</p>
+                            <ul class="newsletter__benefits">
+                                <li class="newsletter__benefit">
+                                    <span class="newsletter__bullet">▸</span>
+                                    Practical AI for local business
+                                </li>
+                                <li class="newsletter__benefit">
+                                    <span class="newsletter__bullet">▸</span>
+                                    Architecture & delivery that ship
+                                </li>
+                                <li class="newsletter__benefit">
+                                    <span class="newsletter__bullet">▸</span>
+                                    Hands-on patterns: statecharts & actor model
+                                </li>
+                                <li class="newsletter__benefit">
+                                    <span class="newsletter__bullet">▸</span>
+                                    Workshop invites & templates
+                                </li>
                             </ul>
-                        </div>
-                        <form class="newsletter-form pe-form pe-form--newsletter" action="{{NEWSLETTER_API_URL}}"
-                            method="POST" id="newsletter-subscribe-form">
-                            <div class="form-group">
-                                <label for="newsletter-email" class="form-label">Email Address</label>
-                                <input type="email" id="newsletter-email" name="email" class="form-input"
-                                    placeholder="your@email.com" required autocomplete="email" inputmode="email"
-                                    spellcheck="false" autocapitalize="off"
-                                    title="Use a full email like name@example.com" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-                                    aria-required="true" aria-describedby="newsletter-help newsletter-error">
-
-                                <!-- Honeypot -->
-                                <div class="visually-hidden" aria-hidden="true">
-                                    <label for="website-newsletter">Leave this field empty</label>
-                                    <input id="website-newsletter" name="website" type="text" tabindex="-1"
-                                        autocomplete="off">
+                            <form class="pe-form" method="POST">
+                                <div class="form-group">
+                                    <label for="newsletter-email" class="form-label required">EMAIL ADDRESS</label>
+                                    <input type="email" id="newsletter-email" name="email" class="form-input"
+                                        placeholder="your@email.com" required
+                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                        title="Enter a valid email address">
+                                    <div id="newsletter-email-error" class="form-error" role="alert">
+                                        <span>Enter a valid email address (name@example.com)</span>
+                                    </div>
                                 </div>
 
-                                <!-- Timestamp -->
-                                <input type="hidden" name="timestamp" value="">
-
-                                <div class="form-error" id="newsletter-error" role="alert" aria-live="assertive">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                        <path
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                    </svg>
-                                    Enter a valid email address (name@example.com)
+                                <div class="form-submit">
+                                    <button type="submit">
+                                        Get Insights <span aria-hidden="true">→</span>
+                                    </button>
+                                    <div class="form-success-message" aria-live="polite">
+                                        <span class="success-emoji">🎉</span>
+                                        <span>You're in! Check your inbox to confirm your subscription.</span>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <button type="submit" class="button button--secondary button--full"
-                                aria-label="Subscribe to weekly insights newsletter">
-                                <span class="button-text">Subscribe for Weekly Insights</span>
-                                <span class="button-icon" aria-hidden="true">→</span>
-                            </button>
-
-                            <p id="newsletter-help" class="form-note">Get weekly AI tips, case studies, and
-                                resources—unsubscribe anytime.</p>
-
-                            <noscript>
-                                <p class="form-note"
-                                    style="margin-top:10px;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;">
-                                    📧 After submitting, you'll be taken to a confirmation page.
-                                </p>
-                            </noscript>
-                        </form>
-                        <div class="form-success" role="status" aria-live="polite" hidden>
-                            🎉 You're subscribed! Check your inbox for confirmation.
+                            </form>
+                            <p class="privacy-note">
+                                Get AI tips, case studies, and resources—unsubscribe anytime.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -859,10 +796,6 @@
 
             <div class="footer__legal">
                 <p>&copy; 2025 Jose Flores. All rights reserved.</p>
-                <p>
-                    <a href="#privacy">Privacy Policy</a> •
-                    <a href="#terms">Terms of Service</a>
-                </p>
             </div>
 
             <a href="#hero" class="back-to-top" aria-label="Back to top">↑ Top</a>
@@ -881,7 +814,10 @@
     </script>
 
     <!-- Deferred Progressive Enhancement Script -->
-    <script defer src="scripts/pe-min-v3.js"></script>
+    <script defer src="scripts/pe.js"></script>
+    
+    <!-- Theme Toggle Script -->
+    <script defer src="scripts/theme-toggle.js"></script>
 </body>
 
 </html>

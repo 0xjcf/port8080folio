@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="monokai-light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDE Theme Test - Developer Portfolio</title>
+    <link rel="stylesheet" href="styles/atomic/main-atomic.css">
+    <style>
+        /* Theme switcher styles */
+        .theme-switcher {
+            position: fixed;
+            top: var(--space-4);
+            right: var(--space-4);
+            z-index: var(--z-modal);
+            background: var(--color-bg-overlay);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-2);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+        
+        .theme-btn {
+            padding: var(--space-2) var(--space-3);
+            background: transparent;
+            border: none;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            text-align: left;
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-base);
+        }
+        
+        .theme-btn:hover {
+            background: var(--color-bg-secondary);
+            color: var(--color-text-primary);
+        }
+        
+        .theme-btn.active {
+            background: var(--color-primary);
+            color: var(--color-text-inverse);
+        }
+        
+        /* Demo sections */
+        .hero-demo {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(180deg, 
+                var(--color-bg-primary) 0%, 
+                var(--color-bg-secondary) 100%);
+        }
+        
+        .code-block {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            font-family: var(--font-mono);
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: "// Component.jsx";
+            position: absolute;
+            top: var(--space-2);
+            left: var(--space-4);
+            color: var(--color-text-muted);
+            font-size: var(--text-xs);
+        }
+        
+        .code-line {
+            margin: var(--space-1) 0;
+        }
+        
+        .token-keyword { color: var(--color-syntax-purple); }
+        .token-string { color: var(--color-syntax-yellow); }
+        .token-function { color: var(--color-syntax-green); }
+        .token-comment { color: var(--color-text-muted); }
+        .token-number { color: var(--color-syntax-orange); }
+    </style>
+</head>
+<body>
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button class="theme-btn active" onclick="setTheme('monokai-dark')">Monokai Dark</button>
+        <button class="theme-btn" onclick="setTheme('monokai-light')">Monokai Light</button>
+        <button class="theme-btn" onclick="setTheme('github-dark')">GitHub Dark</button>
+        <button class="theme-btn" onclick="setTheme('one-dark')">One Dark Pro</button>
+        <button class="theme-btn" onclick="setTheme('dracula')">Dracula</button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-demo">
+        <div class="container">
+            <h1>
+                <span class="text-syntax-purple">const</span> developer = 
+                <span class="text-syntax-green">{</span>
+            </h1>
+            <h2 class="mt-4">
+                <span class="text-muted">name:</span> 
+                <span class="text-syntax-yellow">"Jose Flores"</span>,
+            </h2>
+            <h3 class="mt-4">
+                <span class="text-muted">role:</span> 
+                <span class="text-syntax-yellow">"Technical Advisor"</span>
+            </h3>
+            <p class="lead mt-6">
+                <span class="text-syntax-green">}</span>;
+            </p>
+            
+            <!-- Button Examples -->
+            <div class="btn-group mt-8">
+                <button class="btn btn--primary btn--lg">
+                    View Projects
+                </button>
+                <button class="btn btn--secondary btn--lg">
+                    Contact Me
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="mb-6">IDE-Themed Design System</h2>
+            
+            <p class="lead mb-6">
+                This portfolio uses familiar IDE color schemes to create an instantly recognizable developer aesthetic.
+            </p>
+
+            <!-- Code Example -->
+            <div class="code-block">
+                <div class="code-line mt-8">
+                    <span class="token-keyword">function</span> 
+                    <span class="token-function">buildWebsite</span>() {
+                </div>
+                <div class="code-line">
+                    &nbsp;&nbsp;<span class="token-keyword">const</span> skills = [
+                </div>
+                <div class="code-line">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="token-string">'AI Integration'</span>,
+                </div>
+                <div class="code-line">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="token-string">'Web Development'</span>,
+                </div>
+                <div class="code-line">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="token-string">'Technical Architecture'</span>
+                </div>
+                <div class="code-line">
+                    &nbsp;&nbsp;];
+                </div>
+                <div class="code-line mt-4">
+                    &nbsp;&nbsp;<span class="token-comment">// Transform ideas into reality</span>
+                </div>
+                <div class="code-line">
+                    &nbsp;&nbsp;<span class="token-keyword">return</span> skills.<span class="token-function">map</span>(skill => 
+                </div>
+                <div class="code-line">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="token-function">implement</span>(skill)
+                </div>
+                <div class="code-line">
+                    &nbsp;&nbsp;);
+                </div>
+                <div class="code-line">}</div>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-3 gap-4 mt-8">
+                <div class="card">
+                    <h3 class="text-syntax-green mb-4">// Fast</h3>
+                    <p>Lightning-fast load times with modern optimization techniques</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-syntax-blue mb-4">// Clean</h3>
+                    <p>Clean, maintainable code following best practices</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-syntax-purple mb-4">// Modern</h3>
+                    <p>Built with the latest web technologies and frameworks</p>
+                </div>
+            </div>
+
+            <!-- Button Variations -->
+            <h3 class="mt-8 mb-4">Button Components</h3>
+            <div class="flex gap-4 flex-wrap">
+                <button class="btn btn--primary">Primary</button>
+                <button class="btn btn--secondary">Secondary</button>
+                <button class="btn btn--outline">Outline</button>
+                <button class="btn btn--ghost">Ghost</button>
+                <button class="btn btn--success">Success</button>
+                <button class="btn btn--warning">Warning</button>
+                <button class="btn btn--error">Error</button>
+                <button class="btn btn--info">Info</button>
+            </div>
+
+            <!-- Typography Examples -->
+            <h3 class="mt-8 mb-4">Typography Scale</h3>
+            <h1>Heading 1 - Main Title</h1>
+            <h2>Heading 2 - Section Title</h2>
+            <h3>Heading 3 - Subsection</h3>
+            <h4>Heading 4 - Card Title</h4>
+            <h5>Heading 5 - Small Title</h5>
+            <h6>Heading 6 - Caption</h6>
+            
+            <p class="lead mt-4">
+                Lead paragraph text for important introductions.
+            </p>
+            <p>
+                Regular paragraph text for body content. This is how normal text appears in the design system.
+            </p>
+            <small>Small text for captions and metadata</small>
+
+            <!-- Color Palette -->
+            <h3 class="mt-8 mb-4">Syntax Colors</h3>
+            <div class="flex gap-4">
+                <div class="p-4 card">
+                    <div class="text-syntax-yellow font-mono">Yellow: Strings</div>
+                </div>
+                <div class="p-4 card">
+                    <div class="text-syntax-green font-mono">Green: Success</div>
+                </div>
+                <div class="p-4 card">
+                    <div class="text-syntax-purple font-mono">Purple: Functions</div>
+                </div>
+                <div class="p-4 card">
+                    <div class="text-syntax-blue font-mono">Blue: Links</div>
+                </div>
+                <div class="p-4 card">
+                    <div class="text-syntax-pink font-mono">Pink: Errors</div>
+                </div>
+                <div class="p-4 card">
+                    <div class="text-syntax-orange font-mono">Orange: Numbers</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            
+            // Update active button
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Save preference
+            localStorage.setItem('preferred-ide-theme', theme);
+        }
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('preferred-ide-theme') || 'monokai-light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Update active button on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(savedTheme.replace('-', ' '))) {
+                    btn.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -13,6 +13,10 @@
   --color-brand-primary: oklch(0.75 0.18 55); /* Warm amber/gold */
   --color-brand-secondary: oklch(0.704 0.191 22.216); /* Warm orange */
 
+  /* Higher contrast variants for dark mode */
+  --color-brand-primary-high-contrast: oklch(0.82 0.18 55); /* Brighter for dark mode */
+  --color-brand-secondary-high-contrast: oklch(0.78 0.191 22.216); /* Brighter for dark mode */
+
   /* Neutral colors (consolidated) */
   --color-neutral-000: oklch(100% 0 0);
   --color-neutral-050: oklch(98.5% 0.002 247);
@@ -77,17 +81,22 @@
   --color-primary-dark: var(--color-primary-600);
   --color-primary-light: var(--color-primary-400);
 
-  --color-text: oklch(1 0 0); /* White text for dark theme */
-  --color-text-light: oklch(1 0 0 / 0.8);
-  --color-text-muted: oklch(1 0 0 / 0.6);
+  /* Default to light theme colors */
+  --color-text: var(--color-neutral-900); /* Dark text for light background */
+  --color-text-light: var(--color-neutral-700);
+  --color-text-muted: var(--color-neutral-600);
 
-  --color-background: oklch(0.06 0 0); /* Dark background */
-  --color-surface: oklch(0.12 0 0 / 0.66);
+  --color-background: var(--color-neutral-000);
+  --color-surface: var(--color-neutral-050);
   --color-surface-alt: var(--color-neutral-100);
 
-  --color-border: oklch(1 0 0 / 0.08);
-  --color-border-light: oklch(1 0 0 / 0.05);
-  --color-border-dark: oklch(1 0 0 / 0.12);
+  /* Card/testimonial specific */
+  --color-card-bg: var(--color-neutral-000);
+  --color-card-border: var(--color-neutral-200);
+
+  --color-border: var(--color-neutral-200);
+  --color-border-light: var(--color-neutral-100);
+  --color-border-dark: var(--color-neutral-300);
 
   --color-success: var(--color-emerald-500);
   --color-warning: var(--color-amber-500);
@@ -400,14 +409,8 @@
      From unified-theme
      ====================== */
 
-  --section-bg:
-    radial-gradient(
-      1200px 800px at 50% 15%,
-      oklch(0.75 0.18 55 / 0.12) 0%,
-      oklch(0.75 0.18 55 / 0.05) 28%,
-      oklch(0 0 0 / 0) 60%
-    ), oklch(0.06 0 0);
-  --section-grid-color: oklch(1 0 0 / 0.03);
+  --section-bg: var(--color-background);
+  --section-grid-color: color-mix(in oklch, var(--color-text) 3%, transparent);
   --section-grid-size: 56px;
   --section-fg: var(--color-text);
 
@@ -418,9 +421,10 @@
 
   /* Global Canvas Tints (from unified-theme) */
   --tint-hue: 22;
-  --tint-alpha: 0.14;
-  --spot-alpha: 0.18;
+  --tint-alpha: 0.03; /* Very subtle for light theme */
+  --spot-alpha: 0.05; /* Very subtle for light theme */
   --spot-y: 32%;
+  --section-blend-mode: normal; /* Don't use screen blend mode in light theme */
 
   /* Role accent colors */
   --role-green: oklch(0.72 0.18 142);
@@ -485,4 +489,95 @@
   :root {
     --container-padding: var(--space-12);
   }
+}
+
+/* ================================================
+   Dark Theme Overrides
+   ================================================ */
+
+/* System preference dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: oklch(0.98 0 0); /* Slightly softer white for less eye strain */
+    --color-text-light: oklch(0.92 0 0); /* Increased contrast from 0.8 */
+    --color-text-muted: oklch(0.75 0 0); /* Increased contrast from 0.6 */
+
+    --color-background: oklch(0.06 0 0);
+    --color-surface: oklch(0.14 0 0 / 0.8); /* Increased lightness and opacity */
+    --color-surface-alt: oklch(0.18 0 0); /* Lighter surface for better hierarchy */
+
+    /* Card/testimonial specific for dark theme */
+    --color-card-bg: oklch(0.12 0 0 / 0.65); /* Better contrast against dark background */
+    --color-card-border: oklch(1 0 0 / 0.15); /* More visible borders */
+
+    --color-border: oklch(1 0 0 / 0.12); /* More visible borders */
+    --color-border-light: oklch(1 0 0 / 0.08);
+
+    /* Enhanced brand colors for dark mode */
+    --color-brand-primary: var(--color-brand-primary-high-contrast);
+    --color-brand-secondary: var(--color-brand-secondary-high-contrast);
+
+    /* Dark theme section effects with enhanced contrast */
+    --tint-alpha: 0.16;
+    --spot-alpha: 0.22;
+    --section-blend-mode: screen;
+    --color-border-dark: oklch(1 0 0 / 0.18);
+
+    /* Enhanced panel visibility */
+    --panel-bg: oklch(0.1 0 0 / 0.75);
+    --panel-stroke: oklch(1 0 0 / 0.12);
+    --panel-glow: 0 0 32px oklch(0.75 0.18 55 / 0.15);
+  }
+}
+
+/* Explicit dark theme class */
+[data-theme="dark"] {
+  --color-text: oklch(0.98 0 0); /* Slightly softer white for less eye strain */
+  --color-text-light: oklch(0.92 0 0); /* Increased contrast from 0.8 */
+  --color-text-muted: oklch(0.75 0 0); /* Increased contrast from 0.6 */
+
+  --color-background: oklch(0.06 0 0);
+  --color-surface: oklch(0.14 0 0 / 0.8); /* Increased lightness and opacity */
+  --color-surface-alt: oklch(0.18 0 0); /* Lighter surface for better hierarchy */
+
+  /* Card/testimonial specific for dark theme */
+  --color-card-bg: oklch(0.12 0 0 / 0.65); /* Better contrast against dark background */
+  --color-card-border: oklch(1 0 0 / 0.15); /* More visible borders */
+
+  --color-border: oklch(1 0 0 / 0.12); /* More visible borders */
+  --color-border-light: oklch(1 0 0 / 0.08);
+  --color-border-dark: oklch(1 0 0 / 0.18);
+
+  /* Enhanced brand colors for dark mode */
+  --color-brand-primary: var(--color-brand-primary-high-contrast);
+  --color-brand-secondary: var(--color-brand-secondary-high-contrast);
+
+  /* Dark theme section effects with enhanced contrast */
+  --tint-alpha: 0.16;
+  --spot-alpha: 0.22;
+  --section-blend-mode: screen;
+
+  /* Enhanced panel visibility */
+  --panel-bg: oklch(0.1 0 0 / 0.75);
+  --panel-stroke: oklch(1 0 0 / 0.12);
+  --panel-glow: 0 0 32px oklch(0.75 0.18 55 / 0.15);
+}
+
+/* Light theme explicit */
+[data-theme="light"] {
+  /* Explicitly set light theme values */
+  --color-text: var(--color-neutral-900);
+  --color-text-light: var(--color-neutral-700);
+  --color-text-muted: var(--color-neutral-600);
+  --color-background: var(--color-neutral-000);
+  --color-surface: var(--color-neutral-050);
+  --color-surface-alt: var(--color-neutral-100);
+  --color-card-bg: var(--color-neutral-000);
+  --color-card-border: var(--color-neutral-200);
+  --color-border: var(--color-neutral-200);
+  --color-border-light: var(--color-neutral-100);
+  --color-border-dark: var(--color-neutral-300);
+  --tint-alpha: 0.03;
+  --spot-alpha: 0.05;
+  --section-blend-mode: normal;
 }

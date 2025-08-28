@@ -1,0 +1,276 @@
+/* ================================================
+   Atomic Design: Process Steps (Molecules Level)
+   Workflow steps, timelines, and procedures
+   ================================================ */
+
+/* Process Step Molecule */
+.process-step {
+  display: flex;
+  gap: var(--space-4);
+  position: relative;
+  padding: var(--space-4) 0;
+}
+
+/* Step Number/Icon */
+.process-step__marker {
+  flex-shrink: 0;
+  width: var(--space-12);
+  height: var(--space-12);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-overlay);
+  border: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-bold);
+  font-family: var(--font-mono);
+  color: var(--color-primary);
+  position: relative;
+  z-index: 2;
+  transition: all var(--transition-base);
+}
+
+.process-step__marker--number {
+  font-size: var(--text-lg);
+}
+
+.process-step__marker--icon {
+  font-size: var(--text-xl);
+}
+
+/* Active/completed states */
+.process-step--active .process-step__marker {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-primary);
+  transform: scale(1.1);
+}
+
+.process-step--completed .process-step__marker {
+  background: var(--color-syntax-green);
+  color: var(--color-text-inverse);
+  border-color: var(--color-syntax-green);
+}
+
+.process-step--completed .process-step__marker::after {
+  content: "✓";
+  position: absolute;
+  font-size: var(--text-lg);
+}
+
+/* Step Content */
+.process-step__content {
+  flex: 1;
+  padding-top: var(--space-2);
+}
+
+.process-step__title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.process-step__description {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.process-step__meta {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.process-step__duration {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+/* Connector Line */
+.process-step--connected::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--space-6) - 1px);
+  top: calc(var(--space-12) + var(--space-4));
+  bottom: var(--space-4);
+  width: 2px;
+  background: var(--color-border);
+  z-index: 1;
+}
+
+.process-step--connected:last-child::before {
+  display: none;
+}
+
+/* Horizontal Process Steps */
+.process-steps--horizontal {
+  display: flex;
+  gap: var(--space-6);
+  overflow-x: auto;
+  padding-bottom: var(--space-4);
+}
+
+.process-steps--horizontal .process-step {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 200px;
+  flex: 1;
+  padding: 0;
+}
+
+.process-steps--horizontal .process-step__content {
+  padding-top: var(--space-4);
+}
+
+.process-steps--horizontal .process-step--connected::before {
+  display: none;
+}
+
+.process-steps--horizontal .process-step--connected::after {
+  content: "";
+  position: absolute;
+  top: var(--space-6);
+  left: calc(50% + var(--space-6));
+  right: calc(-50% + var(--space-6));
+  height: 2px;
+  background: var(--color-border);
+  z-index: 0;
+}
+
+.process-steps--horizontal .process-step:last-child::after {
+  display: none;
+}
+
+/* Compact Process Steps */
+.process-step--compact {
+  padding: var(--space-2) 0;
+}
+
+.process-step--compact .process-step__marker {
+  width: var(--space-8);
+  height: var(--space-8);
+  font-size: var(--text-sm);
+}
+
+.process-step--compact .process-step__title {
+  font-size: var(--text-base);
+}
+
+.process-step--compact .process-step__description {
+  font-size: var(--text-sm);
+}
+
+.process-step--compact.process-step--connected::before {
+  left: calc(var(--space-4) - 1px);
+  top: calc(var(--space-8) + var(--space-2));
+}
+
+/* Process Timeline */
+.process-timeline {
+  position: relative;
+  padding-left: var(--space-8);
+}
+
+.process-timeline::before {
+  content: "";
+  position: absolute;
+  left: var(--space-3);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--color-border),
+    var(--color-primary),
+    var(--color-border)
+  );
+}
+
+.process-timeline__item {
+  position: relative;
+  padding: var(--space-4) 0;
+}
+
+.process-timeline__item::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--space-3) * -1 + 1px);
+  top: var(--space-6);
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.process-timeline__date {
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+
+.process-timeline__title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.process-timeline__description {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+/* Animated Process Steps */
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-primary) 40%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 10px color-mix(in oklch, var(--color-primary) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-primary) 0%, transparent);
+  }
+}
+
+.process-step--active .process-step__marker {
+  animation: pulse-ring 2s infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .process-steps--horizontal {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .process-steps--horizontal .process-step {
+    flex-direction: row;
+    text-align: left;
+    min-width: auto;
+  }
+
+  .process-steps--horizontal .process-step__content {
+    padding-top: var(--space-2);
+  }
+
+  .process-steps--horizontal .process-step--connected::after {
+    display: none;
+  }
+
+  .process-steps--horizontal .process-step--connected::before {
+    display: block;
+    left: calc(var(--space-6) - 1px);
+    top: calc(var(--space-12) + var(--space-2));
+    bottom: calc(var(--space-2) * -1);
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+}

@@ -148,7 +148,6 @@ a:hover {
 
 /* Underline animation for text links */
 a:not(.button):not(nav a) {
-  background-image: linear-gradient(var(--color-primary), var(--color-primary));
   background-position: 0 100%;
   background-repeat: no-repeat;
   background-size: 0 var(--space-0-5);

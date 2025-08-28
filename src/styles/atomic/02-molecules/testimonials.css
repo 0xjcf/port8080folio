@@ -1,0 +1,236 @@
+/* ================================================
+   Atomic Design: Testimonials (Molecules Level)
+   Quote cards, reviews, and social proof
+   ================================================ */
+
+/* Testimonial Card Molecule */
+.testimonial {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  position: relative;
+  transition: all var(--transition-base);
+}
+
+/* Quote mark decoration */
+.testimonial::before {
+  content: '"';
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-4);
+  font-size: var(--text-5xl);
+  font-family: serif;
+  color: var(--color-primary);
+  opacity: 0.2;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.testimonial:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-border-active);
+}
+
+/* Testimonial Content */
+.testimonial__quote {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-8);
+  font-style: italic;
+}
+
+.testimonial__quote--small {
+  font-size: var(--text-base);
+}
+
+/* Author Section */
+.testimonial__author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-left: var(--space-8);
+}
+
+.testimonial__avatar {
+  width: var(--space-12);
+  height: var(--space-12);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-overlay);
+  border: 2px solid var(--color-border);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.testimonial__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Placeholder avatar with initials */
+.testimonial__avatar--initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-semibold);
+  font-size: var(--text-lg);
+  color: var(--color-primary);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--color-primary) 10%, var(--color-bg-overlay)),
+    var(--color-bg-overlay)
+  );
+}
+
+.testimonial__info {
+  flex: 1;
+}
+
+.testimonial__name {
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.testimonial__role {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+.testimonial__company {
+  font-size: var(--text-sm);
+  color: var(--color-primary);
+}
+
+/* Rating Stars */
+.testimonial__rating {
+  display: flex;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+  padding-left: var(--space-8);
+}
+
+.testimonial__star {
+  color: var(--color-syntax-yellow);
+  font-size: var(--text-lg);
+}
+
+.testimonial__star--empty {
+  opacity: 0.3;
+}
+
+/* Testimonial Variants */
+.testimonial--compact {
+  padding: var(--space-4);
+}
+
+.testimonial--compact .testimonial__quote {
+  font-size: var(--text-base);
+  margin-bottom: var(--space-3);
+}
+
+.testimonial--compact .testimonial__avatar {
+  width: var(--space-10);
+  height: var(--space-10);
+}
+
+.testimonial--highlight {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--color-primary) 5%, var(--color-bg-secondary)),
+    var(--color-bg-secondary)
+  );
+  border-color: var(--color-primary);
+}
+
+/* Mini Testimonial (for hero/inline) */
+.testimonial--mini {
+  padding: var(--space-3);
+  background: var(--color-bg-overlay);
+  border-radius: var(--radius-md);
+}
+
+.testimonial--mini::before {
+  display: none;
+}
+
+.testimonial--mini .testimonial__quote {
+  font-size: var(--text-sm);
+  padding-left: 0;
+  margin-bottom: var(--space-2);
+}
+
+.testimonial--mini .testimonial__author {
+  padding-left: 0;
+  gap: var(--space-2);
+}
+
+.testimonial--mini .testimonial__avatar {
+  width: var(--space-8);
+  height: var(--space-8);
+}
+
+.testimonial--mini .testimonial__name {
+  font-size: var(--text-sm);
+}
+
+.testimonial--mini .testimonial__role {
+  font-size: var(--text-xs);
+}
+
+/* Testimonial Grid */
+.testimonial-grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@media (max-width: 768px) {
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Testimonial Slider (basic, enhance with JS) */
+.testimonial-slider {
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial-slider__track {
+  display: flex;
+  gap: var(--space-4);
+  transition: transform var(--transition-slow);
+}
+
+.testimonial-slider__item {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.testimonial-slider__nav {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.testimonial-slider__dot {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.testimonial-slider__dot--active {
+  width: var(--space-6);
+  background: var(--color-primary);
+}

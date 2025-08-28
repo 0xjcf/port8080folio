@@ -1,0 +1,8 @@
+{
+  "files": ["vitest.d.ts", "vitest-env.d.ts"],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.workers.json" },
+    { "path": "./tsconfig.tests.json" }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "composite": true,
+    "types": ["vitest/globals", "node"],
+    "lib": ["ES2022", "DOM"]
+  },
+  "include": [
+    "tests/**/*",
+    "tests/setup-dom.ts",
+    "vitest.d.ts",
+    "vitest-env.d.ts",
+    "global.d.ts",
+    "src/**/*"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

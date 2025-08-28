@@ -1,0 +1,126 @@
+/* ================================================
+   Atomic Design System - Main Entry Point
+   IDE-themed design system for developer portfolio
+   ================================================ */
+
+/* Layer order ensures proper cascade */
+@layer tokens, reset, atoms, molecules, organisms, utilities;
+
+/* 00 - Design Tokens */
+@import "./00-tokens/tokens.css" layer(tokens);
+
+/* 01 - Reset & Base */
+@import "./01-atoms/reset.css" layer(reset);
+@import "./01-atoms/typography.css" layer(atoms);
+@import "./01-atoms/badges.css" layer(atoms);
+@import "./01-atoms/loading.css" layer(atoms);
+@import "./01-atoms/navigation.css" layer(atoms);
+@import "./01-atoms/tooltips.css" layer(atoms);
+@import "./01-atoms/code.css" layer(atoms);
+
+/* 02 - Molecules */
+@import "./02-molecules/buttons.css" layer(molecules);
+@import "./02-molecules/forms.css" layer(molecules);
+@import "./02-molecules/cards.css" layer(molecules);
+@import "./02-molecules/testimonials.css" layer(molecules);
+@import "./02-molecules/kpi-tiles.css" layer(molecules);
+
+/* Temporary: Basic layout utilities for testing */
+@layer utilities {
+  /* Container */
+  .container {
+    width: 100%;
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+  }
+
+  /* Section spacing */
+  .section {
+    padding: var(--space-16) 0;
+  }
+
+  /* Flexbox utilities */
+  .flex {
+    display: flex;
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .justify-between {
+    justify-content: space-between;
+  }
+  .gap-2 {
+    gap: var(--space-2);
+  }
+  .gap-4 {
+    gap: var(--space-4);
+  }
+  .gap-6 {
+    gap: var(--space-6);
+  }
+  .gap-8 {
+    gap: var(--space-8);
+  }
+
+  /* Spacing utilities */
+  .mt-4 {
+    margin-top: var(--space-4);
+  }
+  .mt-6 {
+    margin-top: var(--space-6);
+  }
+  .mt-8 {
+    margin-top: var(--space-8);
+  }
+  .mb-4 {
+    margin-bottom: var(--space-4);
+  }
+  .mb-6 {
+    margin-bottom: var(--space-6);
+  }
+  .mb-8 {
+    margin-bottom: var(--space-8);
+  }
+  .p-4 {
+    padding: var(--space-4);
+  }
+  .p-6 {
+    padding: var(--space-6);
+  }
+  .p-8 {
+    padding: var(--space-8);
+  }
+
+  /* Card utility */
+  .card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+
+  /* Grid utilities */
+  .grid {
+    display: grid;
+  }
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    .grid-cols-2,
+    .grid-cols-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+}

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="monokai-light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components Demo - Atomic Design with Light DOM</title>
+    
+    <!-- Atomic CSS System -->
+    <link rel="stylesheet" href="styles/atomic/main-atomic.css">
+    
+    <style>
+        /* Additional demo styles */
+        .demo-section {
+            padding: var(--space-8) var(--space-4);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin-top: var(--space-6);
+        }
+        
+        /* Hero demo styles */
+        #hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(180deg, 
+                var(--color-bg-primary) 0%, 
+                var(--color-bg-secondary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Scroll indicator styles (will be added by component) */
+        .scroll-indicator {
+            position: absolute;
+            bottom: var(--space-8);
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            transition: opacity 0.3s ease;
+        }
+        
+        .scroll-indicator__mouse {
+            width: 24px;
+            height: 40px;
+            border: 2px solid var(--color-text-muted);
+            border-radius: 12px;
+            margin: 0 auto var(--space-2);
+            position: relative;
+        }
+        
+        .scroll-indicator__wheel {
+            width: 4px;
+            height: 8px;
+            background: var(--color-text-muted);
+            border-radius: 2px;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scroll 2s ease-in-out infinite;
+        }
+        
+        @keyframes scroll {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Component (Atom) -->
+    <theme-toggle></theme-toggle>
+
+    <!-- Hero Section with Enhancement -->
+    <section id="hero" class="hero">
+        <h1 class="text-5xl font-bold mb-4">
+            <span class="text-syntax-purple">const</span> developer = 
+            <span class="text-syntax-green">{</span>
+        </h1>
+        <h2 class="text-2xl mb-4" data-typewriter data-typewriter-speed="100">
+            Jose Flores
+        </h2>
+        <p class="text-lg text-secondary mb-8">
+            Technical Advisor & Web Components Enthusiast
+        </p>
+        <div class="btn-group">
+            <button class="btn btn--primary btn--lg">
+                View Projects
+            </button>
+            <button class="btn btn--secondary btn--lg">
+                Learn More
+            </button>
+        </div>
+    </section>
+    
+    <!-- Hero Enhancement Component -->
+    <hero-section target="#hero"></hero-section>
+
+    <!-- Service Cards Section -->
+    <section class="demo-section">
+        <div class="container">
+            <h2 class="text-3xl font-bold mb-2">Service Cards (Molecules)</h2>
+            <p class="text-secondary mb-6">
+                These are Web Components rendering in light DOM for SEO
+            </p>
+            
+            <div class="demo-grid">
+                <service-card
+                    title="AI Integration"
+                    description="Implement AI solutions to automate workflows and enhance customer experience with cutting-edge technology."
+                    icon="🤖"
+                    metrics="50% faster processing"
+                    accent="purple">
+                </service-card>
+                
+                <service-card
+                    title="Web Development"
+                    description="Build lightning-fast, accessible websites using modern frameworks and progressive enhancement."
+                    icon="⚡"
+                    metrics="100/100 Lighthouse"
+                    accent="blue">
+                </service-card>
+                
+                <service-card
+                    title="Technical Advisory"
+                    description="Strategic technical guidance to align your architecture with business goals and best practices."
+                    icon="🎯"
+                    metrics="10+ years experience"
+                    accent="green">
+                </service-card>
+            </div>
+        </div>
+    </section>
+
+    <!-- Forms Section -->
+    <section class="demo-section">
+        <div class="container">
+            <h2 class="text-3xl font-bold mb-2">Enhanced Forms</h2>
+            <p class="text-secondary mb-6">
+                Form works without JS, but gets real-time validation when JS is available
+            </p>
+            
+            <form id="contact-form" class="form" action="/api/contact" method="POST">
+                <div class="form-field">
+                    <label class="form-label form-label--required" for="email">
+                        Email Address
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-input"
+                        placeholder="you@example.com"
+                        required>
+                    <span class="form-helper">We'll never share your email</span>
+                </div>
+                
+                <div class="form-field">
+                    <label class="form-label form-label--required" for="message">
+                        Message
+                    </label>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        class="form-textarea"
+                        placeholder="Tell us about your project..."
+                        required></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn--primary">
+                        Send Message
+                    </button>
+                    <button type="reset" class="btn btn--secondary">
+                        Clear
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Regular HTML Content -->
+    <section class="demo-section">
+        <div class="container">
+            <h2 class="text-3xl font-bold mb-2">Progressive Enhancement Demo</h2>
+            <p class="text-secondary mb-4">
+                This page works perfectly without JavaScript. Try disabling JS to see!
+            </p>
+            
+            <div class="card mt-6 p-6">
+                <h3 class="text-xl font-semibold mb-4">How It Works</h3>
+                <ul class="list-disc pl-6 space-y-2 text-secondary">
+                    <li>All content is in regular HTML (light DOM)</li>
+                    <li>CSS provides the visual design (atomic classes)</li>
+                    <li>Web Components add behavior when JS loads</li>
+                    <li>SEO and accessibility are preserved</li>
+                    <li>Theme switching enhances but isn't required</li>
+                </ul>
+            </div>
+            
+            <div class="card mt-6 p-6">
+                <h3 class="text-xl font-semibold mb-4">View Source Benefits</h3>
+                <p class="text-secondary">
+                    Right-click and "View Page Source" - you'll see all the content 
+                    is in the HTML, not hidden in JavaScript. Search engines and 
+                    screen readers can access everything.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Component Status -->
+    <section class="demo-section">
+        <div class="container">
+            <h2 class="text-3xl font-bold mb-2">Component Status</h2>
+            <p class="text-secondary mb-6">Check if Web Components are loaded:</p>
+            
+            <div id="component-status" class="font-mono text-sm">
+                <p class="mb-2">Checking components...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Import Web Components as ES Modules -->
+    <script type="module">
+        // Import components
+        import './components/atoms/theme-toggle.js';
+        import './components/molecules/service-card.js';
+        import './components/organisms/hero-section.js';
+        
+        // Check component registration
+        const status = document.getElementById('component-status');
+        const components = [
+            'theme-toggle',
+            'service-card', 
+            'hero-section'
+        ];
+        
+        let html = '<ul class="space-y-2">';
+        components.forEach(name => {
+            const isDefined = customElements.get(name);
+            const statusIcon = isDefined ? '✅' : '❌';
+            const statusText = isDefined ? 'Loaded' : 'Not loaded';
+            html += `<li>${statusIcon} <code>&lt;${name}&gt;</code> - ${statusText}</li>`;
+        });
+        html += '</ul>';
+        
+        status.innerHTML = html;
+        
+        // Listen for service card clicks
+        document.addEventListener('service-selected', (e) => {
+            console.log('Service selected:', e.detail);
+            // Could navigate to service detail page or show modal
+        });
+    </script>
+
+    <!-- Fallback for browsers without module support -->
+    <script nomodule>
+        console.log('This browser does not support ES modules. Components will not load, but the page still works!');
+    </script>
+</body>
+</html>

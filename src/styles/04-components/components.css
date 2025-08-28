@@ -99,15 +99,16 @@ nav a:hover {
 .btn-primary {
   --button-bg: linear-gradient(
     90deg,
-    var(--color-red-600) 0%,
-    var(--color-orange-500) 50%,
-    var(--color-red-600) 100%
+    var(--color-brand-primary) 0%,
+    var(--color-brand-secondary) 50%,
+    var(--color-brand-primary) 100%
   );
-  --button-color: var(--color-neutral-000);
+  --button-color: oklch(0.08 0 0); /* Dark text for better contrast on bright button */
   --button-border: transparent;
   --button-hover-shadow:
-    0 var(--space-3) var(--space-8) color-mix(in oklch, var(--color-brand-primary) 35%, transparent),
+    0 var(--space-3) var(--space-8) color-mix(in oklch, var(--color-brand-primary) 45%, transparent),
     0 0 0 1px var(--color-border) inset;
+  font-weight: var(--font-semibold);
 }
 .button--primary:hover::after,
 .btn-primary:hover::after {
@@ -119,11 +120,11 @@ nav a:hover {
 }
 .button--secondary,
 .btn-secondary {
-  --button-bg: color-mix(in oklch, var(--color-text) 4%, transparent);
-  --button-color: color-mix(in oklch, var(--color-text) 95%, var(--color-background));
-  --button-border: color-mix(in oklch, var(--color-text) 12%, transparent);
-  --button-hover-bg: color-mix(in oklch, var(--color-text) 6%, transparent);
-  --button-hover-border: color-mix(in oklch, var(--color-text) 18%, transparent);
+  --button-bg: color-mix(in oklch, var(--color-surface) 80%, transparent);
+  --button-color: var(--color-text);
+  --button-border: color-mix(in oklch, var(--color-text) 20%, transparent);
+  --button-hover-bg: color-mix(in oklch, var(--color-surface) 100%, transparent);
+  --button-hover-border: color-mix(in oklch, var(--color-brand-primary) 40%, transparent);
   backdrop-filter: blur(var(--backdrop-blur-md));
 }
 
@@ -192,9 +193,8 @@ nav a:hover {
   display: flex;
   flex-direction: column;
   padding: var(--space-6);
-  background: var(--card-bg, color-mix(in oklch, var(--color-text) 4%, transparent));
-  border: var(--space-px) solid
-    var(--card-border, color-mix(in oklch, var(--color-text) 12%, transparent));
+  background: var(--color-card-bg);
+  border: var(--space-px) solid var(--color-card-border);
   border-radius: var(--radius-2xl);
   backdrop-filter: blur(var(--backdrop-blur-lg));
   -webkit-backdrop-filter: blur(var(--backdrop-blur-lg));
@@ -520,11 +520,6 @@ nav a:hover {
   backdrop-filter: blur(var(--panel-blur));
   box-shadow: var(--panel-shadow);
   transition: all var(--transition-base);
-}
-
-.form-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: var(--transform-lift-sm);
 }
 
 .form-card::before {
