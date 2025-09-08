@@ -1,0 +1,1114 @@
+/* ========================================
+   About Section Styles
+   Cohesive with Hero - Premium Dark Theme
+   ======================================== */
+
+/* About Section Container - Mobile-first */
+#about {
+  position: relative;
+  z-index: var(--z-elevated); /* ensure this section paints above the hero context */
+  padding: var(--space-18) var(--space-5); /* Mobile-first padding */
+  overflow: hidden;
+  --about-avatar-blur: var(--space-3); /* Mobile blur setting */
+}
+
+@media (min-width: 768px) {
+  #about {
+    padding: var(--space-32) var(--space-6); /* Match hero's inner padding for rhythm parity */
+  }
+}
+
+/* Background effects handled by unified theme */
+
+/* Removed warm vignette for cleaner look */
+
+/* Content wrapper */
+#about .container {
+  position: relative;
+  z-index: var(--z-sticky);
+  max-width: var(--container-xl);
+  margin: var(--space-0) auto;
+}
+
+/* ======================
+   Segment Toggle (Small Business / Product Team)
+   ====================== */
+/* Keep the underlying controls for state, but hide the original toggle UI */
+.about__segment-toggle { display: none; }
+
+.about__seg-radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.about__seg-btn {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  color: var(--color-text-light);
+  cursor: pointer;
+  user-select: none;
+}
+
+#seg-sb:checked + label[for="seg-sb"],
+#seg-pt:checked + label[for="seg-pt"] {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1px 6px color-mix(in oklch, var(--color-text) 8%, transparent);
+}
+
+/* Segment visibility control */
+.about__segment { display: none; }
+/* When :has is supported */
+.about__segment-toggle:has(#seg-sb:checked) + .about__content-wrapper .about__segment--sb { display: block; }
+.about__segment-toggle:has(#seg-pt:checked) + .about__content-wrapper .about__segment--pt { display: block; }
+/* Fallback classes for browsers without :has() */
+#about.about--seg-sb .about__content-wrapper .about__segment--sb { display: block; }
+#about.about--seg-pt .about__content-wrapper .about__segment--pt { display: block; }
+
+/* Section Title */
+.about__header {
+  text-align: center;
+  margin-bottom: var(--space-15);
+  position: relative;
+}
+
+/* Decorative underline now handled by .section__title::after in sections-base.css */
+
+/* .about__title inherits all styles from .section__title base styles in sections-base.css */
+
+/* Text-white and gradient styles handled in sections-base.css */
+
+/* Mobile reduction for localized vignette blur via token - mobile-first */
+.about__current {
+  --about-vignette-blur: var(--space-6);
+}
+
+/* Gradient styles handled in sections-base.css */
+
+/* Body Copy - Mobile-first */
+.about__intro {
+  font-size: var(--text-lg);
+  line-height: var(--leading-loose); /* Mobile optimized */
+  color: var(--color-text-light);
+  max-width: 33ch; /* Mobile readability width */
+  margin: var(--space-2) auto var(--space-10); /* Mobile spacing */
+  text-align: left; /* Left-aligned for better readability */
+}
+
+.about__intro .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.about__bullets {
+  margin: var(--space-3) 0 0;
+  padding-left: var(--space-5);
+}
+
+.about__bullets li {
+  margin: var(--space-2) 0;
+}
+
+/* Intro sections for better content organization */
+.about__intro-section {
+  margin-bottom: var(--space-6);
+}
+
+.about__intro-section:last-child {
+  margin-bottom: 0;
+}
+
+/* Subheadings for better scanning */
+.about__subheading {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  margin: 0 0 var(--space-3) 0;
+  opacity: 0.9;
+}
+
+.about__intro p {
+  margin: var(--space-0) var(--space-0) var(--space-4); /* Mobile-first spacing between paragraphs */
+  color: inherit; /* Keep the softer tone from parent container */
+}
+
+.about__intro p:last-child {
+  margin-bottom: 0;
+}
+
+.about__intro li {
+  color: inherit; /* Keep consistent with paragraph tone */
+}
+
+.about__intro strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.about__intro .highlight {
+  font-weight: 500;
+  color: var(--color-text-light); /* Mobile optimized */
+  /* Mobile-first: use underline instead of border for simplicity */
+  border-bottom: 0;
+  text-decoration: underline;
+  text-decoration-thickness: var(--space-px);
+  text-underline-offset: calc(var(--space-1) * 0.75);
+  transition: color var(--duration-fast);
+}
+
+.about__intro .highlight:hover {
+  color: var(--color-text);
+}
+
+/* Headshot & Role Block - Mobile-first layout */
+.about__current {
+  display: grid;
+  grid-template-columns: 1fr; /* Mobile: stack vertically */
+  align-items: start;
+  gap: var(--space-8);
+  margin-bottom: var(--space-11);
+  position: relative;
+  max-width: 36ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left; /* Left align for readability */
+}
+
+/* Offer card inside right column */
+.offer-card {
+  background: var(--color-neutral-000);
+  border: var(--space-px) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow: 0 6px 24px color-mix(in oklch, var(--color-text) 6%, transparent);
+}
+
+/* Visible switcher on the card */
+.offer-toggle {
+  display: inline-flex;
+  gap: var(--space-2);
+  background: color-mix(in oklch, var(--color-surface) 85%, transparent);
+  border: var(--space-px) solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: var(--space-1);
+  margin: 0 0 var(--space-4) 0;
+}
+
+.offer-toggle__btn {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  color: var(--color-text-light);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Selected state based on hidden radios using :has relationship from the hidden toggle */
+.about__segment-toggle:has(#seg-sb:checked) + .about__content-wrapper .about__offer .offer-toggle .offer-toggle__btn--sb,
+#about.about--seg-sb .offer-toggle .offer-toggle__btn--sb {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1px 6px color-mix(in oklch, var(--color-text) 8%, transparent);
+}
+.about__segment-toggle:has(#seg-pt:checked) + .about__content-wrapper .about__offer .offer-toggle .offer-toggle__btn--pt,
+#about.about--seg-pt .offer-toggle .offer-toggle__btn--pt {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1px 6px color-mix(in oklch, var(--color-text) 8%, transparent);
+}
+
+/* Hide both by default; show based on segment */
+.offer-card--sb, .offer-card--pt { display: none; }
+.about__segment-toggle:has(#seg-sb:checked) + .about__content-wrapper .about__offer .offer-card--sb { display: block; }
+.about__segment-toggle:has(#seg-pt:checked) + .about__content-wrapper .about__offer .offer-card--pt { display: block; }
+#about.about--seg-sb .about__offer .offer-card--sb { display: block; }
+#about.about--seg-pt .about__offer .offer-card--pt { display: block; }
+
+.offer-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-2);
+}
+
+.offer-title {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--space-3);
+}
+
+.offer-list {
+  margin: 0 0 var(--space-3);
+  padding-left: var(--space-5);
+}
+
+.offer-list li { margin: var(--space-1) 0; }
+
+/* Card body type: compact for density */
+.offer-card p,
+.offer-card li,
+.offer-card .offer-outcome,
+.offer-card .offer-subtle {
+  line-height: 1.55;
+}
+
+.offer-outcome {
+  color: var(--color-text-light);
+  font-size: var(--text-sm);
+  margin: 0 0 var(--space-4);
+}
+
+.offer-cta {
+  display: inline-block;
+}
+
+.about__why {
+  font-size: var(--text-sm);
+  color: var(--color-text-light);
+  margin-top: var(--space-2);
+}
+
+.offer-subtle { font-size: var(--text-sm); color: var(--color-text-light); text-align: center; margin-top: var(--space-2); }
+.offer-link { color: var(--color-primary); }
+
+/* ======================
+   Desktop Grid Rhythm (≥1200px)
+   ====================== */
+@media (min-width: 1200px) {
+  .about__content-wrapper {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--space-6); /* 24px */
+    align-items: start;
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .about__content-wrapper .about__intro {
+    grid-column: 1 / span 7;
+    max-width: 70ch;
+  }
+
+  .about__content-wrapper .about__current {
+    grid-column: 8 / span 5;
+    align-self: start;
+    margin-top: var(--space-1); /* Align with subheading */
+    padding: var(--space-6);
+    background: color-mix(in oklch, var(--color-surface) 88%, var(--color-text) 1%);
+    border: 1px solid color-mix(in oklch, var(--color-text) 5%, transparent);
+    border-radius: var(--radius-xl);
+    position: sticky;
+    top: var(--space-24); /* ~96px sticky offset */
+    box-shadow: 0 4px 24px color-mix(in oklch, var(--color-text) 5%, transparent);
+  }
+}
+
+/* Dynamic CTA hint */
+.cta-hint {
+  /* Promote container to top layer to avoid being under later sections */
+  position: fixed;
+  inset: 0; /* zero-size container with fixed children */
+  display: block;
+  pointer-events: none;
+  z-index: var(--z-notification, 100);
+}
+
+.cta-hint__arrow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: var(--z-notification, 100);
+}
+
+#cta-hint-path {
+  stroke: var(--color-primary);
+  stroke-width: 3;
+  marker-end: url(#arrowhead);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Make the arrow tip match the bridge CTA link color */
+#cta-hint-arrow #arrowhead path {
+  fill: var(--color-primary);
+  stroke: var(--color-primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #cta-hint-path {
+    stroke-dasharray: 6 8;
+    animation: dash 1.2s linear infinite;
+  }
+  @keyframes dash { to { stroke-dashoffset: -28; } }
+}
+
+/* Labor illusion block */
+.labor {
+  margin: var(--space-2) 0 var(--space-3);
+  border: var(--space-px) dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in oklch, var(--color-primary) 6%, var(--color-neutral-000));
+}
+.labor > summary { cursor: pointer; font-weight: 700; }
+.labor ul { margin: var(--space-2) 0 0; padding-left: var(--space-5); }
+.labor li { margin: var(--space-1) 0; font-size: calc(var(--text-sm) * 0.97); line-height: 1.55; }
+
+/* Offer section placed below columns */
+.about__offer {
+  margin-top: var(--space-10);
+  text-align: left;
+}
+
+@media (min-width: 1200px) {
+  .about__content-wrapper .about__offer {
+    grid-column: 1 / -1; /* Span both columns */
+    grid-row: 2;
+  }
+}
+
+/* Headshot Container - Glowing Card - Mobile-first */
+.about__avatar {
+  width: var(--space-40); /* Increased for better mobile visibility */
+  height: var(--space-40);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+  background: transparent;
+  padding: var(--space-0-5); /* Space for border */
+  margin: var(--space-3-5) auto var(--space-2);
+  align-self: center;
+}
+
+/* Outer glow frame - Mobile-first */
+.about__avatar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-0-5);
+  /* Fallback for browsers without mask support */
+  background: var(--brand-grad-cta);
+  opacity: 0.44; /* Mobile optimized */
+  transition: opacity var(--duration-base) ease;
+  box-shadow:
+    0 0 0 2px var(--color-brand-primary),
+    0 0 20px color-mix(in oklch, var(--color-brand-primary) 30%, transparent);
+}
+
+/* Enhanced mask-based border for supporting browsers */
+@supports (mask-composite: exclude) or (-webkit-mask-composite: xor) {
+  .about__avatar::before {
+    background: var(--brand-grad-cta);
+    -webkit-mask:
+      linear-gradient(var(--color-text) 0 0) content-box,
+      linear-gradient(var(--color-text) 0 0);
+    mask:
+      linear-gradient(var(--color-text) 0 0) content-box,
+      linear-gradient(var(--color-text) 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    box-shadow: none; /* Remove fallback glow when mask is supported */
+  }
+}
+
+/* Removed glow effect for cleaner appearance */
+
+.about__avatar:hover::before {
+  opacity: 0.8;
+}
+
+/* Motion-safe tilt effect on hover */
+@media (prefers-reduced-motion: no-preference) {
+  .about__avatar {
+    transition: transform var(--duration-base) ease;
+  }
+
+  .about__avatar:hover {
+    transform: perspective(var(--container-md)) rotateY(-2deg) rotateX(1deg);
+  }
+}
+
+.about__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: calc(var(--radius-2xl) - var(--space-1));
+  display: block;
+}
+
+/* Optional decorative pins */
+.about__avatar .pin {
+  position: absolute;
+  width: var(--space-1-5);
+  height: var(--space-1-5);
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--color-brand-primary), var(--color-brand-secondary));
+  box-shadow: 0 0 var(--space-2-5) color-mix(in oklch, var(--color-brand-primary) 50%, transparent);
+  opacity: 0.8;
+}
+
+.about__avatar .pin.top-left {
+  top: var(--space-2);
+  left: var(--space-2);
+}
+
+.about__avatar .pin.bottom-right {
+  bottom: var(--space-2);
+  right: var(--space-2);
+}
+
+.about__current-content h3 {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: var(--space-0) var(--space-0) var(--space-2);
+}
+
+.about__current-content p {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin: var(--space-0) var(--space-0) var(--space-4);
+  line-height: var(--leading-snug);
+}
+
+/* Specific styling for roles metadata paragraph - replaces inline styles */
+.about__roles-meta {
+  font-size: var(--text-base);
+  font-weight: 400;
+  margin-bottom: var(--space-2);
+  color: var(--color-text-light);
+}
+
+/* Role Highlights with Accent Colors - Moderate saturation */
+.role-primary {
+  background: var(--brand-grad-cta); /* Use unified token */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.role-green {
+  color: var(--role-green); /* Use token */
+}
+
+.role-yellow {
+  color: var(--role-yellow); /* Use token */
+}
+
+.role-purple {
+  color: var(--role-purple); /* Use token */
+}
+
+.about__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.tag {
+  padding: var(--space-1) var(--space-2-5);
+  background: color-mix(in oklch, var(--color-text) 7%, transparent); /* Translucent pill */
+  border: var(--space-px) solid color-mix(in oklch, var(--color-text) 10%, transparent);
+  border-radius: var(--radius-full);
+  font-size: calc(var(--space-3) * 0.917);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: color-mix(in oklch, var(--color-text) 90%, transparent);
+  transition: var(--transition-fast);
+}
+
+.tag:hover {
+  background: color-mix(in oklch, var(--color-text) 9%, transparent);
+  border-color: color-mix(in oklch, var(--color-text) 14%, transparent); /* Increased from 0.15 for better contrast */
+  transform: translateY(calc(var(--space-0-5) * -0.25)); /* Very subtle lift */
+}
+
+/* Focus-visible for accessibility */
+.tag:focus-visible,
+.about__avatar:focus-visible {
+  outline: var(--space-0-5) solid var(--focus-outline-alt, var(--color-focus-outline-alt));
+  outline-offset: var(--space-0-5);
+}
+
+/* Removed highlight cards - now in Services section as service cards */
+
+/* Mobile-first responsive styles */
+
+/* Mobile adjustments handled in sections-base.css */
+
+.about__avatar {
+  width: var(--space-40); /* Increased for better mobile visibility */
+  height: var(--space-40);
+  margin: var(--space-6) auto;
+}
+
+.about__tags {
+  justify-content: flex-start;
+}
+
+.about__intro {
+  text-align: left; /* Left align for readability */
+  max-width: 34ch;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: var(--leading-loose);
+}
+
+/* Adjust vignette position for mobile */
+.about__current::before {
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(var(--space-20) * 1.125);
+}
+
+.about__current-content p {
+  margin-bottom: var(--space-3-5);
+}
+.about__roles-meta {
+  color: var(--color-text-light);
+}
+
+/* Tablet and up - override mobile styles */
+@media (min-width: 768px) {
+  .about__current {
+    grid-template-columns: calc(var(--space-40) * 1.125) 1fr; /* Side by side on larger screens */
+    text-align: left;
+    gap: var(--space-12);
+  }
+
+  .about__avatar {
+    width: calc(var(--space-40) * 1.125);
+    height: calc(var(--space-40) * 1.125);
+    margin: var(--space-0);
+  }
+
+  .about__tags {
+    justify-content: flex-start;
+  }
+
+  .about__intro {
+    max-width: 58ch;
+    line-height: var(--leading-loose);
+  }
+
+  /* Reset vignette position for desktop */
+  .about__current::before {
+    left: calc(var(--space-20) * 1.125);
+    transform: none;
+    top: calc(var(--space-20) * 1.125);
+  }
+
+  .about__current-content p {
+    margin-bottom: var(--space-4);
+  }
+  .about__roles-meta {
+    color: var(--color-text-light);
+  }
+  .role-green {
+    color: var(--role-green);
+  }
+  .role-yellow {
+    color: var(--role-yellow);
+  }
+  .role-purple {
+    color: var(--role-purple);
+  }
+}
+
+/* Removed achievements section - now in Services section as KPI tiles */
+
+/* Extra small screens - further adjustments */
+.about__intro {
+  max-width: 32ch;
+}
+
+@media (min-width: 480px) {
+  .about__intro {
+    max-width: 34ch;
+  }
+}
+
+/* Mobile-first balance pass - base mobile styles */
+
+/* Match hero's lighter vertical rhythm on mobile */
+#about {
+  padding: var(--space-18) var(--space-5);
+  --about-avatar-blur: var(--space-3);
+}
+
+/* Title styles handled in sections-base.css */
+
+/* Header spacing on phones */
+.about__header {
+  margin-bottom: var(--space-5-5);
+}
+
+/* Body copy: tighten rhythm & measure */
+.about__intro {
+  font-size: var(--text-lg);
+  line-height: var(--leading-loose);
+  max-width: 33ch; /* keep a tidy column */
+  margin-bottom: var(--space-10);
+  margin-top: var(--space-2);
+}
+.about__intro p {
+  margin-bottom: var(--space-4);
+}
+
+/* Calm the highlight style (less noisy than a full border) */
+.about__intro .highlight {
+  border-bottom: 0;
+  text-decoration: underline;
+  text-decoration-thickness: var(--space-px);
+  text-underline-offset: calc(var(--space-1) * 0.75);
+  color: color-mix(in oklch, var(--color-text) 92%, transparent);
+}
+
+/* Avatar block: smaller, quieter glow, less gap */
+.about__current {
+  gap: var(--space-10);
+  margin-top: 0;
+  margin-bottom: var(--space-9);
+  max-width: 36ch;
+  text-align: left;
+  order: 1;
+}
+
+.about__avatar {
+  width: var(--space-40); /* Increased from space-32 for better mobile visibility */
+  height: var(--space-40);
+  margin: var(--space-3-5) auto var(--space-2);
+  align-self: center;
+}
+
+.about__avatar::before {
+  opacity: 0.44;
+}
+
+/* Tags: friendlier tap targets */
+.tag {
+  padding: var(--space-1-5) var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.about__tags {
+  margin-top: var(--space-3);
+  gap: var(--space-2) var(--space-2-5);
+}
+
+/* Background effects: reduce ambient noise */
+#about::before {
+  opacity: 0.12;
+} /* faint grid */
+#about .noise-overlay {
+  opacity: 0.02;
+}
+
+/* Mobile layout preserved - avatar/current block appears first via flexbox order */
+
+/* Current content styling for mobile */
+.about__current-content h3 {
+  margin-bottom: var(--space-1-5);
+  letter-spacing: 0.09em;
+}
+.about__current-content p {
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  margin: var(--space-2) 0;
+}
+.about__current-content .role-primary,
+.about__current-content .role-green,
+.about__current-content .role-yellow,
+.about__current-content .role-purple {
+  display: block;
+  line-height: 1.18;
+  margin-top: var(--space-0-5);
+  font-weight: 600;
+}
+.about__current-content .role-label {
+  opacity: 0.85;
+}
+.about__roles-meta .comma {
+  display: none;
+}
+/* Hide separator on mobile */
+.about__separator {
+  display: none;
+}
+
+/* Preserve desktop accent colors on mobile */
+.role-green {
+  color: var(--role-green);
+}
+.role-yellow {
+  color: var(--role-yellow);
+}
+.role-purple {
+  color: var(--role-purple);
+}
+
+/* Consolidated 640px media query */
+@media (min-width: 640px) {
+  .about__current {
+    --about-vignette-blur: var(--space-10);
+  }
+
+  /* Reset to desktop padding */
+  #about {
+    padding: var(--space-24) var(--space-6);
+    --about-avatar-blur: var(--space-4);
+  }
+
+  /* Header spacing on larger screens */
+  .about__header {
+    margin-bottom: var(--space-15);
+  }
+
+  /* Desktop body copy */
+  .about__intro {
+    font-size: var(--text-lg);
+    line-height: var(--leading-loose);
+    max-width: 58ch;
+    margin-bottom: var(--space-12);
+    margin-top: 0;
+  }
+
+  .about__intro-section {
+    margin-bottom: var(--space-8);
+  }
+
+  .about__subheading {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-4);
+  }
+
+  .about__intro p {
+    margin-bottom: var(--space-5);
+  }
+
+  /* Reset highlight style */
+  .about__intro .highlight {
+    border-bottom: var(--space-px) solid
+      color-mix(in oklch, var(--color-brand-secondary) 40%, var(--color-text-light));
+    text-decoration: none;
+    color: color-mix(in oklch, var(--color-text) 90%, transparent);
+  }
+
+  /* Desktop avatar and current layout */
+  .about__current {
+    grid-template-columns: calc(var(--space-40) * 1.125) 1fr; /* Desktop: side by side layout */
+    gap: var(--space-8); /* Merged from tablet-specific adjustments */
+    margin-bottom: var(--space-15);
+    max-width: var(--container-lg);
+    text-align: left;
+    order: initial;
+  }
+
+  .about__avatar {
+    width: calc(var(--space-40) * 1.125);
+    height: calc(var(--space-40) * 1.125);
+    margin: var(--space-0);
+    align-self: initial;
+  }
+
+  .about__avatar::before {
+    opacity: 0.5;
+  }
+
+  /* Desktop tags */
+  .tag {
+    padding: var(--space-1) var(--space-2-5);
+    font-size: calc(var(--space-3) * 0.917);
+  }
+
+  .about__tags {
+    margin-top: var(--space-4);
+    gap: var(--space-2);
+  }
+
+  /* Background effects: full intensity */
+  #about::before {
+    opacity: initial;
+  }
+  #about .noise-overlay {
+    opacity: initial;
+  }
+
+  /* Reset container layout */
+  #about .container {
+    display: block;
+  }
+  .about__header {
+    order: initial;
+  }
+  .about__intro {
+    order: initial;
+  }
+  /* Keep flexbox but reset order for tablets */
+  .about__content-wrapper .about__current {
+    order: initial;
+  }
+  .about__content-wrapper .about__intro {
+    order: initial;
+  }
+
+  /* Desktop current content styling */
+  .about__current-content h3 {
+    margin-bottom: var(--space-2);
+    letter-spacing: 0.1em;
+  }
+  .about__current-content p {
+    font-size: var(--text-xl);
+    line-height: var(--leading-snug);
+    margin: var(--space-0) var(--space-0) var(--space-4);
+  }
+  .about__current-content .role-primary,
+  .about__current-content .role-green,
+  .about__current-content .role-yellow,
+  .about__current-content .role-purple {
+    display: initial;
+    line-height: initial;
+    margin-top: initial;
+    font-weight: initial;
+  }
+  .about__current-content .role-label {
+    opacity: initial;
+  }
+  .about__roles-meta .comma {
+    display: initial;
+  }
+}
+
+/* Consolidated 768px media query */
+@media (min-width: 768px) {
+  #about {
+    padding: var(--space-32) var(--space-6);
+  }
+}
+
+/* ========================================
+   Desktop-only enhancements (≥1200px)
+   Conversion-focused improvements
+   ======================================== */
+
+/* Content wrapper - default mobile behavior with flexbox for reordering */
+.about__content-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.about__content-wrapper .about__current {
+  order: 1;
+}
+  .about__content-wrapper .about__intro {
+    order: 2;
+  }
+/* Place offer above intro on mobile/flex layout */
+.about__content-wrapper .about__offer {
+  order: 2;
+  margin-top: var(--space-8);
+}
+
+/* 1. Micro-CTA inside section */
+.about__bridge-cta {
+  display: block;
+}
+
+/* Bridge CTA spans full width on bottom row (after offer) */
+.about__content-wrapper .about__bridge-cta {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  order: 4; /* Place after offer on mobile */
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+@media (min-width: 1200px) {
+  /* Keep header separate */
+  .about__header {
+    margin-bottom: var(--space-16);
+  }
+
+  /* Create wrapper for two-column content with CTA on bottom - grid overrides flexbox */
+  .about__content-wrapper {
+    display: grid;
+    grid-template-columns: 1.4fr 420px;
+    grid-template-rows: auto auto auto; /* Offer, Intro, CTA row */
+    column-gap: var(--space-16);
+    row-gap: var(--space-10); /* Equal vertical rhythm */
+    align-items: start;
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* Reset flexbox order and apply grid positioning */
+  .about__content-wrapper .about__intro {
+    order: initial;
+    grid-column: 1;
+    grid-row: 2; /* below offer */
+    max-width: none;
+    margin: 0;
+  }
+
+  .about__content-wrapper .about__current {
+    order: initial;
+    grid-column: 2;
+    grid-row: 1 / span 2; /* Take rows 1 and 2 */
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin: 0;
+    padding: var(--space-6);
+    background: color-mix(in oklch, var(--color-surface) 88%, var(--color-text) 1%);
+    border: 1px solid color-mix(in oklch, var(--color-text) 5%, transparent);
+    border-radius: var(--radius-xl);
+    position: sticky;
+    top: calc(var(--space-20) + var(--space-12));
+    box-shadow: 0 4px 24px color-mix(in oklch, var(--color-text) 5%, transparent);
+  }
+
+  /* Offer sits above the intro (left column) */
+  .about__content-wrapper .about__offer {
+    grid-column: 1;
+    grid-row: 1;
+    margin-top: 0;
+  }
+
+  /* 1. Micro-CTA inside section */
+  .about__bridge-cta {
+    display: block;
+  }
+
+  /* Bridge CTA spans full width on bottom row after offer */
+  .about__content-wrapper .about__bridge-cta {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    order: initial;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  /* 2. Enhanced link styles */
+  .about__cta-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid transparent;
+    transition: all var(--duration-fast);
+  }
+
+  .about__cta-link:hover {
+    color: var(--color-brand-secondary);
+    border-bottom-color: var(--color-brand-secondary);
+  }
+
+  /* Mobile rules moved below (outside this desktop media block) */
+
+  /* 3. Stronger subheadings */
+  .about__subheading {
+    font-size: var(--text-base);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    margin-bottom: var(--space-5);
+    position: relative;
+    display: inline-block;
+  }
+
+  .about__subheading::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-primary), transparent);
+    opacity: 0.7;
+  }
+
+  /* 4. Purposeful skill chips with subtle interaction */
+  a.tag {
+    cursor: pointer;
+    text-decoration: none;
+    background: color-mix(in oklch, var(--color-text) 4%, transparent);
+    border-color: color-mix(in oklch, var(--color-text) 6%, transparent);
+    transition: all var(--duration-fast);
+  }
+
+  a.tag:hover {
+    background: color-mix(in oklch, var(--color-primary) 10%, transparent);
+    border-color: color-mix(in oklch, var(--color-primary) 20%, transparent);
+    transform: translateY(-1px);
+    color: var(--color-text);
+  }
+
+  /* 5. Refined spacing and rhythm */
+  .about__intro-section {
+    margin-bottom: var(--space-10);
+  }
+
+  .about__intro-section:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Remove comma, use middle dot separator */
+  .about__roles-meta .comma {
+    display: none;
+  }
+
+  /* Show separator on desktop */
+  .about__separator {
+    display: inline;
+  }
+}
+
+/* Mobile-only: hide bridge link arrow and dynamic hint */
+@media (max-width: 640px) {
+  /* Hide the inline arrow character next to the link */
+  .about__bridge-cta .about__cta-arrow,
+  .about__cta-link .about__cta-arrow,
+  span.about__cta-arrow {
+    display: none;
+  }
+
+  /* Hide the dynamic SVG hint arrow that points to the sticky CTA */
+  #cta-hint,
+  #cta-hint-arrow {
+    display: none !important;
+  }
+}
+
+/* Extra large desktop (≥1400px) - premium card layout option */
+@media (min-width: 1400px) {
+  /* Larger avatar on XL screens */
+  .about__avatar {
+    width: 140px;
+    height: 140px;
+  }
+
+  /* Increase avatar glow on larger screens */
+  .about__avatar::before {
+    opacity: 0.6;
+  }
+
+  /* Wider gap between columns */
+  .about__content-wrapper {
+    column-gap: var(--space-20);
+  }
+}

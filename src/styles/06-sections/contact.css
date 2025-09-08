@@ -1,0 +1,383 @@
+/* ========================================
+   Contact Section Styles
+   Following About section pattern exactly
+   ======================================== */
+
+/* Combined Contact Section Container */
+#contact {
+  position: relative;
+  z-index: var(--z-elevated);
+  padding: var(--space-18) var(--space-5) var(--space-24);
+  background: transparent;
+}
+
+@media (min-width: 768px) {
+  #contact {
+    padding: var(--space-32) var(--space-6) var(--space-32);
+  }
+}
+
+/* Content wrapper */
+#contact .container {
+  position: relative;
+  z-index: var(--z-sticky);
+  max-width: var(--container-xl);
+  margin: var(--space-0) auto;
+}
+
+/* Contact section heading */
+#contact h2 {
+  color: var(--color-neutral-100);
+  margin-bottom: var(--space-4);
+}
+
+/* Section Title - inherits all styles from .section__title in sections-base.css */
+
+/* Text-white and gradient styles handled in sections-base.css */
+
+/* Supporting text */
+.contact__supporting {
+  max-width: 64ch;
+  margin-inline: auto;
+  margin-bottom: var(--space-8);
+  color: var(--color-text); /* increase contrast for readability */
+  font-size: var(--text-lg);
+  text-align: center;
+}
+
+/* Social proof stats */
+.contact__stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-0) auto var(--space-8);
+  text-align: center;
+  max-width: fit-content;
+}
+
+@media (min-width: 768px) {
+  .contact__stats {
+    gap: var(--space-3);
+  }
+}
+
+.contact__stats .stat-item {
+  color: var(--color-text-light);
+  font-size: var(--text-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+  padding: var(--space-2) var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .contact__stats .stat-item {
+    font-size: var(--text-lg);
+  }
+}
+
+.stat-highlight {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.stat-icon {
+  color: var(--color-warning);
+  font-size: var(--text-xl);
+}
+
+/* Contact Actions Container */
+.contact__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  justify-content: center;
+  align-items: center;
+  margin: var(--space-8) auto;
+  max-width: 100%;
+}
+
+@media (min-width: 640px) {
+  .contact__actions {
+    flex-direction: row;
+    max-width: fit-content;
+  }
+}
+
+/* Action Item Container */
+.contact__action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 20rem;
+}
+
+@media (min-width: 640px) {
+  .contact__action-item {
+    width: auto;
+  }
+}
+
+/* Action Detail Text */
+.contact__action-detail {
+  font-size: var(--text-sm);
+  color: var(--color-text-light);
+  line-height: var(--leading-normal);
+  margin: 0;
+  text-align: center;
+}
+
+/* Buttons using design system */
+.contact__actions .button {
+  min-height: var(--space-12);
+  padding: var(--space-3) var(--space-8);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+/* Accessible focus styling for keyboard users */
+.contact__actions .button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--color-primary) 20%, transparent);
+  transition: all var(--transition-base);
+}
+
+@media (min-width: 640px) {
+  .contact__actions .button {
+    width: auto;
+    min-width: 18rem;
+  }
+}
+
+#contact .button--primary {
+  background: var(--brand-grad-cta);
+  color: white;
+  border: none;
+  box-shadow: var(--shadow-md);
+}
+
+#contact .button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+#contact .button--secondary {
+  background: var(--color-surface);
+  color: var(--color-primary); /* Brand color text for stronger presence */
+  border: calc(var(--space-px) * 1.5) solid var(--color-primary-200); /* Brand-colored border */
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  z-index: 1; /* Create stacking context for button */
+}
+
+/* Add subtle gradient overlay on hover */
+#contact .button--secondary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--color-primary) 5%, transparent),
+    color-mix(in oklch, var(--color-primary) 10%, transparent)
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: 0; /* Above button background, below text */
+  pointer-events: none;
+}
+
+#contact .button--secondary:hover {
+  background: var(--color-surface);
+  border-color: var(--color-primary); /* Stronger border on hover */
+  color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+#contact .button--secondary:hover::before {
+  opacity: 1;
+}
+
+/* Button labels and details */
+.contact__label {
+  display: block;
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+  position: relative; /* Ensure text stays above overlay */
+  z-index: 2; /* Above overlay */
+}
+
+.contact__detail {
+  display: block;
+  font-size: var(--text-sm);
+  opacity: 0.85;
+  position: relative; /* Ensure text stays above overlay */
+  z-index: 2; /* Above overlay */
+}
+
+/* Arrow */
+.arrow {
+  display: inline-block;
+  font-size: var(--text-xl);
+  line-height: var(--leading-normal);
+  transition: transform var(--transition-base);
+  position: relative;
+  z-index: 2; /* Above overlay */
+}
+
+.button:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Contact Info Box */
+.contact__info {
+  /* Fallback background for unsupported browsers */
+  background-color: var(--color-surface);
+  border: var(--space-px) solid var(--color-border);
+  /* Modern color-mix for supporting browsers */
+  background: color-mix(in oklch, var(--color-surface) 60%, transparent); /* More subtle background */
+  border: var(--space-px) solid color-mix(in oklch, var(--color-border) 30%, transparent); /* Softer border */
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-8); /* Add bottom margin for separation from forms */
+  max-width: 36rem;
+  margin-inline: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  /* Vendor-prefixed backdrop filter for older browsers */
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px); /* Slightly less blur for subtlety */
+}
+
+/* General contact info content styles */
+.contact__info p {
+  color: var(--color-text); /* non-link text should be easy to read */
+  margin-bottom: var(--space-2);
+}
+
+.contact__info a {
+  color: var(--color-primary); /* stronger link color */
+}
+
+.contact__info a:hover {
+  color: var(--color-primary-300);
+}
+
+/* Info Items */
+.contact__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.contact__info-item + .contact__info-item {
+  padding-top: var(--space-3);
+  border-top: var(--space-px) solid var(--color-border);
+}
+
+/* Info Label */
+.contact__info-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Email Link */
+.contact__email {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--text-lg);
+  transition: color var(--transition-base);
+}
+
+/* Slightly stronger on hover for feedback */
+.contact__email:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: var(--space-1);
+}
+
+/* Response Time */
+.contact__response-time {
+  color: var(--color-text);
+  font-size: var(--text-base);
+  margin: 0;
+}
+
+/* Availability */
+.contact__availability-text {
+  color: var(--color-text);
+  font-size: var(--text-base);
+  margin: 0;
+}
+
+.contact__availability {
+  color: var(--color-primary);
+  font-weight: 600;
+  display: inline;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  .contact__supporting {
+    font-size: var(--text-xl);
+  }
+}
+
+/* Forms subsection within contact */
+.contact__forms {
+  margin-top: var(--space-20); /* Increased from space-16 for better separation */
+  padding-top: var(--space-10); /* Increased from space-8 for more breathing room */
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .contact__forms {
+    margin-top: var(--space-24); /* Even more space on desktop */
+    padding-top: var(--space-12);
+  }
+}
+
+/* Accessibility: Disable animations for motion-sensitive users */
+@media (prefers-reduced-motion: reduce) {
+  /* Use higher specificity to override transitions without !important */
+  .contact__actions .button,
+  .contact__actions .button:hover,
+  .contact__actions .button:focus,
+  #contact .button--primary,
+  #contact .button--primary:hover,
+  #contact .button--primary:focus,
+  #contact .button--secondary,
+  #contact .button--secondary:hover,
+  #contact .button--secondary:focus,
+  #contact .button--secondary::before,
+  #contact .arrow {
+    transition: none;
+    transform: none;
+  }
+}

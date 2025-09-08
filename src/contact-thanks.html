@@ -6,6 +6,18 @@
     <title>Thank You - Jose Flores</title>
     <meta name="description" content="Thank you for your message. I'll get back to you within 24 hours.">
     <link rel="stylesheet" href="styles/main.css">
+    <script>
+        (function () {
+            var GA_ID = '{{GA_MEASUREMENT_ID}}';
+            if (!GA_ID || /\{\{.+\}\}/.test(GA_ID)) return;
+            var s = document.createElement('script'); s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID);
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);} window.gtag = gtag;
+            gtag('js', new Date()); gtag('config', GA_ID, { anonymize_ip: true, transport_type: 'beacon' });
+        })();
+    </script>
     <style>
         .thank-you-container {
             min-height: 100vh;
@@ -97,4 +109,5 @@
         </div>
     </div>
 </body>
+<script defer src="scripts/analytics.js"></script>
 </html>

@@ -2,8 +2,9 @@
   "name": "port8080folio-landing",
   "version": "1.0.0",
   "description": "Jose Flores - Technical Advisor Landing Page",
+  "type": "module",
   "scripts": {
-    "dev": "serve src -l 8080",
+    "dev": "tsc -p tsconfig.browser.json --outDir src --rootDir src --watch & serve src -l 8080",
     "serve:dist": "serve dist -l 8080",
     "dev:worker": "wrangler dev",
     "deploy:worker": "wrangler deploy",
@@ -11,27 +12,34 @@
     "lint": "biome lint --write src/",
     "check": "biome check --write src/",
     "check:ci": "biome check src/",
-    "clean": "rm -rf dist",
-    "copy:html": "node scripts/build-replace-vars.js dev",
-    "copy:html:prod": "node scripts/build-replace-vars.js production",
-    "copy:html:check": "node scripts/build-replace-vars.js dev --dry-run",
-    "copy:html:check:prod": "node scripts/build-replace-vars.js production --dry-run",
-    "copy:assets": "mkdir -p dist/assets && cp -r src/assets/* dist/assets/ 2>/dev/null || true",
-    "build:js": "mkdir -p dist/scripts && esbuild src/scripts/pe-enhanced-v3.js --minify --format=iife --target=es2017 --outfile=dist/scripts/pe-min-v3.js",
-    "build:css": "mkdir -p dist/styles && lightningcss --minify --bundle --targets '>= 0.25%' src/styles/main.css -o dist/styles/main.css",
+    "clean": "npx shx rm -rf dist",
+    "copy:html": "tsx scripts/build-replace-vars.ts dev",
+    "copy:html:prod": "tsx scripts/build-replace-vars.ts production",
+    "copy:html:check": "tsx scripts/build-replace-vars.ts dev --dry-run",
+    "copy:html:check:prod": "tsx scripts/build-replace-vars.ts production --dry-run",
+    "copy:assets": "node -e \"import { access, cp, mkdir } from 'fs/promises'; import { constants } from 'fs'; (async () => { try { await access('src/assets', constants.R_OK); await mkdir('dist/assets', { recursive: true }); await cp('src/assets', 'dist/assets', { recursive: true }); } catch (e) { if (e.code !== 'ENOENT') { console.error(e); process.exit(1); } } })();\"",
+    "build:js": "npx shx mkdir -p dist/scripts && esbuild src/scripts/pe.ts src/scripts/theme-toggle.ts src/scripts/analytics.js --bundle --minify --format=iife --target=es2017 --outdir=dist/scripts --entry-names=[name]",
+    "build:css": "npx shx mkdir -p dist/styles && lightningcss --minify --bundle --targets \">=0.25%\" src/styles/main.css -o dist/styles/main.css",
     "build:html": "npx html-minifier-terser --input-dir dist --output-dir dist --file-ext html --collapse-whitespace --remove-comments --minify-css true --minify-js true",
-    "build": "npm run clean && mkdir -p dist && npm run copy:html && npm run copy:assets && npm run build:css && npm run build:js && npm run build:html",
-    "build:prod": "npm run clean && mkdir -p dist && npm run copy:html:prod && npm run copy:assets && npm run build:css && npm run build:js && npm run build:html",
-    "watch:css": "mkdir -p dist/styles && lightningcss --bundle --targets '>= 0.25%' --watch --sourcemap src/styles/main.css -o dist/styles/main.css",
+    "build": "npm run clean && npx shx mkdir -p dist && npm run copy:html && npm run copy:assets && npm run build:css && npm run build:js && npm run build:html",
+    "build:prod": "npm run clean && npx shx mkdir -p dist && npm run copy:html:prod && npm run copy:assets && npm run build:css && npm run build:js && npm run build:html",
+    "watch:css": "echo 'Tip: dev serves src/ directly; no CSS bundling/watch needed.'",
+    "watch:js": "echo 'Tip: dev compiles TS -> JS via tsc --watch.'",
+    "watch:html": "echo 'Tip: dev uses placeholders; dev-env.js sets endpoints locally.'",
     "test:lighthouse": "lighthouse http://localhost:8080 --output=json,html --output-path=./lighthouse-report --preset=perf --view",
     "test:fouc": "lighthouse http://localhost:8080 --output=json --output-path=./fouc-test --only-categories=performance --throttling.cpuSlowdownMultiplier=6"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",
+    "@cloudflare/workers-types": "^4.20240925.0",
+    "@std/toml": "npm:@jsr/std__toml@^1.0.9",
+    "@types/node": "^24.3.0",
     "esbuild": "^0.25.0",
     "html-minifier-terser": "^7.2.0",
     "lightningcss-cli": "^1.30.1",
     "serve": "^14.2.4",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
     "wrangler": "^4.32.0"
   },
   "engines": {
@@ -44,5 +52,8 @@
     "static-site"
   ],
   "author": "Jose Flores",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "valibot": "^1.1.0"
+  }
 }

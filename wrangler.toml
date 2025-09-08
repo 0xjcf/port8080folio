@@ -1,5 +1,6 @@
 name = "website-forms"
-main = "worker.js"
+main = "worker.ts"
+tsconfig = "tsconfig.worker.json"
 compatibility_date = "2025-08-21"
 workers_dev = true
 
@@ -7,6 +8,7 @@ workers_dev = true
 [vars]
 # Dev mode: worker.js treats ENV!="prod" as mock (no external API calls)
 ENV = "dev"
+GA_MEASUREMENT_ID = "" # Optional: set to enable GA4 locally
 
 # Your local static server origin used in same-origin checks
 SITE_URL = "http://127.0.0.1:8080"
@@ -41,6 +43,7 @@ workers_dev = true
 [env.production.vars]
 ENV = "prod"
 SITE_URL = "https://0xjcf.github.io/port8080folio"
+GA_MEASUREMENT_ID = "G-5TR1LWNXXY"                                                                 # Fill with your GA4 Measurement ID (e.g., G-XXXXXXX)
 CONTACT_FORM_URL = "https://0xjcf.github.io/port8080folio/#contact-form"
 CONTACT_THANKS_URL = "https://0xjcf.github.io/port8080folio/contact-thanks.html"
 NEWSLETTER_FORM_URL = "https://0xjcf.github.io/port8080folio/#newsletter-form"

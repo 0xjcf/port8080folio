@@ -25,6 +25,7 @@ ol[role="list"] {
 /* Set core root defaults */
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 /* Set core body defaults */
@@ -60,14 +61,6 @@ select {
   font: inherit;
 }
 
-/* Remove font size adjustment in iOS */
-input,
-button,
-textarea,
-select {
-  -webkit-text-size-adjust: 100%;
-}
-
 /* Remove button styling */
 button {
   background: transparent;
@@ -84,9 +77,9 @@ button {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms;
+    animation-duration: 0s;
     animation-iteration-count: 1;
-    transition-duration: 0.01ms;
+    transition-duration: 0s;
     scroll-behavior: auto;
   }
 }
@@ -94,10 +87,10 @@ button {
 /* Screen reader only class */
 .sr-only {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: var(--space-px, 1px);
+  height: var(--space-px, 1px);
   padding: 0;
-  margin: -1px;
+  margin: calc(var(--space-px, 1px) * -1);
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -133,6 +126,6 @@ table {
 
 /* Focus visible for better accessibility */
 :focus-visible {
-  outline: 2px solid var(--color-primary, oklch(61.2% 0.213 255));
-  outline-offset: 2px;
+  outline: var(--focus-outline-width, 2px) solid var(--focus-outline-color, #0066cc);
+  outline-offset: var(--focus-outline-offset, 2px);
 }

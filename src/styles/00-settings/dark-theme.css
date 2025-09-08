@@ -1,0 +1,1010 @@
+/* ========================================
+   Dark Theme 
+   Aggressive black/red/orange color scheme
+   ======================================== */
+
+/* Modern CSS for browsers that support color-mix() - dark theme specific */
+@supports (color: color-mix(in oklch, red, blue)) {
+  [data-theme="dark"] {
+    /* Borders */
+    --color-border: color-mix(in oklch, var(--color-invalid) 20%, transparent);
+    --color-border-hover: oklch(0.61 0.24 25 / 0.4);
+
+    /* Shadows with red glow */
+    --shadow-sm: 0 var(--space-px) var(--space-0-5) oklch(0.61 0.24 25 / 0.05);
+    --shadow-md: 0 var(--space-1) var(--space-3)
+      color-mix(in oklch, var(--color-invalid) 10%, transparent);
+    --shadow-lg: 0 var(--space-2-5) 25px oklch(0.61 0.24 25 / 0.15);
+    --shadow-xl: 0 25px 50px color-mix(in oklch, var(--color-invalid) 20%, transparent);
+    --shadow-glow: 0 0 30px color-mix(in oklch, var(--color-invalid) 30%, transparent);
+  }
+}
+
+/* Dark theme styles (activated by data attribute) */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Dark theme colors */
+  --color-background: oklch(0 0 0);
+  --color-surface-elevated: var(--color-neutral-900);
+  --color-text-primary: var(--color-neutral-000);
+  --color-text-secondary: var(--color-neutral-400);
+
+  /* Update all color variables */
+  --color-primary: var(--color-brand-primary, oklch(0.75 0.18 55));
+  --color-primary-dark: oklch(0.52 0.25 25);
+  --color-primary-light: oklch(0.73 0.19 25);
+
+  --color-secondary: oklch(0.75 0.18 55);
+  --color-secondary-dark: oklch(0.63 0.22 45);
+  --color-secondary-light: oklch(0.82 0.15 55);
+
+  --color-accent: oklch(0.86 0.18 90);
+
+  /* Borders - fallbacks for older browsers */
+  --color-border: rgba(255, 77, 0, 0.2); /* Fallback for color-mix */
+  --color-border-hover: rgba(255, 77, 0, 0.4); /* Fallback for oklch with alpha */
+
+  /* Shadows with red glow - fallbacks for older browsers */
+  --shadow-sm: 0 var(--space-px) var(--space-0-5) rgba(255, 77, 0, 0.05);
+  --shadow-md: 0 var(--space-1) var(--space-3) rgba(255, 77, 0, 0.1);
+  --shadow-lg: 0 var(--space-2-5) 25px rgba(255, 77, 0, 0.15);
+  --shadow-xl: 0 25px 50px rgba(255, 77, 0, 0.2);
+  --shadow-glow: 0 0 30px rgba(255, 77, 0, 0.3);
+
+  /* Map dark theme to design-token keys used across the site */
+  --color-text: var(--color-text-primary);
+  --color-text-light: var(--color-text-secondary);
+  --color-text-muted: var(--color-neutral-500);
+
+  /* Keep the same neutral token NAMES as light mode so components don't break */
+  --color-neutral-000: oklch(96% 0 0);
+  --color-neutral-050: oklch(90% 0 0);
+  --color-neutral-100: oklch(84% 0 0);
+  --color-neutral-200: oklch(76% 0 0);
+  --color-neutral-300: oklch(68% 0 0);
+  --color-neutral-400: oklch(44% 0 0);
+  --color-neutral-500: oklch(53.5% 0.019 247);
+  --color-neutral-600: oklch(33% 0 0);
+  --color-neutral-700: oklch(22% 0 0);
+  --color-neutral-800: oklch(14.8% 0.013 247);
+  --color-neutral-900: oklch(14.8% 0.013 247);
+  --color-neutral-950: oklch(6.5% 0.013 247);
+
+  /* Also update surface colors for cards/components */
+  --color-surface: var(--color-neutral-900);
+  --color-surface-alt: var(--color-neutral-800);
+
+  /* Background and text color application */
+  background: oklch(0 0 0);
+  color: var(--color-text-primary);
+  
+  /* Create stacking context on body */
+  position: relative;
+  z-index: 0;
+}
+
+/* ================================================
+   Seamless Canvas Background
+   One continuous backdrop for all sections
+   ================================================ */
+
+/* Apply unified canvas background to body */
+[data-theme="dark"] body {
+  /* Single continuous gradient stage */
+  background:
+    /* Top glow - subtle warm accent */
+    radial-gradient(60rem 32rem at 50% -10rem, oklch(0.61 0.24 25 / 0.10), transparent 60%),
+    /* Bottom glow - softer ambient */
+    radial-gradient(80rem 40rem at 50% 110%, oklch(0.75 0.18 55 / 0.06), transparent 55%),
+    /* Base gradient */
+    linear-gradient(to bottom, 
+      oklch(0 0 0),           /* Deepest background at top */
+      oklch(0.06 0.013 247)   /* Slight lift at bottom */
+    );
+}
+
+/* Subtle noise overlay to prevent gradient banding */
+[data-theme="dark"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+/* Let the hero's own layers (bg-grad/grid/vignette/glows) render the BG */
+[data-theme="dark"] #hero {
+  background: transparent;
+}
+
+/* ================================================
+   Seamless Section Blending
+   Sections inherit canvas, with edge fading
+   ================================================ */
+
+/* Make all sections transparent to show unified canvas */
+[data-theme="dark"] .section {
+  background: transparent;
+  position: relative;
+  /* Remove any shadows that create visible seams */
+  box-shadow: none;
+  filter: none;
+  border: none;
+}
+
+/* Seamless edge fading using mask for smooth transitions */
+[data-theme="dark"] .section--hero,
+[data-theme="dark"] .section--proof,
+[data-theme="dark"] .section--about {
+  /* Fade top and bottom edges into shared canvas */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 64px,
+    black calc(100% - 64px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 64px,
+    black calc(100% - 64px),
+    transparent 100%
+  );
+  /* Consistent vertical rhythm */
+  padding-block: clamp(6rem, 12vh, 10rem);
+  scroll-margin-top: 12vh;
+}
+
+/* Hero section special case - only fade bottom */
+[data-theme="dark"] .section--hero {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0,
+    black calc(100% - 96px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0,
+    black calc(100% - 96px),
+    transparent 100%
+  );
+}
+
+/* About section - fade both edges for seamless blend */
+[data-theme="dark"] #about,
+[data-theme="dark"] #contact {
+  border-top: 0;
+  background: transparent;
+}
+
+/* Let components decide when to use text-shadow */
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+  color: var(--color-text-primary);
+  /* text-shadow removed - components handle their own shadows */
+}
+
+/* h1 handled by hero section - no global text-shadow */
+[data-theme="dark"] h1 {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .name {
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(
+    0 var(--space-0-5) var(--space-1) color-mix(in oklch, var(--color-invalid) 30%, transparent)
+  );
+}
+
+[data-theme="dark"] .hero__title {
+  color: var(--color-brand-primary);
+}
+
+[data-theme="dark"] .hero__tagline {
+  color: var(--color-neutral-400);
+}
+
+/* Dark theme cards - Keep elevation only on cards, not sections */
+[data-theme="dark"] .service-card,
+[data-theme="dark"] .highlight-card,
+[data-theme="dark"] .form-card {
+  background: color-mix(in oklch, var(--color-neutral-900) 92%, var(--color-neutral-000) 8%);
+  border: var(--space-px) solid rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-xl);
+  /* Crisp box-shadow instead of filter for better performance */
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 8px 24px rgba(0, 0, 0, 0.55),
+    0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .service-card:hover,
+[data-theme="dark"] .highlight-card:hover,
+[data-theme="dark"] .form-card:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 12px 32px rgba(0, 0, 0, 0.65),
+    0 32px 80px rgba(0, 0, 0, 0.55);
+  transform: var(--transform-lift-md);
+}
+
+/* ================================================
+   CTA Focal Glow
+   Amplify glow around key CTAs for conversion
+   ================================================ */
+
+/* Add focal glow to primary CTAs */
+[data-theme="dark"] .cta-animated {
+  position: relative;
+}
+
+[data-theme="dark"] .cta-animated::before {
+  content: "";
+  position: absolute;
+  inset: auto -20% -200% -20%;
+  height: 260px;
+  pointer-events: none;
+  background: radial-gradient(40rem 16rem at 50% 100%, oklch(0.61 0.24 25 / 0.15), transparent 65%);
+  filter: blur(6px);
+  z-index: -1;
+}
+
+/* Dark theme buttons */
+[data-theme="dark"] .button--primary {
+  /* Match light theme gradient direction */
+  background: linear-gradient(90deg, oklch(0.7 0.2 25), oklch(0.82 0.15 55));
+  border: var(--space-0-5) solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  color: oklch(0.08 0 0); /* Near-black for accessibility - matches light theme */
+  /* Match light theme - no text-shadow */
+  text-shadow: none;
+  /* Match light theme font-weight */
+  font-weight: 600;
+  /* Match light theme - no letter-spacing */
+  letter-spacing: normal;
+}
+
+[data-theme="dark"] .button--primary:hover {
+  box-shadow: var(--shadow-glow);
+  color: oklch(0.08 0 0); /* Keep same accessible color on hover */
+  transform: var(--transform-lift-sm);
+}
+
+[data-theme="dark"] .button--secondary {
+  background: transparent;
+  border: var(--space-0-5) solid var(--color-brand-primary);
+  color: var(--color-brand-primary);
+}
+
+[data-theme="dark"] .button--secondary:hover {
+  background: var(--color-border); /* Use existing border variable for subtle background */
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-md);
+}
+
+/* Dark theme forms */
+[data-theme="dark"] .contact__forms {
+  background: transparent;
+  padding: 4rem 0;
+}
+
+[data-theme="dark"] .forms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-min-feature), 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+[data-theme="dark"] .form-card {
+  padding: 2rem;
+  border-radius: var(--space-3);
+  position: relative;
+  overflow: hidden;
+  background: var(--color-neutral-900);
+}
+
+[data-theme="dark"] .form-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--space-1);
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
+}
+
+[data-theme="dark"] .contact-form-card {
+  border-color: color-mix(in oklch, var(--color-invalid) 30%, transparent);
+}
+
+[data-theme="dark"] .newsletter-form-card {
+  border-color: oklch(0.75 0.18 55 / 0.3);
+}
+
+[data-theme="dark"] .newsletter-form-card::before {
+  background: linear-gradient(90deg, var(--color-brand-primary), oklch(61% 0.24 25));
+}
+
+[data-theme="dark"] .form-icon {
+  width: var(--space-12);
+  height: var(--space-12);
+  border-radius: 50%;
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 30px color-mix(in oklch, var(--color-invalid) 30%, transparent);
+}
+
+[data-theme="dark"] .form-icon svg {
+  color: white;
+}
+
+[data-theme="dark"] .newsletter-icon {
+  background: linear-gradient(135deg, oklch(0.75 0.18 55), oklch(0.86 0.18 90));
+}
+
+[data-theme="dark"] .form-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--color-neutral-000);
+}
+
+[data-theme="dark"] .form-group {
+  margin-bottom: 1.5rem;
+}
+
+[data-theme="dark"] .form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--color-neutral-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+}
+
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: oklch(0 0 0 / 0.5);
+  border-width: var(--space-0-5);
+  border-style: solid;
+  border-radius: var(--space-2);
+  color: var(--color-neutral-000);
+  font-size: 1rem;
+  transition: var(--transition-base) ease;
+}
+
+/* Dark theme focus - only set background, let validation styles handle borders */
+[data-theme="dark"] .form-input:focus:not(.touched):not(:invalid),
+[data-theme="dark"] .form-textarea:focus:not(.touched):not(:invalid) {
+  outline: none;
+  background: oklch(0 0 0 / 0.7);
+}
+
+/* Default focus for empty/untouched fields in dark theme - only applies to valid states */
+[data-theme="dark"] .form-input:focus:placeholder-shown:not(.touched):not(:invalid),
+[data-theme="dark"] .form-textarea:focus:placeholder-shown:not(.touched):not(:invalid) {
+  background: oklch(0 0 0 / 0.7);
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 calc(var(--space-1) * 0.75) var(--color-brand-primary-10);
+}
+
+/* Dark theme validation states - higher specificity than focus to ensure precedence */
+[data-theme="dark"] html.js-enabled .form-input.touched:valid,
+[data-theme="dark"] html.js-enabled .form-textarea.touched:valid,
+[data-theme="dark"] html.js-enabled .pe-form.was-validated .form-input:valid,
+[data-theme="dark"] html.js-enabled .pe-form.was-validated .form-textarea:valid {
+  border-color: var(--color-success);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-success) 22%, transparent);
+}
+
+[data-theme="dark"] html.js-enabled .form-input.touched.blurred:invalid,
+[data-theme="dark"] html.js-enabled .form-textarea.touched.blurred:invalid,
+[data-theme="dark"] html.js-enabled .pe-form.was-validated .form-input:invalid,
+[data-theme="dark"] html.js-enabled .pe-form.was-validated .form-textarea:invalid {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-error) 22%, transparent);
+}
+
+[data-theme="dark"] .form-input::placeholder,
+[data-theme="dark"] .form-textarea::placeholder {
+  color: oklch(60% 0 0);
+}
+
+[data-theme="dark"] .form-textarea {
+  resize: vertical;
+  min-height: var(--space-30);
+}
+
+[data-theme="dark"] .button--full {
+  width: 100%;
+  justify-content: center;
+}
+
+[data-theme="dark"] .button-icon {
+  margin-left: 0.5rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+[data-theme="dark"] .newsletter__intro {
+  /* Match light theme margin-bottom */
+  margin-bottom: var(--space-3); /* 12px to match light theme */
+}
+
+[data-theme="dark"] .newsletter__intro p {
+  color: var(--color-neutral-400);
+  margin-bottom: 1rem;
+}
+
+[data-theme="dark"] .newsletter__benefits {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+[data-theme="dark"] .newsletter__benefits li {
+  /* Match light theme padding - only padding-left */
+  padding: 0;
+  padding-left: var(--space-5); /* 20px to match light theme */
+  position: relative;
+  color: var(--color-neutral-400);
+}
+
+[data-theme="dark"] .newsletter__benefits li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: oklch(0.75 0.18 55);
+  font-weight: bold;
+}
+
+[data-theme="dark"] .form-note {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--color-neutral-500);
+  font-size: 0.875rem;
+}
+
+/* Dark theme footer */
+[data-theme="dark"] .footer {
+  background: transparent;
+  border-top: none;
+  box-shadow: none;
+}
+
+[data-theme="dark"] .footer a {
+  color: var(--color-neutral-400);
+  transition: color var(--duration-base) ease;
+}
+
+[data-theme="dark"] .footer a:hover {
+  color: oklch(61% 0.24 25);
+  text-shadow: 0 0 var(--space-2-5) oklch(0.61 0.24 25 / 0.5);
+}
+
+/* Let sections/typography decide exact tone; the body already has a base color */
+/* Removed global p, li override to allow sections to control their own text colors */
+
+/* Ensure hero gradient text always wins */
+[data-theme="dark"] .name .gradient {
+  background-image: var(--brand-grad-text); /* Use token for consistency */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Utility overrides: ensure explicit black text flips to white in dark mode */
+[data-theme="dark"] .text-black {
+  color: var(--color-neutral-000);
+  /* Needed because the hero name uses text fill/clip for gradients */
+  -webkit-text-fill-color: var(--color-neutral-000);
+}
+
+[data-theme="dark"] .section-subtitle {
+  color: var(--color-neutral-400);
+}
+
+/* Mobile-first: Base styles already handle mobile layout */
+/* Forms grid is 1fr by default, form-card has mobile padding */
+
+/* Fix contact forms container padding */
+[data-theme="dark"] .contact__forms {
+  /* Remove extra padding that doesn't exist in light theme */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Desktop adjustments for dark theme */
+@media (min-width: 768px) {
+  [data-theme="dark"] .form-card {
+    /* Desktop padding inherited from contact-forms.css */
+    padding: var(--space-8);
+  }
+}
+
+/* ================================================
+   About Section - Offer Cards Dark Theme
+   ================================================ */
+
+/* Fix about section padding to match light theme */
+[data-theme="dark"] .section--about {
+  padding: var(--space-32) var(--space-5); /* Match light theme 128px padding */
+}
+
+[data-theme="dark"] .offer-card {
+  background: var(--color-neutral-900);
+  border: var(--space-px) solid var(--color-border);
+  box-shadow: 0 6px 24px oklch(0.61 0.24 25 / 0.08);
+}
+
+[data-theme="dark"] .offer-toggle {
+  background: oklch(0 0 0 / 0.4);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .offer-toggle__btn {
+  color: var(--color-neutral-400);
+  transition: all var(--transition-base) ease;
+}
+
+/* Active toggle button states */
+[data-theme="dark"] .about__segment-toggle:has(#seg-sb:checked) + .about__content-wrapper .about__offer .offer-toggle .offer-toggle__btn--sb,
+[data-theme="dark"] #about.about--seg-sb .offer-toggle .offer-toggle__btn--sb,
+[data-theme="dark"] .about__segment-toggle:has(#seg-pt:checked) + .about__content-wrapper .about__offer .offer-toggle .offer-toggle__btn--pt,
+[data-theme="dark"] #about.about--seg-pt .offer-toggle .offer-toggle__btn--pt {
+  background: var(--color-neutral-800);
+  color: var(--color-neutral-000);
+  box-shadow: 0 1px 6px oklch(0.61 0.24 25 / 0.15);
+}
+
+[data-theme="dark"] .offer-eyebrow {
+  color: var(--color-neutral-500);
+}
+
+[data-theme="dark"] .offer-title {
+  color: var(--color-neutral-000);
+}
+
+[data-theme="dark"] .offer-list {
+  color: var(--color-neutral-200);
+}
+
+[data-theme="dark"] .offer-outcome {
+  color: var(--color-neutral-400);
+}
+
+[data-theme="dark"] .offer-subtle {
+  color: var(--color-neutral-500);
+}
+
+[data-theme="dark"] .offer-link {
+  color: var(--color-brand-primary);
+  text-decoration: underline;
+  text-underline-offset: var(--space-0-5);
+}
+
+[data-theme="dark"] .offer-link:hover {
+  color: oklch(0.75 0.18 55);
+  text-shadow: 0 0 var(--space-3) oklch(0.61 0.24 25 / 0.4);
+}
+
+/* Fix offer CTA button to match light theme styling */
+[data-theme="dark"] .offer-cta.button--primary {
+  /* Match light theme gradient direction and colors */
+  background: linear-gradient(90deg, oklch(0.75 0.18 55) 0%, oklch(0.704 0.191 22.216) 50%, oklch(0.75 0.18 55) 100%);
+  /* Use accessible text color */
+  color: oklch(0.08 0 0);
+  /* Match light theme font-weight */
+  font-weight: 600;
+  /* Remove text-shadow that doesn't exist in light theme */
+  text-shadow: none;
+  /* Remove letter-spacing that doesn't exist in light theme */
+  letter-spacing: normal;
+  /* Match light theme shadow */
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .offer-cta.button--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Labor details in offer cards */
+[data-theme="dark"] .offer-card details.labor {
+  background: oklch(0 0 0 / 0.3);
+  border: var(--space-px) dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+[data-theme="dark"] .offer-card details.labor summary {
+  color: var(--color-neutral-200);
+  position: relative;
+  /* Remove extra padding-left to match light theme */
+  padding-left: 0;
+}
+
+/* Arrow for offer cards details */
+[data-theme="dark"] .offer-card details.labor > summary::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--color-neutral-500);
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+[data-theme="dark"] .offer-card details.labor[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+[data-theme="dark"] .offer-card details.labor ul {
+  color: var(--color-neutral-400);
+  margin-left: var(--space-5);
+  padding-left: 0;
+}
+
+/* ================================================
+   Services Section - Alt Layout Dark Theme
+   ================================================ */
+
+[data-theme="dark"] .service-card-std {
+  background: var(--color-neutral-900);
+  border-color: var(--color-border);
+  transition: all var(--transition-base) ease;
+}
+
+[data-theme="dark"] .service-card-std:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: 0 12px 28px oklch(0.61 0.24 25 / 0.12);
+}
+
+[data-theme="dark"] .service-card-std.is-popular {
+  box-shadow: 0 12px 28px oklch(0.61 0.24 25 / 0.18);
+}
+
+[data-theme="dark"] .service-card-std .card-badge {
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
+  color: var(--color-neutral-000);
+}
+
+[data-theme="dark"] .service-card-std header h3 {
+  color: var(--color-neutral-000);
+}
+
+[data-theme="dark"] .service-card-std .one-liner {
+  color: var(--color-neutral-400);
+}
+
+[data-theme="dark"] .service-card-std .kv dt {
+  color: var(--color-neutral-500);
+}
+
+[data-theme="dark"] .service-card-std .kv dd {
+  color: var(--color-neutral-200);
+}
+
+[data-theme="dark"] .service-card-std .proof {
+  color: var(--color-neutral-400);
+  border-left-color: oklch(0.61 0.24 25 / 0.3);
+}
+
+[data-theme="dark"] .service-card-std details.labor {
+  background: oklch(0 0 0 / 0.4);
+  border: var(--space-px) dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+[data-theme="dark"] .service-card-std details.labor summary {
+  color: var(--color-neutral-200);
+  position: relative;
+  padding-left: var(--space-5);
+}
+
+/* Arrow for service cards details */
+[data-theme="dark"] .service-card-std details.labor > summary::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--color-neutral-500);
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+[data-theme="dark"] .service-card-std details.labor[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+[data-theme="dark"] .service-card-std details.labor ul {
+  color: var(--color-neutral-400);
+  margin: var(--space-2) 0 0 var(--space-5);
+  padding-left: 0;
+}
+
+[data-theme="dark"] .service-card-std details.labor li {
+  margin: var(--space-1) 0;
+  font-size: calc(var(--text-sm) * 0.97);
+  line-height: 1.55;
+}
+
+[data-theme="dark"] .service-card-std .btn-cta {
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
+  color: var(--color-neutral-000);
+  border-color: transparent;
+}
+
+[data-theme="dark"] .service-card-std .btn-cta:hover {
+  box-shadow: 0 0 20px oklch(0.61 0.24 25 / 0.3);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .service-card-std .mini-proof {
+  color: var(--color-neutral-500);
+}
+
+/* Services segment toggle pills */
+[data-theme="dark"] .services-alt .seg-toggle .pill {
+  background: oklch(0 0 0 / 0.4);
+  border-color: var(--color-border);
+  color: var(--color-neutral-400);
+}
+
+[data-theme="dark"] .services-alt .seg-toggle .pill.active {
+  background: var(--color-neutral-800);
+  color: var(--color-neutral-000);
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 2px 8px oklch(0.61 0.24 25 / 0.2);
+}
+
+/* ================================================
+   Trust Bar & Proof Section Dark Theme
+   ================================================ */
+
+/* Testimonial card with floating elevation */
+[data-theme="dark"] .hero__testimonial {
+  background: color-mix(in oklch, var(--color-neutral-900) 92%, var(--color-neutral-000) 8%);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 8px 24px rgba(0, 0, 0, 0.55),
+    0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+/* Increase brightness on testimonial quotes */
+[data-theme="dark"] .testimonial-text {
+  color: oklch(88% 0 0 / 0.95);
+}
+
+[data-theme="dark"] .testimonial-attribution {
+  color: var(--color-neutral-400);
+  opacity: 0.6;
+}
+
+[data-theme="dark"] .testimonial-cta {
+  color: var(--color-neutral-300);
+}
+
+[data-theme="dark"] .testimonial-cta a {
+  color: var(--color-brand-primary);
+  text-decoration: underline;
+  text-underline-offset: var(--space-0-5);
+}
+
+/* Trust bar container - maintain exact grid layout and positioning */
+[data-theme="dark"] .trust {
+  background: var(--color-neutral-900);
+  border: var(--space-px) solid var(--color-border);
+  border-right: none;
+  border-radius: var(--radius-xl);
+  position: relative;
+  height: 100%;
+  overflow: visible;
+  /* Maintain the exact grid layout from light mode */
+  display: grid;
+  grid-template-columns: minmax(220px, 260px) var(--space-px) 1fr auto;
+  align-items: start;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-6);
+}
+
+[data-theme="dark"] .trust--cred {
+  background: var(--color-neutral-900);
+  border: var(--space-px) solid var(--color-border);
+  border-right: none;
+}
+
+[data-theme="dark"] .trust__chips li {
+  background: oklch(0.148 0.013 247);  /* Match the exact dark background */
+  border: var(--space-px) solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-neutral-200);
+  box-shadow: 0 2px 8px oklch(0 0 0 / 0.3);
+  padding: var(--space-1-5) var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  font-size: var(--text-sm);
+  width: 100%;
+}
+
+/* Trust cards - no background, just flex container */
+[data-theme="dark"] .trust__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  /* No background or padding - cards flow naturally in the grid */
+}
+
+/* Subtle inner shadows for dividers instead of borders */
+[data-theme="dark"] .hero__trust-logos {
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+[data-theme="dark"] .trust__chips .tic {
+  color: var(--color-success);
+}
+
+[data-theme="dark"] .trust__divider {
+  background: var(--color-border);
+  opacity: 0.5;
+}
+
+[data-theme="dark"] .trust__cards .q {
+  color: var(--color-neutral-000);
+}
+
+[data-theme="dark"] .trust__cards .byline {
+  color: var(--color-neutral-400);
+}
+
+/* Reset name styles inside trust bar to prevent hero gradient bleeding */
+[data-theme="dark"] .trust__cards .name,
+[data-theme="dark"] .trust .byline .name {
+  /* Override any gradient text styles */
+  background: none;
+  background-image: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: initial;
+  filter: none;
+  color: var(--color-neutral-200);
+  /* Maintain proper typography */
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.3;
+  margin: 0;
+  display: inline;
+}
+
+[data-theme="dark"] .trust__cards .org {
+  color: var(--color-neutral-500);
+}
+
+[data-theme="dark"] .trust__card + .trust__card {
+  border-top-color: var(--color-border);
+}
+
+/* CTA button - maintain absolute positioning at bottom right */
+[data-theme="dark"] .trust__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+  position: absolute;
+  z-index: var(--z-sticky, 2);
+  align-self: end;
+  bottom: var(--space-4);
+  right: var(--space-4);
+}
+
+[data-theme="dark"] .trust .btn-ghost {
+  display: inline-block;
+  font-weight: 700;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
+  border: var(--space-px) solid transparent;
+  color: var(--color-neutral-000);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: box-shadow var(--transition-base), transform 180ms ease;
+  will-change: transform, box-shadow;
+}
+
+[data-theme="dark"] .trust .btn-ghost:hover {
+  border-color: transparent;
+  color: var(--color-neutral-000);
+  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15), 0 0 25px oklch(0.61 0.24 25 / 0.4);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .trust .btn-ghost:focus-visible {
+  outline: var(--space-0-5) solid color-mix(in oklch, var(--color-primary) 40%, transparent);
+  outline-offset: var(--space-1);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Micro text under button */
+[data-theme="dark"] .trust .micro {
+  font-size: var(--text-xs);
+  color: var(--color-neutral-400);
+  margin-top: var(--space-2);
+  text-align: right;
+}
+
+/* ================================================
+   Proof Section Adjustments in Dark Mode  
+   ================================================ */
+
+[data-theme="dark"] .section--proof {
+  /* Maintain consistent padding with light theme */
+  padding: var(--space-10) var(--space-4);
+  /* Remove any inherited background that affects layout */
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Fix testimonial card padding to match light theme */
+[data-theme="dark"] .hero__testimonial {
+  /* Match light theme padding of 20px (var(--space-5)) */
+  padding: var(--space-5) var(--space-6);
+}
+
+/* Fix trust logos to match light theme exactly */  
+[data-theme="dark"] .hero__trust-logos {
+  /* Remove extra margin-bottom that doesn't exist in light theme */
+  margin-bottom: 0;
+  /* Remove padding-bottom that doesn't exist in light theme */
+  padding-bottom: 0;
+  /* Remove box-shadow that doesn't exist in light theme */
+  box-shadow: none;
+}
+
+/* Responsive behavior - maintain light mode behavior */
+@media (max-width: 900px) {
+  [data-theme="dark"] .trust {
+    grid-template-columns: 1fr;
+    row-gap: var(--space-3);
+  }
+  
+  [data-theme="dark"] .trust__cta {
+    position: static;
+    right: auto;
+    bottom: auto;
+    align-items: flex-start;
+    margin-top: var(--space-3);
+  }
+  
+  [data-theme="dark"] .trust .micro {
+    text-align: left;
+  }
+  
+  [data-theme="dark"] .trust__divider {
+    display: none;
+  }
+}
