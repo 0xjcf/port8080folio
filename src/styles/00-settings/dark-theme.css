@@ -197,11 +197,12 @@
   color: var(--color-text-primary);
 }
 
+/* Avoid setting a gradient background on the entire heading in dark mode.
+   When bundling with lightningcss, vendor-prefixed text-clipping can be
+   optimized away which left a solid gradient block behind the text in dist.
+   Keep the gradient on the inner span only (see .name .gradient below). */
 [data-theme="dark"] .name {
-  background: linear-gradient(135deg, oklch(61% 0.24 25), var(--color-brand-primary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* Keep the subtle glow only; no background on the block */
   filter: drop-shadow(
     0 var(--space-0-5) var(--space-1) color-mix(in oklch, var(--color-invalid) 30%, transparent)
   );
@@ -237,7 +238,6 @@
     0 0 0 1px rgba(255, 255, 255, 0.08) inset,
     0 12px 32px rgba(0, 0, 0, 0.65),
     0 32px 80px rgba(0, 0, 0, 0.55);
-  transform: var(--transform-lift-md);
 }
 
 /* ================================================
