@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="styles/main.css" />
     <base href="/port8080folio/" />
 
+    <script>
+        (function () {
+            var GA_ID = '{{GA_MEASUREMENT_ID}}';
+            if (!GA_ID || /\{\{.+\}\}/.test(GA_ID)) return;
+            var s = document.createElement('script'); s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID);
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);} window.gtag = gtag;
+            gtag('js', new Date()); gtag('config', GA_ID, { anonymize_ip: true, transport_type: 'beacon' });
+        })();
+    </script>
+
     <style>
         .wrap {
             min-height: 100vh;
@@ -84,6 +97,7 @@
             </div>
         </section>
     </main>
+<script defer src="scripts/analytics.js"></script>
 </body>
 
 </html>

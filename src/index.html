@@ -4,25 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jose Flores – Technical Advisor & Architect | AI, Websites, Workshops</title>
+    <meta name="color-scheme" content="light dark">
+    <title>Jose Flores — XState & Actor Model in TypeScript | Workshops • Websites/SEO • Open Source</title>
     <meta name="description"
-        content="Helping local businesses use AI and modern web to grow revenue and cut busywork. Websites & apps that convert, AI audits & automations, live workshops, and ongoing advisory.">
+        content="I build reliable web systems with Statecharts (XState), the actor model, and TypeScript. Workshops for teams. Websites & Local SEO for small businesses. Open‑source maintainer.">
     <meta name="author" content="Jose Flores">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://0xjcf.github.io/port8080folio/">
-    <meta property="og:title" content="Jose Flores — Technical Advisor & Architect">
+    <meta property="og:title" content="Jose Flores — XState & Actor Model in TypeScript">
     <meta property="og:description"
-        content="Websites & apps that convert · AI audits & automations · Live workshops · Ongoing advisory.">
+        content="Workshops for teams • Websites & Local SEO for small businesses • Open‑source maintainer.">
     <meta property="og:image" content="https://0xjcf.github.io/port8080folio/images/jose-flores-headshot.jpg">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://0xjcf.github.io/port8080folio/">
-    <meta name="twitter:title" content="Jose Flores — Technical Advisor & Architect">
+    <meta name="twitter:title" content="Jose Flores — XState & Actor Model in TypeScript">
     <meta name="twitter:description"
-        content="Practical technical advising for local business: AI enablement, high‑performance sites, and workshops.">
+        content="Workshops for teams • Websites & Local SEO for small businesses • Open‑source maintainer.">
     <meta name="twitter:image" content="https://0xjcf.github.io/port8080folio/images/jose-flores-headshot.jpg">
     <meta name="twitter:creator" content="@0xjcf">
 
@@ -32,7 +33,7 @@
         "@context": "https://schema.org",
         "@type": "ConsultingBusiness",
         "name": "Jose Flores Technical Advisory",
-        "description": "Technical advisor helping teams align architecture, process, and product",
+        "description": "I specialize in Statecharts (XState), the actor model, and TypeScript—running workshops for teams, consulting for small businesses (websites & local SEO), and maintaining open‑source.",
         "url": "https://0xjcf.github.io/port8080folio/",
         "email": "bluejf.llc@gmail.com",
         "founder": {
@@ -42,6 +43,52 @@
             "url": "https://0xjcf.github.io/port8080folio/"
         }
     }
+    </script>
+
+    <!-- Structured Data for Reviews -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Review",
+          "itemReviewed": { "@type": "Organization", "name": "Jose Flores Technical Advisory" },
+          "author": { "@type": "Person", "name": "Nick Schader" },
+          "reviewBody": "On day one José was already teaching our seasoned team new tools and running workshops. Quick learner, proactive, great to work with.",
+          "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+        },
+        {
+          "@type": "Review",
+          "itemReviewed": { "@type": "Organization", "name": "Jose Flores Technical Advisory" },
+          "author": { "@type": "Person", "name": "Kayla Northington" },
+          "reviewBody": "Handled design expertly, guided decisions, delivered a high‑quality site, and made the process approachable.",
+          "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+        },
+        {
+          "@type": "Review",
+          "itemReviewed": { "@type": "Organization", "name": "Jose Flores Technical Advisory" },
+          "author": { "@type": "Person", "name": "David Daniels" },
+          "reviewBody": "Excellent teacher with rock‑solid front‑ and back‑end skills.",
+          "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+        }
+      ]
+    }
+    </script>
+
+    <!-- GA4 loader (optional, set GA_MEASUREMENT_ID in wrangler.toml env vars) -->
+    <script>
+        (function () {
+            var GA_ID = '{{GA_MEASUREMENT_ID}}';
+            if (!GA_ID || /\{\{.+\}\}/.test(GA_ID)) return; // Skip if not configured
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID);
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); } window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', GA_ID, { anonymize_ip: true, transport_type: 'beacon' });
+        })();
     </script>
 
     <!-- New: Offer catalog for services -->
@@ -55,33 +102,32 @@
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "AI Enablement for Local Business",
-            "areaServed": "US",
-            "serviceType": "AI automation, lead funnels, follow-ups"
+            "name": "XState + Actor Model Workshop (TypeScript)",
+            "serviceType": "Hands‑on workshop: model critical flows, build statecharts/actors, exercises & templates"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Websites & Applications",
-            "serviceType": "High-performance sites and lightweight apps"
+            "name": "Conversion Website & Local SEO",
+            "serviceType": "Website + booking/CRM + local SEO setup and tracking"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Live Workshops",
-            "serviceType": "AI use-cases, statecharts & actor model training"
+            "name": "Small‑Business App & Automation",
+            "serviceType": "Lightweight apps and pragmatic automation when it truly helps"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Advisory & Technical Architecture",
-            "serviceType": "System design, delivery planning, technical advisory"
+            "name": "Open‑Source Sponsorship & Collaboration",
+            "serviceType": "Sponsor or fund features in Actor‑Web / Ignite‑Element"
           }
         }
       ]
@@ -96,530 +142,861 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="styles/main.css">
+
+    <!-- Theme Toggle Script (inline for immediate execution) -->
+    <script>
+        // Prevent flash of unstyled content by applying saved theme immediately
+        (function () {
+            let savedTheme = null;
+
+            // Safely attempt to read from localStorage
+            try {
+                savedTheme = localStorage.getItem('preferred-theme');
+            } catch (error) {
+                // localStorage access failed (private mode, SecurityError, QuotaExceeded, etc.)
+                console.warn('Theme: localStorage access failed, using system preference');
+            }
+
+            // Determine system preference as safe fallback
+            let systemPrefersDark = false;
+            try {
+                systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } catch (error) {
+                // matchMedia not supported, default to light
+                console.warn('Theme: matchMedia not supported, defaulting to light');
+            }
+
+            // Handle theme logic based on saved preference
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                document.documentElement.setAttribute('data-theme-mode', 'manual');
+            } else if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.documentElement.setAttribute('data-theme-mode', 'manual');
+            } else if (savedTheme === 'auto') {
+                // Auto mode - apply system preference immediately
+                document.documentElement.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme-mode', 'auto');
+            } else if (savedTheme === null || savedTheme === undefined) {
+                // No saved preference - default to auto mode and apply system preference
+                document.documentElement.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme-mode', 'auto');
+            } else {
+                // Invalid saved value - default to auto mode and apply system preference for safety
+                document.documentElement.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme-mode', 'auto');
+            }
+        })();
+    </script>
 </head>
 
-<body class="dark-theme no-js">
+<body class="no-js">
 
     <main id="main" role="main">
         <!-- Hero Section -->
-        <section id="hero" class="hero section" aria-label="Introduction">
-            <!-- Background layers -->
-            <div class="bg hero__grid"></div>
-            <div class="bg vignette"></div>
-            <div class="bg glow glow-left"></div>
-            <div class="bg glow glow-right"></div>
+        <section id="hero" class="hero section section--hero" aria-label="Introduction">
+            <!-- Semantic SEO helper (screen reader only) -->
+            <h1 class="sr-only">XState &amp; Actor Model in TypeScript — Workshops, Websites &amp; Local SEO — Jose
+                Flores</h1>
+            <!-- Background layers temporarily removed for theme debugging -->
 
-            <header class="hero__content" role="banner" aria-label="Intro">
-                <!-- Badge -->
-                <p class="badge">SOFTWARE ENGINEER</p>
+            <header class="hero__content" aria-label="Intro">
+                <!-- Enhanced credibility badge -->
+                <p class="badge badge--enhanced">SOFTWARE ENGINEER • TECHNICAL ADVISOR</p>
 
-                <!-- Name: split into two spans -->
+                <!-- Lead with outcomes -->
                 <h1 class="name">
-                    <span class="first">JOSE</span>
-                    <span class="last gradient">FLORES</span>
+                    <span class="text-black">Jose</span>
+                    <span class="gradient">Flores</span>
                 </h1>
 
-                <!-- Updated subtitles -->
-                <p class="subtitle">
-                    Helping local businesses use AI and modern web to grow revenue and cut busywork
+                <!-- Value proposition -->
+                <p class="subtitle subtitle--primary">
+                    I build production-ready web apps for product teams and conversion websites for local businesses.
                 </p>
-                <div class="divider" aria-hidden="true">—</div>
-                <p class="subtitle strong">
-                    Websites & apps that convert · AI audits & automations · Live workshops · Ongoing advisory
+
+
+                <!-- What's Happening Now: subtle, personal ticker -->
+                <p class="hero__now" aria-label="What I'm working on">
+                    <span class="now-dot" aria-hidden="true"></span>
+                    Currently helping local businesses in Sarasota 🌴
                 </p>
+
+                <!-- Secondary tagline - Desktop only -->
+                <!-- Shifted below the hero for focus: supporting tagline -->
 
                 <!-- CTAs -->
                 <nav class="cta-row" aria-label="primary actions">
-                    <a class="btn btn-primary" href="#contact"
-                        title="Get a tailored plan for your business in 30 minutes">
-                        <span>Book a Free AI Strategy Call</span>
-                        <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <a class="button button--primary cta-animated" href="#contact" data-cta="hero_primary"
+                        title="Quick 15-minute call to discuss your needs">
+                        <span class="button__text">Book a quick fit call</span>
+                        <svg class="button__icon arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            aria-hidden="true">
                             <path d="M5 12h12M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
-                    <a class="btn btn-secondary" href="#services">Explore Services</a>
+                    <a class="button button--secondary d-none d-sm-flex" href="#services">
+                        <span>Explore services</span>
+                    </a>
                 </nav>
 
-                <!-- Social Proof Counter -->
-                <div class="social-proof">
-                    <p class="social-proof-text">Join 200+ businesses who've booked an AI audit</p>
-                </div>
+                <!-- Risk reversal note -->
+                <p class="cta-note text-muted">No obligation. If it's not a fit, I'll point you to the right next step.
+                </p>
+            </header>
 
-                <!-- Trust signals (unchanged) -->
-                <div class="hero__trust">
-                    <p class="hero__trust-label">TRUSTED BY TEAMS AT</p>
+            <!-- Scroll indicator -->
+            <div class="scroll" aria-hidden="false">
+                <span class="scroll-text">Scroll</span>
+                <div class="mouse" aria-hidden="true">
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust + Testimonial strip (moved below hero to keep focus on CTAs) -->
+        <section id="proof" class="section section--proof" aria-label="Trusted by">
+            <div class="section__container">
+                <div class="hero__trust" aria-hidden="false">
+                    <p class="hero__trust-label sr-only">Built products at</p>
                     <div class="hero__trust-logos">
                         <div class="trust-logo">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                 <path
                                     d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                             </svg>
-                            <span>TechCorp</span>
+                            <span>Availity</span>
                         </div>
                         <div class="trust-logo">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                 <path
                                     d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
                             </svg>
-                            <span>InnovateLabs</span>
+                            <span>Get More Math</span>
                         </div>
                         <div class="trust-logo">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                 <path
                                     d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                             </svg>
-                            <span>ScaleUp Inc</span>
+                            <span>BlueJF LLC</span>
                         </div>
                     </div>
                 </div>
-            </header>
+                <div class="hero__testimonial" aria-label="Client testimonial">
+                    <!-- Small Business (Kayla) -->
+                    <p class="testimonial-text" data-sb>
+                        "Jose made the web build approachable, guided decisions, and delivered a high‑quality site."
+                    </p>
+                    <p class="testimonial-attribution" data-sb>
+                        — <a href="https://www.linkedin.com/in/kayla-northington-49923015b/" target="_blank"
+                            rel="noopener noreferrer">Kayla Northington</a>
+                    </p>
 
-            <!-- Scroll indicator -->
-            <div class="scroll">
-                <div class="mouse">
-                    <div class="dot"></div>
+                    <!-- Product Team (Nick) -->
+                    <p class="testimonial-text" data-pt hidden>
+                        "Day one, José taught our seasoned team new tools, ran workshops, and lifted our game."
+                    </p>
+                    <p class="testimonial-attribution" data-pt hidden>
+                        — <a href="https://www.linkedin.com/in/nick-schader/" target="_blank"
+                            rel="noopener noreferrer">Nick Schader</a>
+                    </p>
+
+                    <p class="testimonial-cta">Want results like this? <a href="#contact">Book a quick fit call</a></p>
                 </div>
             </div>
         </section>
 
         <!-- About/Experience Section (unchanged body copy) -->
-        <section id="about" class="about section" aria-label="About and Experience">
+        <section id="about" class="about section section--about" aria-label="About and Experience">
             <div class="noise-overlay" aria-hidden="true"></div>
             <div class="container">
                 <header class="about__header">
-                    <h2 class="about__title">
+                    <h2 class="section__title about__title">
                         <span class="text-white">ABOUT</span>
                         <span class="gradient">ME</span>
                     </h2>
                 </header>
 
-                <div class="about__intro">
-                    <p>
-                        I'm Jose, a hands-on technical advisor who believes good systems start with <strong>clear
-                            thinking</strong> and <strong>honest tradeoffs</strong>.
-                        My approach is simple: reduce complexity, choose the smallest tool that works, and design around
-                        real constraints.
-                        I avoid buzzwords, explain decisions in plain English, and focus on changes that <span
-                            class="highlight">measurably improve delivery speed and quality</span>.
-                    </p>
-                    <p>
-                        I help founders and executives turn strategy into shipping. That means aligning product goals
-                        with architecture,
-                        introducing lightweight processes, and mentoring teams to operate with confidence. I use
-                        <strong>statecharts</strong>, the <strong>actor model</strong>,
-                        and disciplined UI patterns to make behavior explicit—so your roadmap, codebase, and KPIs stay
-                        in sync.
-                    </p>
+                <!-- Segment Switcher: Small Business / Product Team -->
+                <div class="about__segment-toggle" role="group" aria-label="Choose your segment">
+                    <input type="radio" name="about-segment" id="seg-sb" class="about__seg-radio" checked>
+                    <label for="seg-sb" class="about__seg-btn" aria-controls="about-segment-sb"
+                        aria-pressed="true">Small Business</label>
+                    <input type="radio" name="about-segment" id="seg-pt" class="about__seg-radio">
+                    <label for="seg-pt" class="about__seg-btn" aria-controls="about-segment-pt"
+                        aria-pressed="false">Product Team</label>
                 </div>
 
-                <div class="about__current">
-                    <div class="about__avatar">
-                        <picture>
-                            <source
-                                srcset="assets/images/gibli-pfp-200.webp 200w, assets/images/gibli-pfp-400.webp 400w"
-                                sizes="(max-width: 640px) 96px, 180px" type="image/webp">
-                            <img src="assets/images/gibli-pfp.png" srcset="assets/images/gibli-pfp.png 1024w"
-                                sizes="(max-width: 640px) 96px, 180px" alt="Jose Flores" width="400" height="400"
-                                loading="lazy">
-                        </picture>
-                    </div>
-                    <div class="about__current-content" aria-labelledby="current-role-heading">
-                        <h3 id="current-role-heading">Currently Working As</h3>
-                        <p>
-                            <span class="role-primary">Independent Technical Advisor & Architect</span>
-                        </p>
-                        <p class="about__roles-meta">
-                            Open-source maintainer: <span class="role-green">Actor-Web, Lit-Bit</span><br>
-                            Specializing in: <span class="role-yellow">Architecture & Delivery</span><span
-                                class="comma">,</span> <span class="role-purple">Developer Experience</span>
-                        </p>
-                        <div class="about__tags">
-                            <span class="tag">Statecharts</span>
-                            <span class="tag">Actor Model</span>
-                            <span class="tag">Event-Driven</span>
-                            <span class="tag">TypeScript</span>
-                            <span class="tag">System Design</span>
+                <!-- Content wrapper for two-column layout on desktop -->
+                <div class="about__content-wrapper">
+                    <div class="about__intro">
+                        <!-- Small Business segment copy -->
+                        <div id="about-segment-sb" class="about__segment about__segment--sb" aria-labelledby="seg-sb">
+                            <div class="about__intro-section">
+                                <p class="eyebrow">For Local Businesses</p>
+                                <h3 class="about__subheading">How I help</h3>
+                                <ul class="about__bullets">
+                                    <li>Turn your website into a lead engine with clear calls-to-action.</li>
+                                    <li>Automate follow-ups and scheduling so you get hours back weekly.</li>
+                                    <li>Connect forms, email, and CRM so nothing slips through the cracks.</li>
+                                    <li>Explain tech choices in plain English so decisions are easy.</li>
+                                </ul>
+                            </div>
+                            <div class="about__intro-section">
+                                <h3 class="about__subheading">Who I help</h3>
+                                <p>Owners who want a simple system that brings in more leads and saves time—without
+                                    hiring a big team.</p>
+                            </div>
+                        </div>
+
+                        <!-- Product Team segment copy -->
+                        <div id="about-segment-pt" class="about__segment about__segment--pt" aria-labelledby="seg-pt">
+                            <div class="about__intro-section">
+                                <p class="eyebrow">For Product Teams</p>
+                                <h3 class="about__subheading">How I help</h3>
+                                <ul class="about__bullets">
+                                    <li>Ship faster by cutting scope and choosing the smallest tool that works.</li>
+                                    <li>Stabilize delivery with statecharts & the actor model—behavior explicit and
+                                        testable.</li>
+                                    <li>Reduce tech debt by aligning product goals, architecture, and process.</li>
+                                    <li>Make decisions in plain English with trade-off docs everyone can understand.
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="about__intro-section">
+                                <h3 class="about__subheading">Who I help</h3>
+                                <p>Founders and execs who need strategy turned into shipping—without a heavy process.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="about__current">
+                        <div class="about__avatar">
+                            <picture>
+                                <source
+                                    srcset="assets/images/gibli-pfp-200.webp 200w, assets/images/gibli-pfp-400.webp 400w"
+                                    sizes="(max-width: 640px) 96px, 180px" type="image/webp">
+                                <img src="assets/images/gibli-pfp.png" srcset="assets/images/gibli-pfp.png 1024w"
+                                    sizes="(max-width: 640px) 96px, 180px" alt="Jose Flores" width="400" height="400"
+                                    loading="lazy">
+                            </picture>
+                        </div>
+                        <div class="about__current-content" aria-labelledby="current-role-heading">
+                            <h3 id="current-role-heading">Currently Working As</h3>
+                            <p class="about__role-title">
+                                <span class="role-primary">Independent Technical Advisor & Software Engineer</span>
+                            </p>
+                            <p class="about__role-subtitle">Statecharts (XState) & Actor‑Model specialist in TypeScript
+                            </p>
+                            <p class="about__roles-meta">
+                                Open-source maintainer: <br><span class="role-green">Actor-Web,
+                                    Ignite-Element</span><br>
+                                Specializing in: <br><span class="role-yellow">Architecture & Delivery</span><br> <span
+                                    class="role-purple">Developer
+                                    Experience</span>
+                            </p>
+                            <p class="about__why">I use statecharts and the actor model so behavior is explicit,
+                                testable, and easy to evolve—reducing risk while we ship.</p>
+                            <div class="about__tags">
+                                <a href="#services" class="tag">TypeScript</a>
+                                <a href="#services" class="tag">XState</a>
+                                <a href="#services" class="tag">Actor Model</a>
+                                <a href="#services" class="tag">Statecharts</a>
+                                <a href="#services" class="tag">Event-Driven</a>
+                                <a href="#services" class="tag">System Design</a>
+                            </div>
+                        </div>
+                    </div><!-- /.about__current -->
+                    <!-- Offer section beneath both columns to avoid CLS on toggle -->
+                    <div class="about__offer">
+                        <div class="offer-toggle" role="tablist" aria-label="Choose offer segment">
+                            <label for="seg-sb" class="offer-toggle__btn offer-toggle__btn--sb" role="tab"
+                                aria-controls="about-segment-sb">Small Business</label>
+                            <label for="seg-pt" class="offer-toggle__btn offer-toggle__btn--pt" role="tab"
+                                aria-controls="about-segment-pt">Product Team</label>
+                        </div>
+                        <div class="offer-card offer-card--sb" aria-labelledby="seg-sb">
+                            <p class="offer-eyebrow">Signature Offer for Small Business</p>
+                            <h3 class="offer-title">Conversion Website &amp; Local SEO</h3>
+                            <ul class="offer-list">
+                                <li>1–3 key pages (conversion‑first)</li>
+                                <li>Booking/CRM &amp; analytics wired correctly</li>
+                                <li>Local SEO: GBP, on‑page, simple schema</li>
+                            </ul>
+                            <details class="labor">
+                                <summary>What I do behind the scenes</summary>
+                                <ul>
+                                    <li>Wire → copy polish → build → Lighthouse &amp; a11y pass</li>
+                                    <li>Set up Google Business Profile, on‑page optimization, schema</li>
+                                    <li>Goal tracking + optional monthly review</li>
+                                </ul>
+                            </details>
+                            <p class="offer-outcome"><strong>Often increases qualified leads (we'll set goals and
+                                    measure).</strong></p>
+                            <a href="#contact" class="button button--primary offer-cta">Start a Website &amp; SEO
+                                Project</a>
+                            <p class="offer-subtle"><a href="#services" class="offer-link">View sample outline</a></p>
+                        </div>
+                        <div class="offer-card offer-card--pt" aria-labelledby="seg-pt">
+                            <p class="offer-eyebrow">Signature Offer for Product Teams</p>
+                            <h3 class="offer-title">XState + Actor Model Workshop (TypeScript)</h3>
+                            <ul class="offer-list">
+                                <li>Event map of 1–2 critical flows</li>
+                                <li>Statecharts &amp; actor topology in TypeScript</li>
+                                <li>Code templates, exercises &amp; follow‑up Q&amp;A</li>
+                            </ul>
+                            <details class="labor">
+                                <summary>What I do behind the scenes</summary>
+                                <ul>
+                                    <li>Model flows with statecharts/actors for clarity</li>
+                                    <li>Live coding in TS (XState) with scenario tests</li>
+                                    <li>Handover: templates, cheat‑sheets, next steps</li>
+                                </ul>
+                            </details>
+                            <p class="offer-outcome"><strong>Ship with fewer surprises—behavior explicit and
+                                    testable.</strong></p>
+                            <a href="#contact" class="button button--primary offer-cta">Book an XState/Actor
+                                Workshop</a>
+                            <p class="offer-subtle">I split time between client work and open‑source; sponsorships keep
+                                tools moving.</p>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic hint that points to the sticky CTA -->
+                    <div id="cta-hint" class="cta-hint" aria-hidden="true">
+                        <svg id="cta-hint-arrow" class="cta-hint__arrow" width="0" height="0" viewBox="0 0 0 0"
+                            role="presentation" focusable="false">
+                            <defs>
+                                <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L6,3 z"></path>
+                                </marker>
+                            </defs>
+                            <path id="cta-hint-path" fill="none" />
+                        </svg>
+                    </div>
+
+                    <!-- Micro CTA - visible only on desktop -->
+                    <div class="about__bridge-cta">
+                        <p>Curious how this applies to your team? <a href="#contact" class="about__cta-link">See exactly
+                                what I'd do first <span class="about__cta-arrow">→</span></a></p>
+                    </div>
+                </div><!-- /.about__content-wrapper -->
             </div>
         </section>
 
         <!-- Services Section (renamed + new cards) -->
-        <section id="services" class="services section" aria-label="Services">
+        <section id="services" class="services section section--services" aria-label="Services">
             <div class="noise-overlay" aria-hidden="true"></div>
+
+            <!-- Sticky CTA Button -->
+            <div class="services__sticky-cta" role="complementary" aria-label="Quick action">
+                <a id="stickyCta" href="https://calendly.com/bluejf-llc/30min" class="button button--sticky"
+                    data-cta="sticky_primary" aria-label="Book a free strategy call"
+                    title="Let's discuss your business needs" target="_blank" rel="noopener noreferrer">
+                    <span class="button__text">Hire Jose</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true" class="d-none">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </a>
+                <div class="sticky-cta__tooltip">Let's discuss your business needs</div>
+            </div>
+
             <div class="container">
                 <header class="services__header">
-                    <h2 class="services__title">
-                        <span class="text-white">OUR</span>
+                    <h2 class="section__title services__title">
+                        <span class="text-white">MY</span>
                         <span class="gradient">SERVICES</span>
                     </h2>
                 </header>
 
                 <p class="services__subheading">
-                    Practical, low‑friction engagements for local businesses and product teams.
-                    Start simple: <strong>AI Mini‑Audit</strong> → <strong>Website/App Sprint</strong> →
-                    <strong>Workshop</strong> → <strong>Ongoing Advisory</strong>.
+                    Four ways to work together: <strong>XState + Actor Model Workshops</strong> •
+                    <strong>Conversion Website &amp; Local SEO</strong> •
+                    <strong>Contract or Full-Time Engineering</strong> •
+                    <strong>Open‑source sponsorship &amp; collaboration</strong>.
                 </p>
 
-                <!-- KPI Tiles (kept) -->
-                <div class="services__kpis">
-                    <div class="kpi-tile" tabindex="0">
-                        <span class="kpi-value">7+</span>
-                        <span class="kpi-label">Years Shipping</span>
+
+                <!-- Segment-aware Services Grid (conversion-first) -->
+                <div class="services-alt">
+                    <div class="services-alt__head">
+                        <div class="seg-toggle" role="tablist" aria-label="Audience">
+                            <button class="pill active" data-seg="sb" role="tab" aria-selected="true">Small
+                                Business</button>
+                            <button class="pill" data-seg="pt" role="tab" aria-selected="false">Product Team</button>
+                        </div>
                     </div>
-                    <div class="kpi-tile" tabindex="0">
-                        <span class="kpi-value">50+</span>
-                        <span class="kpi-label">Projects Delivered</span>
+
+
+                    <div class="services-alt__grid">
+                        <!-- Card 1: Growth Partner Path (Most popular for Small Business) -->
+                        <article class="service-card-std" data-card="growth" data-order-sb="1" data-order-pt="2"
+                            data-popular-sb="1" data-popular-pt="0">
+                            <div class="card-badge-slot">
+                                <div class="card-badge" data-sb>Most popular</div>
+                                <div class="card-badge" data-pt hidden style="visibility: hidden;">Placeholder</div>
+                            </div>
+                            <header>
+                                <h3 data-sb>Conversion Website & Local SEO</h3>
+                                <h3 data-pt hidden>Contract / Full-Time Availability</h3>
+                                <p class="one-liner" data-sb><strong>Website build + SEO + booking system</strong>
+                                </p>
+                                <p class="one-liner" data-pt hidden><strong>Hire me as a front-end engineer
+                                        (contract, C2H, or full-time)</strong></p>
+                            </header>
+                            <dl class="kv">
+                                <div>
+                                    <dt>You'll get</dt>
+                                    <dd data-sb>Custom plan, build, analytics, and leads tracking</dd>
+                                    <dd data-pt hidden>Production UI shipped in your repo · Explicit, testable
+                                        behavior with XState · Scenario tests & docs</dd>
+                                </div>
+                                <div>
+                                    <dt>Best for</dt>
+                                    <dd data-sb>Local businesses ready to book more calls</dd>
+                                    <dd data-pt hidden>Teams needing hands-on delivery (not just advice)</dd>
+                                </div>
+                                <div>
+                                    <dt>Investment</dt>
+                                    <dd data-sb>Fixed project price</dd>
+                                    <dd data-pt hidden>Contract, contract-to-hire, or full-time</dd>
+                                </div>
+                            </dl>
+                            <!-- Proof tie-in -->
+                            <p class="proof" data-sb>"Jose handled design expertly, guided the right decisions, and
+                                made the process approachable."
+                                — Kayla Northington</p>
+                            <p class="proof" data-pt hidden>"Day one, José taught our seasoned team new tools, ran
+                                workshops, and lifted our game."
+                                — Nick Schader</p>
+
+                            <details class="labor">
+                                <summary>What I do behind the scenes</summary>
+                                <ul data-sb>
+                                    <li>Wire → copy polish → build → lighthouse & a11y pass.</li>
+                                    <li>Set up Local SEO: Google Business Profile, on-page optimization, schema
+                                        markup.</li>
+                                    <li>Form → CRM mapping + goal tracking → monthly review option.</li>
+                                </ul>
+                                <ul data-pt hidden>
+                                    <li>Embed with your team and ship a small but valuable slice behind a flag</li>
+                                    <li>Model behavior with XState (statecharts/actors) and add scenario tests</li>
+                                    <li>Merge via PRs; write clear docs (diagrams, decisions, how to extend)</li>
+                                </ul>
+                            </details>
+                            <a class="btn-cta" href="#contact" data-cta="services_hire_me">Hire Jose →</a>
+                            <p class="mini-proof" data-sb>No obligation. If it's not a fit, I'll point you to the
+                                right next step.
+                            </p>
+                            <p class="mini-proof" data-pt hidden>Available for contract, contract-to-hire, or
+                                full-time.</p>
+                        </article>
+
+                        <!-- Card 2: Quick Wins Path -->
+                        <article class="service-card-std" data-card="quickwins" data-order-sb="2" data-order-pt="1"
+                            data-popular-sb="0" data-popular-pt="1">
+                            <div class="card-badge-slot">
+                                <div class="card-badge" data-sb style="visibility: hidden;">Placeholder</div>
+                                <div class="card-badge" data-pt hidden>Most popular</div>
+                            </div>
+                            <header>
+                                <h3 data-sb>XState + Actor Model Workshop</h3>
+                                <h3 data-pt hidden>XState + Actor Model Workshop</h3>
+                                <p class="one-liner" data-sb><strong>90 minutes · Remote or onsite</strong></p>
+                                <p class="one-liner" data-pt hidden><strong>90 minutes · Remote or onsite</strong>
+                                </p>
+                            </header>
+                            <dl class="kv">
+                                <div>
+                                    <dt>You'll leave with</dt>
+                                    <dd data-sb>A mapped event model, prioritized refactors, and an adoption plan
+                                    </dd>
+                                    <dd data-pt hidden>Statechart/actor models for 1–2 critical flows, a shared
+                                        vocabulary, and TypeScript templates to reuse</dd>
+                                </div>
+                                <div>
+                                    <dt>Best for</dt>
+                                    <dd data-sb>Teams migrating to actors or struggling with complex flows</dd>
+                                    <dd data-pt hidden>Product teams formalizing behavior and reducing release risk
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt>Investment</dt>
+                                    <dd>Flat workshop rate</dd>
+                                </div>
+                            </dl>
+                            <!-- Proof tie-in -->
+                            <p class="proof" data-sb>"Jose is an excellent teacher with rock‑solid front‑ and
+                                back‑end skills."
+                                — David Daniels</p>
+                            <p class="proof" data-pt hidden>"Jose handled design expertly, guided the right
+                                decisions, and made the process approachable."
+                                — Kayla Northington</p>
+
+                            <details class="labor">
+                                <summary>What I do behind the scenes</summary>
+                                <ul>
+                                    <li>Map your critical flows as statecharts and actor topology.</li>
+                                    <li>Build working examples in TypeScript with XState.</li>
+                                    <li>Deliver templates and team reference materials.</li>
+                                    <li>Provide follow-up Q&A support after the workshop.</li>
+                                </ul>
+                            </details>
+                            <a class="btn-cta" href="#contact" data-cta="services_workshop">Book the XState/Actor
+                                Workshop →</a>
+                            <p class="mini-proof">No obligation. If it's not a fit, I'll point you to the right next
+                                step.</p>
+                        </article>
+
                     </div>
-                    <div class="kpi-tile" tabindex="0">
-                        <span class="kpi-value">4</span>
-                        <span class="kpi-label">Open Source Tools</span>
+
+                </div>
+
+                <!-- How It Works Process Preview -->
+                <div class="services__process" aria-labelledby="process-heading">
+                    <header class="process__header">
+                        <h3 id="process-heading">How It Works</h3>
+                        <p class="process__subtitle">Simple, transparent process. No surprises.</p>
+                    </header>
+
+                    <div class="process__steps">
+                        <div class="process__step">
+                            <div class="process__step-icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div class="process__step-content">
+                                <h4>1. Book a quick fit call</h4>
+                                <p>We clarify goals and success metrics</p>
+                                <div class="process__step-feedback">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" aria-hidden="true">
+                                        <path d="M3 8l4-4m0 0l4 4m-4-4v12" />
+                                    </svg>
+                                    <span>Confirmation email within minutes</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="process__step">
+                            <div class="process__step-icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <div class="process__step-content">
+                                <h4>2. Get a 1-page plan</h4>
+                                <p>Scope, timeline, and exact deliverables</p>
+                                <div class="process__step-feedback">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" aria-hidden="true">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12,6 12,12 16,14" />
+                                    </svg>
+                                    <span>Typically delivered within 24 hours (Mon–Fri)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="process__step">
+                            <div class="process__step-icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                            <div class="process__step-content">
+                                <h4>3. Launch & grow</h4>
+                                <p>Implement the plan with regular check-ins and simple metrics we agree on</p>
+                                <div class="process__step-feedback">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" aria-hidden="true">
+                                        <path d="M9 11l3 3l8-8" />
+                                    </svg>
+                                    <span>First review checkpoint at 30 days</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="kpi-tile" tabindex="0">
-                        <span class="kpi-value">100%</span>
-                        <span class="kpi-label">Client Satisfaction</span>
+
+                    <div class="process__cta">
+                        <a href="#contact-forms" class="button button--primary button--large"
+                            aria-label="Start with free consultation">
+                            Book a quick fit call
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <path d="m9 18 6-6-6-6" />
+                            </svg>
+                        </a>
+                        <p class="process__cta-note">No commitment required. We'll share assumptions, track outcomes,
+                            and adjust fast.</p>
                     </div>
                 </div>
 
-                <!-- Service Cards Grid (4 cards) -->
-                <div class="services__grid">
-                    <!-- AI for Local Business -->
-                    <!-- AI Enablement for Local Business -->
-                    <article id="svc-ai" class="service-card" tabindex="0">
-                        <div class="service-card__icon" aria-hidden="true">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <h3>Turn Your Data into Results</h3>
-                        <p>Capture leads, automate follow‑ups, and save 10–30% of your team's time in 2–4 weeks.</p>
-                        <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">2–4 wks</span><span
-                                    class="metric-label">Quick ROI</span></div>
-                            <div class="metric"><span class="metric-value">10–30%</span><span class="metric-label">Ops
-                                    time saved</span></div>
-                        </div>
-                    </article>
 
-                    <!-- Websites & Applications -->
-                    <article id="svc-web" class="service-card" tabindex="0">
-                        <div class="service-card__icon" aria-hidden="true">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </div>
-                        <h3>Websites That Convert</h3>
-                        <p>Fast, mobile‑ready, and designed to turn visitors into customers. Optimized for SEO, UX, and
-                            accessibility.</p>
-                        <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">&lt;1s</span><span class="metric-label">Load
-                                    time</span></div>
-                            <div class="metric"><span class="metric-value">A+</span><span
-                                    class="metric-label">Accessibility grade</span></div>
-                        </div>
-                    </article>
 
-                    <!-- Live Workshops -->
-                    <article id="svc-workshops" class="service-card" tabindex="0">
-                        <div class="service-card__icon" aria-hidden="true">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7h8M8 11h8M5 19l7-3 7 3" />
-                            </svg>
-                        </div>
-                        <h3>Hands‑On Training for Your Team</h3>
-                        <p>Practical AI, statecharts, and delivery workshops. Leave with strategies you can apply
-                            immediately.</p>
-                        <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">3-hour</span><span
-                                    class="metric-label">Intensive</span></div>
-                            <div class="metric"><span class="metric-value">100%</span><span
-                                    class="metric-label">Ready‑to‑apply</span></div>
-                        </div>
-                    </article>
-
-                    <!-- Advisory & Technical Architecture -->
-                    <article id="svc-advisory" class="service-card" tabindex="0">
-                        <div class="service-card__icon" aria-hidden="true">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6l-8 4 8 4 8-4-8-4zM4 14l8 4 8-4" />
-                            </svg>
-                        </div>
-                        <h3>Clear Roadmaps, Zero Waste</h3>
-                        <p>Get actionable system designs, risk planning, and technology guidance that fit your business
-                            goals.</p>
-                        <div class="service-card__metrics">
-                            <div class="metric"><span class="metric-value">1–2 wk</span><span
-                                    class="metric-label">Framework</span></div>
-                            <div class="metric"><span class="metric-value">Zero‑waste</span><span
-                                    class="metric-label">Roadmaps save budget</span></div>
-                        </div>
-                    </article>
-                </div>
-
-                <!-- Progress dots for mobile carousel -->
-                <nav class="services__dots" aria-label="Service cards navigation">
-                    <a class="services__dot" href="#svc-ai" aria-label="AI Enablement"></a>
-                    <a class="services__dot" href="#svc-web" aria-label="Websites & Applications"></a>
-                    <a class="services__dot" href="#svc-workshops" aria-label="Live Workshops"></a>
-                    <a class="services__dot" href="#svc-advisory" aria-label="Advisory & Technical Architecture"></a>
-                </nav>
-
-                <!-- Why Work With Me Section -->
-                <div class="services__why">
-                    <h3>Why Work With Me?</h3>
-                    <ul class="why-list">
-                        <li tabindex="0">Quick wins first: revenue, leads, or time saved</li>
-                        <li tabindex="0">AI that fits your workflow (no vendor lock‑in)</li>
-                        <li tabindex="0">Websites/apps tuned for speed, SEO, and UX</li>
-                        <li tabindex="0">Clear docs and handoff—teams stay productive</li>
-                        <li tabindex="0">Modern patterns: statecharts, actor model, TypeScript</li>
-                        <li tabindex="0">Measurable outcomes, not buzzwords</li>
-                    </ul>
-                </div>
             </div>
         </section>
 
-        <!-- Contact/CTA Section -->
-        <section id="contact" class="chapter chapter--cta contact section" aria-label="Contact">
+        <!-- Contact Section (Combined) -->
+        <section id="contact" class="chapter chapter--contact contact section section--contact"
+            aria-label="Contact and Connect">
             <div class="contact__spotlight" aria-hidden="true"></div>
             <div class="container">
-                <h2 class="contact__title">
-                    <span class="text-white">READY TO GET</span>
-                    <span class="gradient">STARTED?</span>
+                <h2 class="section__title contact__title">
+                    <span class="text-white">LET'S</span>
+                    <span class="gradient">CONNECT</span>
                 </h2>
                 <p class="contact__supporting">
-                    Let's discuss goals, constraints, and timelines. If we're a fit, I'll outline a simple plan and
-                    first milestone.
+                    Tell me your goals and constraints. I'll map options and suggest the smallest step that makes a
+                    difference.
                 </p>
 
+
                 <div class="contact__actions">
-                    <a href="mailto:bluejf.llc@gmail.com?subject=Consulting%20Inquiry" class="button button--primary"
-                        aria-label="Schedule a call - opens email client">
-                        Schedule a Call
-                    </a>
-                    <a href="#contact-forms" class="button button--secondary" aria-label="Start AI mini-audit">
-                        Start a Free AI Mini‑Audit
-                        <span class="arrow" aria-hidden="true">→</span>
-                        <span class="button-subtext">Receive a custom 1-page report within 24 hours</span>
-                    </a>
+                    <div class="contact__action-item">
+                        <a href="https://calendly.com/bluejf-llc/30min" class="button button--primary"
+                            aria-label="Schedule a call - opens Calendly" target="_blank" rel="noopener noreferrer">
+                            Schedule a Call
+                        </a>
+                        <p class="contact__action-detail">30 min · Free</p>
+                    </div>
                 </div>
 
                 <div class="contact__info" role="complementary" aria-label="Contact details">
-                    <p>
-                        <span class="contact__label" role="text">Email</span>
-                        <a href="mailto:bluejf.llc@gmail.com?subject=Intro%20Call"
+                    <div class="contact__info-item">
+                        <h3 class="contact__info-label">Email</h3>
+                        <a href="mailto:bluejf.llc@gmail.com?subject=Intro%20Call" class="contact__email"
                             aria-label="Email Jose Flores">bluejf.llc@gmail.com</a>
-                    </p>
-                    <p aria-live="polite">I typically reply within 24 hours.</p>
-                    <p>Available for projects starting <span class="contact__availability">September 2025</span></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Forms Section -->
-        <section id="contact-forms" class="chapter chapter--forms contact-forms section"
-            aria-label="Contact and Newsletter">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="forms__title">
-                        <span class="text-white">LETS</span>
-                        <span class="gradient">CONNECT</span>
-                    </h2>
-                    <p class="section-subtitle">Ready to transform your business? Send me a message or join my
-                        newsletter for insights.</p>
-
-                    <!-- Social Proof for Forms -->
-                    <div class="forms-social-proof">
-                        <p class="forms-social-proof-text">✨ I typically reply within 24 hours with actionable next
-                            steps</p>
+                    </div>
+                    <div class="contact__info-item">
+                        <p class="contact__response-time" aria-live="polite">I typically reply within 24 hours
+                            (Mon–Fri).</p>
+                    </div>
+                    <div class="contact__info-item">
+                        <p class="contact__availability-text">Now booking for <span
+                                class="contact__availability">October 2025</span></p>
+                    </div>
+                    <div class="contact__info-item">
+                        <p class="contact__availability-text">Open to <strong>contract</strong>,
+                            <strong>contract-to-hire</strong>, or <strong>full-time</strong> roles.
+                        </p>
                     </div>
                 </div>
 
-                <!-- Tab Navigation (Mobile Only) -->
-                <div class="form-tabs" role="tablist">
-                    <button class="form-tab active" role="tab" aria-selected="true" aria-controls="contact-form"
-                        data-tab="contact">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                            </path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        <span>Message</span>
-                    </button>
-                    <button class="form-tab" role="tab" aria-selected="false" aria-controls="newsletter-form"
-                        data-tab="newsletter">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0">
-                            </path>
-                        </svg>
-                        <span>Newsletter</span>
-                    </button>
-                </div>
+                <!-- Forms Section (formerly contact-forms) -->
+                <div class="contact__forms" id="contact-forms">
+                    <!-- Accessible description for form choice -->
+                    <div id="form-choice-description" class="sr-only">
+                        Choose between sending a message or subscribing to the newsletter
+                    </div>
 
-                <div class="forms-grid">
-                    <!-- Contact Form (unchanged actions) -->
-                    <div class="form-card contact-form-card active" id="contact-form" tabindex="-1">
-                        <div class="form-icon" aria-hidden="true">
+                    <!-- Radio buttons for form toggle (CSS-only approach) -->
+                    <input type="radio" name="form-choice" id="form-contact" class="form-radio"
+                        value="contact-form-panel" checked hidden required aria-describedby="form-choice-description">
+                    <input type="radio" name="form-choice" id="form-newsletter" class="form-radio"
+                        value="newsletter-form-panel" hidden aria-describedby="form-choice-description">
+
+                    <!-- Mobile Form Toggle -->
+                    <div class="form-tabs-mobile">
+                        <label class="form-toggle" for="form-contact" id="mobile-tab-contact"
+                            aria-controls="contact-form-panel" aria-label="Show contact form">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+                                height="20">
+                                <path
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            MESSAGE
+                        </label>
+                        <label class="form-toggle" for="form-newsletter" id="mobile-tab-newsletter"
+                            aria-controls="newsletter-form-panel" aria-label="Show newsletter form">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+                                height="20">
+                                <path
+                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                            NEWSLETTER
+                        </label>
+                    </div>
+
+
+                    <!-- Tab Navigation (Desktop Only) -->
+                    <div class="form-tabs d-none d-md-flex" role="tablist">
+                        <button class="form-tab active" role="tab" aria-selected="true" tabindex="0"
+                            aria-controls="contact-form-panel" data-tab="contact">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
                                 </path>
                                 <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
-                        </div>
-                        <h3 class="form-title">Send a Message</h3>
-                        <form class="contact-form pe-form pe-form--contact" action="{{CONTACT_API_URL}}" method="POST">
-                            <fieldset style="border: none; padding: 0; margin: 0;">
-                                <legend class="visually-hidden">Contact Information</legend>
-
-                                <div class="form-group">
-                                    <label for="name" class="form-label">Your Name</label>
-                                    <input type="text" id="name" name="name" class="form-input" placeholder="Your Name"
-                                        required autocomplete="name" minlength="2" maxlength="70" aria-required="true"
-                                        aria-describedby="name-error">
-                                    <div class="form-error" id="name-error" role="alert" aria-live="assertive">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                            <path
-                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                        </svg>
-                                        Please enter at least 2 characters
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="contact-email" class="form-label">Email Address</label>
-                                    <input type="email" id="contact-email" name="email" class="form-input"
-                                        placeholder="your@email.com" required autocomplete="email" inputmode="email"
-                                        spellcheck="false" autocapitalize="off"
-                                        title="Use a full email like name@example.com"
-                                        pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" aria-required="true"
-                                        aria-describedby="contact-email-error">
-                                    <div class="form-error" id="contact-email-error" role="alert" aria-live="assertive">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                            <path
-                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                        </svg>
-                                        Enter a valid email address (name@example.com)
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="message" class="form-label">Your Message</label>
-                                    <textarea id="message" name="message" class="form-textarea"
-                                        placeholder="Your Message" required minlength="10" maxlength="5000"
-                                        aria-required="true" aria-describedby="message-error"></textarea>
-                                    <div class="form-error" id="message-error" role="alert" aria-live="assertive">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                            <path
-                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                        </svg>
-                                        Enter a message
-                                    </div>
-                                </div>
-
-                                <!-- Honeypot -->
-                                <div class="visually-hidden" aria-hidden="true">
-                                    <label for="website">Leave this field empty</label>
-                                    <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
-                                </div>
-
-                                <!-- Timestamp -->
-                                <input type="hidden" name="timestamp" value="">
-
-                            </fieldset>
-
-                            <button type="submit" class="button button--primary button--full"
-                                aria-label="Send message to Jose Flores">
-                                <span class="button-text">Send Message</span>
-                                <span class="button-icon" aria-hidden="true">→</span>
-                            </button>
-                        </form>
-
-                        <noscript>
-                            <p class="form-note"
-                                style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                                📬 On submit you'll be taken to a confirmation page.<br>
-                                Or email directly: <a href="mailto:bluejf.llc@gmail.com"
-                                    style="color: oklch(0.75 0.18 55);">bluejf.llc@gmail.com</a>
-                            </p>
-                        </noscript>
-
-                        <div class="form-success" role="status" aria-live="polite" hidden>
-                            ✅ Thanks! I'll reply within 24 hours with next steps.
-                        </div>
-                    </div>
-
-                    <!-- Newsletter Signup -->
-                    <div class="form-card newsletter-form-card" id="newsletter-form" tabindex="-1">
-                        <div class="form-icon" aria-hidden="true">
+                            <span>Message</span>
+                        </button>
+                        <button class="form-tab" role="tab" aria-selected="false" tabindex="-1"
+                            aria-controls="newsletter-form-panel" data-tab="newsletter">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path
-                                    d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                                    d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0">
                                 </path>
                             </svg>
-                        </div>
-                        <h3 class="form-title">Subscribe for Weekly AI Tips</h3>
-                        <div class="newsletter-description">
-                            <p class="newsletter-helper-text">Get case studies, templates, and insights — unsubscribe
-                                anytime.</p>
-                            <p>Get exclusive insights on:</p>
-                            <ul class="newsletter-benefits">
-                                <li>Practical AI for local business</li>
-                                <li>Architecture & delivery that ship</li>
-                                <li>Hands‑on patterns: statecharts & actor model</li>
-                                <li>Workshop invites & templates</li>
-                            </ul>
-                        </div>
-                        <form class="newsletter-form pe-form pe-form--newsletter" action="{{NEWSLETTER_API_URL}}"
-                            method="POST" id="newsletter-subscribe-form">
-                            <div class="form-group">
-                                <label for="newsletter-email" class="form-label">Email Address</label>
-                                <input type="email" id="newsletter-email" name="email" class="form-input"
-                                    placeholder="your@email.com" required autocomplete="email" inputmode="email"
-                                    spellcheck="false" autocapitalize="off"
-                                    title="Use a full email like name@example.com" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-                                    aria-required="true" aria-describedby="newsletter-help newsletter-error">
+                            <span>Newsletter</span>
+                        </button>
+                    </div>
 
-                                <!-- Honeypot -->
-                                <div class="visually-hidden" aria-hidden="true">
-                                    <label for="website-newsletter">Leave this field empty</label>
-                                    <input id="website-newsletter" name="website" type="text" tabindex="-1"
-                                        autocomplete="off">
+                    <!-- Forms Container -->
+                    <div class="forms-container">
+                        <!-- Contact Form (unchanged actions) -->
+                        <div class="form-card" data-tab="contact" role="tabpanel" id="contact-form-panel"
+                            aria-labelledby="mobile-tab-contact">
+                            <h3>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Contact
+                            </h3>
+                            <form class="pe-form" action="#" data-endpoint="{{CONTACT_API_URL}}" method="POST">
+                                <noscript>
+                                    <div class="form-error"
+                                        style="margin-bottom: 1rem; padding: 1rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; color: #dc2626;">
+                                        <strong>JavaScript Required:</strong> This form requires JavaScript to function
+                                        properly. Please enable JavaScript in your browser or contact us directly via
+                                        email.
+                                    </div>
+                                </noscript>
+                                <div class="form-group">
+                                    <label for="name" class="form-label required">YOUR NAME</label>
+                                    <input type="text" id="name" name="name" class="form-input" placeholder="Your Name"
+                                        required minlength="2" maxlength="70">
+                                    <div id="name-error" class="form-error" role="alert">
+                                        <span>Please enter at least 2 characters</span>
+                                    </div>
                                 </div>
 
-                                <!-- Timestamp -->
+                                <div class="form-group">
+                                    <label for="contact-email" class="form-label required">EMAIL ADDRESS</label>
+                                    <input type="email" id="contact-email" name="email" class="form-input"
+                                        placeholder="your@email.com" required>
+                                    <div id="contact-email-error" class="form-error" role="alert">
+                                        <span>Enter a valid email address (name@example.com)</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="message" class="form-label required">YOUR MESSAGE</label>
+                                    <textarea id="message" name="message" class="form-textarea"
+                                        placeholder="Your Message" required minlength="10" maxlength="5000"
+                                        rows="6"></textarea>
+                                    <div id="message-error" class="form-error" role="alert">
+                                        <span>Enter a message (at least 10 characters)</span>
+                                    </div>
+                                </div>
+
+                                <!-- Honeypot and timestamp fields for spam protection -->
+                                <input type="text" name="website" class="sr-only-absolute" tabindex="-1"
+                                    autocomplete="new-password" aria-hidden="true">
                                 <input type="hidden" name="timestamp" value="">
 
-                                <div class="form-error" id="newsletter-error" role="alert" aria-live="assertive">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                        <path
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                                    </svg>
-                                    Enter a valid email address (name@example.com)
+                                <div class="form-submit">
+                                    <button type="submit">
+                                        <span class="button__text">Send & I'll Reply Within 24 Hours <span
+                                                aria-hidden="true">→</span></span>
+                                        <span class="sr-only loading-status" role="status" aria-live="polite"
+                                            aria-atomic="true">Loading…</span>
+                                    </button>
+                                    <div class="form-success-message" aria-live="polite">
+                                        <span class="success-emoji">✅</span>
+                                        <span>Got it — I'll reply within 24 hours.</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
+                        </div>
 
-                            <button type="submit" class="button button--secondary button--full"
-                                aria-label="Subscribe to weekly insights newsletter">
-                                <span class="button-text">Subscribe for Weekly Insights</span>
-                                <span class="button-icon" aria-hidden="true">→</span>
-                            </button>
+                        <!-- Mobile form divider -->
 
-                            <p id="newsletter-help" class="form-note">Get weekly AI tips, case studies, and
-                                resources—unsubscribe anytime.</p>
+                        <!-- Newsletter Signup -->
+                        <div class="form-card" data-tab="newsletter" role="tabpanel" id="newsletter-form-panel"
+                            aria-labelledby="mobile-tab-newsletter">
+                            <h3>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                </svg>
+                                Newsletter
+                            </h3>
+                            <p class="newsletter__social-proof">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" aria-hidden="true" class="newsletter__icon">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Join other readers getting insights
+                            </p>
+                            <p class="newsletter__intro">Get exclusive insights on:</p>
+                            <ul class="newsletter__benefits">
+                                <li class="newsletter__benefit">
+                                    <span class="newsletter__bullet">▸</span>
+                                    Practical AI for local business
+                                </li>
+                                <li class="newsletter__benefit">
+                                    <span class="newsletter__bullet">▸</span>
+                                    Architecture & delivery that ship
+                                </li>
+                                <li class="newsletter__benefit">
+                                    <span class="newsletter__bullet">▸</span>
+                                    Hands-on patterns: statecharts & actor model
+                                </li>
+                                <li class="newsletter__benefit">
+                                    <span class="newsletter__bullet">▸</span>
+                                    Workshop invites & templates
+                                </li>
+                            </ul>
+                            <form class="pe-form" action="#" data-endpoint="{{NEWSLETTER_API_URL}}" method="POST">
+                                <noscript>
+                                    <div class="form-error"
+                                        style="margin-bottom: 1rem; padding: 1rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; color: #dc2626;">
+                                        <strong>JavaScript Required:</strong> This form requires JavaScript to function
+                                        properly. Please enable JavaScript in your browser or contact us directly via
+                                        email.
+                                    </div>
+                                </noscript>
+                                <div class="form-group">
+                                    <label for="newsletter-email" class="form-label required">EMAIL ADDRESS</label>
+                                    <input type="email" id="newsletter-email" name="email" class="form-input"
+                                        placeholder="your@email.com" required>
+                                    <div id="newsletter-email-error" class="form-error" role="alert">
+                                        <span>Enter a valid email address (name@example.com)</span>
+                                    </div>
+                                </div>
 
-                            <noscript>
-                                <p class="form-note"
-                                    style="margin-top:10px;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;">
-                                    📧 After submitting, you'll be taken to a confirmation page.
-                                </p>
-                            </noscript>
-                        </form>
-                        <div class="form-success" role="status" aria-live="polite" hidden>
-                            🎉 You're subscribed! Check your inbox for confirmation.
+                                <!-- Honeypot and timestamp fields for spam protection -->
+                                <input type="text" name="website" class="sr-only-absolute" tabindex="-1"
+                                    autocomplete="new-password" aria-hidden="true">
+                                <input type="hidden" name="timestamp" value="">
+
+                                <div class="form-submit">
+                                    <button type="submit">
+                                        <span class="button__text">Get Insights <span aria-hidden="true">→</span></span>
+                                        <span class="sr-only loading-status" role="status" aria-live="polite"
+                                            aria-atomic="true">Loading…</span>
+                                    </button>
+                                    <div class="form-success-message" aria-live="polite">
+                                        <span class="success-emoji">🎉</span>
+                                        <span>You're in! Check your inbox to confirm your subscription.</span>
+                                    </div>
+                                </div>
+                            </form>
+                            <p class="privacy-note">
+                                Get AI tips, case studies, and resources—unsubscribe anytime.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -628,7 +1005,7 @@
     </main>
 
     <!-- Footer -->
-    <footer role="contentinfo" class="footer section">
+    <footer role="contentinfo" class="footer section section--footer">
         <div class="container">
             <nav class="footer__links" aria-label="Footer navigation">
                 <a href="mailto:bluejf.llc@gmail.com" aria-label="Email Jose Flores">Email</a>
@@ -641,14 +1018,12 @@
                 <span aria-hidden="true">•</span>
                 <a href="https://www.x.com/0xjcf" rel="noopener noreferrer" target="_blank"
                     aria-label="X (Twitter) Profile">X</a>
+                <span aria-hidden="true">•</span>
+                <a href="#contact" data-cta="footer_sponsor_feature">Sponsor or fund a feature</a>
             </nav>
 
             <div class="footer__legal">
                 <p>&copy; 2025 Jose Flores. All rights reserved.</p>
-                <p>
-                    <a href="#privacy">Privacy Policy</a> •
-                    <a href="#terms">Terms of Service</a>
-                </p>
             </div>
 
             <a href="#hero" class="back-to-top" aria-label="Back to top">↑ Top</a>
@@ -665,9 +1040,482 @@
             }
         })();
     </script>
+    <!-- Trust bars 'Read more' togglers (supports multiple bars) -->
+    <script>
+        (function () {
+            var bars = document.querySelectorAll('.trust');
+            if (!bars.length) return;
+
+            bars.forEach(function (trust) {
+                var more = trust.querySelector('.trust__more');
+                var q = trust.querySelector('.q');
+                if (!more || !q) return;
+
+                function updateMoreVisibility() {
+                    // Show toggle only if truncated
+                    var truncated = q.scrollHeight > q.clientHeight + 1;
+                    more.style.display = truncated ? '' : 'none';
+                    if (!truncated) {
+                        trust.classList.remove('is-open');
+                        more.setAttribute('aria-expanded', 'false');
+                        more.textContent = 'Read more';
+                    }
+                }
+
+                more.addEventListener('click', function () {
+                    var open = trust.classList.toggle('is-open');
+                    more.setAttribute('aria-expanded', open ? 'true' : 'false');
+                    more.textContent = open ? 'Read less' : 'Read more';
+                });
+
+                // Re-evaluate on load and resize
+                window.addEventListener('load', updateMoreVisibility);
+                window.addEventListener('resize', function () { requestAnimationFrame(updateMoreVisibility); }, { passive: true });
+                updateMoreVisibility();
+            });
+        })();
+    </script>
+
+    <!-- Tab Navigation Controller -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabContainer = document.querySelector('.form-tabs[role="tablist"]');
+            const tabs = tabContainer ? tabContainer.querySelectorAll('[role="tab"]') : [];
+            const panels = document.querySelectorAll('[role="tabpanel"]');
+            const formsSection = document.querySelector('.contact__forms');
+
+            // Mobile toggle buttons and radio inputs
+            const mobileToggles = document.querySelectorAll('.form-tabs-mobile .form-toggle');
+            const radioInputs = document.querySelectorAll('input[name="form-choice"]');
+            // Activates a tab and associated panel. Optionally focuses the tab.
+            function activateTab(selectedTab, shouldFocus = false) {
+                if (!selectedTab) return;
+
+                const targetPanel = selectedTab.getAttribute('aria-controls');
+
+                // Update all tabs (null-safe)
+                if (tabs.length > 0) {
+                    tabs.forEach(tab => {
+                        const isSelected = tab === selectedTab;
+                        tab.setAttribute('aria-selected', isSelected.toString());
+                        tab.setAttribute('tabindex', isSelected ? '0' : '-1');
+
+                        // Update visual classes
+                        if (isSelected) {
+                            tab.classList.add('active');
+                        } else {
+                            tab.classList.remove('active');
+                        }
+                    });
+                }
+
+                // Update all panels
+                panels.forEach(panel => {
+                    const isVisible = panel.id === targetPanel;
+                    panel.setAttribute('aria-hidden', (!isVisible).toString());
+
+                    // Update panel visibility and active class for CSS
+                    if (isVisible) {
+                        panel.style.display = '';
+                        panel.removeAttribute('hidden');
+                        panel.classList.add('active');
+                    } else {
+                        panel.style.display = 'none';
+                        panel.setAttribute('hidden', '');
+                        panel.classList.remove('active');
+                    }
+                });
+
+                // Sync radio inputs
+                const targetRadio = document.querySelector(`input[value="${targetPanel}"]`);
+                if (targetRadio) {
+                    targetRadio.checked = true;
+                    targetRadio.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+
+                // Focus the activated tab only when requested (avoid scroll on load)
+                if (shouldFocus && selectedTab && typeof selectedTab.focus === 'function') {
+                    try {
+                        // Prevent scroll if supported to avoid jumping the page
+                        selectedTab.focus({ preventScroll: true });
+                    } catch (e) {
+                        // Fallback without options
+                        selectedTab.focus();
+                    }
+                }
+            }
+
+            // Initialize tabs system (add class for CSS)
+            if (formsSection && tabs.length > 0) {
+                formsSection.classList.add('tabs-initialized');
+                // Set initial active state on contact form panel
+                const contactPanel = document.querySelector('[data-tab="contact"]');
+                if (contactPanel) {
+                    contactPanel.classList.add('active');
+                }
+            }
+
+            // Add click handlers for desktop tabs (null-safe)
+            if (tabs.length > 0) {
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        activateTab(this, true);
+                    });
+
+                    // Add keyboard navigation
+                    tab.addEventListener('keydown', function (e) {
+                        let targetTab = null;
+                        const tabsArray = Array.from(tabs);
+                        const currentIndex = tabsArray.indexOf(this);
+
+                        switch (e.key) {
+                            case 'ArrowLeft':
+                                e.preventDefault();
+                                targetTab = tabsArray[currentIndex - 1] || tabsArray[tabsArray.length - 1];
+                                break;
+                            case 'ArrowRight':
+                                e.preventDefault();
+                                targetTab = tabsArray[currentIndex + 1] || tabsArray[0];
+                                break;
+                            case 'Home':
+                                e.preventDefault();
+                                targetTab = tabsArray[0];
+                                break;
+                            case 'End':
+                                e.preventDefault();
+                                targetTab = tabsArray[tabsArray.length - 1];
+                                break;
+                            case 'Enter':
+                            case ' ':
+                                e.preventDefault();
+                                activateTab(this, true);
+                                return;
+                        }
+
+                        if (targetTab) {
+                            activateTab(targetTab, true);
+                        }
+                    });
+                });
+            }
+
+            // Add mobile toggle button handlers
+            mobileToggles.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Find the associated radio input and tab
+                    const targetValue = this.getAttribute('data-target') || this.getAttribute('aria-controls');
+                    const targetRadio = document.querySelector(`input[value="${targetValue}"]`);
+                    const targetTab = tabContainer ? tabContainer.querySelector(`[aria-controls="${targetValue}"]`) : null;
+
+                    // Update radio input
+                    if (targetRadio) {
+                        targetRadio.checked = true;
+                        targetRadio.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+
+                    // Update mobile button ARIA states
+                    mobileToggles.forEach(btn => {
+                        const isSelected = btn === this;
+                        if (btn.hasAttribute('aria-pressed')) {
+                            btn.setAttribute('aria-pressed', isSelected.toString());
+                        }
+                        if (btn.hasAttribute('aria-expanded')) {
+                            btn.setAttribute('aria-expanded', isSelected.toString());
+                        }
+
+                        // Update visual classes
+                        if (isSelected) {
+                            btn.classList.add('active');
+                        } else {
+                            btn.classList.remove('active');
+                        }
+                    });
+
+                    // Update desktop tab ARIA states to stay in sync
+                    if (tabs.length > 0) {
+                        tabs.forEach(tab => {
+                            const isSelected = tab.getAttribute('aria-controls') === targetValue;
+                            tab.setAttribute('aria-selected', isSelected.toString());
+                            tab.setAttribute('tabindex', isSelected ? '0' : '-1');
+
+                            // Update visual classes
+                            if (isSelected) {
+                                tab.classList.add('active');
+                            } else {
+                                tab.classList.remove('active');
+                            }
+                        });
+                    }
+
+                    // Use existing activateTab logic if desktop tab exists
+                    if (targetTab) {
+                        activateTab(targetTab, false);
+                    } else {
+                        // Handle mobile-only case - update panels directly
+                        panels.forEach(panel => {
+                            const isVisible = panel.id === targetValue;
+                            panel.setAttribute('aria-hidden', (!isVisible).toString());
+
+                            if (isVisible) {
+                                panel.style.display = '';
+                                panel.removeAttribute('hidden');
+                            } else {
+                                panel.style.display = 'none';
+                                panel.setAttribute('hidden', '');
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Add radio input change and keydown listeners for keyboard accessibility
+            radioInputs.forEach(radio => {
+                // Handle radio input changes (including keyboard navigation)
+                radio.addEventListener('change', function (e) {
+                    if (this.checked) {
+                        const targetValue = this.value;
+                        const matchingTab = tabContainer ? tabContainer.querySelector(`[aria-controls="${targetValue}"]`) : null;
+
+                        if (matchingTab) {
+                            // Only focus when the change is initiated by the user
+                            const userInitiated = e && e.isTrusted === true;
+                            activateTab(matchingTab, userInitiated);
+                        }
+
+                        // Update mobile toggle states
+                        mobileToggles.forEach(btn => {
+                            const isSelected = btn.getAttribute('data-target') === targetValue ||
+                                btn.getAttribute('aria-controls') === targetValue;
+
+                            if (btn.hasAttribute('aria-pressed')) {
+                                btn.setAttribute('aria-pressed', isSelected.toString());
+                            }
+                            if (btn.hasAttribute('aria-expanded')) {
+                                btn.setAttribute('aria-expanded', isSelected.toString());
+                            }
+                            btn.setAttribute('aria-selected', isSelected.toString());
+
+                            // Update visual classes
+                            if (isSelected) {
+                                btn.classList.add('active');
+                            } else {
+                                btn.classList.remove('active');
+                            }
+                        });
+                    }
+                });
+
+                // Handle keyboard interactions on radio inputs
+                radio.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.checked = true;
+                        this.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                });
+            });
+
+            // Initialize: ensure only the first tab/panel is active
+            if (tabs.length > 0) {
+                // Initialize without focusing to avoid page scroll on load
+                activateTab(tabs[0], false);
+            } else if (panels.length > 0) {
+                // Mobile-only initialization
+                const firstPanel = panels[0];
+                if (firstPanel) {
+                    firstPanel.style.display = '';
+                    firstPanel.removeAttribute('hidden');
+                    firstPanel.setAttribute('aria-hidden', 'false');
+
+                    // Hide other panels
+                    for (let i = 1; i < panels.length; i++) {
+                        panels[i].style.display = 'none';
+                        panels[i].setAttribute('hidden', '');
+                        panels[i].setAttribute('aria-hidden', 'true');
+                    }
+
+                    // Set first radio as checked
+                    if (radioInputs.length > 0) {
+                        radioInputs[0].checked = true;
+                    }
+
+                    // Set first mobile button as active
+                    if (mobileToggles.length > 0) {
+                        mobileToggles[0].classList.add('active');
+                        if (mobileToggles[0].hasAttribute('aria-pressed')) {
+                            mobileToggles[0].setAttribute('aria-pressed', 'true');
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 
     <!-- Deferred Progressive Enhancement Script -->
-    <script defer src="scripts/pe-min-v3.js"></script>
+    <!-- Dev helper: fills endpoints on localhost when placeholders exist -->
+    <script defer src="scripts/dev-env.js"></script>
+    <script defer src="scripts/pe.js"></script>
+
+    <!-- Theme Toggle Script -->
+    <script defer src="scripts/theme-toggle.js"></script>
+
+    <!-- Analytics click + conversion wiring (provider-agnostic) -->
+    <script defer src="scripts/analytics.js"></script>
+
+    <!-- Dynamic CTA hint + segment sync (lightweight, page-local) -->
+    <script>
+        (function () {
+            function syncSegmentAttr() {
+                var sb = document.getElementById('seg-sb');
+                var pt = document.getElementById('seg-pt');
+                var seg = (pt && pt.checked) ? 'pt' : 'sb';
+                document.body.setAttribute('data-segment', seg);
+                document.dispatchEvent(new Event('segmentchange'));
+            }
+            var sb = document.getElementById('seg-sb');
+            var pt = document.getElementById('seg-pt');
+            if (sb) sb.addEventListener('change', syncSegmentAttr);
+            if (pt) pt.addEventListener('change', syncSegmentAttr);
+            syncSegmentAttr();
+
+            var sticky = document.getElementById('stickyCta');
+            var svg = document.getElementById('cta-hint-arrow');
+            var path = document.getElementById('cta-hint-path');
+            var hintContainer = document.getElementById('cta-hint');
+            var origin = document.querySelector('.about__bridge-cta .about__cta-link') || document.querySelector('.about__bridge-cta');
+            if (!sticky || !svg || !path || !origin) return;
+            // Disable the visual hint on mobile screens
+            if (window.matchMedia && window.matchMedia('(max-width: 640px)').matches) {
+                svg.style.display = 'none';
+                return;
+            }
+
+            // Ensure the hint container is at the document root to escape section stacking contexts
+            if (hintContainer && hintContainer.parentElement !== document.body) {
+                document.body.appendChild(hintContainer);
+            }
+
+            // Create gradient for stroke
+            var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            var lg = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+            lg.setAttribute('id', 'hintGradient');
+            var s1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', '#FF8B61');
+            var s2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', '#FFA267');
+            lg.appendChild(s1); lg.appendChild(s2); defs.appendChild(lg); svg.insertBefore(defs, svg.firstChild);
+            path.setAttribute('stroke', 'url(#hintGradient)');
+
+            function drawArrow() {
+                var originRect = origin.getBoundingClientRect();
+                var stickyRect = sticky.getBoundingClientRect();
+
+                // Keep the arrow visible as long as the origin (about__bridge-cta) is visible
+                var vh = window.innerHeight || document.documentElement.clientHeight;
+                var originVisible = originRect.bottom > 0 && originRect.top < vh;
+                if (!originVisible) {
+                    svg.style.display = 'none';
+                    return;
+                }
+
+                var sx = originRect.right + 8; var sy = originRect.top + originRect.height / 2;
+                var ex = stickyRect.left - 8; var ey = stickyRect.top + stickyRect.height / 2;
+                var cx1 = sx + Math.max(60, (ex - sx) / 2); var cy1 = sy - 40;
+                var cx2 = ex - 40; var cy2 = ey - 20;
+                var minX = Math.min(sx, ex, cx1, cx2) - 12; var minY = Math.min(sy, ey, cy1, cy2) - 12;
+                var maxX = Math.max(sx, ex, cx1, cx2) + 12; var maxY = Math.max(sy, ey, cy1, cy2) + 12;
+                svg.setAttribute('width', (maxX - minX)); svg.setAttribute('height', (maxY - minY));
+                svg.setAttribute('viewBox', '0 0 ' + (maxX - minX) + ' ' + (maxY - minY));
+                svg.style.left = minX + 'px'; svg.style.top = minY + 'px';
+                var d = 'M ' + (sx - minX) + ',' + (sy - minY) + ' C ' + (cx1 - minX) + ',' + (cy1 - minY) + ' ' + (cx2 - minX) + ',' + (cy2 - minY) + ' ' + (ex - minX) + ',' + (ey - minY);
+                path.setAttribute('d', d);
+                svg.style.display = 'block';
+            }
+
+            sticky.addEventListener('click', function () { svg.style.display = 'none'; }, { once: true });
+            var io = new IntersectionObserver(function (entries) { entries.forEach(function (e) { if (!e.isIntersecting) svg.style.display = 'none'; }); }, { threshold: 0 });
+            io.observe(sticky);
+
+            ['resize', 'scroll'].forEach(function (evt) { window.addEventListener(evt, drawArrow, { passive: true }); });
+            document.addEventListener('segmentchange', function () { drawArrow(); });
+            drawArrow();
+        })();
+    </script>
+    <!-- Services segment toggle (scoped to #services) -->
+    <script>
+        (function () {
+            var root = document.getElementById('services');
+            if (!root) return;
+            function wireToggle(scope) {
+                var pills = root.querySelectorAll(scope + ' .seg-toggle .pill');
+                if (!pills.length) return;
+                pills.forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        pills.forEach(function (p) { var active = (p === btn); p.classList.toggle('active', active); p.setAttribute('aria-selected', active ? 'true' : 'false'); });
+                        var seg = btn.getAttribute('data-seg') || 'sb';
+                        root.querySelectorAll('[data-sb]').forEach(function (n) { n.hidden = (seg !== 'sb'); });
+                        root.querySelectorAll('[data-pt]').forEach(function (n) { n.hidden = (seg !== 'pt'); });
+
+                        // Reorder cards based on data-order-<seg>
+                        var grid = root.querySelector('.services-alt__grid');
+                        if (grid) {
+                            var cards = Array.from(grid.querySelectorAll('.service-card-std'));
+                            var sorted = cards.slice().sort(function (a, b) {
+                                var ao = parseInt(a.getAttribute('data-order-' + seg) || '99', 10);
+                                var bo = parseInt(b.getAttribute('data-order-' + seg) || '99', 10);
+                                return ao - bo;
+                            });
+                            grid.replaceChildren.apply(grid, sorted);
+                            // Toggle popular badge
+                            sorted.forEach(function (c) {
+                                var popular = (c.getAttribute('data-popular-' + seg) === '1');
+                                c.classList.toggle('is-popular', popular);
+                                // Select only the badge for the active segment (data-sb or data-pt)
+                                var badge = c.querySelector('.card-badge[data-' + seg + ']');
+                                if (badge) {
+                                    badge.style.display = popular ? '' : 'none';
+                                }
+                            });
+                        }
+                        // Update sticky CTA label
+                        var sticky = document.getElementById('stickyCta');
+                        if (sticky) {
+                            var label = 'Hire Jose';
+                            var textSpan = sticky.querySelector('.button__text');
+                            if (textSpan) textSpan.textContent = label;
+                        }
+
+                        // Sync global segment state and notify listeners (e.g., proof quotes)
+                        document.body.setAttribute('data-segment', seg);
+                        document.dispatchEvent(new Event('segmentchange'));
+                    });
+                });
+            }
+            wireToggle('.services-alt');
+            wireToggle('.svc');
+
+            // Ensure initial state is correct for service cards
+            setTimeout(function () {
+                var seg = document.body.getAttribute('data-segment') || 'sb';
+                document.querySelectorAll('[data-sb]').forEach(function (n) { n.hidden = (seg !== 'sb'); });
+                document.querySelectorAll('[data-pt]').forEach(function (n) { n.hidden = (seg !== 'pt'); });
+            }, 0);
+        })();
+    </script>
+    <!-- Global segment visibility sync: toggle [data-sb]/[data-pt] across the page on segmentchange -->
+    <script>
+        (function () {
+            function updateSeg() {
+                var seg = document.body.getAttribute('data-segment') || 'sb';
+                document.querySelectorAll('[data-sb]').forEach(function (n) { n.hidden = (seg !== 'sb'); });
+                document.querySelectorAll('[data-pt]').forEach(function (n) { n.hidden = (seg !== 'pt'); });
+            }
+            document.addEventListener('segmentchange', updateSeg);
+            // Initialize once on load
+            updateSeg();
+        })();
+    </script>
 </body>
 
 </html>

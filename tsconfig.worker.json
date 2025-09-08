@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ESNext", "WebWorker"],
+    "types": ["@cloudflare/workers-types"],
+    "moduleResolution": "Bundler",
+    "verbatimModuleSyntax": true
+  },
+  "include": ["worker.ts"]
+}

@@ -1,7 +1,312 @@
 /* ================================================
-   06-utilities.css - Utility Classes
+   05-utilities/utilities.css - Utility Classes
    Helper classes for quick styling
    ================================================ */
+
+/* ======================
+   Typography Utilities
+   ====================== */
+
+/* Font size */
+.text-xs {
+  font-size: var(--text-xs);
+}
+.text-sm {
+  font-size: var(--text-sm);
+}
+.text-base {
+  font-size: var(--text-base);
+}
+.text-lg {
+  font-size: var(--text-lg);
+}
+.text-xl {
+  font-size: var(--text-xl);
+}
+.text-2xl {
+  font-size: var(--text-2xl);
+}
+.text-3xl {
+  font-size: var(--text-3xl);
+}
+.text-4xl {
+  font-size: var(--text-4xl);
+}
+
+/* Font weight */
+.font-light {
+  font-weight: var(--font-light);
+}
+.font-normal {
+  font-weight: var(--font-normal);
+}
+.font-medium {
+  font-weight: var(--font-medium);
+}
+.font-semibold {
+  font-weight: var(--font-semibold);
+}
+.font-bold {
+  font-weight: var(--font-bold);
+}
+
+/* Line height */
+.leading-none {
+  line-height: var(--leading-none);
+}
+.leading-tight {
+  line-height: var(--leading-tight);
+}
+.leading-normal {
+  line-height: var(--leading-normal);
+}
+.leading-relaxed {
+  line-height: var(--leading-relaxed);
+}
+.leading-loose {
+  line-height: var(--leading-loose);
+}
+
+/* Text alignment */
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.text-justify {
+  text-align: justify;
+}
+
+/* Text transform */
+.uppercase {
+  text-transform: uppercase;
+}
+.lowercase {
+  text-transform: lowercase;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+.normal-case {
+  text-transform: none;
+}
+
+/* Text decoration */
+.underline {
+  text-decoration: underline;
+}
+.no-underline {
+  text-decoration: none;
+}
+.line-through {
+  text-decoration: line-through;
+}
+
+/* Text color */
+.text-primary {
+  color: var(--color-primary);
+}
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+.text-light {
+  color: var(--color-text-light);
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
+.text-white {
+  color: var(--color-neutral-000);
+}
+.text-black {
+  color: var(--color-neutral-900);
+}
+
+/* ======================
+   Flexbox Utilities
+   ====================== */
+
+/* Flex direction */
+.flex-row {
+  flex-direction: row;
+}
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+.flex-col {
+  flex-direction: column;
+}
+.flex-col-reverse {
+  flex-direction: column-reverse;
+}
+
+/* Flex wrap */
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
+/* Justify content */
+.justify-start {
+  justify-content: flex-start;
+}
+.justify-end {
+  justify-content: flex-end;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-around {
+  justify-content: space-around;
+}
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+/* Align items */
+.items-start {
+  align-items: flex-start;
+}
+.items-end {
+  align-items: flex-end;
+}
+.items-center {
+  align-items: center;
+}
+.items-baseline {
+  align-items: baseline;
+}
+.items-stretch {
+  align-items: stretch;
+}
+
+/* Align self */
+.self-auto {
+  align-self: auto;
+}
+.self-start {
+  align-self: flex-start;
+}
+.self-end {
+  align-self: flex-end;
+}
+.self-center {
+  align-self: center;
+}
+.self-stretch {
+  align-self: stretch;
+}
+
+/* Flex grow/shrink */
+.flex-1 {
+  flex: 1 1 0%;
+}
+.flex-auto {
+  flex: 1 1 auto;
+}
+.flex-initial {
+  flex: 0 1 auto;
+}
+.flex-none {
+  flex: none;
+}
+.flex-grow {
+  flex-grow: 1;
+}
+.flex-grow-0 {
+  flex-grow: 0;
+}
+.flex-shrink {
+  flex-shrink: 1;
+}
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+/* Gap */
+.gap-0 {
+  gap: 0;
+}
+.gap-1 {
+  gap: var(--space-1);
+}
+.gap-2 {
+  gap: var(--space-2);
+}
+.gap-3 {
+  gap: var(--space-3);
+}
+.gap-4 {
+  gap: var(--space-4);
+}
+.gap-5 {
+  gap: var(--space-5);
+}
+.gap-6 {
+  gap: var(--space-6);
+}
+.gap-8 {
+  gap: var(--space-8);
+}
+
+/* ======================
+   Grid Utilities
+   ====================== */
+
+/* Grid template columns */
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.grid-cols-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.grid-cols-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+/* Grid column span */
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+.col-span-3 {
+  grid-column: span 3 / span 3;
+}
+.col-span-4 {
+  grid-column: span 4 / span 4;
+}
+.col-span-6 {
+  grid-column: span 6 / span 6;
+}
+.col-span-12 {
+  grid-column: span 12 / span 12;
+}
+.col-span-full {
+  grid-column: 1 / -1;
+}
 
 /* ======================
    Display Utilities
@@ -497,23 +802,23 @@
   border: 0;
 }
 .border {
-  border: 1px solid var(--color-border);
+  border: var(--space-px) solid var(--color-border);
 }
 .border-2 {
   border-width: 2px;
 }
 
 .border-top {
-  border-top: 1px solid var(--color-border);
+  border-top: var(--space-px) solid var(--color-border);
 }
 .border-bottom {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: var(--space-px) solid var(--color-border);
 }
 .border-left {
-  border-left: 1px solid var(--color-border);
+  border-left: var(--space-px) solid var(--color-border);
 }
 .border-right {
-  border-right: 1px solid var(--color-border);
+  border-right: var(--space-px) solid var(--color-border);
 }
 
 .rounded-none {
@@ -580,22 +885,22 @@
    ====================== */
 
 .z-0 {
-  z-index: 0;
+  z-index: var(--z-base);
 }
 .z-10 {
-  z-index: 10;
+  z-index: var(--z-header);
 }
 .z-20 {
-  z-index: 20;
+  z-index: var(--z-overlay);
 }
 .z-30 {
-  z-index: 30;
+  z-index: var(--z-modal);
 }
 .z-40 {
-  z-index: 40;
+  z-index: var(--z-popover);
 }
 .z-50 {
-  z-index: 50;
+  z-index: var(--z-tooltip);
 }
 
 /* ======================
@@ -667,14 +972,22 @@
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
 }
 
+/* Simple off-screen positioning for honeypot fields */
+.sr-only-absolute {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+}
+
 /* Focus visible utility */
-.focus-visible:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+.focus-visible:focus-visible {
+  outline: var(--space-0-5) solid var(--color-primary);
+  outline-offset: var(--space-0-5);
 }
 
 /* ======================
@@ -693,4 +1006,73 @@
 
 .print-only {
   display: none;
+}
+
+/* ======================
+   Back to Top Utility
+   ====================== */
+
+.back-to-top {
+  position: fixed;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  background: var(--color-primary);
+  color: white;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-base);
+  z-index: var(--z-overlay);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Keyboard focus styles for accessibility */
+.back-to-top:focus-visible {
+  opacity: 1;
+  visibility: visible;
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+  box-shadow:
+    0 0 0 6px color-mix(in oklch, var(--color-primary) 20%, transparent),
+    var(--shadow-lg);
+}
+
+/* ================================================
+   Mobile Accessibility Improvements
+   ================================================ */
+
+/* Ensure all touch targets meet 44px minimum */
+@media (max-width: 768px) {
+  button,
+  .button,
+  .btn-cta,
+  .form-tab,
+  .form-toggle,
+  a.button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improved readable line-height (scoped to optional utility container to avoid global overrides) */
+  :root {
+    --mobile-line-height: 1.65;
+    --mobile-line-height-dark: 1.7;
+  }
+
+  /* Opt-in container: add class .mobile-prose to any section needing adjusted mobile readability */
+  .mobile-prose p,
+  .mobile-prose li {
+    line-height: var(--mobile-line-height);
+  }
+
+  [data-theme="dark"] .mobile-prose p,
+  [data-theme="dark"] .mobile-prose li {
+    line-height: var(--mobile-line-height-dark);
+  }
 }

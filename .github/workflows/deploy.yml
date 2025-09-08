@@ -46,7 +46,8 @@ jobs:
         run: |
           find dist -name '*.html' -print0 | xargs -0 sed -i \
             -e "s#styles/main.css#styles/main.css?v=${GITHUB_SHA::8}#g" \
-            -e "s#scripts/pe-min-v3.js#scripts/pe-min-v3.js?v=${GITHUB_SHA::8}#g"
+            -e "s#scripts/pe.js#scripts/pe.js?v=${GITHUB_SHA::8}#g" \
+            -e "s#scripts/theme-toggle.js#scripts/theme-toggle.js?v=${GITHUB_SHA::8}#g"
 
       - name: Add .nojekyll
         run: touch dist/.nojekyll
