@@ -781,3 +781,12 @@ async function hashEmail(email: string): Promise<string> {
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 16);
 }
+
+export const __workerTest = {
+  withError,
+  isValidDomainName,
+  isReasonableSize,
+  normalizeEmail,
+  addCORSHeaders,
+  isRateLimited,
+};

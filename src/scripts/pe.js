@@ -1,4 +1,5 @@
-"use strict";
+import { resolveFormRedirect } from './form-redirect';
+
 /*!
  * Progressive Enhancement v3 - Custom Validation with real-time feedback
  * ~1.5KB minified
@@ -10,15 +11,15 @@
         docElement.classList.remove('no-js');
         docElement.classList.add('js-enabled');
         // Fallback for browsers without :has() support
-        const hasSupport = typeof CSS !== 'undefined' &&
+        const hasSupport =
+            typeof CSS !== 'undefined' &&
             typeof CSS.supports === 'function' &&
             CSS.supports('selector(:has(*))');
         if (!hasSupport) {
             // Add fallback for form validation visual feedback
             document.querySelectorAll('form').forEach((form) => {
                 const submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
-                if (submitButtons.length === 0)
-                    return;
+                if (submitButtons.length === 0) return;
                 const createSubmitUpdater = (submitButton) => {
                     return () => {
                         const form = submitButton.form;
@@ -31,15 +32,16 @@
                         submitButton.disabled = !isValid;
                         if (isValid) {
                             submitButton.classList.remove('is-submit-disabled');
-                        }
-                        else {
+                        } else {
                             submitButton.classList.add('is-submit-disabled');
                         }
                     };
                 };
                 // Create updaters for each submit button
                 const updaters = Array.from(submitButtons)
-                    .filter((button) => button instanceof HTMLButtonElement || button instanceof HTMLInputElement)
+                    .filter(
+                        (button) => button instanceof HTMLButtonElement || button instanceof HTMLInputElement,
+                    )
                     .map(createSubmitUpdater);
                 const updateAllSubmits = () => {
                     updaters.forEach((updater) => {
@@ -63,8 +65,7 @@
                 const targetSections = ['#about', '#services', '#contact'];
                 if (targetSections.includes(hash)) {
                     document.body.classList.add('contact-targeted');
-                }
-                else {
+                } else {
                     document.body.classList.remove('contact-targeted');
                 }
             };
@@ -78,13 +79,11 @@
             const segPT = document.getElementById('seg-pt');
             if (aboutSection && (segSB || segPT)) {
                 const applySegClass = () => {
-                    if (!aboutSection)
-                        return;
+                    if (!aboutSection) return;
                     aboutSection.classList.remove('about--seg-sb', 'about--seg-pt');
                     if (segSB?.checked) {
                         aboutSection.classList.add('about--seg-sb');
-                    }
-                    else if (segPT?.checked) {
+                    } else if (segPT?.checked) {
                         aboutSection.classList.add('about--seg-pt');
                     }
                 };
@@ -96,8 +95,7 @@
         }
         // Process forms
         document.querySelectorAll('form.pe-form').forEach((element) => {
-            if (!(element instanceof HTMLFormElement))
-                return;
+            if (!(element instanceof HTMLFormElement)) return;
             const form = element;
             // Disable native validation
             form.setAttribute('novalidate', '');
@@ -142,9 +140,13 @@
                 const endpoint = form.getAttribute('data-endpoint');
                 if (!endpoint || endpoint.trim() === '' || /\{\{[\s\S]*?\}\}/.test(endpoint)) {
                     // Endpoint is missing, whitespace-only, or contains template placeholders
-                    const submitBtnElement = form.querySelector('button[type="submit"], input[type="submit"]');
-                    if (submitBtnElement instanceof HTMLButtonElement ||
-                        submitBtnElement instanceof HTMLInputElement) {
+                    const submitBtnElement = form.querySelector(
+                        'button[type="submit"], input[type="submit"]',
+                    );
+                    if (
+                        submitBtnElement instanceof HTMLButtonElement ||
+                        submitBtnElement instanceof HTMLInputElement
+                    ) {
                         submitBtnElement.disabled = true;
                         // Show error message
                         let errorElement = form.querySelector('.form-endpoint-error');
@@ -200,10 +202,11 @@
                 };
                 if (submitBtnElement instanceof HTMLButtonElement && !submitBtnElement.disabled) {
                     setButtonLoadingState(submitBtnElement);
-                }
-                else if (submitBtnElement instanceof HTMLInputElement &&
+                } else if (
+                    submitBtnElement instanceof HTMLInputElement &&
                     submitBtnElement.type === 'submit' &&
-                    !submitBtnElement.disabled) {
+                    !submitBtnElement.disabled
+                ) {
                     setButtonLoadingState(submitBtnElement);
                 }
                 // Proceed with form submission to the configured endpoint
@@ -221,16 +224,13 @@
                     if (error instanceof Error) {
                         if (error.name === 'AbortError') {
                             errorMessage += 'Request timed out.';
-                        }
-                        else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                        } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
                             errorMessage +=
                                 'Network connection failed. Please check your internet connection and try again.';
-                        }
-                        else if (error.message) {
+                        } else if (error.message) {
                             errorMessage += error.message;
                         }
-                    }
-                    else {
+                    } else {
                         errorMessage += 'An unexpected error occurred.';
                     }
                     // Remove any existing error messages first
@@ -245,8 +245,10 @@
                     errorElement.textContent = errorMessage;
                     form.appendChild(errorElement);
                     // Re-enable submit button on error
-                    if (submitBtn &&
-                        (submitBtn instanceof HTMLButtonElement || submitBtn instanceof HTMLInputElement)) {
+                    if (
+                        submitBtn &&
+                        (submitBtn instanceof HTMLButtonElement || submitBtn instanceof HTMLInputElement)
+                    ) {
                         removeButtonLoadingState(submitBtn);
                     }
                 };
@@ -277,8 +279,7 @@
                                         });
                                     }, finalWaitTime);
                                     return;
-                                }
-                                else {
+                                } else {
                                     throw new Error(`Rate limited. Please try again later.`);
                                 }
                             }
@@ -289,12 +290,10 @@
                                 if (contentType?.includes('application/json')) {
                                     const errorData = await response.json();
                                     errorDetails = errorData.message || errorData.error || 'Unknown error';
-                                }
-                                else {
+                                } else {
                                     errorDetails = (await response.text()) || 'Unknown error';
                                 }
-                            }
-                            catch {
+                            } catch {
                                 errorDetails = 'Unable to read error details';
                             }
                             throw new Error(`Server error (${response.status}): ${errorDetails}`);
@@ -302,114 +301,19 @@
                         // Handle success with strengthened redirect validation
                         const redirectUrl = response.url || '#';
                         const safeInternalHash = '#contact-success'; // Safe fallback
-                        // Define allowed redirect paths and prefixes
-                        const allowedPaths = [
-                            '/contact-thanks.html',
-                            '/newsletter-thanks.html',
-                            '/contact-error.html',
-                            '/newsletter-error.html',
-                            '/newsletter-check-email.html',
-                        ];
-                        const allowedPrefixes = ['/contact-', '/newsletter-'];
-                        try {
-                            // Explicitly reject protocol-relative URLs (starting with '//')
-                            if (redirectUrl.startsWith('//')) {
-                                window.location.href = safeInternalHash;
-                                return;
-                            }
-                            const url = new URL(redirectUrl, window.location.origin);
-                            // Strict protocol validation: only allow http: or https:
-                            if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-                                window.location.href = safeInternalHash;
-                                return;
-                            }
-                            // Strict origin validation: must exactly match current origin
-                            if (url.origin !== window.location.origin) {
-                                window.location.href = safeInternalHash;
-                                return;
-                            }
-                            // Enhanced security: check for control characters and encoded attacks
-                            const hasControlChars = (str) => {
-                                for (let i = 0; i < str.length; i++) {
-                                    const code = str.charCodeAt(i);
-                                    if ((code >= 0 && code <= 31) || code === 127) {
-                                        return true;
-                                    }
-                                }
-                                return false;
-                            };
-                            const hostnameHasControlChars = hasControlChars(url.hostname);
-                            const searchHasControlChars = hasControlChars(url.search);
-                            const hashHasControlChars = hasControlChars(url.hash);
-                            if (hostnameHasControlChars || searchHasControlChars || hashHasControlChars) {
-                                window.location.href = safeInternalHash;
-                                return;
-                            }
-                            // Safely decode pathname and search for validation
-                            let decodedPathname;
-                            let decodedSearch;
-                            try {
-                                decodedPathname = decodeURIComponent(url.pathname);
-                                decodedSearch = decodeURIComponent(url.search);
-                            }
-                            catch {
-                                // Malformed URL encoding
-                                window.location.href = safeInternalHash;
-                                return;
-                            }
-                            // Check for path traversal and encoded attacks in decoded components
-                            const hasPathTraversal = decodedPathname.includes('/../') ||
-                                decodedPathname.startsWith('../') ||
-                                decodedSearch.includes('/../') ||
-                                decodedSearch.startsWith('../');
-                            const hasNullBytes = decodedPathname.includes('\0') || decodedSearch.includes('\0');
-                            const hasEncodedSeparators = url.pathname.toLowerCase().includes('%2f') ||
-                                url.pathname.toLowerCase().includes('%5c') ||
-                                url.search.toLowerCase().includes('%2f') ||
-                                url.search.toLowerCase().includes('%5c');
-                            if (hasPathTraversal || hasNullBytes || hasEncodedSeparators) {
-                                window.location.href = safeInternalHash;
-                                return;
-                            }
-                            // Normalize pathname by resolving relative segments
-                            const normalizePathSegments = (path) => {
-                                const segments = path.split('/').filter((segment) => segment !== '');
-                                const normalizedSegments = [];
-                                for (const segment of segments) {
-                                    if (segment === '.') {
-                                    }
-                                    else if (segment === '..') {
-                                        // Remove last segment for parent directory reference
-                                        normalizedSegments.pop();
-                                    }
-                                    else {
-                                        normalizedSegments.push(segment);
-                                    }
-                                }
-                                return '/' + normalizedSegments.join('/');
-                            };
-                            const normalizedPath = normalizePathSegments(decodedPathname).toLowerCase();
-                            const isAllowedPath = allowedPaths.some((path) => normalizedPath === path.toLowerCase()) ||
-                                allowedPrefixes.some((prefix) => normalizedPath.startsWith(prefix.toLowerCase()));
-                            if (isAllowedPath) {
-                                window.location.href = url.href;
-                            }
-                            else {
-                                window.location.href = safeInternalHash;
-                            }
-                        }
-                        catch {
-                            // Any parsing errors fall back to safe internal hash
-                            window.location.href = safeInternalHash;
-                        }
-                    }
-                    catch (error) {
+                        const targetHref = resolveFormRedirect({
+                            redirectUrl,
+                            safeInternalHash,
+                            currentOrigin: window.location.origin,
+                            currentPathname: window.location.pathname,
+                        });
+                        window.location.href = targetHref;
+                    } catch (error) {
                         clearTimeout(timeoutId);
                         // Handle different types of errors with separate retry logic for network failures
                         if (error instanceof Error && error.name === 'AbortError') {
                             handleSubmissionError(new Error('Request timed out'), form, submitBtnElement);
-                        }
-                        else if (error instanceof TypeError && error.message.includes('fetch')) {
+                        } else if (error instanceof TypeError && error.message.includes('fetch')) {
                             // Network/connectivity errors - short immediate retry with jitter
                             if (networkRetryCount < 2) {
                                 // Max 2 network retries
@@ -422,12 +326,16 @@
                                     });
                                 }, retryDelay);
                                 return;
+                            } else {
+                                handleSubmissionError(
+                                    new Error(
+                                        'Network connection failed. Please check your internet connection and try again.',
+                                    ),
+                                    form,
+                                    submitBtnElement,
+                                );
                             }
-                            else {
-                                handleSubmissionError(new Error('Network connection failed. Please check your internet connection and try again.'), form, submitBtnElement);
-                            }
-                        }
-                        else {
+                        } else {
                             // Re-throw to be handled by outer catch
                             throw error;
                         }
@@ -443,16 +351,14 @@
             const timestampElement = form.querySelector('input[name="timestamp"]');
             if (timestampElement && timestampElement instanceof HTMLInputElement) {
                 timestampElement.value = Date.now().toString();
-            }
-            else if (timestampElement && !(timestampElement instanceof HTMLInputElement)) {
+            } else if (timestampElement && !(timestampElement instanceof HTMLInputElement)) {
                 // Timestamp element exists but is not an input - create a new one instead
                 const hiddenTimestamp = document.createElement('input');
                 hiddenTimestamp.type = 'hidden';
                 hiddenTimestamp.name = 'timestamp';
                 hiddenTimestamp.value = Date.now().toString();
                 form.appendChild(hiddenTimestamp);
-            }
-            else {
+            } else {
                 // Element doesn't exist - create it dynamically for spam protection
                 const hiddenTimestamp = document.createElement('input');
                 hiddenTimestamp.type = 'hidden';
@@ -532,8 +438,7 @@
             const labelTabs = Array.from(tabs).filter((tab) => tab instanceof HTMLLabelElement);
             labelTabs.forEach((tab) => {
                 tab.addEventListener('keydown', function (e) {
-                    if (!(e instanceof KeyboardEvent))
-                        return;
+                    if (!(e instanceof KeyboardEvent)) return;
                     let newTab = null;
                     const currentIndex = labelTabs.indexOf(this);
                     switch (e.key) {
@@ -574,7 +479,9 @@
         const initStickyCTA = () => {
             const stickyCTA = document.querySelector('.services__sticky-cta');
             // Target the hero CTA button more specifically
-            const heroCTA = document.querySelector('.cta-row .button.button--primary, #hero .button--primary');
+            const heroCTA = document.querySelector(
+                '.cta-row .button.button--primary, #hero .button--primary',
+            );
             if (!stickyCTA || !heroCTA) {
                 return;
             }
@@ -583,15 +490,13 @@
             let scrollTicking = false;
             // Function to handle condensing based on scroll position
             const handleCondensing = () => {
-                if (!hasBeenShown)
-                    return;
+                if (!hasBeenShown) return;
                 const scrollY = window.scrollY || window.pageYOffset;
                 const viewportHeight = window.innerHeight;
                 const condenseTrigger = viewportHeight * 1.5; // Condense after 150vh of scrolling
                 if (scrollY > condenseTrigger) {
                     stickyCTA.classList.add('is-condensed');
-                }
-                else {
+                } else {
                     stickyCTA.classList.remove('is-condensed');
                 }
             };
@@ -610,8 +515,7 @@
                                 stickyCTA.classList.add('is-visible');
                                 hasBeenShown = true;
                                 handleCondensing(); // Check if should be condensed
-                            }
-                            else if (hasBeenShown) {
+                            } else if (hasBeenShown) {
                                 // Hide sticky CTA when hero CTA is back IN view
                                 stickyCTA.classList.remove('is-visible');
                                 stickyCTA.classList.remove('is-condensed');
@@ -631,8 +535,7 @@
                     }
                 };
                 window.addEventListener('scroll', onScrollCondense, { passive: true });
-            }
-            else {
+            } else {
                 // Method 2: Fallback to scroll event for older browsers
                 let ticking = false;
                 const checkVisibility = () => {
@@ -641,8 +544,7 @@
                     if (isOutOfView && !stickyCTA.classList.contains('is-visible')) {
                         stickyCTA.classList.add('is-visible');
                         hasBeenShown = true;
-                    }
-                    else if (!isOutOfView && hasBeenShown && stickyCTA.classList.contains('is-visible')) {
+                    } else if (!isOutOfView && hasBeenShown && stickyCTA.classList.contains('is-visible')) {
                         stickyCTA.classList.remove('is-visible');
                         stickyCTA.classList.remove('is-condensed');
                     }
@@ -681,8 +583,7 @@
         // Initialize sticky CTA - always register DOM handler
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initStickyCTA);
-        }
-        else {
+        } else {
             initStickyCTA();
         }
     }

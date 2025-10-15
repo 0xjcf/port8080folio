@@ -1,3 +1,5 @@
+import { resolveFormRedirect } from './form-redirect';
+
 /*!
  * Progressive Enhancement v3 - Custom Validation with real-time feedback
  * ~1.5KB minified
@@ -354,123 +356,14 @@
             // Handle success with strengthened redirect validation
             const redirectUrl = response.url || '#';
             const safeInternalHash = '#contact-success'; // Safe fallback
+            const targetHref = resolveFormRedirect({
+              redirectUrl,
+              safeInternalHash,
+              currentOrigin: window.location.origin,
+              currentPathname: window.location.pathname,
+            });
 
-            // Define allowed redirect paths and prefixes
-            const allowedPaths = [
-              '/contact-thanks.html',
-              '/newsletter-thanks.html',
-              '/contact-error.html',
-              '/newsletter-error.html',
-              '/newsletter-check-email.html',
-            ];
-            const allowedPrefixes = ['/contact-', '/newsletter-'];
-
-            try {
-              // Explicitly reject protocol-relative URLs (starting with '//')
-              if (redirectUrl.startsWith('//')) {
-                window.location.href = safeInternalHash;
-                return;
-              }
-
-              const url = new URL(redirectUrl, window.location.origin);
-
-              // Strict protocol validation: only allow http: or https:
-              if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-                window.location.href = safeInternalHash;
-                return;
-              }
-
-              // Strict origin validation: must exactly match current origin
-              if (url.origin !== window.location.origin) {
-                window.location.href = safeInternalHash;
-                return;
-              }
-
-              // Enhanced security: check for control characters and encoded attacks
-              const hasControlChars = (str: string): boolean => {
-                for (let i = 0; i < str.length; i++) {
-                  const code = str.charCodeAt(i);
-                  if ((code >= 0 && code <= 31) || code === 127) {
-                    return true;
-                  }
-                }
-                return false;
-              };
-
-              const hostnameHasControlChars = hasControlChars(url.hostname);
-              const searchHasControlChars = hasControlChars(url.search);
-              const hashHasControlChars = hasControlChars(url.hash);
-
-              if (hostnameHasControlChars || searchHasControlChars || hashHasControlChars) {
-                window.location.href = safeInternalHash;
-                return;
-              }
-
-              // Safely decode pathname and search for validation
-              let decodedPathname: string;
-              let decodedSearch: string;
-
-              try {
-                decodedPathname = decodeURIComponent(url.pathname);
-                decodedSearch = decodeURIComponent(url.search);
-              } catch {
-                // Malformed URL encoding
-                window.location.href = safeInternalHash;
-                return;
-              }
-
-              // Check for path traversal and encoded attacks in decoded components
-              const hasPathTraversal =
-                decodedPathname.includes('/../') ||
-                decodedPathname.startsWith('../') ||
-                decodedSearch.includes('/../') ||
-                decodedSearch.startsWith('../');
-
-              const hasNullBytes = decodedPathname.includes('\0') || decodedSearch.includes('\0');
-
-              const hasEncodedSeparators =
-                url.pathname.toLowerCase().includes('%2f') ||
-                url.pathname.toLowerCase().includes('%5c') ||
-                url.search.toLowerCase().includes('%2f') ||
-                url.search.toLowerCase().includes('%5c');
-
-              if (hasPathTraversal || hasNullBytes || hasEncodedSeparators) {
-                window.location.href = safeInternalHash;
-                return;
-              }
-
-              // Normalize pathname by resolving relative segments
-              const normalizePathSegments = (path: string): string => {
-                const segments = path.split('/').filter((segment) => segment !== '');
-                const normalizedSegments: string[] = [];
-
-                for (const segment of segments) {
-                  if (segment === '.') {
-                  } else if (segment === '..') {
-                    // Remove last segment for parent directory reference
-                    normalizedSegments.pop();
-                  } else {
-                    normalizedSegments.push(segment);
-                  }
-                }
-
-                return '/' + normalizedSegments.join('/');
-              };
-
-              const normalizedPath = normalizePathSegments(decodedPathname).toLowerCase();
-              const isAllowedPath =
-                allowedPaths.some((path) => normalizedPath === path.toLowerCase()) ||
-                allowedPrefixes.some((prefix) => normalizedPath.startsWith(prefix.toLowerCase()));
-
-              if (isAllowedPath) {
-                window.location.href = url.href;
-              } else {
-                window.location.href = safeInternalHash;
-              }
-            } catch {
-              // Any parsing errors fall back to safe internal hash
-              window.location.href = safeInternalHash;
-            }
+            window.location.href = targetHref;
           } catch (error) {
             clearTimeout(timeoutId);
 

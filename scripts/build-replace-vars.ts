@@ -15,18 +15,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Type definitions for wrangler.toml structure
-interface WranglerConfig {
+export interface WranglerConfig {
   vars?: Record<string, string>;
   env?: Record<string, {
     vars?: Record<string, string>;
   }>;
 }
 
+export interface ProcessHtmlOptions {
+  srcDir?: string;
+  distDir?: string;
+}
+
 /**
  * Mask sensitive values in logs to prevent secret leakage
  * Detects likely secrets by name patterns and masks their values
  */
-function maskSensitiveValue(key: string, value: string): string {
+export function maskSensitiveValue(key: string, value: string): string {
   // Define patterns that indicate sensitive values
   // Use word boundaries that work with underscores and hyphens
   const sensitivePatterns = /(SECRET|KEY|TOKEN|PASS|PASSWORD|PRIVATE|AUTH|CREDENTIAL)/i;
@@ -49,7 +54,7 @@ function maskSensitiveValue(key: string, value: string): string {
 }
 
 // Load variables from wrangler.toml
-function loadVariables(environment: string): Record<string, string> {
+export function loadVariables(environment: string): Record<string, string> {
   const tomlPath = path.join(__dirname, '..', 'wrangler.toml');
   const tomlContent = fs.readFileSync(tomlPath, 'utf-8');
   const parsed = toml.parse(tomlContent) as WranglerConfig;
@@ -82,7 +87,7 @@ function loadVariables(environment: string): Record<string, string> {
 }
 
 // Recursively find all HTML files
-function listHtmlFiles(dir: string): string[] {
+export function listHtmlFiles(dir: string): string[] {
   const files: string[] = [];
 
   // Check if directory exists and is actually a directory
@@ -117,12 +122,12 @@ function listHtmlFiles(dir: string): string[] {
 }
 
 // Escape regex metacharacters for literal matching
-function escapeRegExp(string: string): string {
+export function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 // Replace template variables in content
-function replaceVariables(content: string, vars: Record<string, string>): string {
+export function replaceVariables(content: string, vars: Record<string, string>): string {
   let result = content;
   for (const [key, value] of Object.entries(vars)) {
     const escapedKey = escapeRegExp(key);
@@ -134,7 +139,7 @@ function replaceVariables(content: string, vars: Record<string, string>): string
 }
 
 // Validate that all template variables have been replaced
-function validateReplacement(content: string, filePath: string): void {
+export function validateReplacement(content: string, filePath: string): void {
   const unreplacedVars = content.match(/\{\{[^}]+\}\}/g);
   if (unreplacedVars) {
     console.warn(`⚠️  Warning: Unreplaced variables in ${filePath}:`);
@@ -145,7 +150,11 @@ function validateReplacement(content: string, filePath: string): void {
 }
 
 // Process HTML files
-function processHtmlFiles(environment: string, dryRun: boolean = false): void {
+export function processHtmlFiles(
+  environment: string,
+  dryRun: boolean = false,
+  options: ProcessHtmlOptions = {},
+): void {
   console.log(`📝 Processing HTML files for environment: ${environment}`);
 
   const vars = loadVariables(environment);
@@ -154,8 +163,8 @@ function processHtmlFiles(environment: string, dryRun: boolean = false): void {
     console.log(`   ${key} = ${maskSensitiveValue(key, value)}`);
   }
 
-  const srcDir = path.join(__dirname, '..', 'src');
-  const distDir = path.join(__dirname, '..', 'dist');
+  const srcDir = options.srcDir ?? path.join(__dirname, '..', 'src');
+  const distDir = options.distDir ?? path.join(__dirname, '..', 'dist');
   const htmlFiles = listHtmlFiles(srcDir);
 
   console.log(`\n📁 Found ${htmlFiles.length} HTML files:`);
@@ -235,6 +244,7 @@ function processHtmlFiles(environment: string, dryRun: boolean = false): void {
   }
 }
 
+/* c8 ignore start */
 // Main function
 function main(): void {
   const args = process.argv.slice(2);
@@ -338,9 +348,11 @@ function main(): void {
     });
     process.on('exit', () => cleanup());
   }
+  /* c8 ignore end */
 }
 
 // Run if called directly
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
 }
+/* c8 ignore end */
