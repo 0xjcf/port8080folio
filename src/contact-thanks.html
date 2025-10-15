@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You - Jose Flores</title>
-    <meta name="description" content="Thank you for your message. I'll get back to you within 24 hours.">
+    <meta name="description" content="Thanks for your message. I'll reply within 24 hours.">
+    <meta name="robots" content="noindex,follow">
     <link rel="stylesheet" href="styles/main.css">
     <script>
         (function () {
@@ -14,100 +16,36 @@
             s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID);
             document.head.appendChild(s);
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);} window.gtag = gtag;
+            function gtag() { dataLayer.push(arguments); } window.gtag = gtag;
             gtag('js', new Date()); gtag('config', GA_ID, { anonymize_ip: true, transport_type: 'beacon' });
         })();
     </script>
-    <style>
-        .thank-you-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .thank-you-card {
-            max-width: 600px;
-            text-align: center;
-            padding: 48px;
-            background: oklch(1 0 0 / 0.04);
-            backdrop-filter: blur(20px);
-            border: 1px solid oklch(1 0 0 / 0.12);
-            border-radius: 16px;
-            box-shadow: 0 22px 38px oklch(0.75 0.18 55 / 0.12);
-        }
-        .thank-you-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 24px;
-            background: linear-gradient(90deg, oklch(70% 0.2 25), oklch(82% 0.15 55));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .thank-you-icon svg {
-            width: 40px;
-            height: 40px;
-            color: white;
-        }
-        .thank-you-title {
-            font-size: 32px;
-            font-weight: 600;
-            margin: 0 0 16px;
-            color: oklch(1 0 0);
-        }
-        .thank-you-message {
-            font-size: 18px;
-            line-height: 1.6;
-            color: oklch(1 0 0 / 0.8);
-            margin: 0 0 32px;
-        }
-        .thank-you-actions {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .thank-you-btn {
-            padding: 12px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .thank-you-btn-primary {
-            background: linear-gradient(90deg, oklch(70% 0.2 25), oklch(82% 0.15 55));
-            color: white;
-        }
-        .thank-you-btn-secondary {
-            background: oklch(1 0 0 / 0.05);
-            color: oklch(1 0 0 / 0.9);
-            border: 1px solid oklch(1 0 0 / 0.1);
-        }
-        .thank-you-btn:hover {
-            transform: translateY(-2px);
-        }
-    </style>
 </head>
-<body class="dark-theme">
-    <div class="thank-you-container">
-        <div class="thank-you-card">
-            <div class="thank-you-icon">
+
+<body class="status-page status-page--success">
+    <main class="status-page__wrapper" role="main">
+        <section class="status-card" role="status" aria-live="polite">
+            <div class="status-card__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 6L9 17l-5-5"></path>
+                    <path d="M20 6 9 17l-5-5"></path>
                 </svg>
             </div>
-            <h1 class="thank-you-title">Message Sent Successfully!</h1>
-            <p class="thank-you-message">
-                Thank you for reaching out. I've received your message and will respond within 24 hours.
+            <p class="status-card__eyebrow">Success</p>
+            <h1 class="status-card__title">Message sent successfully!</h1>
+            <p class="status-card__message">
+                Thanks for reaching out. I've received your message and will respond within a day.
             </p>
-            <div class="thank-you-actions">
-                <a href="/port8080folio/" class="thank-you-btn thank-you-btn-primary">Back to Home</a>
-                <a href="/port8080folio/#services" class="thank-you-btn thank-you-btn-secondary">View Services</a>
+            <div class="status-card__actions">
+                <a href="/port8080folio/" class="status-page__btn status-page__btn--primary">Back to home</a>
+                <a href="/port8080folio/#services" class="status-page__btn status-page__btn--secondary">View services</a>
             </div>
-        </div>
-    </div>
+            <p class="status-card__support">
+                Prefer email? Reach me at
+                <a class="status-page__link" href="mailto:bluejf.llc@gmail.com">bluejf.llc@gmail.com</a>.
+            </p>
+        </section>
+    </main>
+    <script defer src="scripts/analytics.js"></script>
 </body>
-<script defer src="scripts/analytics.js"></script>
+
 </html>

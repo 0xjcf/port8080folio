@@ -25,7 +25,7 @@ const normalizePathSegments = (path: string): string => {
     normalizedSegments.push(segment);
   }
 
-  return '/' + normalizedSegments.join('/');
+  return `/${normalizedSegments.join('/')}`;
 };
 
 const deriveBasePrefixes = (pathname: string | undefined): string[] => {
@@ -54,7 +54,7 @@ const deriveBasePrefixes = (pathname: string | undefined): string[] => {
     return [];
   }
 
-  return ['/' + segments.join('/')];
+  return [`/${segments.join('/')}`];
 };
 
 /**

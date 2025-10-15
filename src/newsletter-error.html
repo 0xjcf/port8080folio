@@ -1,13 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
-    <title>We couldn’t add your email — Jose Flores</title>
+    <title>We couldn't add your email - Jose Flores</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,follow" />
     <link rel="stylesheet" href="styles/main.css" />
-    <base href="/port8080folio/" />
 
     <script>
         (function () {
@@ -22,82 +21,37 @@
         })();
     </script>
 
-    <style>
-        .wrap {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .card {
-            max-width: 640px;
-            text-align: center;
-            padding: 48px;
-            background: oklch(1 0 0/.04);
-            border: 1px solid oklch(1 0 0/.12);
-            border-radius: 16px;
-            box-shadow: 0 22px 38px oklch(.75 .18 55/.12);
-        }
-
-        .title {
-            font-size: 28px;
-            margin: 0 0 12px;
-            color: oklch(1 0 0);
-        }
-
-        .msg {
-            font-size: 16px;
-            color: oklch(1 0 0/.8);
-            margin: 0 0 20px;
-        }
-
-        .actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .primary {
-            background: linear-gradient(90deg, oklch(70% .2 25), oklch(82% .15 55));
-            color: #fff;
-        }
-
-        .ghost {
-            background: oklch(1 0 0/.05);
-            color: oklch(1 0 0/.9);
-            border: 1px solid oklch(1 0 0/.1);
-        }
-    </style>
 </head>
 
-<body class="dark-theme">
-    <main class="wrap">
-        <section class="card" role="status" aria-live="polite">
-            <h1 class="title">We couldn’t add your email</h1>
-            <p class="msg">
-                This can happen if the address is invalid, if there was a temporary issue,
-                or if too many sign-ups happened in a short time. Please try again later or email me directly and I’ll
-                add you.
-            </p>
-            <div class="actions">
-                <a class="btn primary" href="#newsletter-form">Try again</a>
-                <a class="btn ghost" href="mailto:bluejf.llc@gmail.com?subject=Newsletter%20Signup%20Error">Email
-                    Jose</a>
-                <a class="btn ghost" href="./">Back to Home</a>
+<body class="status-page status-page--error">
+    <main class="status-page__wrapper" role="main">
+        <section class="status-card" role="status" aria-live="polite">
+            <div class="status-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="m15 9-6 6"></path>
+                    <path d="m9 9 6 6"></path>
+                </svg>
             </div>
+            <p class="status-card__eyebrow">Signup issue</p>
+            <h1 class="status-card__title">We couldn't add your email</h1>
+            <p class="status-card__message">
+                This can happen if the address looks invalid, a lot of signups happened at once, or the provider had a
+                momentary hiccup. Try again shortly. If it still fails, reply by email and I'll make sure you get added.
+            </p>
+            <div class="status-card__actions">
+                <a class="status-page__btn status-page__btn--primary" href="/port8080folio/#newsletter-form">Try again</a>
+                <a class="status-page__btn status-page__btn--secondary"
+                    href="mailto:bluejf.llc@gmail.com?subject=Newsletter%20Signup%20Error">Email Jose</a>
+                <a class="status-page__btn status-page__btn--ghost" href="/port8080folio/">Back to home</a>
+            </div>
+            <p class="status-card__support">
+                For persistent problems, send a quick note to
+                <a class="status-page__link" href="mailto:bluejf.llc@gmail.com">bluejf.llc@gmail.com</a> and I'll handle it manually.
+            </p>
         </section>
     </main>
-<script defer src="scripts/analytics.js"></script>
+    <script defer src="scripts/analytics.js"></script>
 </body>
 
 </html>

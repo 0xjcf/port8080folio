@@ -46,6 +46,7 @@
 @import "./06-sections/contact.css" layer(sections);
 @import "./06-sections/contact-forms.css" layer(sections);
 @import "./06-sections/footer.css" layer(sections);
+@import "./06-sections/status-pages.css" layer(sections);
 
 /* ================================================
    7. Theme - Theme-specific overrides
