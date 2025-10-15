@@ -6,6 +6,7 @@ import * as path from 'node:path';
 import { tmpdir } from 'node:os';
 
 import {
+  applyEnvironmentTransforms,
   escapeRegExp,
   listHtmlFiles,
   loadVariables,
@@ -104,6 +105,24 @@ describe('build-replace-vars utility', () => {
     expect(output).toContain('http://127.0.0.1:8787/api/contact');
     expect(output).not.toMatch(/\{\{/);
     logSpy.mockRestore();
+  });
+
+  it('removes dev helper script when producing production HTML', () => {
+    const { srcDir, distDir } = createTempProject();
+    const filePath = path.join(srcDir, 'with-dev-script.html');
+    const scriptSource = `<script defer src="scripts/dev-env.js"></script>
+<script src="scripts/dev-env.js" data-test="variation"></script>
+<div>content</div>`;
+    fs.writeFileSync(filePath, scriptSource);
+
+    processHtmlFiles('production', false, { srcDir, distDir });
+
+    const prodOutput = fs.readFileSync(path.join(distDir, 'with-dev-script.html'), 'utf-8');
+    expect(prodOutput).not.toContain('dev-env.js');
+    expect(prodOutput).toContain('content');
+
+    const devOutput = applyEnvironmentTransforms(scriptSource, 'dev');
+    expect(devOutput).toContain('dev-env.js');
   });
 
   it('performs dry run without writing files', () => {

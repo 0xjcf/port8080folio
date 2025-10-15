@@ -138,6 +138,19 @@ export function replaceVariables(content: string, vars: Record<string, string>):
   return result;
 }
 
+// Apply environment-specific HTML tweaks
+export function applyEnvironmentTransforms(content: string, environment: string): string {
+  if (environment !== 'production') {
+    return content;
+  }
+
+  // Remove dev-only helper script to avoid 404s and dev behavior in production
+  return content.replace(
+    /[ \t]*<script\b[^>]*\bsrc=["']scripts\/dev-env\.js["'][^>]*>\s*<\/script>\s*/g,
+    '',
+  );
+}
+
 // Validate that all template variables have been replaced
 export function validateReplacement(content: string, filePath: string): void {
   const unreplacedVars = content.match(/\{\{[^}]+\}\}/g);
@@ -190,7 +203,8 @@ export function processHtmlFiles(
 
     try {
       const content = fs.readFileSync(srcFile, 'utf-8');
-      const processedContent = replaceVariables(content, vars);
+      let processedContent = replaceVariables(content, vars);
+      processedContent = applyEnvironmentTransforms(processedContent, environment);
 
       if (dryRun) {
         console.log(`   🔍 [DRY RUN] Would write to: ${path.relative(process.cwd(), distFile)}`);
