@@ -91,9 +91,9 @@ NEWSLETTER_API_URL = "https://website-forms-production.bluejf-llc.workers.dev/ap
 # Development
 [[kv_namespaces]]
 binding = "RATE_LIMIT_KV"
-id = "f42bdaa4d8544c3a8ef4c6f3efe936de"
+id = "a8084909de3348969002d684387b23fc"
 
 # Production  
 [[env.production.kv_namespaces]]
 binding = "RATE_LIMIT_KV"
-id = "6fd8370c0307443f827e7b66ede74e53"
+id = "e5f219d5db6d48eca60ddd8a5df06ae1"
