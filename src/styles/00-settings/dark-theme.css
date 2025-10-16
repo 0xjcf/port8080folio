@@ -500,6 +500,85 @@
   text-shadow: 0 0 var(--space-2-5) oklch(0.61 0.24 25 / 0.5);
 }
 
+/* ================================================
+   Status Pages - Dark Theme
+   ================================================ */
+[data-theme="dark"] body.status-page {
+  --status-card-surface: color-mix(in oklch, var(--color-neutral-950) 68%, transparent);
+  --status-card-border: color-mix(in oklch, var(--status-accent) 28%, var(--color-neutral-800));
+  --status-shadow: 0 42px 96px color-mix(in oklch, var(--status-accent) 26%, oklch(0 0 0 / 0.65));
+  --status-muted: color-mix(in oklch, var(--color-neutral-200) 72%, transparent);
+  --status-icon-color: var(--color-neutral-050);
+  background: oklch(0.035 0.01 250);
+}
+
+[data-theme="dark"] body.status-page::before {
+  background:
+    radial-gradient(120% 120% at 50% -12%, color-mix(in oklch, var(--status-accent) 24%, transparent) 0%, transparent 55%),
+    linear-gradient(180deg, oklch(0.13 0.01 250) 0%, oklch(0.07 0.009 250) 44%, oklch(0.03 0 250) 100%);
+  opacity: 0.75;
+}
+
+[data-theme="dark"] body.status-page::after {
+  background: radial-gradient(65% 60% at 50% 40%, color-mix(in oklch, var(--status-accent) 38%, transparent) 0%, transparent 72%);
+  filter: blur(120px);
+  opacity: 0.65;
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  [data-theme="dark"] .status-card {
+    background: color-mix(in oklch, var(--color-neutral-950) 72%, transparent);
+  }
+}
+
+[data-theme="dark"] .status-card__list {
+  background: color-mix(in oklch, var(--status-accent) 18%, var(--color-neutral-950));
+  border-color: color-mix(in oklch, var(--status-accent) 36%, transparent);
+}
+
+[data-theme="dark"] .status-card__list h2 {
+  color: color-mix(in oklch, var(--status-accent) 48%, var(--color-neutral-050) 52%);
+}
+
+[data-theme="dark"] .status-card__list li {
+  color: color-mix(in oklch, var(--color-neutral-050) 85%, transparent);
+}
+
+[data-theme="dark"] .status-card__list li::before {
+  color: color-mix(in oklch, var(--status-accent) 70%, var(--color-neutral-050) 30%);
+}
+
+[data-theme="dark"] .status-page__btn--secondary {
+  background: color-mix(in oklch, var(--status-accent) 24%, var(--color-neutral-950));
+  border-color: color-mix(in oklch, var(--status-accent) 38%, transparent);
+  color: color-mix(in oklch, var(--status-accent) 75%, var(--color-neutral-050) 25%);
+}
+
+[data-theme="dark"] .status-page__btn--ghost {
+  border-color: color-mix(in oklch, var(--status-muted) 50%, transparent);
+  color: color-mix(in oklch, var(--status-muted) 90%, transparent);
+}
+
+[data-theme="dark"] .status-page--error .status-page__btn--ghost {
+  background: color-mix(in oklch, var(--status-accent) 18%, var(--color-neutral-950));
+  border-color: color-mix(in oklch, var(--status-accent) 44%, transparent);
+  color: color-mix(in oklch, var(--status-accent) 72%, var(--color-neutral-050) 28%);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--status-accent) 24%, transparent);
+}
+
+[data-theme="dark"] .status-card__support {
+  color: color-mix(in oklch, var(--status-muted) 78%, var(--color-neutral-300) 22%);
+}
+
+[data-theme="dark"] .status-page__link {
+  color: color-mix(in oklch, var(--status-accent) 60%, var(--color-neutral-050) 40%);
+}
+
+[data-theme="dark"] .status-page--error {
+  --status-card-border: color-mix(in oklch, var(--status-accent) 32%, var(--color-neutral-800));
+  --status-shadow: 0 48px 120px color-mix(in oklch, var(--status-accent) 30%, transparent);
+}
+
 /* Let sections/typography decide exact tone; the body already has a base color */
 /* Removed global p, li override to allow sections to control their own text colors */
 

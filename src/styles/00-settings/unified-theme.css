@@ -50,6 +50,34 @@ body::before {
   mix-blend-mode: screen;
 }
 
+/* Override global canvas for standalone status pages */
+body.status-page {
+  background: color-mix(in oklch, var(--color-brand-primary) 6%, var(--color-neutral-000));
+}
+
+body.status-page::before {
+  mix-blend-mode: normal;
+  opacity: 1;
+  z-index: var(--z-below);
+}
+
+body.status-page::after {
+  content: "";
+  position: fixed;
+  inset-inline: 8%;
+  top: 12%;
+  height: 68%;
+  pointer-events: none;
+  background: radial-gradient(
+    60% 62% at 50% 44%,
+    color-mix(in oklch, var(--color-brand-primary) 22%, var(--color-neutral-000)) 0%,
+    transparent 78%
+  );
+  filter: blur(90px);
+  opacity: 0.55;
+  z-index: calc(var(--z-below) + 1);
+}
+
 @media (forced-colors: active) {
   body::before {
     display: none;

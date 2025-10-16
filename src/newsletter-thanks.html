@@ -8,6 +8,38 @@
     <meta name="description"
         content="You're subscribed! Expect architecture patterns, optimization tactics, and hands-on guidance directly in your inbox.">
     <meta name="robots" content="noindex,follow">
+    <meta name="color-scheme" content="light dark">
+    <script>
+        (function () {
+            var themeKey = 'preferred-theme';
+            var storedTheme = null;
+            try {
+                var candidate = localStorage.getItem(themeKey);
+                if (candidate === 'light' || candidate === 'dark' || candidate === 'auto') {
+                    storedTheme = candidate;
+                }
+            } catch (error) {
+                storedTheme = null;
+            }
+
+            var prefersDark = false;
+            try {
+                prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } catch (error) {
+                prefersDark = false;
+            }
+
+            var theme = prefersDark ? 'dark' : 'light';
+            var mode = 'auto';
+            if (storedTheme === 'light' || storedTheme === 'dark') {
+                theme = storedTheme;
+                mode = 'manual';
+            }
+
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.setAttribute('data-theme-mode', mode);
+        })();
+    </script>
     <link rel="stylesheet" href="styles/main.css">
     <script>
         (function () {
@@ -56,6 +88,7 @@
             </p>
         </section>
     </main>
+    <script defer src="scripts/theme-toggle.js"></script>
     <script defer src="scripts/analytics.js"></script>
 </body>
 
