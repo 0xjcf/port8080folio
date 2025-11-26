@@ -61,6 +61,6 @@
   "author": "Jose Flores",
   "license": "MIT",
   "dependencies": {
-    "valibot": "^1.1.0"
+    "valibot": "^1.2.0"
   }
 }
