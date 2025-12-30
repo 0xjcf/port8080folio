@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'About — Jose Flores | Behavior-First Systems';
+const description = 'How Jose Flores works with teams: behavior-first system design, clear tradeoffs, and sustainable delivery.';
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Jose Flores',
+  url: 'https://0xjcf.com',
+  jobTitle: 'Software Engineer',
+  description,
+  sameAs: [
+    'https://github.com/0xjcf',
+    'https://www.linkedin.com/in/joseflores-io',
+    'https://x.com/0xjcf'
+  ]
+};
+---
+
+<BaseLayout title={title} description={description} bodyClass="no-js">
+  <Fragment slot="head">
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(personSchema)}></script>
+  </Fragment>
+  <main id="main" role="main" class="section section--about page-content">
+    <div class="container">
+      <h1 class="section__title">About</h1>
+
+      <section class="about__section">
+        <h2>How I think, how I work, and why behavior matters</h2>
+        <p>
+          I’m Jose Flores — a software engineer and technical advisor focused on helping teams ship complex systems
+          with confidence. I specialize in making behavior explicit so teams can reason about change, reduce risk, and
+          move faster without chaos.
+        </p>
+      </section>
+
+      <section class="about__section">
+        <h2>My background (the short version)</h2>
+        <ul>
+          <li>Product teams shipping customer-facing systems.</li>
+          <li>Founders navigating scale and technical uncertainty.</li>
+          <li>Local businesses turning websites into reliable lead engines.</li>
+        </ul>
+        <p>
+          The pattern is consistent: teams don’t stall because of code quality — they stall because expectations are
+          unclear and behavior is hard to reason about.
+        </p>
+      </section>
+
+      <section class="about__section">
+        <h2>How I think about software</h2>
+        <p>
+          Most complexity comes from hidden assumptions. When behavior lives only in people’s heads or scattered across
+          components, teams slow down, bugs repeat, and decisions get revisited endlessly.
+        </p>
+        <p>I make behavior visible and shared by:</p>
+        <ul>
+          <li>Modeling flows with statecharts.</li>
+          <li>Structuring systems using the actor model.</li>
+          <li>Turning assumptions into scenarios you can test.</li>
+          <li>Writing decisions in plain English so they don’t drift.</li>
+        </ul>
+        <p>This doesn’t add overhead — it removes friction.</p>
+      </section>
+
+      <section class="about__section">
+        <h2>How I work with teams</h2>
+        <ul>
+          <li>Clarity matters more than speed theater.</li>
+          <li>Decisions are documented, not tribal.</li>
+          <li>Collaboration beats heroics.</li>
+          <li>Shipping sustainably is the goal.</li>
+        </ul>
+        <p>
+          I don’t arrive with a fixed framework or agenda. I help teams choose the smallest tool that solves the real
+          problem — whether that’s a workshop, advisory support, or hands-on engineering.
+        </p>
+      </section>
+
+      <section class="about__section">
+        <h2>What people usually notice</h2>
+        <ul>
+          <li>I ask the right questions early.</li>
+          <li>I explain tradeoffs clearly and calmly.</li>
+          <li>I reduce ambiguity instead of adding process.</li>
+        </ul>
+        <p><strong>My goal is always the same:</strong> make future work easier, not harder.</p>
+      </section>
+
+      <section class="about__section">
+        <h2>Open source and teaching</h2>
+        <p>
+          I maintain and contribute to open-source projects like Actor-Web and Ignite-Element. These tools exist
+          because I care about developer experience and systems that scale cognitively, not just technically.
+        </p>
+        <p>
+          Teaching and writing help me sharpen these ideas — and help others avoid the mistakes I’ve already made.
+          <a href="/open-source">See open-source work →</a>
+        </p>
+      </section>
+
+      <section class="about__section">
+        <h2>Who I work best with</h2>
+        <ul>
+          <li>Clear thinking over buzzwords.</li>
+          <li>Explicit behavior over implicit assumptions.</li>
+          <li>Collaboration over control.</li>
+          <li>Long-term stability over short-term hacks.</li>
+        </ul>
+        <p>
+          If you want someone to take over decision-making entirely, I’m probably not the right fit. If you want a
+          partner who helps you think clearly and ship confidently, we should talk.
+        </p>
+      </section>
+
+      <section class="about__section">
+        <h2>What’s next</h2>
+        <p>
+          If you’re curious how this applies to your situation, the best place to start is a short conversation.
+        </p>
+        <p>
+          <a class="button button--primary" href="https://calendly.com/bluejf-llc/30min" target="_blank" rel="noopener">
+            Book a quick fit call
+          </a>
+          <a class="button button--secondary" href="/services">Explore services</a>
+        </p>
+        <p class="text-muted">No obligation. If it’s not a fit, I’ll point you to the right next step.</p>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

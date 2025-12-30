@@ -1,0 +1,605 @@
+/* ================================================
+   03-layout.css - Layout System
+   Grid, flexbox, and container patterns
+   ================================================ */
+
+/* ======================
+   Base Layout
+   ====================== */
+
+html {
+  font-family: var(--font-sans);
+  font-size: 100%;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  color-scheme: light;
+}
+
+/* Dark theme color-scheme */
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Light theme color-scheme - explicit opt-in (redundant with html default, but explicit for clarity) */
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Auto dark mode fallback - respects system preference */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+main {
+  flex: 1;
+}
+
+/* ======================
+   Skip link
+   ====================== */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 10px 12px;
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
+  border-radius: var(--radius-md);
+  z-index: 9999;
+}
+.skip-link:focus {
+  left: 12px;
+  top: 12px;
+}
+
+/* ======================
+   Global Nav
+   ====================== */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: color-mix(in oklab, var(--color-surface, #fff) 85%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+  transition: box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.site-nav__container {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: 14px var(--container-padding);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.site-nav__brand {
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  color: inherit;
+}
+
+.site-nav__links {
+  display: none;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.site-nav__links a {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.site-nav__links a:hover,
+.site-nav__links a.is-active {
+  opacity: 1;
+}
+
+.site-nav__links a.is-active {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.site-nav__controls {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.site-nav__cta {
+  white-space: nowrap;
+}
+
+.site-nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--space-10);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.site-nav__mobile {
+  padding: 12px var(--container-padding) 18px;
+  display: grid;
+  gap: var(--space-2);
+  max-width: var(--container-xl);
+  margin: 0 auto;
+}
+
+.site-nav__mobile[hidden] {
+  display: none;
+}
+
+/* Scrolled state */
+.site-nav.is-scrolled {
+  background: color-mix(in oklab, var(--color-surface, #fff) 95%, transparent);
+  box-shadow: 0 8px 24px color-mix(in oklab, var(--color-text) 8%, transparent);
+  border-color: color-mix(in oklab, var(--color-border) 80%, transparent);
+}
+
+html.nav-open body {
+  overflow: hidden;
+  padding-top: var(--space-16);
+}
+
+html.nav-open .site-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+
+.site-nav__controls .theme-toggle {
+  position: static;
+  top: auto;
+  right: auto;
+  z-index: auto;
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.site-nav__controls .theme-toggle:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.site-nav__controls .theme-toggle::after {
+  display: none;
+}
+
+/* Desktop breakpoint */
+@media (min-width: 900px) {
+  .site-nav__links {
+    display: flex;
+  }
+  .site-nav__toggle {
+    display: none;
+  }
+  .site-nav__mobile {
+    display: none !important;
+  }
+}
+
+/* Mobile sheet */
+@media (max-width: 899px) {
+  .site-nav__cta {
+    display: none;
+  }
+
+  .site-nav__mobile {
+    position: fixed;
+    top: var(--space-16);
+    left: 0;
+    right: 0;
+    z-index: var(--z-overlay);
+    max-width: none;
+    margin: 0;
+    padding: var(--space-4) var(--container-padding)
+      calc(var(--space-4) + env(safe-area-inset-bottom));
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+    max-height: calc(100dvh - var(--space-16));
+    overflow: auto;
+  }
+
+  .site-nav__mobile a:not(.button) {
+    display: block;
+    padding: var(--space-3) var(--space-3);
+    border-radius: var(--radius-lg);
+    color: var(--color-text);
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+  }
+
+  .site-nav__mobile a:not(.button):hover {
+    background: var(--color-surface-alt);
+  }
+
+  .site-nav__mobile .button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Ensure content not hidden under sticky nav */
+main {
+  scroll-margin-top: 72px;
+}
+
+/* Offset anchor targets for sticky header */
+:target {
+  scroll-margin-top: 90px;
+}
+
+/* ======================
+   Container System
+   ====================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+.container--full {
+  max-width: 100%;
+}
+
+.container--narrow {
+  max-width: var(--container-lg);
+}
+
+.container--wide {
+  max-width: var(--container-2xl);
+}
+
+/* ======================
+   Section Spacing
+   ====================== */
+
+section:not(.section) {
+  padding-block: var(--space-16);
+}
+
+@media (min-width: 768px) {
+  section:not(.section) {
+    padding-block: var(--space-20);
+  }
+}
+
+@media (min-width: 1024px) {
+  section:not(.section) {
+    padding-block: var(--space-24);
+  }
+}
+
+/* ======================
+   Grid Systems
+   ====================== */
+
+.grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid--4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Auto-fit responsive grid */
+.grid--auto {
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-min-tile), 1fr));
+}
+
+/* Mobile-first responsive grids */
+/* Mobile base: single column */
+.grid--2,
+.grid--3,
+.grid--4 {
+  grid-template-columns: 1fr;
+}
+
+/* Tablet: restore 2 columns for grid--2, add 2 columns for grid--3/4 */
+@media (min-width: 768px) {
+  .grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid--3,
+  .grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: restore full columns */
+@media (min-width: 1024px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ======================
+   Flexbox Utilities
+   ====================== */
+
+.flex {
+  display: flex;
+}
+
+.flex--column {
+  flex-direction: column;
+}
+
+.flex--row {
+  flex-direction: row;
+}
+
+.flex--wrap {
+  flex-wrap: wrap;
+}
+
+.flex--center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex--between {
+  justify-content: space-between;
+}
+
+.flex--around {
+  justify-content: space-around;
+}
+
+.flex--evenly {
+  justify-content: space-evenly;
+}
+
+.flex--start {
+  justify-content: flex-start;
+}
+
+.flex--end {
+  justify-content: flex-end;
+}
+
+.items--start {
+  align-items: flex-start;
+}
+
+.items--center {
+  align-items: center;
+}
+
+.items--end {
+  align-items: flex-end;
+}
+
+.items--baseline {
+  align-items: baseline;
+}
+
+.items--stretch {
+  align-items: stretch;
+}
+
+/* Flex gap */
+.gap--1 {
+  gap: var(--space-1);
+}
+
+.gap--2 {
+  gap: var(--space-2);
+}
+
+.gap--3 {
+  gap: var(--space-3);
+}
+
+.gap--4 {
+  gap: var(--space-4);
+}
+
+.gap--6 {
+  gap: var(--space-6);
+}
+
+.gap--8 {
+  gap: var(--space-8);
+}
+
+/* ======================
+   Navigation Layout
+   ====================== */
+
+/* Only the top-level site header should be sticky */
+body > header[role="banner"] {
+  position: sticky;
+  top: 0;
+  background: var(--color-background);
+  border-bottom: var(--space-px) solid var(--color-border);
+  z-index: var(--z-header);
+  /* backdrop-filter set in responsive section for performance */
+  background-color: color-mix(in oklch, var(--color-surface) 90%, transparent);
+}
+
+/* ======================
+   Hero Layout
+   ====================== */
+
+/* Basic hero layout - details in hero.css */
+.hero {
+  min-height: 100vh;
+  display: block;
+  text-align: center;
+  position: relative;
+}
+
+/* ======================
+   About Section Layout
+   Note: Specific about styles moved to about.css
+   ====================== */
+
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-min-card), 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+
+/* ======================
+   Services Section Layout
+   ====================== */
+
+.services {
+  background: linear-gradient(to bottom, var(--color-neutral-050), var(--color-primary-50));
+}
+
+/* Services grid styles moved to services.css */
+
+/* ======================
+   Contact Section Layout
+   ====================== */
+
+.contact {
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact__actions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-block: var(--space-8);
+}
+
+.contact__info {
+  margin-top: var(--space-8);
+}
+
+/* ======================
+   Footer Layout
+   ====================== */
+
+.footer {
+  margin-top: auto; /* keep layout concern only */
+}
+
+/* Remove style concerns; governed by 06-sections/footer.css */
+/* ======================
+   Mobile-First Responsive Layout
+   ====================== */
+
+/* Mobile base styles */
+.hero {
+  min-height: 100svh;
+}
+
+/* Mobile: reduce sticky header GPU cost */
+body > header[role="banner"] {
+  /* Fallback for browsers without backdrop-filter support */
+  background-color: color-mix(in oklch, var(--color-surface) 95%, transparent);
+}
+
+/* Apply backdrop-filter only if supported */
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  body > header[role="banner"] {
+    backdrop-filter: blur(var(--backdrop-blur-sm));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+  }
+
+  /* Disable blur for users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    body > header[role="banner"] {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      /* Enhance fallback background for better contrast */
+      background-color: color-mix(in oklch, var(--color-surface) 98%, transparent);
+    }
+  }
+}
+
+/* Services grid mobile override moved to services.css */
+
+.highlights-grid {
+  grid-template-columns: 1fr;
+}
+
+/* Small tablet adjustments (641px+) */
+@media (min-width: 640px) {
+  .hero {
+    min-height: 100vh;
+  }
+
+  /* Restore header blur with progressive enhancement */
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    body > header[role="banner"] {
+      backdrop-filter: blur(var(--backdrop-blur-lg));
+      -webkit-backdrop-filter: blur(var(--backdrop-blur-lg));
+    }
+
+    /* Disable blur for users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      body > header[role="banner"] {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+    }
+  }
+
+  .highlights-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop adjustments */
+@media (min-width: 1024px) {
+  /* About intro styles moved to about.css */
+
+  .highlights-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Large screens */
+@media (min-width: 1280px) {
+  .services__grid {
+    gap: var(--space-10);
+  }
+}

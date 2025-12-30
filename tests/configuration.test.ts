@@ -76,8 +76,8 @@ describe('production configuration sanity checks', () => {
     expect(fs.existsSync(indexPath)).toBe(true);
 
     const html = fs.readFileSync(indexPath, 'utf-8');
-    expect(html).toContain('https://website-forms-production.bluejf-llc.workers.dev/api/contact');
-    expect(html).toContain('https://website-forms-production.bluejf-llc.workers.dev/api/newsletter');
+    expect(html).toContain('https://0xjcf.com/api/contact');
+    expect(html).toContain('https://0xjcf.com/api/newsletter');
 
     logSpy.mockRestore();
   });

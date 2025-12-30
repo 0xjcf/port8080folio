@@ -4,6 +4,10 @@
   "description": "Jose Flores - Technical Advisor Landing Page",
   "type": "module",
   "scripts": {
+    "astro": "astro",
+    "dev:astro": "astro dev",
+    "build:astro": "astro build",
+    "preview:astro": "astro preview",
     "dev": "tsc -p tsconfig.browser.json --outDir src --rootDir src --watch & serve src -l 8080",
     "serve:dist": "serve dist -l 8080",
     "dev:worker": "wrangler dev",
@@ -33,11 +37,14 @@
     "test:fouc": "lighthouse http://localhost:8080 --output=json --output-path=./fouc-test --only-categories=performance --throttling.cpuSlowdownMultiplier=6"
   },
   "devDependencies": {
+    "@astrojs/rss": "^4.0.14",
+    "@astrojs/sitemap": "^3.6.0",
     "@biomejs/biome": "^2.2.0",
     "@cloudflare/workers-types": "^4.20240925.0",
     "@std/toml": "npm:@jsr/std__toml@^1.0.9",
     "@types/node": "^24.3.0",
     "@vitest/coverage-v8": "^3.2.4",
+    "astro": "^5.16.6",
     "esbuild": "^0.25.0",
     "happy-dom": "^20.0.2",
     "html-minifier-terser": "^7.2.0",

@@ -34,20 +34,40 @@ NEWSLETTER_API_URL = "http://127.0.0.1:8787/api/newsletter"
 
 # (Optional for dev) RESEND_AUDIENCE_ID not required in dev
 
+# ---------- Staging ----------
+[env.staging]
+name = "website-forms-staging"
+workers_dev = true
+
+[env.staging.vars]
+ENV = "dev"
+SITE_URL = "https://staging.0xjcf.com"
+GA_MEASUREMENT_ID = ""                                                                 # Optional for staging
+CONTACT_FORM_URL = "https://staging.0xjcf.com/#contact-form"
+CONTACT_THANKS_URL = "https://staging.0xjcf.com/contact-thanks.html"
+NEWSLETTER_FORM_URL = "https://staging.0xjcf.com/#newsletter-form"
+NEWSLETTER_THANKS_URL = "https://staging.0xjcf.com/newsletter-thanks.html"
+FROM_EMAIL = "Website <noreply@resend.dev>"
+TO_EMAIL = "bluejf.llc@gmail.com"
+
+# API endpoints for forms (same-origin under staging domain)
+CONTACT_API_URL = "https://staging.0xjcf.com/api/contact"
+NEWSLETTER_API_URL = "https://staging.0xjcf.com/api/newsletter"
+
 # ---------- Production ----------
 [env.production]
 name = "website-forms-production"
 workers_dev = true
 
-# Vars used by your deployed site on GitHub Pages
+# Vars used by your deployed site on Cloudflare Pages
 [env.production.vars]
 ENV = "prod"
-SITE_URL = "https://0xjcf.github.io/port8080folio"
+SITE_URL = "https://0xjcf.com"
 GA_MEASUREMENT_ID = "G-5TR1LWNXXY"                                                                 # Fill with your GA4 Measurement ID (e.g., G-XXXXXXX)
-CONTACT_FORM_URL = "https://0xjcf.github.io/port8080folio/#contact-form"
-CONTACT_THANKS_URL = "https://0xjcf.github.io/port8080folio/contact-thanks.html"
-NEWSLETTER_FORM_URL = "https://0xjcf.github.io/port8080folio/#newsletter-form"
-NEWSLETTER_THANKS_URL = "https://0xjcf.github.io/port8080folio/newsletter-thanks.html"
+CONTACT_FORM_URL = "https://0xjcf.com/#contact-form"
+CONTACT_THANKS_URL = "https://0xjcf.com/contact-thanks.html"
+NEWSLETTER_FORM_URL = "https://0xjcf.com/#newsletter-form"
+NEWSLETTER_THANKS_URL = "https://0xjcf.com/newsletter-thanks.html"
 FROM_EMAIL = "Website <noreply@resend.dev>"
 TO_EMAIL = "bluejf.llc@gmail.com"
 
@@ -55,9 +75,9 @@ TO_EMAIL = "bluejf.llc@gmail.com"
 CONTACT_MIN_TIME = "3000"
 NEWSLETTER_MIN_TIME = "1500"
 
-# API endpoints for forms
-CONTACT_API_URL = "https://website-forms-production.bluejf-llc.workers.dev/api/contact"
-NEWSLETTER_API_URL = "https://website-forms-production.bluejf-llc.workers.dev/api/newsletter"
+# API endpoints for forms (same-origin under production domain)
+CONTACT_API_URL = "https://0xjcf.com/api/contact"
+NEWSLETTER_API_URL = "https://0xjcf.com/api/newsletter"
 
 # RESEND_AUDIENCE_ID - Set via secret (see instructions below)
 
@@ -79,7 +99,8 @@ NEWSLETTER_API_URL = "https://website-forms-production.bluejf-llc.workers.dev/ap
 # ---------- Redirect Documentation ----------
 # Redirect URLs are configured via vars above:
 # - Dev:  http://127.0.0.1:8080/
-# - Prod: https://0xjcf.github.io/port8080folio/
+# - Staging: https://staging.0xjcf.com/
+# - Prod: https://0xjcf.com/
 #
 # Success pages:
 #   contact-thanks.html
@@ -93,7 +114,12 @@ NEWSLETTER_API_URL = "https://website-forms-production.bluejf-llc.workers.dev/ap
 binding = "RATE_LIMIT_KV"
 id = "a8084909de3348969002d684387b23fc"
 
-# Production  
+# Staging
+[[env.staging.kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "a8084909de3348969002d684387b23fc"
+
+# Production
 [[env.production.kv_namespaces]]
 binding = "RATE_LIMIT_KV"
 id = "e5f219d5db6d48eca60ddd8a5df06ae1"

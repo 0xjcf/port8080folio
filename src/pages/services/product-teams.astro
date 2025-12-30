@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = 'Product Teams & Startups | Jose Flores — Behavior-First Delivery';
+const description =
+  'Workshops, advisory, and embedded delivery for product teams: statecharts, actor model, and explicit behavior to reduce risk.';
+---
+
+<BaseLayout title={title} description={description}>
+  <main id="main" class="section section--service-detail page-content">
+    <div class="container">
+      <header class="service-detail__header section__header">
+        <p class="eyebrow">Product Teams & Startups</p>
+        <h1 class="section__title">Ship complex systems with confidence</h1>
+        <p class="lead section__subtitle">
+          Modern product teams struggle when system behavior is implicit and hard to reason about. I make behavior
+          explicit so changes are safer, delivery is steadier, and everyone aligns on what should happen before code
+          ships.
+        </p>
+      </header>
+
+      <section class="service-detail__section">
+        <h2>When this is a good fit</h2>
+        <ul>
+          <li>Core flows are complex and difficult to explain.</li>
+          <li>Bugs return because behavior is implicit.</li>
+          <li>Changes feel risky and slow to ship.</li>
+          <li>Product and engineering disagree on expected behavior.</li>
+          <li>You’ve refactored the same areas more than once.</li>
+        </ul>
+        <p>If complexity is slowing you down, you don’t need more process—you need clarity at the behavior level.</p>
+      </section>
+
+      <section class="service-detail__section">
+        <h2>My approach</h2>
+        <ul>
+          <li>Model critical flows with statecharts (XState).</li>
+          <li>Structure systems using the actor model.</li>
+          <li>Make assumptions explicit and testable.</li>
+          <li>Choose the smallest tool that actually works.</li>
+        </ul>
+        <p>The result isn’t more abstraction—it’s less accidental complexity and fewer rework loops.</p>
+      </section>
+
+      <section class="service-detail__section">
+        <h2>How I help</h2>
+
+        <h3>XState + Actor Model Workshop</h3>
+        <p><strong>Best for teams aligning on complex behavior.</strong></p>
+        <ul>
+          <li>Map 1–2 critical user or system flows.</li>
+          <li>Define states, events, and failure paths.</li>
+          <li>Model behavior using statecharts and actors (TypeScript).</li>
+          <li>Leave templates and examples your team can reuse.</li>
+        </ul>
+        <p><strong>Typical outcome:</strong> A shared mental model and requirements everyone can reason about.</p>
+
+        <h3>Architecture & Technical Advisory</h3>
+        <p><strong>Best for teams navigating change or scale.</strong></p>
+        <ul>
+          <li>Review delivery risks and current architecture.</li>
+          <li>Clarify boundaries, ownership, and responsibilities.</li>
+          <li>Turn uncertainty into documented decisions that stick.</li>
+        </ul>
+        <p><strong>Typical outcome:</strong> Clearer tradeoffs and steadier delivery.</p>
+
+        <h3>Embedded Engineering (Contract / C2H)</h3>
+        <p><strong>Best for teams that need hands-on help.</strong></p>
+        <ul>
+          <li>Ship production features inside your codebase.</li>
+          <li>Model behavior explicitly with XState and actors.</li>
+          <li>Add scenario-based tests and durable docs.</li>
+        </ul>
+        <p><strong>Typical outcome:</strong> Real progress without new complexity or dependencies.</p>
+      </section>
+
+      <section class="service-detail__section">
+        <h2>Proof</h2>
+        <p>“Day one, José taught our seasoned team new tools, ran workshops, and lifted our game.” — Nick Schader</p>
+      </section>
+
+      <section class="service-detail__section">
+        <h2>What teams value most</h2>
+        <ul>
+          <li>I explain tradeoffs in plain English.</li>
+          <li>I focus on behavior before tools.</li>
+          <li>I leave systems easier to evolve than I found them.</li>
+        </ul>
+      </section>
+
+      <section class="service-detail__section">
+        <h2>What this is not</h2>
+        <ul>
+          <li>A quick UI reskin.</li>
+          <li>A framework rewrite just because.</li>
+          <li>Heavy process over clear models.</li>
+          <li>Someone taking over decisions entirely.</li>
+        </ul>
+      </section>
+
+      <section class="service-detail__section">
+        <h2>How it works</h2>
+        <ol>
+          <li><strong>Quick fit call:</strong> Clarify goals, constraints, and success.</li>
+          <li><strong>Clear plan:</strong> Scope, outcomes, and next steps.</li>
+          <li><strong>Execution:</strong> Ship with explicit behavior and documented decisions.</li>
+        </ol>
+      </section>
+
+      <section class="service-detail__cta">
+        <a class="button button--primary" href="https://calendly.com/bluejf-llc/30min" target="_blank" rel="noopener">
+          Book a product team fit call
+        </a>
+        <p>Most calls are 20–30 minutes. No obligation—if it’s not a fit, I’ll point you to the right next step.</p>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

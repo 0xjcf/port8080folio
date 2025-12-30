@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Weekly Insights - Jose Flores</title>
+    <meta name="description"
+        content="You're subscribed! Expect architecture patterns, optimization tactics, and hands-on guidance directly in your inbox.">
+    <meta name="robots" content="noindex,follow">
+    <meta name="color-scheme" content="light dark">
+    <script>
+        (function () {
+            var themeKey = 'preferred-theme';
+            var storedTheme = null;
+            try {
+                var candidate = localStorage.getItem(themeKey);
+                if (candidate === 'light' || candidate === 'dark' || candidate === 'auto') {
+                    storedTheme = candidate;
+                }
+            } catch (error) {
+                storedTheme = null;
+            }
+
+            var prefersDark = false;
+            try {
+                prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } catch (error) {
+                prefersDark = false;
+            }
+
+            var theme = prefersDark ? 'dark' : 'light';
+            var mode = 'auto';
+            if (storedTheme === 'light' || storedTheme === 'dark') {
+                theme = storedTheme;
+                mode = 'manual';
+            }
+
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.setAttribute('data-theme-mode', mode);
+        })();
+    </script>
+    <link rel="stylesheet" href="styles/main.css">
+    <script>
+        (function () {
+            var GA_ID = '{{GA_MEASUREMENT_ID}}';
+            if (!GA_ID || /\{\{.+\}\}/.test(GA_ID)) return;
+            var s = document.createElement('script'); s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID);
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); } window.gtag = gtag;
+            gtag('js', new Date()); gtag('config', GA_ID, { anonymize_ip: true, transport_type: 'beacon' });
+        })();
+    </script>
+</head>
+
+<body class="status-page status-page--success">
+    <main id="main" class="status-page__wrapper" role="main">
+        <section class="status-card" role="status" aria-live="polite">
+            <div class="status-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m4 13 5 5 11-13"></path>
+                </svg>
+            </div>
+            <p class="status-card__eyebrow">You're in</p>
+            <h1 class="status-card__title">Welcome to Weekly Insights!</h1>
+            <p class="status-card__message">
+                Thanks for subscribing. Expect first-hand tactics on statecharts, performance, and small-business growth
+                every week or two.
+            </p>
+            <div class="status-card__list">
+                <h2>What you'll receive</h2>
+                <ul>
+                    <li>Architecture patterns that scale without the overhead.</li>
+                    <li>Process tweaks that keep teams shipping confidently.</li>
+                    <li>Automation and tooling that actually save time.</li>
+                    <li>Early access to workshops, templates, and open-source updates.</li>
+                </ul>
+            </div>
+            <div class="status-card__actions">
+                <a href="/" class="status-page__btn status-page__btn--primary">Back to home</a>
+                <a href="/writing" class="status-page__btn status-page__btn--secondary">Read recent writing</a>
+            </div>
+            <p class="status-card__support">
+                If the email doesn't show up, check spam or add
+                <a class="status-page__link" href="mailto:bluejf.llc@gmail.com">bluejf.llc@gmail.com</a> to your contacts.
+            </p>
+        </section>
+    </main>
+    <script defer src="scripts/theme-toggle.js"></script>
+    <script defer src="scripts/analytics.js"></script>
+</body>
+
+</html>

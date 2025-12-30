@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts
+    .filter((post) => !post.data.draft)
+    .map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const title = `${post.data.title} — Jose Flores`;
+const description = post.data.description;
+const canonicalUrl = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).toString()
+  : Astro.url.toString();
+const blogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: post.data.updatedDate ? post.data.updatedDate.toISOString() : undefined,
+  author: {
+    '@type': 'Person',
+    name: 'Jose Flores',
+    url: 'https://0xjcf.com'
+  },
+  mainEntityOfPage: canonicalUrl
+};
+---
+
+<BaseLayout title={title} description={description} bodyClass="no-js">
+  <Fragment slot="head">
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(blogSchema)}></script>
+  </Fragment>
+  <main id="main" role="main" class="section section--about page-content">
+    <div class="container">
+      <article>
+        <header>
+          <h1 class="section__title">{post.data.title}</h1>
+          <p class="text-muted">{post.data.description}</p>
+        </header>
+        <div class="section__content">
+          <Content />
+        </div>
+      </article>
+    </div>
+  </main>
+</BaseLayout>

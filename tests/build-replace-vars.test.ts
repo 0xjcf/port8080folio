@@ -48,8 +48,8 @@ describe('build-replace-vars utility', () => {
   it('loads production environment variables from wrangler.toml', () => {
     const vars = loadVariables('production');
 
-    expect(vars.CONTACT_API_URL).toBe('https://website-forms-production.bluejf-llc.workers.dev/api/contact');
-    expect(vars.NEWSLETTER_API_URL).toBe('https://website-forms-production.bluejf-llc.workers.dev/api/newsletter');
+    expect(vars.CONTACT_API_URL).toBe('https://0xjcf.com/api/contact');
+    expect(vars.NEWSLETTER_API_URL).toBe('https://0xjcf.com/api/newsletter');
   });
 
   it('replaces placeholders with provided values', () => {
@@ -70,7 +70,7 @@ describe('build-replace-vars utility', () => {
     const prodVars = loadVariables('production');
 
     expect(devVars.CONTACT_API_URL).toBe('http://127.0.0.1:8787/api/contact');
-    expect(prodVars.CONTACT_API_URL).toBe('https://website-forms-production.bluejf-llc.workers.dev/api/contact');
+    expect(prodVars.CONTACT_API_URL).toBe('https://0xjcf.com/api/contact');
   });
 
   it('escapes special characters when building regex pattern', () => {

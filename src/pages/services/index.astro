@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = 'Services | Jose Flores — Product Teams & Local Businesses';
+const description = 'Choose how to work together: product teams (XState/actor model) or local business websites & local SEO.';
+---
+
+<BaseLayout title={title} description={description}>
+  <main id="main" class="section section--services-router page-content">
+    <div class="container">
+      <header class="services-router__header section__header">
+        <h1 class="section__title">Services</h1>
+        <p class="section__subtitle">
+          Choose the path that fits your situation. Two audiences, two clear outcomes—pick the one that matches you
+          to see details and book a fit call.
+        </p>
+      </header>
+
+      <div class="services-router__grid">
+        <article class="services-router__card">
+          <p class="eyebrow">Product Teams & Startups</p>
+          <h2>Ship complex systems with confidence</h2>
+          <ul>
+            <li>Model behavior with statecharts & the actor model</li>
+            <li>Make implicit flows explicit and testable</li>
+            <li>Reduce delivery risk with clear tradeoffs</li>
+          </ul>
+          <a class="button button--primary" href="/services/product-teams">Explore product team services</a>
+        </article>
+
+        <article class="services-router__card">
+          <p class="eyebrow">Local Businesses</p>
+          <h2>Turn your website into a lead engine</h2>
+          <ul>
+            <li>Conversion-focused website (1–3 key pages)</li>
+            <li>Local SEO, booking, and follow-ups wired correctly</li>
+            <li>Plain-English decisions and simple metrics</li>
+          </ul>
+          <a class="button button--primary" href="/services/local-business">Explore local business services</a>
+        </article>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

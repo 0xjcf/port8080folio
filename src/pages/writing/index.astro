@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const title = 'Writing — Jose Flores';
+const description = 'Writing on frontend architecture, statecharts, and the actor model.';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title={title} description={description} bodyClass="no-js">
+  <main id="main" role="main" class="section section--about page-content">
+    <div class="container">
+      <h1 class="section__title">Writing</h1>
+      <p class="text-muted">Notes on frontend architecture, statecharts, and the actor model.</p>
+
+      <div class="section__content">
+        {posts.length === 0 ? (
+          <p class="text-muted">Posts are coming soon.</p>
+        ) : (
+          <ul class="list list--plain">
+            {posts.map((post) => (
+              <li>
+                <a href={`/writing/${post.slug}`}>{post.data.title}</a>
+                <p class="text-muted">{post.data.description}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  </main>
+</BaseLayout>

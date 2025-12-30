@@ -1,0 +1,659 @@
+/* ========================================
+   Unified Theme System
+   One continuous canvas with local tints
+   ======================================== */
+
+/* ======================
+   Page Canvas
+   Single background for entire page
+   ====================== */
+
+/* Prevent white overscroll on all devices */
+html {
+  background: var(--color-background); /* Match darkest body color */
+  /* Modern overscroll control - prevents pull-to-refresh and elastic bounce */
+  overscroll-behavior-y: none;
+}
+
+body {
+  background:
+    radial-gradient(
+      1800px 900px at 50% 15%,
+      color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
+      transparent 55%
+    ), linear-gradient(oklch(0.015 0 0), var(--color-background) 35%, var(--color-background));
+  position: relative;
+  overflow-x: hidden;
+  min-height: 100vh;
+  /* Contain overscroll within body */
+  overscroll-behavior-y: contain;
+}
+
+/* Grid + noise always-on canvas */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-below);
+  /* Subtle grid */
+  background:
+    radial-gradient(
+      circle at var(--space-px) 1px,
+      color-mix(in oklch, var(--color-text) 4%, transparent) 1px,
+      transparent 1px
+    )
+    0 0 / var(--space-10) 40px,
+    /* Noise texture */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='64' height='64' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E") repeat;
+  opacity: 0.35;
+  mix-blend-mode: screen;
+}
+
+/* Override global canvas for standalone status pages */
+body.status-page {
+  background: color-mix(in oklch, var(--color-brand-primary) 6%, var(--color-neutral-000));
+}
+
+body.status-page::before {
+  mix-blend-mode: normal;
+  opacity: 1;
+  z-index: var(--z-below);
+}
+
+body.status-page::after {
+  content: "";
+  position: fixed;
+  inset-inline: 8%;
+  top: 12%;
+  height: 68%;
+  pointer-events: none;
+  background: radial-gradient(
+    60% 62% at 50% 44%,
+    color-mix(in oklch, var(--color-brand-primary) 22%, var(--color-neutral-000)) 0%,
+    transparent 78%
+  );
+  filter: blur(90px);
+  opacity: 0.55;
+  z-index: calc(var(--z-below) + 1);
+}
+
+@media (forced-colors: active) {
+  body::before {
+    display: none;
+  }
+}
+
+/* ======================
+   Section Theme Effects
+   Spotlights and tints only - base styles in sections-base.css
+   ====================== */
+
+/* Section-local vignette/spotlight controlled by vars */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--space-20) * -1) 0 calc(var(--space-20) * -1) 0;
+  z-index: var(--z-below);
+  background:
+    radial-gradient(
+      600px 300px at 50% var(--spot-y, 32%),
+      color-mix(in oklch, var(--color-brand-primary) var(--spot-alpha, 18%), transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      1200px 600px at 50% 100%,
+      color-mix(in oklch, var(--color-brand-secondary) var(--tint-alpha, 14%), transparent),
+      transparent 70%
+    );
+  mix-blend-mode: var(--section-blend-mode, screen);
+  pointer-events: none;
+}
+
+/* Consistent gutter between all sections */
+.section + .section {
+  box-shadow: inset 0 var(--space-6) var(--space-15)
+    color-mix(in oklch, var(--color-background) 35%, transparent);
+  position: relative;
+}
+
+/* Subtle top border for additional definition */
+.section + .section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: var(--space-px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--section-grid-color) 20%,
+    var(--section-grid-color) 80%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: var(--z-elevated);
+}
+
+/* Chapter sections don't get the generic divider line */
+#about.section,
+#contact.section {
+  box-shadow: none;
+}
+
+#about.section::after,
+#contact.section::after {
+  display: none;
+}
+
+/* ======================
+   Section Presets
+   Variable-driven atmospheres
+   ====================== */
+
+/* Hero – warm center */
+#hero.section {
+  --tint-hue: 22; /* warm */
+  --tint-alpha: 0.14;
+  --spot-alpha: 0.18;
+  --spot-y: 30%;
+}
+
+/* About – chapter break with lower spotlight and accent gradient */
+#about.section {
+  --tint-hue: 18;
+  --tint-alpha: 0.12;
+  --spot-alpha: 0.14;
+  --spot-y: 46%; /* Lower spotlight for distinct "room" feel */
+  position: relative;
+}
+
+
+[data-theme="dark"] #about.section {
+  background:
+    radial-gradient(
+      ellipse 1200px 600px at 50% 30%,
+      color-mix(in oklch, var(--color-brand-secondary) 8%, transparent),
+      transparent 70%
+    ), var(--color-background);
+}
+
+/* Services – neutral dark with warm undertone and accent */
+#services.section {
+  --tint-hue: 24;
+  --tint-alpha: 0.1;
+  --spot-alpha: 0.12;
+  --spot-y: 40%;
+  position: relative;
+}
+
+/* Add subtle accent for Services section in dark mode */
+@media (prefers-color-scheme: dark) {
+  #services.section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--color-brand-secondary) 5%, transparent) 0%,
+      transparent 40%,
+      color-mix(in oklch, var(--color-brand-primary) 5%, transparent) 100%
+    );
+    pointer-events: none;
+    z-index: var(--z-base);
+  }
+}
+
+[data-theme="dark"] #services.section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--color-brand-secondary) 5%, transparent) 0%,
+    transparent 40%,
+    color-mix(in oklch, var(--color-brand-primary) 5%, transparent) 100%
+  );
+  pointer-events: none;
+  z-index: var(--z-base);
+}
+
+/* Contact CTA – gentle warm center on dark with accent */
+#contact.section {
+  --tint-hue: 22;
+  --tint-alpha: 0.1;
+  --spot-alpha: 0.16;
+  --spot-y: 45%;
+  position: relative;
+}
+
+/* Add gradient accent for Contact section in dark mode */
+@media (prefers-color-scheme: dark) {
+  #contact.section {
+    background:
+      radial-gradient(
+        ellipse 1000px 500px at 50% 40%,
+        color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
+        transparent 60%
+      ),
+      linear-gradient(
+        180deg,
+        var(--color-background),
+        color-mix(in oklch, var(--color-brand-primary) 3%, var(--color-background))
+      );
+  }
+}
+
+[data-theme="dark"] #contact.section {
+  background:
+    radial-gradient(
+      ellipse 1000px 500px at 50% 40%,
+      color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      var(--color-background),
+      color-mix(in oklch, var(--color-brand-primary) 3%, var(--color-background))
+    );
+}
+
+/* Contact Forms – move spotlight lower and cooler */
+#contact-forms.section {
+  --tint-hue: 26; /* still warm but deeper */
+  --tint-alpha: 0.12;
+  --spot-alpha: 0.14;
+  --spot-y: 58%;
+}
+
+/* Footer - darkest, minimal tint */
+.footer.section {
+  --tint-hue: 28;
+  --tint-alpha: 0.08;
+  --spot-alpha: 0.08;
+  --spot-y: 70%;
+  padding-bottom: var(--space-16);
+}
+
+/* ======================
+   Unified Components
+   Consistent across sections
+   ====================== */
+
+/* Section gradient accents - base styles in sections-base.css */
+.section__title .gradient {
+  background: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Unified gradient divider */
+.section__title::after {
+  content: "";
+  display: block;
+  width: var(--space-10);
+  height: var(--space-0-5);
+  margin: var(--space-4) auto 0;
+  border-radius: var(--radius-full);
+  background: var(--brand-grad-text);
+  opacity: 0.45;
+}
+
+/* ======================
+   Elevation Classes
+   Consistent depth system
+   ====================== */
+
+.elev-1 {
+  box-shadow: var(--elev-1);
+}
+
+.elev-2 {
+  box-shadow: var(--elev-2);
+}
+
+.elev-hover {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.elev-hover:hover {
+  transform: translateY(calc(var(--space-1) * -0.75));
+  box-shadow: var(--elev-3);
+}
+
+/* Hover state for cards/tiles */
+.card-hover {
+  transition: all var(--duration-base) var(--ease-in-out);
+}
+
+.card-hover:hover {
+  transform: translateY(calc(var(--space-1) * -0.75));
+  box-shadow: var(--elev-3);
+  border-color: color-mix(in oklch, var(--color-text) 16%, transparent);
+}
+
+/* ======================
+   Focus States
+   Unified ring style
+   ====================== */
+
+.focus-ring:focus-visible {
+  outline: var(--space-0-5) solid
+    color-mix(in oklch, var(--color-text) 60%, var(--color-brand-secondary) 40%);
+  outline-offset: calc(var(--space-1) * 0.75);
+  border-radius: var(--radius-md);
+}
+
+/* ======================
+   Mobile-First Base Styles
+   Lower intensity for mobile performance
+   ====================== */
+
+/* Mobile base: lower noise/grid intensity */
+body::before {
+  opacity: 0.18;
+  mix-blend-mode: normal; /* avoid expensive screen blend on mobile */
+}
+
+/* Mobile base: reduced spotlight alphas */
+#hero.section {
+  --spot-alpha: 0.13;
+}
+#about.section {
+  --spot-alpha: 0.1;
+}
+#services.section {
+  --spot-alpha: 0.08;
+}
+#contact.section {
+  --spot-alpha: 0.11;
+}
+#contact-forms.section {
+  --spot-alpha: 0.1;
+}
+.footer.section {
+  --spot-alpha: 0.06;
+}
+
+/* Avoid expensive screen blending for section spotlights on mobile */
+.section::before {
+  mix-blend-mode: normal;
+}
+
+/* Desktop enhancements: restore full intensity */
+@media (min-width: 768px) {
+  body::before {
+    opacity: 0.35;
+    mix-blend-mode: screen;
+  }
+
+  #hero.section {
+    --spot-alpha: 0.18;
+  }
+  #about.section {
+    --spot-alpha: 0.14;
+  }
+  #services.section {
+    --spot-alpha: 0.12;
+  }
+  #contact.section {
+    --spot-alpha: 0.16;
+  }
+  #contact-forms.section {
+    --spot-alpha: 0.14;
+  }
+  .footer.section {
+    --spot-alpha: 0.08;
+  }
+
+  .section::before {
+    mix-blend-mode: screen;
+  }
+}
+
+/* ======================
+   Motion Language
+   Consistent animations
+   ====================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .elev-hover,
+  .elev-hover:hover,
+  .card-hover,
+  .card-hover:hover {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ======================
+   Container Sizing
+   Consistent max-width
+   ====================== */
+
+/* ======================
+   Gradient Accents
+   Reusable classes
+   ====================== */
+
+.gradient-text {
+  background: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Feature detection fallback for browsers without mask-composite support */
+@supports not (mask-composite: exclude) {
+  .gradient-border::after {
+    content: "";
+    position: absolute;
+    inset: calc(var(--space-px) * -1);
+    border-radius: inherit;
+    background: none;
+    border: 1px solid;
+    border-image: var(--brand-grad-cta) 1;
+    opacity: 0.3;
+    pointer-events: none;
+    transition: opacity var(--duration-fast);
+  }
+}
+
+/* Modern mask-composite implementation for supporting browsers */
+@supports (mask-composite: exclude) {
+  .gradient-border::after {
+    content: "";
+    position: absolute;
+    inset: calc(var(--space-px) * -1);
+    border-radius: inherit;
+    padding: var(--space-px);
+    background: var(--brand-grad-cta);
+    -webkit-mask:
+      linear-gradient(var(--color-text) 0 0) content-box,
+      linear-gradient(var(--color-text) 0 0);
+    mask:
+      linear-gradient(var(--color-text) 0 0) content-box,
+      linear-gradient(var(--color-text) 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.4;
+    pointer-events: none;
+    transition: opacity var(--duration-fast);
+  }
+}
+
+/* Hover states for both fallback and modern implementations */
+@supports not (mask-composite: exclude) {
+  .gradient-border:hover::after {
+    opacity: 0.5;
+  }
+}
+
+@supports (mask-composite: exclude) {
+  .gradient-border:hover::after {
+    opacity: 0.6;
+  }
+}
+
+/* ======================
+   Responsive Adjustments
+   ====================== */
+
+/* Section responsive adjustments moved to sections-base.css */
+
+/* Small tablet responsive adjustments moved to sections-base.css */
+
+/* Tablet responsive adjustments moved to sections-base.css */
+
+/* ======================
+   Performance Optimizations
+   ====================== */
+
+/* Mobile base: reduced effects for better performance */
+.kpi-tile,
+.service-card,
+.form-card,
+.contact__info,
+.about__avatar {
+  backdrop-filter: blur(var(--backdrop-blur-sm));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+}
+
+/* Mobile base: reduce heavy glows */
+.glow,
+.service-card::before,
+.kpi-tile::before {
+  opacity: 0.1;
+}
+
+/* Desktop: restore full effects */
+@media (min-width: 768px) {
+  .kpi-tile,
+  .service-card,
+  .form-card,
+  .contact__info,
+  .about__avatar {
+    backdrop-filter: blur(var(--backdrop-blur-md));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-md));
+  }
+
+  /* Restore glow effects */
+  .glow {
+    opacity: 0.2;
+  }
+
+  .service-card::before,
+  .kpi-tile::before {
+    opacity: 0.15;
+  }
+}
+
+/* Disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
+  }
+}
+
+/* =============  Chapter Canvas & Panel System  ============= */
+/* All tokens now in 00-settings/tokens.css */
+
+.chapter {
+  position: relative;
+  color: var(--section-fg);
+  background: var(--section-bg);
+  overflow: hidden;
+}
+
+/* Panel blur reduction handled in tokens.css */
+.chapter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(transparent 99%, var(--section-grid-color) 1%),
+    linear-gradient(90deg, transparent 99%, var(--section-grid-color) 1%);
+  background-size: var(--section-grid-size) var(--section-grid-size);
+  pointer-events: none;
+}
+.chapter__title {
+  font-weight: var(--font-light);
+}
+.chapter__title .gradient {
+  background-image: var(--brand-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600;
+  display: inline;
+}
+.chapter__title .text-white {
+  color: var(--color-text);
+  font-weight: 600;
+  display: inline;
+}
+.chapter__title::after {
+  content: "";
+  display: block;
+  width: var(--space-10);
+  height: var(--space-0-5);
+  margin: var(--space-4) auto 0;
+  border-radius: var(--radius-full);
+  background: var(--brand-grad-text);
+  opacity: 0.45;
+}
+
+/* Panel primitive */
+.panel {
+  background: var(--panel-bg);
+  border: var(--space-px) solid var(--panel-stroke);
+  border-radius: var(--radius-2xl);
+  backdrop-filter: blur(var(--panel-blur));
+  box-shadow: var(--panel-shadow);
+  transition:
+    box-shadow var(--duration-base) var(--ease-default),
+    transform  var(--duration-base) var(--ease-default);
+}
+.panel:hover {
+  box-shadow: var(--panel-shadow), var(--panel-glow);
+  transform: var(--transform-lift-sm);
+}
+
+/* Variants (tune ember strength per chapter) */
+.chapter--about {
+  --section-bg:
+    radial-gradient(
+      1100px 700px at 48% 12%,
+      color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
+      oklch(0 0 0 / 0) 60%
+    ), var(--color-background);
+}
+.chapter--cta {
+  --section-bg:
+    radial-gradient(
+      1000px 650px at 54% 12%,
+      color-mix(in oklch, var(--color-brand-primary) 8%, transparent),
+      oklch(0 0 0 / 0) 60%
+    ), var(--color-background);
+}
+.chapter--forms {
+  --section-bg:
+    radial-gradient(
+      900px 600px at 44% 10%,
+      color-mix(in oklch, var(--color-brand-primary) 7%, transparent),
+      oklch(0 0 0 / 0) 60%
+    ), var(--color-background);
+}
