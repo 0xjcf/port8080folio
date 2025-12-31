@@ -139,6 +139,33 @@
     return style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
   }
 
+  const activeSuccessObservers = new Set();
+  const activeRemovalObservers = new Set();
+  let unloadCleanupAttached = false;
+  const detachAllSuccessObservers = () => {
+    activeSuccessObservers.forEach((observer) => observer.disconnect());
+    activeRemovalObservers.forEach((observer) => observer.disconnect());
+    activeSuccessObservers.clear();
+    activeRemovalObservers.clear();
+    document.querySelectorAll('.form-success-message').forEach((el) => {
+      if (el.__mo) {
+        delete el.__mo;
+      }
+      if (el.__removalMo) {
+        delete el.__removalMo;
+      }
+    });
+  };
+  const ensureUnloadCleanup = () => {
+    if (unloadCleanupAttached) return;
+    const handler = () => {
+      detachAllSuccessObservers();
+    };
+    window.addEventListener('pagehide', handler);
+    window.addEventListener('beforeunload', handler);
+    unloadCleanupAttached = true;
+  };
+
   // 1) Custom event hooks (useful if your form script can dispatch them)
   document.addEventListener('pe:success', (e) => {
     const form = e.detail?.form ?? document.querySelector('.pe-form');
@@ -165,15 +192,57 @@
       if (isVisible(success)) {
         track('form_submit_success', { form_id: formId, section: section });
         success.__alreadyTracked = true;
+        return;
       }
+      let removalObserver = null;
+      const cleanup = () => {
+        const observerRef = success.__mo;
+        if (observerRef) {
+          observerRef.disconnect();
+          activeSuccessObservers.delete(observerRef);
+          if (success.__mo === observerRef) {
+            delete success.__mo;
+          }
+        }
+
+        const removalRef = success.__removalMo || removalObserver;
+        if (removalRef) {
+          removalRef.disconnect();
+          activeRemovalObservers.delete(removalRef);
+          if (success.__removalMo === removalRef) {
+            delete success.__removalMo;
+          }
+        }
+
+        removalObserver = null;
+      };
       const mo = new MutationObserver(() => {
+        if (!success.isConnected || !form.contains(success)) {
+          cleanup();
+          return;
+        }
         if (!success.__alreadyTracked && isVisible(success)) {
           success.__alreadyTracked = true;
           track('form_submit_success', { form_id: formId, section: section });
+          cleanup();
         }
       });
       mo.observe(success, { attributes: true, attributeFilter: ['style', 'class'] });
       success.__mo = mo;
+      activeSuccessObservers.add(mo);
+
+      if (!success.__removalMo) {
+        removalObserver = new MutationObserver(() => {
+          if (!form.contains(success)) {
+            cleanup();
+          }
+        });
+        removalObserver.observe(form, { childList: true, subtree: true });
+        success.__removalMo = removalObserver;
+        activeRemovalObservers.add(removalObserver);
+      }
+
+      ensureUnloadCleanup();
     });
   }
   window.addEventListener('load', watchFormSuccess, { once: true });

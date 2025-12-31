@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@astrojs/rss": "^4.0.14",
-    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/sitemap": "^3.5.1",
     "@biomejs/biome": "^2.2.0",
     "@cloudflare/workers-types": "^4.20240925.0",
     "@std/toml": "npm:@jsr/std__toml@^1.0.9",

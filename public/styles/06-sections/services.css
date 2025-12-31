@@ -1333,6 +1333,17 @@
   transform: scale(1);
 }
 
+
+:root {
+  --shadow-pulse: 0 0 30px rgba(255, 77, 0, 0.4);
+}
+
+@supports (color: color-mix(in oklch, #000 50%, transparent)) {
+  :root {
+    --shadow-pulse: 0 0 30px color-mix(in oklch, var(--color-primary) 40%, transparent);
+  }
+}
+
 .button--sticky:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-xl);
@@ -1344,8 +1355,7 @@
     box-shadow: var(--shadow-xl);
   }
   50% {
-    box-shadow: 0 0 30px rgba(255, 77, 0, 0.4); /* Fallback for older browsers */
-    box-shadow: 0 0 30px color-mix(in oklch, var(--color-primary) 40%, transparent);
+    box-shadow: var(--shadow-pulse);
   }
 }
 

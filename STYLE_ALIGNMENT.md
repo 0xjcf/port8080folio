@@ -60,6 +60,7 @@ Use `chrome-devtools__evaluate_script` to grab the browser’s computed styles. 
 ```
 
 Tips:
+
 - To record the dark theme, click the in-page toggle (`chrome-devtools__click` on the theme button), re-run the snippet, and stash the JSON response.
 - Use `getComputedStyle(element, '::before')` or `'::after'` if you need gradient data coming from pseudo elements (body backdrops, glow halos).
 - You can add extra selectors (e.g., `.status-card__icon`) to the `targets` map when a component looks off.
@@ -81,6 +82,7 @@ Re-run the extraction after each change to verify the values have converged on t
 ## 5. Extend the audit to other pages
 
 Swap the URL in step 2 for:
+
 - `http://localhost:8080/newsletter-error.html`
 - `http://localhost:8080/contact-thanks.html`
 - `http://localhost:8080/contact-error.html`
@@ -95,4 +97,4 @@ Repeat steps 3 and 4 to confirm the shared styles still hold and to catch any bu
 2. When everything looks right in the browser, run `npm run build:prod` to regenerate the distribution bundle.
 3. Spot-check the minified HTML in `dist/` if you plan to deploy.
 
-This process gives us a reproducible checklist anytime the dark-mode palette changes or we need to re-tune the light theme styling.***
+This process gives us a reproducible checklist anytime the dark-mode palette changes or we need to re-tune the light theme styling.

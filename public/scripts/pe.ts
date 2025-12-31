@@ -250,12 +250,6 @@ import { resolveFormRedirect } from './form-redirect.js';
         // For now, we'll use the browser's default form submission
         const formData = new FormData(form);
 
-        // Create an AbortController for timeout
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => {
-          controller.abort();
-        }, 30000); // 30 second timeout
-
         // Error handling helper function
         const handleSubmissionError = (
           error: Error | unknown,
@@ -301,6 +295,16 @@ import { resolveFormRedirect } from './form-redirect.js';
 
         // Enhanced fetch with comprehensive error handling and rate limiting
         const submitWithRetry = async (retryAttempt = 0, networkRetryCount = 0): Promise<void> => {
+          const controller = new AbortController();
+          const timeoutId = window.setTimeout(() => {
+            controller.abort();
+          }, 30000); // 30 second timeout
+
+          const cleanupAttempt = () => {
+            window.clearTimeout(timeoutId);
+            controller.abort();
+          };
+
           try {
             const response = await fetch(endpoint, {
               method: 'POST',
@@ -308,7 +312,7 @@ import { resolveFormRedirect } from './form-redirect.js';
               signal: controller.signal,
             });
 
-            clearTimeout(timeoutId);
+            cleanupAttempt();
 
             // Check for rate limiting headers
             const retryAfter = response.headers.get('Retry-After');
@@ -365,7 +369,7 @@ import { resolveFormRedirect } from './form-redirect.js';
 
             window.location.href = targetHref;
           } catch (error) {
-            clearTimeout(timeoutId);
+            cleanupAttempt();
 
             // Handle different types of errors with separate retry logic for network failures
             if (error instanceof Error && error.name === 'AbortError') {

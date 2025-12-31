@@ -50,6 +50,10 @@ NEWSLETTER_THANKS_URL = "https://staging.0xjcf.com/newsletter-thanks.html"
 FROM_EMAIL = "Website <noreply@resend.dev>"
 TO_EMAIL = "bluejf.llc@gmail.com"
 
+# Anti-bot timing thresholds (milliseconds)
+CONTACT_MIN_TIME = "3000"
+NEWSLETTER_MIN_TIME = "1500"
+
 # API endpoints for forms (same-origin under staging domain)
 CONTACT_API_URL = "https://staging.0xjcf.com/api/contact"
 NEWSLETTER_API_URL = "https://staging.0xjcf.com/api/newsletter"

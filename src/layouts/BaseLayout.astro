@@ -1,24 +1,29 @@
 ---
-import mainCss from '../styles/main.css?url';
+import mainCss from "../styles/main.css?url";
 
 const {
   title,
   description,
-  bodyClass = 'no-js',
+  bodyClass = "no-js",
   canonical,
   ogImage,
-  ogType = 'website',
-  twitterCard = 'summary_large_image',
-  noindex = false
+  ogType = "website",
+  twitterCard = "summary_large_image",
+  noindex = false,
 } = Astro.props;
 const path = Astro.url.pathname;
-const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
 
 const site = Astro.site;
-const canonicalUrl = canonical
-  ?? (site ? new URL(Astro.url.pathname, site).toString() : Astro.url.toString());
-const imageUrl = ogImage
-  ?? (site ? new URL('/assets/images/gibli-pfp.png', site).toString() : '/assets/images/gibli-pfp.png');
+const canonicalUrl =
+  canonical ??
+  (site ? new URL(Astro.url.pathname, site).toString() : Astro.url.toString());
+const imageUrl =
+  ogImage ??
+  (site
+    ? new URL("/assets/images/gibli-pfp.png", site).toString()
+    : "/assets/images/gibli-pfp.png");
 ---
 
 <!doctype html>
@@ -32,13 +37,21 @@ const imageUrl = ogImage
     {noindex ? <meta name="robots" content="noindex,follow" /> : null}
     {canonicalUrl ? <link rel="canonical" href={canonicalUrl} /> : null}
     {title ? <meta property="og:title" content={title} /> : null}
-    {description ? <meta property="og:description" content={description} /> : null}
+    {
+      description ? (
+        <meta property="og:description" content={description} />
+      ) : null
+    }
     {canonicalUrl ? <meta property="og:url" content={canonicalUrl} /> : null}
     {ogType ? <meta property="og:type" content={ogType} /> : null}
     {imageUrl ? <meta property="og:image" content={imageUrl} /> : null}
     {twitterCard ? <meta name="twitter:card" content={twitterCard} /> : null}
     {title ? <meta name="twitter:title" content={title} /> : null}
-    {description ? <meta name="twitter:description" content={description} /> : null}
+    {
+      description ? (
+        <meta name="twitter:description" content={description} />
+      ) : null
+    }
     {canonicalUrl ? <meta name="twitter:url" content={canonicalUrl} /> : null}
     {imageUrl ? <meta name="twitter:image" content={imageUrl} /> : null}
     <meta name="twitter:creator" content="@0xjcf" />
@@ -50,72 +63,110 @@ const imageUrl = ogImage
     <slot name="head" />
     <script is:inline>
       (function () {
-        var GA_ID = '{{GA_MEASUREMENT_ID}}';
+        var GA_ID = "{{GA_MEASUREMENT_ID}}";
         if (!GA_ID || /\{\{.+\}\}/.test(GA_ID)) return;
-        var s = document.createElement('script');
+        var s = document.createElement("script");
         s.async = true;
-        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID);
+        s.src =
+          "https://www.googletagmanager.com/gtag/js?id=" +
+          encodeURIComponent(GA_ID);
         document.head.appendChild(s);
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); } window.gtag = gtag;
-        gtag('js', new Date());
-        gtag('config', GA_ID, { anonymize_ip: true, transport_type: 'beacon' });
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        window.gtag = gtag;
+        gtag("js", new Date());
+        gtag("config", GA_ID, { anonymize_ip: true, transport_type: "beacon" });
       })();
     </script>
     <script is:inline>
       (function () {
         let savedTheme = null;
         try {
-          savedTheme = localStorage.getItem('preferred-theme');
+          savedTheme = localStorage.getItem("preferred-theme");
         } catch (error) {
-          console.warn('Theme: localStorage access failed, using system preference');
+          console.warn(
+            "Theme: localStorage access failed, using system preference",
+          );
         }
 
         let systemPrefersDark = false;
         try {
-          systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          systemPrefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
         } catch (error) {
-          console.warn('Theme: matchMedia not supported, defaulting to light');
+          console.warn("Theme: matchMedia not supported, defaulting to light");
         }
 
-        if (savedTheme === 'light') {
-          document.documentElement.setAttribute('data-theme', 'light');
-          document.documentElement.setAttribute('data-theme-mode', 'manual');
-        } else if (savedTheme === 'dark') {
-          document.documentElement.setAttribute('data-theme', 'dark');
-          document.documentElement.setAttribute('data-theme-mode', 'manual');
-        } else if (savedTheme === 'auto') {
-          document.documentElement.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
-          document.documentElement.setAttribute('data-theme-mode', 'auto');
+        if (savedTheme === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+          document.documentElement.setAttribute("data-theme-mode", "manual");
+        } else if (savedTheme === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.setAttribute("data-theme-mode", "manual");
+        } else if (savedTheme === "auto") {
+          document.documentElement.setAttribute(
+            "data-theme",
+            systemPrefersDark ? "dark" : "light",
+          );
+          document.documentElement.setAttribute("data-theme-mode", "auto");
         } else if (savedTheme === null || savedTheme === undefined) {
-          document.documentElement.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
-          document.documentElement.setAttribute('data-theme-mode', 'auto');
+          document.documentElement.setAttribute(
+            "data-theme",
+            systemPrefersDark ? "dark" : "light",
+          );
+          document.documentElement.setAttribute("data-theme-mode", "auto");
         } else {
-          document.documentElement.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
-          document.documentElement.setAttribute('data-theme-mode', 'auto');
+          document.documentElement.setAttribute(
+            "data-theme",
+            systemPrefersDark ? "dark" : "light",
+          );
+          document.documentElement.setAttribute("data-theme-mode", "auto");
         }
       })();
     </script>
     <script defer src="/scripts/theme-toggle.js"></script>
   </head>
-  <body class={bodyClass}>
+  <body class={bodyClass} id="top">
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-nav" aria-label="Primary">
       <div class="site-nav__container">
         <a class="site-nav__brand" href="/">Jose Flores</a>
         <nav class="site-nav__links" aria-label="Main navigation">
-          <a class:list={[isActive('/') && 'is-active']} href="/">Home</a>
-          <a class:list={[isActive('/writing') && 'is-active']} href="/writing">Writing</a>
-          <a class:list={[isActive('/services') && 'is-active']} href="/services">Services</a>
-          <a class:list={[isActive('/open-source') && 'is-active']} href="/open-source">Open Source</a>
-          <a class:list={[isActive('/about') && 'is-active']} href="/about">About</a>
+          <a class:list={[isActive("/") && "is-active"]} href="/">Home</a>
+          <a class:list={[isActive("/writing") && "is-active"]} href="/writing"
+            >Writing</a
+          >
+          <a
+            class:list={[isActive("/services") && "is-active"]}
+            href="/services">Services</a
+          >
+          <a
+            class:list={[isActive("/open-source") && "is-active"]}
+            href="/open-source">Open Source</a
+          >
+          <a class:list={[isActive("/about") && "is-active"]} href="/about"
+            >About</a
+          >
         </nav>
-        <a class="button button--primary site-nav__cta" href="https://calendly.com/bluejf-llc/30min" target="_blank" rel="noopener">
+        <a
+          class="button button--primary site-nav__cta"
+          href="https://calendly.com/bluejf-llc/30min"
+          target="_blank"
+          rel="noopener"
+        >
           Book a Call
         </a>
         <div class="site-nav__controls">
-          <button class="site-nav__toggle" type="button" aria-label="Open menu" aria-expanded="false">
+          <button
+            class="site-nav__toggle"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+          >
             Menu
           </button>
         </div>
@@ -126,51 +177,56 @@ const imageUrl = ogImage
         <a href="/services">Services</a>
         <a href="/open-source">Open Source</a>
         <a href="/about">About</a>
-        <a class="button button--primary" href="https://calendly.com/bluejf-llc/30min" target="_blank" rel="noopener">
+        <a
+          class="button button--primary"
+          href="https://calendly.com/bluejf-llc/30min"
+          target="_blank"
+          rel="noopener"
+        >
           Book a Call
         </a>
       </div>
       <script is:inline>
         (function () {
-          var header = document.querySelector('.site-nav');
-          var btn = header && header.querySelector('.site-nav__toggle');
-          var panel = header && header.querySelector('.site-nav__mobile');
+          var header = document.querySelector(".site-nav");
+          var btn = header && header.querySelector(".site-nav__toggle");
+          var panel = header && header.querySelector(".site-nav__mobile");
           if (!btn || !panel) return;
 
           function setOpen(open) {
-            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            btn.setAttribute("aria-expanded", open ? "true" : "false");
             panel.hidden = !open;
-            btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-            document.documentElement.classList.toggle('nav-open', open);
+            btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+            document.documentElement.classList.toggle("nav-open", open);
           }
 
           setOpen(false);
 
           // Toggle mobile menu
-          btn.addEventListener('click', function () {
-            var open = btn.getAttribute('aria-expanded') === 'true';
+          btn.addEventListener("click", function () {
+            var open = btn.getAttribute("aria-expanded") === "true";
             setOpen(!open);
           });
 
           // Close on link click (mobile)
-          panel.querySelectorAll('a').forEach(function (link) {
-            link.addEventListener('click', function () {
+          panel.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
               setOpen(false);
             });
           });
 
-          document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
+          document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
               setOpen(false);
             }
           });
 
-          var mediaQuery = window.matchMedia('(min-width: 900px)');
+          var mediaQuery = window.matchMedia("(min-width: 900px)");
           function handleViewportChange() {
             setOpen(false);
           }
           if (mediaQuery.addEventListener) {
-            mediaQuery.addEventListener('change', handleViewportChange);
+            mediaQuery.addEventListener("change", handleViewportChange);
           } else if (mediaQuery.addListener) {
             mediaQuery.addListener(handleViewportChange);
           }
@@ -179,10 +235,10 @@ const imageUrl = ogImage
           function updateScrolled() {
             if (!header) return;
             var scrolled = window.scrollY > 8;
-            header.classList.toggle('is-scrolled', scrolled);
+            header.classList.toggle("is-scrolled", scrolled);
           }
           updateScrolled();
-          window.addEventListener('scroll', updateScrolled, { passive: true });
+          window.addEventListener("scroll", updateScrolled, { passive: true });
         })();
       </script>
     </header>
@@ -194,7 +250,8 @@ const imageUrl = ogImage
         <div class="site-footer__brand">
           <div class="site-footer__name">Jose Flores</div>
           <div class="site-footer__tagline">
-            XState &amp; Actor Model in TypeScript • Workshops • Websites/SEO • Open Source
+            XState &amp; Actor Model in TypeScript • Workshops • Websites/SEO •
+            Open Source
           </div>
         </div>
         <div class="site-footer__cols">
@@ -213,15 +270,25 @@ const imageUrl = ogImage
           <div class="site-footer__col">
             <div class="site-footer__title">Connect</div>
             <a href="mailto:bluejf.llc@gmail.com">Email</a>
-            <a href="https://www.linkedin.com/in/joseflores-io" rel="me noopener" target="_blank">LinkedIn</a>
-            <a href="https://github.com/0xjcf" rel="me noopener" target="_blank">GitHub</a>
-            <a href="https://www.x.com/0xjcf" rel="me noopener" target="_blank">X</a>
+            <a
+              href="https://www.linkedin.com/in/joseflores-io"
+              rel="me noopener"
+              target="_blank">LinkedIn</a
+            >
+            <a href="https://github.com/0xjcf" rel="me noopener" target="_blank"
+              >GitHub</a
+            >
+            <a href="https://www.x.com/0xjcf" rel="me noopener" target="_blank"
+              >X</a
+            >
           </div>
         </div>
       </div>
       <div class="site-footer__bottom">
-        <span>&copy; {new Date().getFullYear()} Jose Flores. All rights reserved.</span>
-        <a href="#main">↑ Top</a>
+        <span
+          >&copy; {new Date().getFullYear()} Jose Flores. All rights reserved.</span
+        >
+        <a href="#top">↑ Top</a>
       </div>
     </footer>
   </body>

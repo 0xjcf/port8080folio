@@ -82,6 +82,11 @@ export function resolveFormRedirect({
       return safeInternalHash;
     }
 
+    const rawTargetLower = targetUrl.toLowerCase();
+    if (rawTargetLower.includes('%2f') || rawTargetLower.includes('%5c')) {
+      return safeInternalHash;
+    }
+
     const url = new URL(targetUrl, currentOrigin);
 
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
@@ -129,13 +134,7 @@ export function resolveFormRedirect({
     const hasNullBytes =
       decodedPathname.includes('\0') || decodedSearch.includes('\0');
 
-    const hasEncodedSeparators =
-      url.pathname.toLowerCase().includes('%2f') ||
-      url.pathname.toLowerCase().includes('%5c') ||
-      url.search.toLowerCase().includes('%2f') ||
-      url.search.toLowerCase().includes('%5c');
-
-    if (hasPathTraversal || hasNullBytes || hasEncodedSeparators) {
+    if (hasPathTraversal || hasNullBytes) {
       return safeInternalHash;
     }
 

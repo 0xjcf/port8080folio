@@ -661,8 +661,10 @@ input[type="hidden"],
     display: flex;
   }
 
-  /* Safe fallback - show contact form by default */
-  .contact__forms .forms-container .form-card[data-tab="contact"] {
+  /* Safe fallback - show contact form only if neither radio is checked */
+  .contact__forms #form-contact:not(:checked)
+    ~ #form-newsletter:not(:checked)
+    ~ .forms-container .form-card[data-tab="contact"] {
     display: flex;
   }
 

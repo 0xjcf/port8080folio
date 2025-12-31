@@ -32,7 +32,7 @@ temp/
 
 # Project planning (local only)
 project-planning/
-# plans/
+plans/
 
 # Build outputs - GitHub Actions will build these
 dist/

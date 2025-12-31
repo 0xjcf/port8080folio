@@ -1,40 +1,49 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+type BlogPost = CollectionEntry<"blog">;
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = (await getCollection("blog")) as BlogPost[];
   return posts
     .filter((post) => !post.data.draft)
     .map((post) => ({ params: { slug: post.slug }, props: { post } }));
 }
 
-const { post } = Astro.props;
+const { post } = Astro.props as { post: BlogPost };
 const { Content } = await post.render();
 const title = `${post.data.title} — Jose Flores`;
 const description = post.data.description;
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).toString()
   : Astro.url.toString();
-const blogSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
+const blogSchema: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
   headline: post.data.title,
   description: post.data.description,
   datePublished: post.data.pubDate.toISOString(),
-  dateModified: post.data.updatedDate ? post.data.updatedDate.toISOString() : undefined,
   author: {
-    '@type': 'Person',
-    name: 'Jose Flores',
-    url: 'https://0xjcf.com'
+    "@type": "Person",
+    name: "Jose Flores",
+    url: "https://0xjcf.com",
   },
-  mainEntityOfPage: canonicalUrl
+  mainEntityOfPage: canonicalUrl,
 };
+
+if (post.data.updatedDate) {
+  blogSchema.dateModified = post.data.updatedDate.toISOString();
+}
 ---
 
 <BaseLayout title={title} description={description} bodyClass="no-js">
   <Fragment slot="head">
-    <script type="application/ld+json" is:inline set:html={JSON.stringify(blogSchema)}></script>
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(blogSchema)}
+    />
   </Fragment>
   <main id="main" role="main" class="section section--about page-content">
     <div class="container">
