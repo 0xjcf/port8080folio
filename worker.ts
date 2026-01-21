@@ -340,7 +340,7 @@ export default {
 
     // Route POSTs:
     if (url.pathname === '/api/newsletter') {
-      const response = await handleNewsletter(request, env);
+      const response = await handleNewsletter(request, env, _ctx);
       return addCORSHeaders(response, env);
     }
     if (url.pathname === '/api/contact') {
@@ -547,7 +547,7 @@ async function sendEmail(env: Env, { name, email, message }: { name: string; ema
 }
 
 // -------------------- Newsletter --------------------
-async function handleNewsletter(request: Request, env: Env): Promise<Response> {
+async function handleNewsletter(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const { NEWSLETTER_THANKS, SITE_URL } = getUrls(env);
   const NEWSLETTER_ERROR = new URL('newsletter-error.html', SITE_URL).toString();
 
@@ -591,9 +591,43 @@ async function handleNewsletter(request: Request, env: Env): Promise<Response> {
     }
 
     // PROD: add contact to Resend Audience
-    const ok = await addContactToAudience(env, email);
-    if (!ok) {
+    const addResult = await addContactToAudience(env, email);
+    if (!addResult.ok) {
       return Response.redirect(NEWSLETTER_ERROR, 303);
+    }
+
+    if (addResult.ok && !addResult.rateLimited && env.RATE_LIMIT_KV) {
+      const kv = env.RATE_LIMIT_KV;
+      const normalizedEmail = email.toLowerCase().trim();
+      const emailHash = await hashEmailFull(normalizedEmail);
+      const dedupeKey = `newsletter:welcome_sent:${emailHash}`;
+
+      try {
+        const alreadySent = await kv.get(dedupeKey);
+        if (!alreadySent) {
+          const idempotencyKey = `welcome:${emailHash}`;
+          ctx.waitUntil((async () => {
+            try {
+              const ok = await sendWelcomeEmail(env, email, idempotencyKey);
+              if (ok) {
+                try {
+                  await kv.put(dedupeKey, String(Date.now()), {
+                    expirationTtl: 60 * 60 * 24 * 180
+                  });
+                } catch (e) {
+                  console.error('welcome dedupe write failed', e);
+                }
+              } else {
+                console.error('welcome email failed (non-2xx)');
+              }
+            } catch (e) {
+              console.error('welcome email failed', e);
+            }
+          })());
+        }
+      } catch (e) {
+        console.error('welcome dedupe check failed', e);
+      }
     }
 
     return Response.redirect(NEWSLETTER_THANKS, 303);
@@ -602,12 +636,14 @@ async function handleNewsletter(request: Request, env: Env): Promise<Response> {
   }
 }
 
-async function addContactToAudience(env: Env, email: string): Promise<boolean> {
+type AudienceAddResult = { ok: boolean; rateLimited: boolean };
+
+async function addContactToAudience(env: Env, email: string): Promise<AudienceAddResult> {
   const audienceId = env.RESEND_AUDIENCE_ID;
   if (!audienceId) {
     // No audience configured → treat as soft-fail or success.
     // Prefer success to avoid blocking signups until you set the ID.
-    return true;
+    return { ok: true, rateLimited: false };
   }
 
   // Resend supports creating contacts under an Audience via API
@@ -629,18 +665,74 @@ async function addContactToAudience(env: Env, email: string): Promise<boolean> {
 
     // Common non-200s: 400 invalid, 409 already exists, 429 rate limit, 5xx upstream
     // Treat 200–299, 409 (already exists), and (optionally) 429 (rate-limited) as "ok" for UX smoothness.
-    if (resp.ok || resp.status === 409 || resp.status === 429) return true;
+    if (resp.ok || resp.status === 409) return { ok: true, rateLimited: false };
+    if (resp.status === 429) return { ok: false, rateLimited: true };
     const body = await resp.text().catch(() => 'Unable to read response body');
     console.error(`Resend audience add failed: ${resp.status} ${resp.statusText}; email=[redacted]`);
     // (Optional) In non-prod you could log body; avoid PII/verbose logs in prod.
     if (env.ENV !== 'prod') {
       console.error('Upstream (redacted) body:', body.replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[REDACTED_EMAIL]'));
     }
-    return false;
+    return { ok: false, rateLimited: false };
   } catch (error) {
     console.error(`Failed to add contact to audience: audienceId=${audienceId}`, error);
+    return { ok: false, rateLimited: false };
+  }
+}
+
+async function sendWelcomeEmail(env: Env, email: string, idempotencyKey: string): Promise<boolean> {
+  const from = env.FROM_EMAIL || 'Website <no-reply@example.com>';
+  const replyTo = env.TO_EMAIL || 'to@example.com';
+
+  const payload = {
+    from,
+    to: [email],
+    reply_to: replyTo,
+    subject: 'Welcome — you’re in',
+    text: [
+      'You’re subscribed.',
+      'When I publish a new article, you’ll get a short note + link.',
+      'https://0xjcf.com/writing',
+      'Reply and tell me what you’re building.',
+    ].join('\n'),
+    html: `<p>You’re subscribed.</p>
+           <p>When I publish a new article, you’ll get a short note + link.</p>
+           <p><a href="https://0xjcf.com/writing">https://0xjcf.com/writing</a></p>
+           <p>Reply and tell me what you’re building.</p>`
+  } as const;
+
+  try {
+    const resp = await fetchWithTimeout('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+        'Idempotency-Key': idempotencyKey,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (resp.ok) return true;
+
+    if (env.ENV === 'prod') {
+      console.error(`Welcome email send failed: ${resp.status} ${resp.statusText}`);
+    } else {
+      const body = await resp.text().catch(() => 'Unable to read response body');
+      console.error(`Welcome email send failed: ${resp.status} ${resp.statusText}`, body);
+    }
+    return false;
+  } catch (error) {
+    console.error('Welcome email send error:', error);
     return false;
   }
+}
+
+async function hashEmailFull(email: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(email.toLowerCase().trim());
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 /**

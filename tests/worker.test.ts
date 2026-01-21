@@ -11,6 +11,7 @@ const ORIGIN = 'https://example.com';
 const createKV = () => {
   const store = new Map<string, string>();
   return {
+    store,
     async get(key: string) {
       return store.get(key) ?? null;
     },
@@ -48,7 +49,28 @@ const createEnv = (overrides: Partial<MutableEnv> = {}): MutableEnv => {
   return env;
 };
 
-const ctx = {} as Parameters<typeof worker.fetch>[2];
+const ctx = {
+  waitUntil(promise: Promise<unknown>) {
+    void promise;
+  },
+  passThroughOnException() {
+    // no-op for tests
+  },
+} as Parameters<typeof worker.fetch>[2];
+
+const createCtx = () => {
+  const waitUntilPromises: Promise<unknown>[] = [];
+  const ctx = {
+    waitUntil(promise: Promise<unknown>) {
+      waitUntilPromises.push(promise);
+    },
+    passThroughOnException() {
+      // no-op for tests
+    },
+  } as Parameters<typeof worker.fetch>[2];
+
+  return { ctx, waitUntilPromises };
+};
 
 interface RequestOverrides {
   method?: string;
@@ -132,6 +154,7 @@ describe('Cloudflare worker form handlers', () => {
   });
 
   it('redirects newsletter submissions to thanks page in development', async () => {
+    const fetchMock = vi.spyOn(globalThis, 'fetch');
     const now = Date.now();
     const request = makeRequest(`${ORIGIN}/api/newsletter`, {
       email: 'reader@example.com',
@@ -143,6 +166,7 @@ describe('Cloudflare worker form handlers', () => {
 
     expect(response.status).toBe(303);
     expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('redirects newsletter submissions to error when email invalid', async () => {
@@ -181,6 +205,155 @@ describe('Cloudflare worker form handlers', () => {
 
     expect(response.status).toBe(303);
     expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('sends welcome email with idempotency key and writes dedupe on success', async () => {
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response('{}', { status: 200 }))
+      .mockResolvedValueOnce(new Response('{}', { status: 200 }));
+
+    const kv = createKV();
+    const env = createEnv({
+      ENV: 'prod',
+      RESEND_AUDIENCE_ID: 'aud_123',
+      RATE_LIMIT_KV: kv,
+    });
+    const { ctx: prodCtx, waitUntilPromises } = createCtx();
+
+    const now = Date.now();
+    const request = makeRequest(`${ORIGIN}/api/newsletter`, {
+      email: 'reader@example.com',
+      timestamp: String(now - 2500),
+      website: '',
+    });
+
+    const response = await worker.fetch(request, env, prodCtx);
+    await Promise.all(waitUntilPromises);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+
+    const [, welcomeCall] = fetchMock.mock.calls;
+    const [welcomeUrl, welcomeInit] = welcomeCall;
+    const headers = (welcomeInit as RequestInit)?.headers as Record<string, string>;
+    const body = JSON.parse((welcomeInit as RequestInit)?.body as string) as {
+      reply_to?: string;
+    };
+
+    expect(welcomeUrl).toBe('https://api.resend.com/emails');
+    expect(headers['Idempotency-Key']).toMatch(/^welcome:[a-f0-9]{64}$/);
+    expect(body.reply_to).toBe('owner@example.com');
+
+    const hasWelcomeKey = Array.from(kv.store.keys()).some((key) =>
+      key.startsWith('newsletter:welcome_sent:')
+    );
+    expect(hasWelcomeKey).toBe(true);
+  });
+
+  it('does not send welcome or write dedupe when audience add is rate-limited', async () => {
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response('rate limited', { status: 429 }));
+
+    const kv = createKV();
+    const env = createEnv({
+      ENV: 'prod',
+      RESEND_AUDIENCE_ID: 'aud_123',
+      RATE_LIMIT_KV: kv,
+    });
+    const { ctx: prodCtx, waitUntilPromises } = createCtx();
+
+    const now = Date.now();
+    const request = makeRequest(`${ORIGIN}/api/newsletter`, {
+      email: 'reader@example.com',
+      timestamp: String(now - 2500),
+      website: '',
+    });
+
+    const response = await worker.fetch(request, env, prodCtx);
+    await Promise.all(waitUntilPromises);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error.html`);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(waitUntilPromises).toHaveLength(0);
+    expect(kv.store.size).toBe(0);
+  });
+
+  it('does not write dedupe when welcome send fails', async () => {
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response('{}', { status: 200 }))
+      .mockResolvedValueOnce(new Response('nope', { status: 500 }));
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const kv = createKV();
+    const env = createEnv({
+      ENV: 'prod',
+      RESEND_AUDIENCE_ID: 'aud_123',
+      RATE_LIMIT_KV: kv,
+    });
+    const { ctx: prodCtx, waitUntilPromises } = createCtx();
+
+    const now = Date.now();
+    const request = makeRequest(`${ORIGIN}/api/newsletter`, {
+      email: 'reader@example.com',
+      timestamp: String(now - 2500),
+      website: '',
+    });
+
+    const response = await worker.fetch(request, env, prodCtx);
+    await Promise.all(waitUntilPromises);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+
+    const hasWelcomeKey = Array.from(kv.store.keys()).some((key) =>
+      key.startsWith('newsletter:welcome_sent:')
+    );
+    expect(hasWelcomeKey).toBe(false);
+  });
+
+  it('skips welcome send when dedupe key exists', async () => {
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(new Response('{}', { status: 200 }));
+
+    const store = new Map<string, string>();
+    const kv = {
+      store,
+      async get(key: string) {
+        if (key.startsWith('newsletter:welcome_sent:')) return '1';
+        return '0';
+      },
+      async put(key: string, value: string) {
+        store.set(key, value);
+      },
+    };
+    const env = createEnv({
+      ENV: 'prod',
+      RESEND_AUDIENCE_ID: 'aud_123',
+      RATE_LIMIT_KV: kv,
+    });
+    const { ctx: prodCtx, waitUntilPromises } = createCtx();
+
+    const now = Date.now();
+    const request = makeRequest(`${ORIGIN}/api/newsletter`, {
+      email: 'reader@example.com',
+      timestamp: String(now - 2500),
+      website: '',
+    });
+
+    const response = await worker.fetch(request, env, prodCtx);
+    await Promise.all(waitUntilPromises);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(waitUntilPromises).toHaveLength(0);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
