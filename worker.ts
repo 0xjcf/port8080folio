@@ -171,7 +171,17 @@ function getAllowedOrigins(env: Env): Set<string> {
     const origins = raw
       .split(',')
       .map((entry) => entry.trim())
-      .filter(Boolean);
+      .filter((entry) => {
+        if (!entry) return false;
+        try {
+          new URL(entry);
+          return true;
+        } catch {
+          console.warn(`Invalid origin in ALLOWED_ORIGINS: ${entry}`);
+          return false;
+        }
+      })
+      .map((entry) => new URL(entry).origin);
     return new Set(origins);
   }
 

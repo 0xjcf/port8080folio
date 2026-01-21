@@ -1011,7 +1011,8 @@ describe('worker internals', () => {
   it('adds Origin to existing Vary header when adding CORS headers', () => {
     const env = createEnv();
     const original = new Response('ok', { headers: { Vary: 'Accept-Encoding' } });
-    const updated = addCORSHeaders(original, env);
+    const request = new Request(`${ORIGIN}/api/contact`, { headers: { origin: ORIGIN } });
+    const updated = addCORSHeaders(original, request, env);
 
     expect(updated.headers.get('Vary')).toBe('Accept-Encoding, Origin');
   });
