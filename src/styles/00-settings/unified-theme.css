@@ -169,7 +169,6 @@ body.status-page::after {
   position: relative;
 }
 
-
 [data-theme="dark"] #about.section {
   background:
     radial-gradient(
@@ -625,7 +624,7 @@ body::before {
   box-shadow: var(--panel-shadow);
   transition:
     box-shadow var(--duration-base) var(--ease-default),
-    transform  var(--duration-base) var(--ease-default);
+    transform var(--duration-base) var(--ease-default);
 }
 .panel:hover {
   box-shadow: var(--panel-shadow), var(--panel-glow);

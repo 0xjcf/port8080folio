@@ -1,29 +1,39 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 
-const title = 'Open Source — Jose Flores | Behavior-First Tooling';
-const description = 'Tools, patterns, and ideas built in the open: Actor-Web, Ignite-Element, and behavior-first systems.';
+const title = "Open Source | Jose Flores | Behavior-First Tooling";
+const description =
+  "Tools, patterns, and ideas built in the open: Actor-Web, Ignite-Element, and behavior-first systems.";
 ---
 
 <BaseLayout title={title} description={description} bodyClass="no-js">
-  <main id="main" role="main" class="section section--services page-content">
+  <main id="main" role="main" class="section section--open-source page-content">
     <div class="container">
       <h1 class="section__title">Open Source</h1>
 
       <section class="open-source__section">
         <h2>Tools, patterns, and ideas built in the open</h2>
         <p>
-          I maintain and contribute to open-source projects because I care about clarity, explicit behavior, and
-          systems that scale cognitively—not just technically. Open source is where I test ideas, sharpen patterns,
-          and share what actually works in real products.
+          I maintain and contribute to open-source projects because I care about
+          clarity, explicit behavior, and systems that scale cognitively.
+          Technical scale matters too. Open source is where I test ideas,
+          sharpen patterns, and share what works in real products.
+        </p>
+        <p>
+          These projects are where the questions in my writing get exercised
+          under real constraints.
         </p>
       </section>
 
       <section class="open-source__section">
         <h2>Why I build in the open</h2>
         <p>
-          Most production issues don’t come from a lack of libraries. They come from unclear behavior, hidden
-          assumptions, and systems that are hard to reason about.
+          In the systems I worked on, the problems that stayed with me were
+          about unclear behavior, hidden assumptions, and systems that were hard
+          to reason about.
+        </p>
+        <p>
+          I started building in the open after noticing those patterns repeat:
         </p>
         <ul>
           <li>Explore better ways to model behavior.</li>
@@ -36,25 +46,15 @@ const description = 'Tools, patterns, and ideas built in the open: Actor-Web, Ig
       <section class="open-source__section">
         <h2>Featured projects</h2>
 
-        <h3>Actor-Web</h3>
-        <p><strong>A lightweight actor runtime for frontend systems.</strong></p>
-        <p>
-          Actor-Web explores how the actor model can be applied to frontend architecture in a way that’s explicit,
-          composable, and easy to reason about.
-        </p>
-        <ul>
-          <li>Actor-based boundaries</li>
-          <li>Message-driven communication</li>
-          <li>Clear ownership of behavior</li>
-          <li>Predictable lifecycle management</li>
-        </ul>
-        <p><a href="https://github.com/0xjcf/actor-web" target="_blank" rel="noopener">View Actor-Web on GitHub →</a></p>
-
-        <h3>Ignite-Element</h3>
+        <p class="open-source__eyebrow">Primary project</p>
+        <h3>
+          Ignite-Element
+          <span class="open-source__badge">Start here</span>
+        </h3>
         <p><strong>Behavior-first web components.</strong></p>
         <p>
-          Ignite-Element bridges state machines and custom elements, making it easier to build UI components whose
-          behavior is explicit and testable.
+          Ignite-Element bridges state machines and custom elements, making it
+          easier to build UI components whose behavior is explicit and testable.
         </p>
         <ul>
           <li>Statecharts as the source of truth</li>
@@ -62,14 +62,70 @@ const description = 'Tools, patterns, and ideas built in the open: Actor-Web, Ig
           <li>Reduced state drift</li>
           <li>Components that scale with complexity</li>
         </ul>
-        <p><a href="https://github.com/0xjcf/ignite-element" target="_blank" rel="noopener">View Ignite-Element on GitHub →</a></p>
+        <p class="open-source__project-actions">
+          <a
+            class="button button--primary"
+            href="https://0xjcf.github.io/ignite-element/"
+            target="_blank"
+            rel="noopener"
+          >
+            Read the documentation →
+          </a>
+          <a
+            class="button button--secondary"
+            href="https://github.com/0xjcf/ignite-element"
+            target="_blank"
+            rel="noopener"
+          >
+            View source on GitHub →
+          </a>
+        </p>
+
+        <p class="open-source__eyebrow">Foundational work</p>
+        <h3>Actor-Web</h3>
+        <p>
+          <strong>A pure actor-model runtime for JavaScript/TypeScript.</strong>
+        </p>
+        <p>
+          Actor-Web is a minimal actor system inspired by Erlang/OTP. It helps
+          you build resilient, message-driven JS/TS systems with
+          location-transparent actors. It’s not a UI framework. It’s a
+          foundation for reasoning about concurrency, boundaries, and lifecycles
+          across client and server environments.
+        </p>
+        <ul>
+          <li>Actor-based boundaries and ownership</li>
+          <li>Message-driven communication (bounded mailboxes)</li>
+          <li>Predictable lifecycles and explicit failure handling</li>
+          <li>Systems that stay debuggable as complexity grows</li>
+        </ul>
+        <p>
+          If Ignite-Element is how these ideas land in UI components, Actor-Web
+          is where they’re stress-tested at the system level.
+        </p>
+        <p class="open-source__project-actions">
+          <a
+            class="button button--primary"
+            href="https://github.com/0xjcf/actor-web"
+            target="_blank"
+            rel="noopener"
+          >
+            View Actor-Web on GitHub →
+          </a>
+        </p>
       </section>
 
       <section class="open-source__section">
         <h2>How this connects to my work</h2>
         <p>
-          These projects aren’t side hobbies—they’re extensions of how I think about systems. Open-source work informs
-          my workshops, shapes my advisory approach, and improves the tools I bring into client environments.
+          These projects aren’t side hobbies. They extend how I think about
+          systems. Open-source work informs my workshops. It shapes my advisory
+          approach. It improves the tools I bring into client environments.
+        </p>
+        <p>
+          They are the practical side of the same ideas I explore in <em
+            >Behavior &amp; Boundaries</em
+          >.
         </p>
       </section>
 
@@ -88,8 +144,8 @@ const description = 'Tools, patterns, and ideas built in the open: Actor-Web, Ig
       <section class="open-source__section">
         <h2>Supporting the work</h2>
         <p>
-          I split my time between client work and open source. Sponsorships and community support help keep these
-          projects moving forward.
+          I split my time between client work and open source. Sponsorships and
+          community support help keep these projects moving forward.
         </p>
         <ul>
           <li>Star or contribute on GitHub.</li>
@@ -98,20 +154,36 @@ const description = 'Tools, patterns, and ideas built in the open: Actor-Web, Ig
         <iframe
           src="https://github.com/sponsors/0xjcf/card"
           title="Sponsor 0xjcf"
-          height="225"
-          width="600"
-          style="border: 0;"
-        ></iframe>
+          class="sponsor-iframe"
+          loading="lazy"
+          referrerpolicy="no-referrer"></iframe>
       </section>
 
       <section class="open-source__section">
         <h2>Want to go deeper?</h2>
-        <p>Explore related ideas and applications:</p>
         <p>
-          <a class="button button--primary" href="/services/product-teams">Explore services for product teams</a>
-          <a class="button button--secondary" href="/writing">Read my writing</a>
+          Explore the <em>Behavior &amp; Boundaries</em> series and related applications.
         </p>
-        <p class="text-muted">Open source is where ideas start. Production is where they’re proven.</p>
+        <p>
+          If you are new to the series, start with <em
+            >When Code Becomes Cheap</em
+          >.
+        </p>
+        <p class="open-source__actions">
+          <a class="button button--primary" href="/writing">Read my writing</a>
+          <!-- Business site link disabled until site is ready.
+          <a
+            class="button button--secondary"
+            href="https://bluejf.llc"
+            target="_blank"
+            rel="noopener"
+          >
+            Business site (external)
+          </a>
+          -->
+        </p>
+        <!-- Business details line hidden until business site is ready. -->
+        <!-- <p class="text-muted">Business details live on bluejf.llc.</p> -->
       </section>
     </div>
   </main>

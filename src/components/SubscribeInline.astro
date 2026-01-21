@@ -1,0 +1,108 @@
+---
+const {
+  seriesName,
+  variant = "seriesActive",
+  formId = "inline-subscribe",
+} = Astro.props as {
+  seriesName?: string;
+  variant?: "seriesActive" | "seriesComplete" | "generic";
+  formId?: string;
+};
+
+const copyByVariant = {
+  seriesActive: {
+    title: "Continue the series",
+    description: seriesName
+      ? `Get the next essay in ${seriesName} when it\u2019s published. Low frequency, high signal.`
+      : "Get new essays when they\u2019re published. Low frequency, high signal.",
+    valueLine: null,
+  },
+  seriesComplete: {
+    title: "Stay connected",
+    description:
+      "Thoughtful essays on architecture, behavior, and systems design. Published when there is something worth saying.",
+    valueLine: "Low frequency. High signal.",
+  },
+  generic: {
+    title: "Stay connected",
+    description:
+      "Get new essays when they\u2019re published. Low frequency, high signal.",
+    valueLine: null,
+  },
+};
+
+const { title, description, valueLine } =
+  copyByVariant[variant] ?? copyByVariant.seriesActive;
+const emailId = `${formId}-email`;
+const errorId = `${formId}-email-error`;
+const titleId = `${formId}-title`;
+---
+
+<section class="subscribe-inline" aria-labelledby={titleId}>
+  <div class="subscribe-inline__inner">
+    <h2 class="subscribe-inline__title" id={titleId}>{title}</h2>
+    <p class="subscribe-inline__copy">{description}</p>
+    {valueLine ? (
+      <p class="subscribe-inline__copy subscribe-inline__copy--value">
+        {valueLine}
+      </p>
+    ) : null}
+    <form
+      class="pe-form subscribe-inline__form"
+      action="/api/newsletter"
+      data-endpoint="/api/newsletter"
+      data-inline-success="true"
+      method="POST"
+    >
+      <noscript>
+        <div class="form-error" role="alert">
+          <span>JavaScript is required to submit this form.</span>
+        </div>
+      </noscript>
+      <div class="form-group">
+        <label for={emailId} class="sr-only">Email address</label>
+        <input
+          type="email"
+          id={emailId}
+          name="email"
+          class="form-input"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        />
+        <div id={errorId} class="form-error" role="alert">
+          <span>Enter a valid email address (name@example.com)</span>
+        </div>
+      </div>
+
+      <input
+        type="text"
+        name="website"
+        class="sr-only-absolute"
+        tabindex="-1"
+        autocomplete="new-password"
+        aria-hidden="true"
+      />
+      <input type="hidden" name="timestamp" value="" />
+
+      <div class="form-submit">
+        <button type="submit">
+          <span class="button__text">Subscribe <span aria-hidden="true">&rarr;</span></span>
+          <span
+            class="sr-only loading-status"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            Loading…
+          </span>
+        </button>
+        <div class="form-success-message" aria-live="polite" aria-atomic="true">
+          <span class="success-emoji">🎉</span>
+          <span>You&#x2019;re in! Check your inbox to confirm your subscription.</span>
+        </div>
+      </div>
+    </form>
+    <p class="subscribe-inline__helper text--small">Unsubscribe anytime.</p>
+  </div>
+</section>

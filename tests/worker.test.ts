@@ -537,7 +537,7 @@ describe('Cloudflare worker form handlers', () => {
     expect(response.status).toBe(404);
   });
 
-  it('treats root POST as contact submission', async () => {
+  it('returns 404 for root POST', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('{}', { status: 200 }));
 
     const response = await worker.fetch(
@@ -552,7 +552,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks.html`);
+    expect(response.status).toBe(404);
   });
 
   it('rejects contact submissions when honeypot filled', async () => {

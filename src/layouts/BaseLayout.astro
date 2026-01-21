@@ -14,6 +14,7 @@ const {
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === "/" ? path === "/" : path.startsWith(href);
+const isHomePage = path === "/";
 
 const site = Astro.site;
 const canonicalUrl =
@@ -128,6 +129,7 @@ const imageUrl =
       })();
     </script>
     <script defer src="/scripts/theme-toggle.js"></script>
+    <script defer src="/scripts/code-copy.js"></script>
   </head>
   <body class={bodyClass} id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -141,25 +143,23 @@ const imageUrl =
             >Writing</a
           >
           <a
-            class:list={[isActive("/services") && "is-active"]}
-            href="/services">Services</a
-          >
-          <a
             class:list={[isActive("/open-source") && "is-active"]}
             href="/open-source">Open Source</a
           >
           <a class:list={[isActive("/about") && "is-active"]} href="/about"
             >About</a
           >
+          <!-- Business site link disabled until site is ready.
+          <a
+            class="site-nav__external"
+            href="https://bluejf.llc"
+            target="_blank"
+            rel="noopener"
+          >
+            Business site (external)
+          </a>
+          -->
         </nav>
-        <a
-          class="button button--primary site-nav__cta"
-          href="https://calendly.com/bluejf-llc/30min"
-          target="_blank"
-          rel="noopener"
-        >
-          Book a Call
-        </a>
         <div class="site-nav__controls">
           <button
             class="site-nav__toggle"
@@ -174,17 +174,13 @@ const imageUrl =
       <div class="site-nav__mobile" hidden>
         <a href="/">Home</a>
         <a href="/writing">Writing</a>
-        <a href="/services">Services</a>
         <a href="/open-source">Open Source</a>
         <a href="/about">About</a>
-        <a
-          class="button button--primary"
-          href="https://calendly.com/bluejf-llc/30min"
-          target="_blank"
-          rel="noopener"
-        >
-          Book a Call
+        <!-- Business site link disabled until site is ready.
+        <a class="site-nav__external" href="https://bluejf.llc" target="_blank" rel="noopener">
+          Business site (external)
         </a>
+        -->
       </div>
       <script is:inline>
         (function () {
@@ -250,8 +246,7 @@ const imageUrl =
         <div class="site-footer__brand">
           <div class="site-footer__name">Jose Flores</div>
           <div class="site-footer__tagline">
-            XState &amp; Actor Model in TypeScript • Workshops • Websites/SEO •
-            Open Source
+            Statecharts &amp; Actor Model in TypeScript • Writing • Open Source
           </div>
         </div>
         <div class="site-footer__cols">
@@ -261,15 +256,17 @@ const imageUrl =
             <a href="/open-source">Open Source</a>
             <a href="/about">About</a>
           </div>
+          <!-- Business footer column hidden until site is ready. -->
+          <!--
           <div class="site-footer__col">
-            <div class="site-footer__title">Services</div>
-            <a href="/services">Services Overview</a>
-            <a href="/services/product-teams">Product Teams</a>
-            <a href="/services/local-business">Local Businesses</a>
+            <div class="site-footer__title">Business</div>
+            <a href="https://bluejf.llc" target="_blank" rel="noopener"
+              >Business site (external)</a
+            >
           </div>
+          -->
           <div class="site-footer__col">
-            <div class="site-footer__title">Connect</div>
-            <a href="mailto:bluejf.llc@gmail.com">Email</a>
+            <div class="site-footer__title">Profiles</div>
             <a
               href="https://www.linkedin.com/in/joseflores-io"
               rel="me noopener"

@@ -2,7 +2,9 @@
 title: "Pragmatic Statecharts in Product Teams"
 description: "A practical introduction to statecharts for teams shipping real products."
 pubDate: 2025-02-05
+edition: 1
 tags: ["statecharts", "xstate", "product-delivery"]
+draft: true
 ---
 
 Statecharts give teams a shared language for behavior. The goal is not diagram perfection. The goal is shipping a UI that behaves the same way every time.

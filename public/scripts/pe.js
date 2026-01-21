@@ -299,16 +299,34 @@ import { resolveFormRedirect } from './form-redirect.js';
                             }
                             throw new Error(`Server error (${response.status}): ${errorDetails}`);
                         }
-                        // Handle success with strengthened redirect validation
-                        const redirectUrl = response.url || '#';
-                        const safeInternalHash = '#contact-success'; // Safe fallback
-                        const targetHref = resolveFormRedirect({
-                            redirectUrl,
-                            safeInternalHash,
-                            currentOrigin: window.location.origin,
-                            currentPathname: window.location.pathname,
+                    const inlineSuccess = form.hasAttribute('data-inline-success');
+                    if (inlineSuccess) {
+                        form.classList.add('form-submitted');
+                        if (submitBtnElement &&
+                            (submitBtnElement instanceof HTMLButtonElement ||
+                                submitBtnElement instanceof HTMLInputElement)) {
+                            removeButtonLoadingState(submitBtnElement);
+                            submitBtnElement.disabled = true;
+                            submitBtnElement.setAttribute('aria-disabled', 'true');
+                        }
+                        form.querySelectorAll('input, textarea, select').forEach((field) => {
+                            if (field instanceof HTMLElement) {
+                                field.setAttribute('disabled', 'true');
+                                field.setAttribute('aria-disabled', 'true');
+                            }
                         });
-                        window.location.href = targetHref;
+                        return;
+                    }
+                    // Handle success with strengthened redirect validation
+                    const redirectUrl = response.url || '#';
+                    const safeInternalHash = '#contact-success'; // Safe fallback
+                    const targetHref = resolveFormRedirect({
+                        redirectUrl,
+                        safeInternalHash,
+                        currentOrigin: window.location.origin,
+                        currentPathname: window.location.pathname,
+                    });
+                    window.location.href = targetHref;
                     }
                     catch (error) {
                         clearTimeout(timeoutId);

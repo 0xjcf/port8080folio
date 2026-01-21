@@ -42,15 +42,21 @@ nav a {
   color: var(--color-text);
   text-decoration: none;
   font-weight: var(--font-medium);
-  transition: color var(--transition-fast);
+  transition:
+    color var(--transition-fast),
+    text-decoration-color var(--transition-fast);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
 }
 
 nav a:hover,
 nav a:focus-visible {
-  color: var(--color-primary);
-  background-color: var(--color-primary-100);
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-thickness: var(--space-0-5);
+  text-underline-offset: var(--space-1);
+  text-decoration-color: var(--color-text-muted);
+  background-color: transparent;
 }
 
 nav a:focus-visible {
@@ -59,8 +65,27 @@ nav a:focus-visible {
   box-shadow: 0 0 0 6px var(--color-brand-primary-10); /* Fallback for older browsers */
 }
 
+nav a.site-nav__external {
+  color: var(--color-text);
+  border: var(--space-px) solid var(--color-border);
+  background: color-mix(in oklch, var(--color-surface) 85%, transparent);
+  border-color: color-mix(in oklch, var(--color-text) 15%, transparent);
+}
+
+nav a.site-nav__external:hover,
+nav a.site-nav__external:focus-visible {
+  text-decoration: none;
+  background: color-mix(in oklch, var(--color-surface) 92%, transparent);
+  border-color: color-mix(in oklch, var(--color-text) 25%, transparent);
+}
+
 /* Modern browsers with color-mix support */
 @supports (color: color-mix(in oklch, red, blue)) {
+  nav a:hover,
+  nav a:focus-visible {
+    text-decoration-color: color-mix(in oklch, var(--color-text) 70%, transparent);
+  }
+
   nav a:focus-visible {
     box-shadow: 0 0 0 6px color-mix(in oklch, var(--color-brand-primary) 20%, transparent);
   }

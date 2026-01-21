@@ -18,10 +18,21 @@
   padding: 0 var(--space-5); /* Standard mobile padding */
 }
 
+.contact__forms--newsletter .forms-container {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 @media (min-width: 768px) {
   .contact__forms {
     max-width: 60rem; /* ~960px - enough for 2x420px forms + gap */
     padding: 0 var(--space-6); /* Some padding on desktop */
+  }
+
+  .contact__forms--newsletter .forms-container {
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -152,9 +163,9 @@
   padding: var(--space-3) var(--space-6);
   background: var(--color-surface);
   border: calc(var(--space-px) * 1.5) solid
-    color-mix(in oklch, var(--color-primary) 30%, var(--color-border));
+    color-mix(in oklch, var(--color-primary) 15%, var(--color-border));
   border-radius: var(--radius-lg);
-  color: var(--color-text-light);
+  color: var(--color-text-muted);
   font-weight: 500;
   font-size: var(--text-base);
   cursor: pointer;
@@ -195,12 +206,12 @@
 }
 
 /* Forms Container - Desktop only wrapper for two-row grid */
-.forms-container {
+.contact__forms .forms-container {
   width: 100%;
 }
 
 @media (min-width: 768px) {
-  .forms-container {
+  .contact__forms .forms-container {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
@@ -211,7 +222,7 @@
 }
 
 @media (min-width: 1024px) {
-  .forms-container {
+  .contact__forms .forms-container {
     max-width: 42rem; /* Slightly wider on larger screens */
   }
 }
@@ -219,7 +230,7 @@
 /* Form Card */
 .contact__forms .form-card {
   background: var(--color-surface);
-  border: var(--space-px) solid var(--color-border);
+  border: var(--space-px) solid color-mix(in oklch, var(--color-border) 70%, transparent);
   border-radius: var(--radius-lg);
   padding: var(--space-8);
   display: flex;
@@ -230,16 +241,18 @@
   margin: 0 auto; /* Center on mobile */
   position: relative; /* allow top accent stripe */
   overflow: hidden; /* keep accent inside radius */
-  box-shadow: var(--shadow-md); /* parity with dark theme depth */
+  box-shadow: var(--shadow-sm);
 }
 
 /* Light theme parity: top accent stripe like dark mode */
 .contact__forms .form-card::before {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: var(--space-1);
-  background: var(--brand-grad-cta);
+  background: color-mix(in oklch, var(--color-primary) 25%, transparent);
 }
 
 @media (min-width: 768px) {
@@ -247,12 +260,12 @@
     max-width: none; /* Let container control width */
     margin: 0; /* Remove centering */
   }
-  
+
   /* Hide inactive form panels on desktop */
   .contact__forms .form-card[data-tab] {
     display: none;
   }
-  
+
   /* Show only the active form panel */
   .contact__forms .form-card[data-tab].active {
     display: flex;
@@ -661,8 +674,8 @@ input[type="hidden"],
     display: flex;
   }
 
-  /* Safe fallback - show contact form by default */
-  .contact__forms .forms-container .form-card[data-tab="contact"] {
+  /* Safe fallback - show newsletter form by default */
+  .contact__forms .forms-container .form-card[data-tab="newsletter"] {
     display: flex;
   }
 
@@ -696,20 +709,20 @@ input[type="hidden"],
 
 /* Desktop tab panel visibility managed by JavaScript */
 @media (min-width: 768px) {
-  /* Default state - show contact form initially */
-  .contact__forms .form-card[data-tab="contact"] {
+  /* Default state - show newsletter form initially */
+  .contact__forms .form-card[data-tab="newsletter"] {
     display: flex;
   }
-  
-  .contact__forms .form-card[data-tab="newsletter"] {
+
+  .contact__forms .form-card[data-tab="contact"] {
     display: none;
   }
-  
+
   /* When tabs are active, JavaScript will control visibility */
   .contact__forms.tabs-initialized .form-card[data-tab] {
     display: none;
   }
-  
+
   .contact__forms.tabs-initialized .form-card[data-tab].active {
     display: flex;
   }

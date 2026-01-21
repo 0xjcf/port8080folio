@@ -38,6 +38,7 @@ NEWSLETTER_API_URL = "http://127.0.0.1:8787/api/newsletter"
 [env.staging]
 name = "website-forms-staging"
 workers_dev = true
+routes = [{ pattern = "staging.0xjcf.com/api/*", zone_name = "0xjcf.com" }]
 
 [env.staging.vars]
 ENV = "dev"
@@ -61,7 +62,8 @@ NEWSLETTER_API_URL = "https://staging.0xjcf.com/api/newsletter"
 # ---------- Production ----------
 [env.production]
 name = "website-forms-production"
-workers_dev = true
+workers_dev = false
+routes = [{ pattern = "0xjcf.com/api/*", zone_name = "0xjcf.com" }]
 
 # Vars used by your deployed site on Cloudflare Pages
 [env.production.vars]

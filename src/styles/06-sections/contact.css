@@ -45,6 +45,12 @@
   text-align: center;
 }
 
+.contact__secondary-link {
+  margin-top: var(--space-6);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
 /* Social proof stats */
 .contact__stats {
   display: flex;
@@ -249,10 +255,7 @@
 
 /* Contact Info Box */
 .contact__info {
-  /* Fallback background for unsupported browsers */
-  background-color: var(--color-surface);
-  border: var(--space-px) solid var(--color-border);
-  /* Modern color-mix for supporting browsers */
+  /* Single background/border declarations */
   background: color-mix(in oklch, var(--color-surface) 60%, transparent); /* More subtle background */
   border: var(--space-px) solid color-mix(in oklch, var(--color-border) 30%, transparent); /* Softer border */
   border-radius: var(--radius-lg);

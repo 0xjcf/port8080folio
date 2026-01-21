@@ -68,16 +68,20 @@ main {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: color-mix(in oklab, var(--color-surface, #fff) 85%, transparent);
+  background: color-mix(in oklab, var(--color-surface, #fff) 70%, transparent);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
-  transition: box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--color-border, rgba(0, 0, 0, 0.08)) 65%, transparent);
+  transition:
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .site-nav__container {
   max-width: var(--container-xl);
   margin: 0 auto;
-  padding: 14px var(--container-padding);
+  padding: var(--space-2-5) var(--container-padding);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -116,7 +120,7 @@ main {
 .site-nav__controls {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
 .site-nav__cta {
@@ -127,7 +131,8 @@ main {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: var(--space-10);
+  min-height: var(--space-11);
+  min-width: var(--space-11);
   padding: 0 var(--space-3);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
@@ -170,8 +175,8 @@ html.nav-open .site-nav {
   top: auto;
   right: auto;
   z-index: auto;
-  width: var(--space-10);
-  height: var(--space-10);
+  width: var(--space-11);
+  height: var(--space-11);
   border-radius: var(--radius-lg);
   box-shadow: none;
   background: var(--color-surface);
@@ -196,7 +201,7 @@ html.nav-open .site-nav {
     display: none;
   }
   .site-nav__mobile {
-    display: none !important;
+    display: none;
   }
 }
 
@@ -226,6 +231,7 @@ html.nav-open .site-nav {
   .site-nav__mobile a:not(.button) {
     display: block;
     padding: var(--space-3) var(--space-3);
+    min-height: var(--space-11);
     border-radius: var(--radius-lg);
     color: var(--color-text);
     font-weight: var(--font-semibold);
@@ -256,7 +262,7 @@ main {
    Footer
    ====================== */
 .site-footer {
-  margin-top: var(--space-18);
+  margin-top: var(--space-20);
   border-top: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
   padding: var(--space-12) var(--container-padding) var(--space-6);
 }
@@ -291,6 +297,20 @@ main {
 .site-footer__col {
   display: grid;
   gap: var(--space-2);
+}
+
+.site-footer__col a {
+  color: var(--color-text-muted);
+  font-weight: 500;
+  text-decoration: none;
+  background-image: none;
+  padding-bottom: 0;
+}
+
+.site-footer__col a:hover {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: var(--space-1);
 }
 
 .site-footer__title {

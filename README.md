@@ -12,11 +12,11 @@ npm run dev
 npm run serve
 ```
 
-Then open http://localhost:8080
+Then open <http://localhost:8080>.
 
 ## Project Structure
 
-```
+```text
 src/
 ├── index.html          # Main landing page
 ├── gibli-pfp.png      # Profile image
@@ -50,6 +50,7 @@ src/
 ## Development
 
 ### Worker Development
+
 ```bash
 # Start Wrangler dev server for forms
 npm run dev:worker
@@ -62,6 +63,7 @@ WRANGLER_SEND_METRICS=false npm run dev:worker
 ```
 
 ### Available Scripts
+
 - `npm run dev` - Static file server for frontend
 - `npm run dev:worker` - Wrangler dev server for form handling
 - `npm run deploy:worker` - Deploy worker to Cloudflare

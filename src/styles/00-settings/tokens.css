@@ -52,7 +52,11 @@
   --color-rose-600: oklch(53.5% 0.24 13);
   --color-indigo-500: oklch(60.2% 0.22 275);
   --color-indigo-600: oklch(53.4% 0.24 276);
-  --color-accent-muted: color-mix(in oklch, var(--color-brand-secondary) 35%, var(--color-background));
+  --color-accent-muted: color-mix(
+    in oklch,
+    var(--color-brand-secondary) 35%,
+    var(--color-background)
+  );
 
   /* Red palette (from hero) */
   --color-red-400: oklch(70.8% 0.181 16);
@@ -83,6 +87,14 @@
   --color-primary-light: var(--color-primary-400);
   --color-primary-visited: var(--color-primary-700); /* Darker for visited links */
 
+  /* Link tokens */
+  --link-secondary: var(--color-primary);
+  --link-primary: var(--color-primary-dark);
+  --link-hover: var(--color-primary-dark);
+  --link-visited: var(--color-primary-visited);
+  --link-guided: color-mix(in oklch, var(--color-brand-primary) 72%, var(--color-text) 28%);
+  --link-guided-hover: color-mix(in oklch, var(--color-brand-primary) 82%, var(--color-text) 18%);
+
   /* Default to light theme colors */
   --color-text: var(--color-neutral-900); /* Dark text for light background */
   --color-text-light: var(--color-neutral-700);
@@ -103,6 +115,14 @@
   --color-border: var(--color-neutral-200);
   --color-border-light: var(--color-neutral-100);
   --color-border-dark: var(--color-neutral-300);
+
+  /* Code colors */
+  --color-code-inline-bg: #f6f8fa;
+  --color-code-inline-text: #24292f;
+  --color-code-inline-border: #d0d7de;
+  --color-code-block-bg: #f6f8fa;
+  --color-code-block-text: #24292f;
+  --color-code-block-border: #d0d7de;
 
   --color-success: var(--color-emerald-500);
   --color-warning: var(--color-amber-500);
@@ -389,12 +409,12 @@
 
   @media (prefers-reduced-motion: reduce) {
     /* Disable all durations - use minimal values for accessibility */
-  /* Use near-zero (non-zero) durations so assistive tech detects animation end events */
-  --duration-instant: 0.01ms;
-  --duration-fast: 0.01ms;
-  --duration-base: 0.01ms;
-  --duration-slow: 0.01ms;
-  --duration-slower: 0.01ms;
+    /* Use near-zero (non-zero) durations so assistive tech detects animation end events */
+    --duration-instant: 0.01ms;
+    --duration-fast: 0.01ms;
+    --duration-base: 0.01ms;
+    --duration-slow: 0.01ms;
+    --duration-slower: 0.01ms;
 
     /* Disable all transitions */
     --transition-none: none;
@@ -563,7 +583,7 @@
   :root {
     --color-text: oklch(98% 0 0); /* Slightly softer white for less eye strain */
     --color-text-light: oklch(92% 0 0); /* Increased contrast from 0.8 */
-    --color-text-muted: oklch(75% 0 0); /* Increased contrast from 0.6 */
+    --color-text-muted: hsl(255 15% 68%); /* Increased contrast from 0.6 */
 
     --color-background: oklch(6% 0 0);
     --color-surface: oklch(14% 0 0 / 0.8); /* Increased lightness and opacity */
@@ -579,6 +599,11 @@
     /* Enhanced brand colors for dark mode */
     --color-brand-primary: var(--color-brand-primary-high-contrast);
     --color-brand-secondary: var(--color-brand-secondary-high-contrast);
+
+    --link-secondary: var(--color-primary-300);
+    --link-primary: var(--color-brand-primary-high-contrast);
+    --link-hover: var(--color-primary-200);
+    --link-visited: var(--color-primary-400);
 
     /* Dark theme section effects with enhanced contrast */
     --tint-alpha: 0.16;
@@ -597,7 +622,7 @@
 [data-theme="dark"] {
   --color-text: oklch(98% 0 0); /* Slightly softer white for less eye strain */
   --color-text-light: oklch(92% 0 0); /* Increased contrast from 0.8 */
-  --color-text-muted: oklch(75% 0 0); /* Increased contrast from 0.6 */
+  --color-text-muted: hsl(255 15% 68%); /* Increased contrast from 0.6 */
 
   --color-background: oklch(6% 0 0);
   --color-surface: oklch(14% 0 0 / 0.8); /* Increased lightness and opacity */
@@ -614,6 +639,11 @@
   /* Enhanced brand colors for dark mode */
   --color-brand-primary: var(--color-brand-primary-high-contrast);
   --color-brand-secondary: var(--color-brand-secondary-high-contrast);
+
+  --link-secondary: var(--color-primary-300);
+  --link-primary: var(--color-brand-primary-high-contrast);
+  --link-hover: var(--color-primary-200);
+  --link-visited: var(--color-primary-400);
 
   /* Dark theme section effects with enhanced contrast */
   --tint-alpha: 0.16;

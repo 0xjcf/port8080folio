@@ -7,9 +7,9 @@
 #hero {
   position: relative;
   z-index: var(--z-elevated);
-  padding: var(--space-18) var(--space-5); /* Mobile-first padding */
+  padding: var(--space-14) var(--space-5) var(--space-10); /* Mobile-first padding */
   overflow: hidden;
-  min-height: 100svh;
+  min-height: calc(100svh - var(--space-8));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,8 +18,8 @@
 
 @media (min-width: 768px) {
   #hero {
-    padding: var(--space-32) var(--space-6); /* Desktop padding */
-    min-height: 100vh;
+    padding: var(--space-24) var(--space-6) var(--space-18); /* Desktop padding */
+    min-height: calc(100vh - var(--space-10));
   }
 }
 
@@ -53,24 +53,32 @@
   line-height: 1.05;
   letter-spacing: -0.01em; /* Slightly more open for premium feel */
   font-weight: 600;
-  margin: var(--space-0) var(--space-0) var(--space-4) var(--space-0);
+  margin: var(--space-0) var(--space-0) var(--space-2) var(--space-0);
 }
 
-.name .first {
+.hero__name-text {
   color: var(--color-text);
   display: block;
-  margin-bottom: var(--space-1);
 }
 
-.name .gradient {
+.hero__claim {
   /* Fallback color for browsers that don't support background-clip: text */
   color: var(--color-primary, currentColor);
   display: block;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.hero__supporting {
+  color: var(--color-text-muted);
+  display: block;
+  font-weight: 300;
+  margin-top: var(--space-2);
 }
 
 /* Apply gradient text effect only when background-clip: text is supported */
 @supports (background-clip: text) or (-webkit-background-clip: text) {
-  .name .gradient {
+  .hero__claim {
     background-image: var(--brand-grad-text);
     -webkit-background-clip: text;
     background-clip: text;
@@ -84,24 +92,15 @@
     font-size: var(--space-24);
     line-height: var(--space-30);
   }
-
-  .name .first,
-  .name .gradient {
-    display: inline;
-  }
-
-  .name .first {
-    margin-bottom: 0;
-  }
 }
 
 /* Subtitle */
 .subtitle {
   color: var(--color-text-muted); /* Softer gray for separation */
   font-size: var(--text-lg);
-  line-height: var(--leading-loose); /* More comfortable reading */
+  line-height: var(--leading-normal);
   font-weight: 300; /* Light weight */
-  margin: var(--space-3) auto var(--space-4);
+  margin: var(--space-2) auto var(--space-5);
   max-width: 40rem; /* ~640px for better measure */
 }
 
@@ -149,15 +148,15 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  color: var(--color-text);
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-weight: 500;
   line-height: var(--leading-normal);
-  margin: var(--space-4) auto var(--space-5);
+  margin: var(--space-3) auto var(--space-5);
   padding: var(--space-1) var(--space-4);
   /* Muted accent background (subtle brand tint) */
-  background: color-mix(in oklch, var(--color-primary) 6%, var(--color-surface));
-  border: var(--space-px) solid color-mix(in oklch, var(--color-primary) 18%, var(--color-border));
+  background: color-mix(in oklch, var(--color-primary) 4%, var(--color-surface));
+  border: var(--space-px) solid color-mix(in oklch, var(--color-primary) 12%, var(--color-border));
   border-radius: var(--radius-full);
   max-width: 40rem;
 }
@@ -250,6 +249,13 @@
   transition: all var(--transition-base);
 }
 
+#hero .cta-row .button,
+#hero .cta-row .button:hover,
+#hero .cta-row .button:focus,
+#hero .cta-row .button:focus-visible {
+  text-decoration: none;
+}
+
 #hero .button--primary {
   background: var(--brand-grad-cta);
   color: oklch(0.08 0 0); /* Near-black for 7.38:1 contrast with orange */
@@ -283,7 +289,7 @@
 
 #hero .button--secondary {
   background: var(--color-surface);
-  color: var(--color-text);
+  color: var(--color-text-light);
   border: var(--space-px) solid var(--color-border);
   position: relative;
   overflow: hidden;
@@ -377,6 +383,16 @@
 
   #hero .button--secondary:focus-visible::before {
     opacity: 0; /* No overlay needed with focus-visible state */
+  }
+}
+
+@media (min-width: 640px) {
+  #hero .cta-row .button--primary,
+  #hero .cta-row .button--secondary {
+    min-height: var(--space-12);
+    padding: var(--space-4) var(--space-8);
+    font-size: var(--text-base);
+    min-width: 12rem;
   }
 }
 
@@ -476,9 +492,19 @@
 }
 
 /* Tie hero proof to action */
-.testimonial-cta{ margin-top: var(--space-2); font-size: var(--text-sm); color: var(--color-text-light); }
-.testimonial-cta a{ color: var(--color-primary); font-weight: 600; text-decoration: underline; }
-.testimonial-cta a:hover{ text-decoration: none; }
+.testimonial-cta {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-light);
+}
+.testimonial-cta a {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: underline;
+}
+.testimonial-cta a:hover {
+  text-decoration: none;
+}
 
 /* Mobile styles for testimonial CTA */
 @media (max-width: 640px) {

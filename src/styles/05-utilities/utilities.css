@@ -126,6 +126,33 @@
   color: var(--color-neutral-900);
 }
 
+/* Link emphasis */
+.link-primary {
+  color: var(--link-primary);
+  font-weight: 500;
+}
+.link-primary:visited {
+  color: var(--link-primary);
+}
+.link-primary:hover,
+.link-primary:focus,
+.link-primary:focus-visible {
+  color: var(--link-hover);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+:root:not([data-theme="dark"]) .start-here-link {
+  color: var(--link-guided);
+}
+:root:not([data-theme="dark"]) .start-here-link:hover,
+:root:not([data-theme="dark"]) .start-here-link:focus,
+:root:not([data-theme="dark"]) .start-here-link:focus-visible {
+  color: var(--link-guided-hover);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 /* ======================
    Flexbox Utilities
    ====================== */
@@ -1058,7 +1085,7 @@
     min-height: 44px;
     min-width: 44px;
   }
-  
+
   /* Improved readable line-height (scoped to optional utility container to avoid global overrides) */
   :root {
     --mobile-line-height: 1.65;

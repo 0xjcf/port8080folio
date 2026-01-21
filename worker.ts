@@ -4,18 +4,18 @@
  *   TO_EMAIL = "to@example.com"               // Configure via environment variables
  *   FROM_EMAIL = "Website <no-reply@example.com>"  // Configure via environment variables
  *
- *   SITE_URL = "https://0xjcf.github.io/port8080folio"
+ *   SITE_URL = "https://0xjcf.com"
 
  *   // Contact form (REQUIRED – no defaults/fallbacks; must be absolute & same-origin with SITE_URL):
- *   CONTACT_FORM_URL   = "https://0xjcf.github.io/port8080folio/#contact-form"        (example)
- *   CONTACT_THANKS_URL = "https://0xjcf.github.io/port8080folio/contact-thanks.html"  (example)
+ *   CONTACT_FORM_URL   = "https://0xjcf.com/#contact-form"        (example)
+ *   CONTACT_THANKS_URL = "https://0xjcf.com/contact-thanks.html"  (example)
  *
  *   // Newsletter:
  *   RESEND_AUDIENCE_ID     = "aud_xxxxxxxxxxxxx"
- *   NEWSLETTER_FORM_URL    = "https://0xjcf.github.io/port8080folio/#newsletter-form"
- *   NEWSLETTER_THANKS_URL  = "https://0xjcf.github.io/port8080folio/newsletter-thanks.html"
+ *   NEWSLETTER_FORM_URL    = "https://0xjcf.com/#newsletter-form"
+ *   NEWSLETTER_THANKS_URL  = "https://0xjcf.com/newsletter-thanks.html"
  *   // Optional:
- *   // NEWSLETTER_CONFIRM_URL = "https://0xjcf.github.io/port8080folio/newsletter-check-email.html"
+ *   // NEWSLETTER_CONFIRM_URL = "https://0xjcf.com/newsletter-check-email.html"
  *
  *   // Environment toggle:
  *   ENV = "prod" | "dev"
@@ -95,7 +95,10 @@ async function fetchWithTimeout(
 
 
 function getUrls(env: Env) {
-  const baseSiteUrl = env.SITE_URL || 'https://0xjcf.github.io/port8080folio';
+  const baseSiteUrl = env.SITE_URL;
+  if (!baseSiteUrl) {
+    throw new Error('SITE_URL missing');
+  }
 
   // Construct URL once and derive normalized SITE_URL from it
   let siteUrlInstance;
@@ -340,7 +343,7 @@ export default {
       const response = await handleNewsletter(request, env);
       return addCORSHeaders(response, env);
     }
-    if (url.pathname === '/api/contact' || url.pathname === '/' || url.pathname === '') {
+    if (url.pathname === '/api/contact') {
       const response = await handleContact(request, env);
       return addCORSHeaders(response, env);
     }

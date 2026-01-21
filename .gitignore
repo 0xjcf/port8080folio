@@ -33,7 +33,8 @@ temp/
 # Project planning (local only)
 project-planning/
 plans/
-
+# META.md
+agents/
 # Build outputs - GitHub Actions will build these
 dist/
 /index.html
@@ -58,3 +59,12 @@ logs/
 
 # Cache
 .cache/
+
+# Astro build/cache artifacts
+.astro/
+
+# Vendored build output
+public/vendor/
+
+# Legacy scripts (served from public/scripts/)
+src/scripts/
