@@ -35,6 +35,7 @@ interface Env {
   TO_EMAIL?: string;
   FROM_EMAIL?: string;
   SITE_URL?: string;
+  ALLOWED_ORIGINS?: string;
   CONTACT_FORM_URL: string;        // REQUIRED
   CONTACT_THANKS_URL: string;      // REQUIRED
   RESEND_AUDIENCE_ID?: string;
@@ -164,24 +165,47 @@ function withError(u: string, code: string): string {
   }
 }
 
-// Only allow same-origin POSTs (Origin preferred, else Referer path under SITE_URL)
-function isAllowedOrigin(req: Request, siteUrl: string): boolean {
-  let site;
-  try { site = new URL(siteUrl); } catch { return false; }
-  const origin = req.headers.get('origin') || '';
-  const referer = req.headers.get('referer') || '';
+function getAllowedOrigins(env: Env): Set<string> {
+  const raw = env.ALLOWED_ORIGINS;
+  if (raw) {
+    const origins = raw
+      .split(',')
+      .map((entry) => entry.trim())
+      .filter(Boolean);
+    return new Set(origins);
+  }
+
+  const { SITE_URL } = getUrls(env);
+  return new Set([new URL(SITE_URL).origin]);
+}
+
+function isAllowedOrigin(req: Request, env: Env): boolean {
+  const allowedOrigins = getAllowedOrigins(env);
+  const origin = req.headers.get('origin');
+  const referer = req.headers.get('referer');
 
   if (origin) {
-    try { return new URL(origin).origin === site.origin; } catch { return false; }
+    return allowedOrigins.has(origin);
   }
+
   if (referer) {
     try {
       const ref = new URL(referer);
-      if (ref.origin !== site.origin) return false;
+      if (!allowedOrigins.has(ref.origin)) return false;
+
+      if (env.ALLOWED_ORIGINS) {
+        return true;
+      }
+
+      const { SITE_URL } = getUrls(env);
+      const site = new URL(SITE_URL);
       const base = site.pathname.endsWith('/') ? site.pathname : site.pathname + '/';
       return ref.pathname === site.pathname || ref.pathname.startsWith(base);
-    } catch { return false; }
+    } catch {
+      return false;
+    }
   }
+
   return false;
 }
 
@@ -310,7 +334,7 @@ export default {
 
     // Handle CORS preflight requests
     if (request.method === 'OPTIONS') {
-      return handleCORSPreflight(env);
+      return handleCORSPreflight(request, env);
     }
 
     if (request.method !== 'POST') {
@@ -318,7 +342,7 @@ export default {
     }
 
     // Shared origin/ctype/size checks
-    if (!isAllowedOrigin(request, SITE_URL)) {
+    if (!isAllowedOrigin(request, env)) {
       // Decide which form to send back to, based on path
       const url = new URL(request.url);
       const back = url.pathname.startsWith('/api/newsletter') ? NEWSLETTER_FORM : CONTACT_FORM;
@@ -341,11 +365,11 @@ export default {
     // Route POSTs:
     if (url.pathname === '/api/newsletter') {
       const response = await handleNewsletter(request, env, _ctx);
-      return addCORSHeaders(response, env);
+      return addCORSHeaders(response, request, env);
     }
     if (url.pathname === '/api/contact') {
       const response = await handleContact(request, env);
-      return addCORSHeaders(response, env);
+      return addCORSHeaders(response, request, env);
     }
 
     return new Response('Not Found', { status: 404 });
@@ -353,25 +377,29 @@ export default {
 } satisfies ExportedHandler<Env>;
 
 // Add CORS headers to responses
-function addCORSHeaders(response: Response, env: Env): Response {
+function addCORSHeaders(response: Response, request: Request, env: Env): Response {
   // Clone headers to avoid mutating the original response
   const clonedHeaders = new Headers(response.headers);
 
-  const { SITE_URL } = getUrls(env);
-  const allowedOrigin = new URL(SITE_URL).origin;
+  const allowedOrigins = getAllowedOrigins(env);
+  const origin = request.headers.get('origin');
+  const isAllowed = origin ? allowedOrigins.has(origin) : false;
 
-  clonedHeaders.set('Access-Control-Allow-Origin', allowedOrigin);
   clonedHeaders.set('Access-Control-Allow-Methods', 'POST');
   clonedHeaders.set('Access-Control-Allow-Headers', 'Content-Type');
   clonedHeaders.set('Access-Control-Max-Age', '86400');
 
-  // Add Vary header to ensure caches vary by origin
-  const existingVary = clonedHeaders.get('Vary');
-  if (existingVary) {
-    // Merge with existing Vary header if present
-    clonedHeaders.set('Vary', `${existingVary}, Origin`);
-  } else {
-    clonedHeaders.set('Vary', 'Origin');
+  if (isAllowed && origin) {
+    clonedHeaders.set('Access-Control-Allow-Origin', origin);
+
+    // Add Vary header to ensure caches vary by origin
+    const existingVary = clonedHeaders.get('Vary');
+    if (existingVary) {
+      // Merge with existing Vary header if present
+      clonedHeaders.set('Vary', `${existingVary}, Origin`);
+    } else {
+      clonedHeaders.set('Vary', 'Origin');
+    }
   }
 
   const newResponse = new Response(response.body, {
@@ -384,17 +412,22 @@ function addCORSHeaders(response: Response, env: Env): Response {
 }
 
 // Handle CORS preflight requests
-function handleCORSPreflight(env: Env): Response {
-  const { SITE_URL } = getUrls(env);
-  const allowedOrigin = new URL(SITE_URL).origin;
+function handleCORSPreflight(request: Request, env: Env): Response {
+  const origin = request.headers.get('origin');
+  const allowedOrigins = getAllowedOrigins(env);
+
+  if (!origin || !allowedOrigins.has(origin)) {
+    return new Response('Forbidden', { status: 403 });
+  }
 
   return new Response(null, {
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': allowedOrigin,
+      'Access-Control-Allow-Origin': origin,
       'Access-Control-Allow-Methods': 'POST',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Max-Age': '86400',
+      'Vary': 'Origin',
     }
   });
 }

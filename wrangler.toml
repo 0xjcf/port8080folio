@@ -63,12 +63,16 @@ NEWSLETTER_API_URL = "https://staging.0xjcf.com/api/newsletter"
 [env.production]
 name = "website-forms-production"
 workers_dev = false
-routes = [{ pattern = "0xjcf.com/api/*", zone_name = "0xjcf.com" }]
+routes = [
+  { pattern = "0xjcf.com/api/*", zone_name = "0xjcf.com" },
+  { pattern = "www.0xjcf.com/api/*", zone_name = "0xjcf.com" }
+]
 
 # Vars used by your deployed site on Cloudflare Pages
 [env.production.vars]
 ENV = "prod"
 SITE_URL = "https://0xjcf.com"
+ALLOWED_ORIGINS = "https://0xjcf.com,https://www.0xjcf.com"
 GA_MEASUREMENT_ID = "G-5TR1LWNXXY"                                                                 # Fill with your GA4 Measurement ID (e.g., G-XXXXXXX)
 CONTACT_FORM_URL = "https://0xjcf.com/#contact-form"
 CONTACT_THANKS_URL = "https://0xjcf.com/contact-thanks.html"
