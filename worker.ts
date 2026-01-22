@@ -165,6 +165,38 @@ function withError(u: string, code: string): string {
   }
 }
 
+function getRedirectBase(request: Request, env: Env): string {
+  const allowedOrigins = getAllowedOrigins(env);
+  const origin = request.headers.get('origin');
+  if (origin && allowedOrigins.has(origin)) {
+    return origin.endsWith('/') ? origin : `${origin}/`;
+  }
+
+  const referer = request.headers.get('referer');
+  if (referer) {
+    try {
+      const ref = new URL(referer);
+      if (allowedOrigins.has(ref.origin)) {
+        return ref.origin.endsWith('/') ? ref.origin : `${ref.origin}/`;
+      }
+    } catch {
+      // fall through to SITE_URL
+    }
+  }
+
+  const { SITE_URL } = getUrls(env);
+  return SITE_URL;
+}
+
+function rewriteUrlOrigin(target: string, base: string): string {
+  try {
+    const url = new URL(target);
+    return new URL(`${url.pathname}${url.search}${url.hash}`, base).toString();
+  } catch {
+    return target;
+  }
+}
+
 function getAllowedOrigins(env: Env): Set<string> {
   const raw = env.ALLOWED_ORIGINS;
   if (raw) {
@@ -341,6 +373,9 @@ export default {
       return new Response(`Server misconfiguration: ${msg}`, { status: 500 });
     }
     const { SITE_URL, CONTACT_FORM, NEWSLETTER_FORM } = urls;
+    const redirectBase = getRedirectBase(request, env);
+    const CONTACT_BACK = rewriteUrlOrigin(CONTACT_FORM, redirectBase);
+    const NEWSLETTER_BACK = rewriteUrlOrigin(NEWSLETTER_FORM, redirectBase);
 
     // Handle CORS preflight requests
     if (request.method === 'OPTIONS') {
@@ -355,18 +390,18 @@ export default {
     if (!isAllowedOrigin(request, env)) {
       // Decide which form to send back to, based on path
       const url = new URL(request.url);
-      const back = url.pathname.startsWith('/api/newsletter') ? NEWSLETTER_FORM : CONTACT_FORM;
+      const back = url.pathname.startsWith('/api/newsletter') ? NEWSLETTER_BACK : CONTACT_BACK;
       return Response.redirect(withError(back, 'origin'), 303);
     }
     const ctype = request.headers.get('content-type') || '';
     if (!ctype.includes('application/x-www-form-urlencoded') && !ctype.includes('multipart/form-data')) {
       const url = new URL(request.url);
-      const back = url.pathname.startsWith('/api/newsletter') ? NEWSLETTER_FORM : CONTACT_FORM;
+      const back = url.pathname.startsWith('/api/newsletter') ? NEWSLETTER_BACK : CONTACT_BACK;
       return Response.redirect(withError(back, 'ctype'), 303);
     }
     if (!isReasonableSize(request)) {
       const url = new URL(request.url);
-      const back = url.pathname.startsWith('/api/newsletter') ? NEWSLETTER_FORM : CONTACT_FORM;
+      const back = url.pathname.startsWith('/api/newsletter') ? NEWSLETTER_BACK : CONTACT_BACK;
       return Response.redirect(withError(back, 'too_large'), 303);
     }
 
@@ -444,8 +479,13 @@ function handleCORSPreflight(request: Request, env: Env): Response {
 
 // -------------------- Contact (unchanged behavior) --------------------
 async function handleContact(request: Request, env: Env): Promise<Response> {
-  const { CONTACT_THANKS, SITE_URL } = getUrls(env);
-  const CONTACT_ERROR = new URL('contact-error/', SITE_URL).toString();
+  const { CONTACT_THANKS } = getUrls(env);
+  const redirectBase = getRedirectBase(request, env);
+  const CONTACT_SUCCESS = rewriteUrlOrigin(CONTACT_THANKS, redirectBase);
+  const CONTACT_ERROR = rewriteUrlOrigin(
+    new URL('contact-error/', CONTACT_THANKS).toString(),
+    redirectBase
+  );
 
   try {
     const form = await request.formData();
@@ -455,7 +495,7 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
     const website = (form.get('website') || '').toString(); // honeypot
     const timestamp = (form.get('timestamp') || '').toString();
 
-    if (website) return Response.redirect(CONTACT_THANKS, 303);
+    if (website) return Response.redirect(CONTACT_SUCCESS, 303);
 
     if (!name || name.length < 2 || name.length > 70) {
       return Response.redirect(CONTACT_ERROR, 303);
@@ -497,7 +537,7 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
     const ok = await sendEmail(env, { name, email, message });
     if (!ok) return Response.redirect(CONTACT_ERROR, 303);
 
-    return Response.redirect(CONTACT_THANKS, 303);
+    return Response.redirect(CONTACT_SUCCESS, 303);
   } catch {
     return Response.redirect(CONTACT_ERROR, 303);
   }
@@ -591,8 +631,13 @@ async function sendEmail(env: Env, { name, email, message }: { name: string; ema
 
 // -------------------- Newsletter --------------------
 async function handleNewsletter(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-  const { NEWSLETTER_THANKS, SITE_URL } = getUrls(env);
-  const NEWSLETTER_ERROR = new URL('newsletter-error/', SITE_URL).toString();
+  const { NEWSLETTER_THANKS } = getUrls(env);
+  const redirectBase = getRedirectBase(request, env);
+  const NEWSLETTER_SUCCESS = rewriteUrlOrigin(NEWSLETTER_THANKS, redirectBase);
+  const NEWSLETTER_ERROR = rewriteUrlOrigin(
+    new URL('newsletter-error/', NEWSLETTER_THANKS).toString(),
+    redirectBase
+  );
 
   try {
     const form = await request.formData();
@@ -600,7 +645,7 @@ async function handleNewsletter(request: Request, env: Env, ctx: ExecutionContex
     const website = (form.get('website') || '').toString();         // honeypot
     const timestamp = (form.get('timestamp') || '').toString();
 
-    if (website) return Response.redirect(NEWSLETTER_THANKS, 303);
+    if (website) return Response.redirect(NEWSLETTER_SUCCESS, 303);
     if (!isValidEmail(email)) {
       return Response.redirect(NEWSLETTER_ERROR, 303);
     }
@@ -630,7 +675,7 @@ async function handleNewsletter(request: Request, env: Env, ctx: ExecutionContex
 
     // Local/dev: don't hit external APIs
     if (env.ENV !== 'prod') {
-      return Response.redirect(NEWSLETTER_THANKS, 303);
+      return Response.redirect(NEWSLETTER_SUCCESS, 303);
     }
 
     // PROD: add contact to Resend Audience
@@ -673,7 +718,7 @@ async function handleNewsletter(request: Request, env: Env, ctx: ExecutionContex
       }
     }
 
-    return Response.redirect(NEWSLETTER_THANKS, 303);
+    return Response.redirect(NEWSLETTER_SUCCESS, 303);
   } catch {
     return Response.redirect(NEWSLETTER_ERROR, 303);
   }
