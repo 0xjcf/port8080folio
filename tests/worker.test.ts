@@ -27,10 +27,10 @@ const baseEnv = {
   FROM_EMAIL: 'Website <noreply@example.com>',
   SITE_URL: ORIGIN,
   CONTACT_FORM_URL: `${ORIGIN}/#contact-form`,
-  CONTACT_THANKS_URL: `${ORIGIN}/contact-thanks.html`,
+  CONTACT_THANKS_URL: `${ORIGIN}/contact-thanks/`,
   NEWSLETTER_FORM_URL: `${ORIGIN}/#newsletter-form`,
-  NEWSLETTER_THANKS_URL: `${ORIGIN}/newsletter-thanks.html`,
-  NEWSLETTER_CONFIRM_URL: `${ORIGIN}/newsletter-check-email.html`,
+  NEWSLETTER_THANKS_URL: `${ORIGIN}/newsletter-thanks/`,
+  NEWSLETTER_CONFIRM_URL: `${ORIGIN}/newsletter-check-email/`,
   CONTACT_MIN_TIME: '3000',
   NEWSLETTER_MIN_TIME: '1500',
   ENV: 'dev' as const,
@@ -131,7 +131,7 @@ describe('Cloudflare worker form handlers', () => {
     const response = await worker.fetch(request, createEnv(), ctx);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks/`);
   });
 
   it('redirects contact submissions to error when email provider returns failure', async () => {
@@ -150,7 +150,7 @@ describe('Cloudflare worker form handlers', () => {
     const response = await worker.fetch(request, createEnv(), ctx);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error/`);
   });
 
   it('redirects newsletter submissions to thanks page in development', async () => {
@@ -165,7 +165,7 @@ describe('Cloudflare worker form handlers', () => {
     const response = await worker.fetch(request, createEnv(), ctx);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks/`);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
@@ -179,7 +179,7 @@ describe('Cloudflare worker form handlers', () => {
     const response = await worker.fetch(request, createEnv(), ctx);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error/`);
   });
 
   it('uses audience API in production and reports success when Resend responds ok', async () => {
@@ -204,7 +204,7 @@ describe('Cloudflare worker form handlers', () => {
     const response = await worker.fetch(request, env, ctx);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks/`);
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
@@ -233,7 +233,7 @@ describe('Cloudflare worker form handlers', () => {
     await Promise.all(waitUntilPromises);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks/`);
     expect(fetchMock).toHaveBeenCalledTimes(2);
 
     const [, welcomeCall] = fetchMock.mock.calls;
@@ -277,7 +277,7 @@ describe('Cloudflare worker form handlers', () => {
     await Promise.all(waitUntilPromises);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error/`);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(waitUntilPromises).toHaveLength(0);
     expect(kv.store.size).toBe(0);
@@ -309,7 +309,7 @@ describe('Cloudflare worker form handlers', () => {
     await Promise.all(waitUntilPromises);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks/`);
     expect(fetchMock).toHaveBeenCalledTimes(2);
 
     const hasWelcomeKey = Array.from(kv.store.keys()).some((key) =>
@@ -352,7 +352,7 @@ describe('Cloudflare worker form handlers', () => {
     await Promise.all(waitUntilPromises);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks/`);
     expect(waitUntilPromises).toHaveLength(0);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
@@ -419,7 +419,7 @@ describe('Cloudflare worker form handlers', () => {
   });
 
   it('returns 500 when CONTACT_THANKS URL is not same-origin', async () => {
-    const env = createEnv({ CONTACT_THANKS_URL: 'https://attacker.example/contact-thanks.html' });
+    const env = createEnv({ CONTACT_THANKS_URL: 'https://attacker.example/contact-thanks/' });
 
     const response = await worker.fetch(
       makeRequest(`${ORIGIN}/api/contact`, {
@@ -613,7 +613,7 @@ describe('Cloudflare worker form handlers', () => {
 
     const response = await worker.fetch(request, env, ctx);
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error/`);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
@@ -665,7 +665,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks/`);
     expect(fetchMock).toHaveBeenCalled();
   });
 
@@ -694,7 +694,7 @@ describe('Cloudflare worker form handlers', () => {
     const response = await worker.fetch(request, createEnv(), ctx);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks/`);
     expect(fetchMock).toHaveBeenCalled();
   });
 
@@ -741,7 +741,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks/`);
   });
 
   it('rejects contact submissions when name too short', async () => {
@@ -756,7 +756,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error/`);
   });
 
   it('rejects contact submissions when message too short', async () => {
@@ -771,7 +771,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error/`);
   });
 
   it('falls back to sanitized default name when user name strips to empty', async () => {
@@ -792,7 +792,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-thanks/`);
     const payload = JSON.parse(bodies[0]);
     expect(payload.text).toContain('Website Visitor');
   });
@@ -809,7 +809,7 @@ describe('Cloudflare worker form handlers', () => {
 
     const response = await worker.fetch(request, createEnv(), ctx);
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error/`);
   });
 
   it('rejects contact submissions when email invalid', async () => {
@@ -824,7 +824,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error/`);
   });
 
   it('rejects contact submissions when timestamp invalid', async () => {
@@ -839,7 +839,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error/`);
   });
 
   it('rejects contact submissions when timestamp too recent', async () => {
@@ -854,7 +854,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error/`);
   });
 
   it('returns newsletter thanks when honeypot filled', async () => {
@@ -868,7 +868,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-thanks/`);
   });
 
   it('rejects newsletter when timestamp invalid', async () => {
@@ -881,7 +881,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error/`);
   });
 
   it('rejects newsletter when timestamp too fast', async () => {
@@ -894,7 +894,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error/`);
   });
 
   it('redirects to error when addContactToAudience fails in production', async () => {
@@ -919,7 +919,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/newsletter-error/`);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
@@ -949,7 +949,7 @@ describe('Cloudflare worker form handlers', () => {
     await vi.advanceTimersByTimeAsync(30000);
     const response = await responsePromise;
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error/`);
     expect(fetchMock).toHaveBeenCalled();
 
     vi.useRealTimers();
@@ -971,7 +971,7 @@ describe('Cloudflare worker form handlers', () => {
       ctx,
     );
 
-    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error.html`);
+    expect(response.headers.get('location')).toBe(`${ORIGIN}/contact-error/`);
   });
 
 });

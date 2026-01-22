@@ -252,9 +252,9 @@
     const path = location.pathname;
     let last = {};
     try { last = JSON.parse(sessionStorage.getItem('lastCTA') || '{}'); } catch (_) { /* sessionStorage may not be available */ }
-    if (/contact-thanks\.html$/.test(path)) {
+    if (/\/contact-thanks\/?$/.test(path)) {
       track('conversion_contact', last);
-    } else if (/newsletter-thanks\.html$/.test(path)) {
+    } else if (/\/newsletter-thanks\/?$/.test(path)) {
       track('conversion_newsletter', last);
     }
   })();
@@ -277,4 +277,3 @@
     } catch (_) { /* ignore cross-origin issues */ }
   }, false);
 })();
-

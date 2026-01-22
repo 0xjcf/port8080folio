@@ -41,11 +41,11 @@ const deriveBasePrefixes = (pathname) => {
  * Returns either the sanitized redirect target or the provided safe fallback.
  */
 export function resolveFormRedirect({ redirectUrl, safeInternalHash, currentOrigin, currentPathname, allowedPaths = [
-    '/contact-thanks.html',
-    '/newsletter-thanks.html',
-    '/contact-error.html',
-    '/newsletter-error.html',
-    '/newsletter-check-email.html',
+    '/contact-thanks/',
+    '/newsletter-thanks/',
+    '/contact-error/',
+    '/newsletter-error/',
+    '/newsletter-check-email/',
 ], allowedPrefixes = ['/contact-', '/newsletter-'], }) {
     const targetUrl = redirectUrl || '#';
     try {

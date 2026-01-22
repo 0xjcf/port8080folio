@@ -139,14 +139,14 @@ const imageUrl =
         <a class="site-nav__brand" href="/">Jose Flores</a>
         <nav class="site-nav__links" aria-label="Main navigation">
           <a class:list={[isActive("/") && "is-active"]} href="/">Home</a>
-          <a class:list={[isActive("/writing") && "is-active"]} href="/writing"
+          <a class:list={[isActive("/writing/") && "is-active"]} href="/writing/"
             >Writing</a
           >
           <a
-            class:list={[isActive("/open-source") && "is-active"]}
-            href="/open-source">Open Source</a
+            class:list={[isActive("/open-source/") && "is-active"]}
+            href="/open-source/">Open Source</a
           >
-          <a class:list={[isActive("/about") && "is-active"]} href="/about"
+          <a class:list={[isActive("/about/") && "is-active"]} href="/about/"
             >About</a
           >
           <!-- Business site link disabled until site is ready.
@@ -173,9 +173,9 @@ const imageUrl =
       </div>
       <div class="site-nav__mobile" hidden>
         <a href="/">Home</a>
-        <a href="/writing">Writing</a>
-        <a href="/open-source">Open Source</a>
-        <a href="/about">About</a>
+        <a href="/writing/">Writing</a>
+        <a href="/open-source/">Open Source</a>
+        <a href="/about/">About</a>
         <!-- Business site link disabled until site is ready.
         <a class="site-nav__external" href="https://bluejf.llc" target="_blank" rel="noopener">
           Business site (external)
@@ -252,9 +252,9 @@ const imageUrl =
         <div class="site-footer__cols">
           <div class="site-footer__col">
             <div class="site-footer__title">Explore</div>
-            <a href="/writing">Writing</a>
-            <a href="/open-source">Open Source</a>
-            <a href="/about">About</a>
+            <a href="/writing/">Writing</a>
+            <a href="/open-source/">Open Source</a>
+            <a href="/about/">About</a>
           </div>
           <!-- Business footer column hidden until site is ready. -->
           <!--

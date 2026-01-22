@@ -65,7 +65,7 @@ describe('progressive enhancement form handler', () => {
 
     stubMatchMedia();
     window.localStorage.clear();
-    window.location.href = `${SITE_BASE}/index.html`;
+    window.location.href = `${SITE_BASE}/`;
   });
 
   afterEach(() => {
@@ -81,7 +81,7 @@ describe('progressive enhancement form handler', () => {
       ok: true,
       status: 200,
       headers: new Headers(),
-      url: `${SITE_BASE}/contact-thanks.html`,
+      url: `${SITE_BASE}/contact-thanks/`,
       json: async () => ({}),
       text: async () => '',
     });
@@ -99,7 +99,7 @@ describe('progressive enhancement form handler', () => {
     expect(requestUrl).toBe(CONTACT_ENDPOINT);
     expect(requestInit?.method).toBe('POST');
     expect(requestInit?.body).toBeInstanceOf(FormData);
-    expect(window.location.href).toBe(`${SITE_BASE}/contact-thanks.html`);
+    expect(window.location.href).toBe(`${SITE_BASE}/contact-thanks/`);
   });
 
   it('shows error message and re-enables button when fetch returns non-ok response', async () => {
@@ -107,7 +107,7 @@ describe('progressive enhancement form handler', () => {
       ok: false,
       status: 500,
       headers: new Headers({ 'content-type': 'application/json' }),
-      url: `${SITE_BASE}/contact-error.html`,
+      url: `${SITE_BASE}/contact-error/`,
       json: async () => ({ message: 'Server error' }),
       text: async () => '{"message":"Server error"}',
     });
@@ -124,7 +124,7 @@ describe('progressive enhancement form handler', () => {
     const errorEl = form.querySelector('.form-error');
     expect(errorEl).toBeTruthy();
     expect(button.disabled).toBe(false);
-    expect(window.location.href).toBe(`${SITE_BASE}/index.html`);
+    expect(window.location.href).toBe(`${SITE_BASE}/`);
   });
 
   it('prevents submission when endpoint contains unresolved placeholder', async () => {
@@ -140,7 +140,7 @@ describe('progressive enhancement form handler', () => {
     `;
 
     stubMatchMedia();
-    window.location.href = `${SITE_BASE}/index.html`;
+    window.location.href = `${SITE_BASE}/`;
 
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
@@ -376,7 +376,7 @@ describe('progressive enhancement form handler', () => {
       })
       .mockImplementation(async () => {
         const response = new Response('', { status: 200 });
-        Object.defineProperty(response, 'url', { value: `${SITE_BASE}/contact-thanks.html` });
+        Object.defineProperty(response, 'url', { value: `${SITE_BASE}/contact-thanks/` });
         return response;
       });
 
@@ -392,7 +392,7 @@ describe('progressive enhancement form handler', () => {
     await flushMicrotasks();
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(window.location.href).toBe(`${SITE_BASE}/contact-thanks.html`);
+    expect(window.location.href).toBe(`${SITE_BASE}/contact-thanks/`);
 
     randomSpy.mockRestore();
     vi.useRealTimers();
@@ -408,7 +408,7 @@ describe('progressive enhancement form handler', () => {
       .mockRejectedValueOnce(new TypeError('fetch failed'))
       .mockImplementation(async () => {
         const response = new Response('', { status: 200 });
-        Object.defineProperty(response, 'url', { value: `${SITE_BASE}/contact-thanks.html` });
+        Object.defineProperty(response, 'url', { value: `${SITE_BASE}/contact-thanks/` });
         return response;
       });
 
@@ -427,7 +427,7 @@ describe('progressive enhancement form handler', () => {
     await flushMicrotasks();
 
     expect(fetchMock).toHaveBeenCalledTimes(3);
-    expect(window.location.href).toBe(`${SITE_BASE}/contact-thanks.html`);
+    expect(window.location.href).toBe(`${SITE_BASE}/contact-thanks/`);
 
     randomSpy.mockRestore();
     vi.useRealTimers();
@@ -473,7 +473,7 @@ describe('progressive enhancement form handler', () => {
 
     stubMatchMedia();
     vi.stubGlobal('CSS', { supports: vi.fn().mockReturnValue(false) });
-    window.location.href = `${SITE_BASE}/index.html#contact`;
+    window.location.href = `${SITE_BASE}/#contact`;
 
     await import('../src/scripts/pe.js');
 
@@ -497,7 +497,7 @@ describe('progressive enhancement form handler', () => {
 
     stubMatchMedia();
     vi.stubGlobal('CSS', { supports: vi.fn().mockReturnValue(false) });
-    window.location.href = `${SITE_BASE}/index.html#about`;
+    window.location.href = `${SITE_BASE}/#about`;
 
     await import('../src/scripts/pe.js');
 
@@ -525,7 +525,7 @@ describe('progressive enhancement form handler', () => {
 
     stubMatchMedia();
     vi.stubGlobal('CSS', { supports: vi.fn().mockReturnValue(false) });
-    window.location.href = `${SITE_BASE}/index.html`;
+    window.location.href = `${SITE_BASE}/`;
 
     await import('../src/scripts/pe.js');
 

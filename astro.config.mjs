@@ -79,8 +79,8 @@ const shikiThemeVarsTransformer = {
 
 export default defineConfig({
   output: 'static',
-  build: { format: 'file' },
-  trailingSlash: 'ignore',
+  build: { format: 'directory' },
+  trailingSlash: 'always',
   site,
   integrations: [sitemap()],
   markdown: {

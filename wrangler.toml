@@ -15,10 +15,10 @@ SITE_URL = "http://127.0.0.1:8080"
 
 # Card-specific anchors so error redirects open the right form card
 CONTACT_FORM_URL = "http://127.0.0.1:8080/#contact-form"
-CONTACT_THANKS_URL = "http://127.0.0.1:8080/contact-thanks.html"
+CONTACT_THANKS_URL = "http://127.0.0.1:8080/contact-thanks/"
 
 NEWSLETTER_FORM_URL = "http://127.0.0.1:8080/#newsletter-form"
-NEWSLETTER_THANKS_URL = "http://127.0.0.1:8080/newsletter-thanks.html"
+NEWSLETTER_THANKS_URL = "http://127.0.0.1:8080/newsletter-thanks/"
 
 # Email routing used by contact form
 FROM_EMAIL = "Website <noreply@resend.dev>"
@@ -45,9 +45,9 @@ ENV = "dev"
 SITE_URL = "https://staging.0xjcf.com"
 GA_MEASUREMENT_ID = ""                                                                 # Optional for staging
 CONTACT_FORM_URL = "https://staging.0xjcf.com/#contact-form"
-CONTACT_THANKS_URL = "https://staging.0xjcf.com/contact-thanks.html"
+CONTACT_THANKS_URL = "https://staging.0xjcf.com/contact-thanks/"
 NEWSLETTER_FORM_URL = "https://staging.0xjcf.com/#newsletter-form"
-NEWSLETTER_THANKS_URL = "https://staging.0xjcf.com/newsletter-thanks.html"
+NEWSLETTER_THANKS_URL = "https://staging.0xjcf.com/newsletter-thanks/"
 FROM_EMAIL = "Website <noreply@resend.dev>"
 TO_EMAIL = "bluejf.llc@gmail.com"
 
@@ -75,9 +75,9 @@ SITE_URL = "https://0xjcf.com"
 ALLOWED_ORIGINS = "https://0xjcf.com,https://www.0xjcf.com"
 GA_MEASUREMENT_ID = "G-5TR1LWNXXY"                                                                 # Fill with your GA4 Measurement ID (e.g., G-XXXXXXX)
 CONTACT_FORM_URL = "https://0xjcf.com/#contact-form"
-CONTACT_THANKS_URL = "https://0xjcf.com/contact-thanks"
+CONTACT_THANKS_URL = "https://0xjcf.com/contact-thanks/"
 NEWSLETTER_FORM_URL = "https://0xjcf.com/#newsletter-form"
-NEWSLETTER_THANKS_URL = "https://0xjcf.com/newsletter-thanks"
+NEWSLETTER_THANKS_URL = "https://0xjcf.com/newsletter-thanks/"
 FROM_EMAIL = "Website <noreply@resend.dev>"
 TO_EMAIL = "bluejf.llc@gmail.com"
 
@@ -113,11 +113,11 @@ NEWSLETTER_API_URL = "https://0xjcf.com/api/newsletter"
 # - Prod: https://0xjcf.com/
 #
 # Success pages:
-#   contact-thanks.html
-#   newsletter-thanks.html
+#   contact-thanks/
+#   newsletter-thanks/
 # Error pages:
-#   contact-error.html
-#   newsletter-error.html
+#   contact-error/
+#   newsletter-error/
 
 # Development
 [[kv_namespaces]]

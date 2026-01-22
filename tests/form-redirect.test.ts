@@ -8,29 +8,29 @@ const origin = 'https://0xjcf.github.io';
 describe('resolveFormRedirect', () => {
   it('permits known success pages when the site is served from the origin root', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/contact-thanks.html`,
+      redirectUrl: `${origin}/contact-thanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/',
     });
 
-    expect(result).toBe(`${origin}/contact-thanks.html`);
+    expect(result).toBe(`${origin}/contact-thanks/`);
   });
 
   it('permits known success pages when the site is hosted on a subdirectory (e.g. GitHub Pages)', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/port8080folio/contact-thanks.html`,
+      redirectUrl: `${origin}/port8080folio/contact-thanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/port8080folio/',
     });
 
-    expect(result).toBe(`${origin}/port8080folio/contact-thanks.html`);
+    expect(result).toBe(`${origin}/port8080folio/contact-thanks/`);
   });
 
   it('falls back to a safe internal hash for cross-origin redirects', () => {
     const result = resolveFormRedirect({
-      redirectUrl: 'https://example.com/contact-thanks.html',
+      redirectUrl: 'https://example.com/contact-thanks/',
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/port8080folio/',
@@ -41,7 +41,7 @@ describe('resolveFormRedirect', () => {
 
   it('rejects protocol-relative URLs (missing scheme)', () => {
     const result = resolveFormRedirect({
-      redirectUrl: '//evil.example.com/contact-thanks.html',
+      redirectUrl: '//evil.example.com/contact-thanks/',
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/port8080folio/',
@@ -80,7 +80,7 @@ describe('resolveFormRedirect', () => {
         this.hostname = '0xjcf.github.io';
         this.search = '?valid=true';
         this.hash = '#\u0001bad';
-        this.pathname = '/contact-thanks.html';
+        this.pathname = '/contact-thanks/';
 
         // Ensure the arguments are exercised to mirror browser URL API behaviour
         void base;
@@ -92,7 +92,7 @@ describe('resolveFormRedirect', () => {
 
     try {
       const result = resolveFormRedirect({
-        redirectUrl: `${origin}/contact-thanks.html`,
+        redirectUrl: `${origin}/contact-thanks/`,
         safeInternalHash: safeFallback,
         currentOrigin: origin,
         currentPathname: '/port8080folio/',
@@ -106,7 +106,7 @@ describe('resolveFormRedirect', () => {
 
   it('rejects URLs that cannot be safely decoded', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/%E0%A/contact-thanks.html`, // Broken percent-encoding
+      redirectUrl: `${origin}/%E0%A/contact-thanks/`, // Broken percent-encoding
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/port8080folio/',
@@ -117,13 +117,13 @@ describe('resolveFormRedirect', () => {
 
   it('rejects URLs with traversal or encoded separator attempts', () => {
     const traversal = resolveFormRedirect({
-      redirectUrl: `${origin}/contact-thanks.html?next=/../admin`,
+      redirectUrl: `${origin}/contact-thanks/?next=/../admin`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/port8080folio/',
     });
     const encodedSeparator = resolveFormRedirect({
-      redirectUrl: `${origin}/contact%2fthanks.html`,
+      redirectUrl: `${origin}/contact%2fthanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/port8080folio/',
@@ -135,18 +135,18 @@ describe('resolveFormRedirect', () => {
 
   it('derives the correct base path when currentPathname includes a filename', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/port8080folio/newsletter-thanks.html`,
+      redirectUrl: `${origin}/port8080folio/newsletter-thanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/port8080folio/index.html',
     });
 
-    expect(result).toBe(`${origin}/port8080folio/newsletter-thanks.html`);
+    expect(result).toBe(`${origin}/port8080folio/newsletter-thanks/`);
   });
 
   it('ignores base path derivation when the site is served from the origin root', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/port8080folio/newsletter-thanks.html`,
+      redirectUrl: `${origin}/port8080folio/newsletter-thanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/',
@@ -157,13 +157,13 @@ describe('resolveFormRedirect', () => {
 
   it('trims query fragments from currentPathname when deriving prefixes', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/port8080folio/newsletter-check-email.html`,
+      redirectUrl: `${origin}/port8080folio/newsletter-check-email/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/port8080folio/contact.html?utm=1#contact',
     });
 
-    expect(result).toBe(`${origin}/port8080folio/newsletter-check-email.html`);
+    expect(result).toBe(`${origin}/port8080folio/newsletter-check-email/`);
   });
 
   it('falls back when redirectUrl is missing', () => {
@@ -190,7 +190,7 @@ describe('resolveFormRedirect', () => {
 
   it('falls back when currentPathname is undefined and redirect needs a base prefix', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/port8080folio/contact-thanks.html`,
+      redirectUrl: `${origin}/port8080folio/contact-thanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: undefined,
@@ -201,7 +201,7 @@ describe('resolveFormRedirect', () => {
 
   it('falls back when currentPathname is empty string', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/port8080folio/contact-thanks.html`,
+      redirectUrl: `${origin}/port8080folio/contact-thanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '',
@@ -212,7 +212,7 @@ describe('resolveFormRedirect', () => {
 
   it('falls back when currentPathname contains only query/hash fragments', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/port8080folio/contact-thanks.html`,
+      redirectUrl: `${origin}/port8080folio/contact-thanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '?utm=1#section',
@@ -223,7 +223,7 @@ describe('resolveFormRedirect', () => {
 
   it('falls back when currentPathname resolves to a file at the origin root', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/port8080folio/contact-thanks.html`,
+      redirectUrl: `${origin}/port8080folio/contact-thanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/index.html',
@@ -234,23 +234,23 @@ describe('resolveFormRedirect', () => {
 
   it('ignores currentPathname segments that represent current directory', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/port8080folio/newsletter-thanks.html`,
+      redirectUrl: `${origin}/port8080folio/newsletter-thanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/port8080folio/./',
     });
 
-    expect(result).toBe(`${origin}/port8080folio/newsletter-thanks.html`);
+    expect(result).toBe(`${origin}/port8080folio/newsletter-thanks/`);
   });
 
   it('handles dot-dot segments in currentPathname by trimming the last segment', () => {
     const result = resolveFormRedirect({
-      redirectUrl: `${origin}/port8080folio/foo/newsletter-thanks.html`,
+      redirectUrl: `${origin}/port8080folio/foo/newsletter-thanks/`,
       safeInternalHash: safeFallback,
       currentOrigin: origin,
       currentPathname: '/port8080folio/contact/../foo/',
     });
 
-    expect(result).toBe(`${origin}/port8080folio/foo/newsletter-thanks.html`);
+    expect(result).toBe(`${origin}/port8080folio/foo/newsletter-thanks/`);
   });
 });

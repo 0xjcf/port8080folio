@@ -8,14 +8,14 @@
 
  *   // Contact form (REQUIRED – no defaults/fallbacks; must be absolute & same-origin with SITE_URL):
  *   CONTACT_FORM_URL   = "https://0xjcf.com/#contact-form"        (example)
- *   CONTACT_THANKS_URL = "https://0xjcf.com/contact-thanks.html"  (example)
+ *   CONTACT_THANKS_URL = "https://0xjcf.com/contact-thanks/"  (example)
  *
  *   // Newsletter:
  *   RESEND_AUDIENCE_ID     = "aud_xxxxxxxxxxxxx"
  *   NEWSLETTER_FORM_URL    = "https://0xjcf.com/#newsletter-form"
- *   NEWSLETTER_THANKS_URL  = "https://0xjcf.com/newsletter-thanks.html"
+ *   NEWSLETTER_THANKS_URL  = "https://0xjcf.com/newsletter-thanks/"
  *   // Optional:
- *   // NEWSLETTER_CONFIRM_URL = "https://0xjcf.com/newsletter-check-email"
+ *   // NEWSLETTER_CONFIRM_URL = "https://0xjcf.com/newsletter-check-email/"
  *
  *   // Environment toggle:
  *   ENV = "prod" | "dev"
@@ -124,13 +124,13 @@ function getUrls(env: Env) {
 
   // ---- Newsletter ----
   const NEWSLETTER_THANKS = safeSameOrigin(env.NEWSLETTER_THANKS_URL, SITE_URL)
-    || new URL('newsletter-thanks', SITE_URL).toString();
+    || new URL('newsletter-thanks/', SITE_URL).toString();
 
   const NEWSLETTER_FORM = safeSameOrigin(env.NEWSLETTER_FORM_URL, SITE_URL)
     || new URL('#newsletter-form', SITE_URL).toString();
 
   const NEWSLETTER_CONFIRM = safeSameOrigin(env.NEWSLETTER_CONFIRM_URL, SITE_URL)
-    || new URL('newsletter-check-email', SITE_URL).toString();
+    || new URL('newsletter-check-email/', SITE_URL).toString();
 
   return {
     SITE_URL,
@@ -445,7 +445,7 @@ function handleCORSPreflight(request: Request, env: Env): Response {
 // -------------------- Contact (unchanged behavior) --------------------
 async function handleContact(request: Request, env: Env): Promise<Response> {
   const { CONTACT_THANKS, SITE_URL } = getUrls(env);
-  const CONTACT_ERROR = new URL('contact-error.html', SITE_URL).toString();
+  const CONTACT_ERROR = new URL('contact-error/', SITE_URL).toString();
 
   try {
     const form = await request.formData();
@@ -592,7 +592,7 @@ async function sendEmail(env: Env, { name, email, message }: { name: string; ema
 // -------------------- Newsletter --------------------
 async function handleNewsletter(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const { NEWSLETTER_THANKS, SITE_URL } = getUrls(env);
-  const NEWSLETTER_ERROR = new URL('newsletter-error.html', SITE_URL).toString();
+  const NEWSLETTER_ERROR = new URL('newsletter-error/', SITE_URL).toString();
 
   try {
     const form = await request.formData();
