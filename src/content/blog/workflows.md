@@ -185,11 +185,11 @@ The layer that translates the outside world into the first step of a workflow, a
 
 This essay builds on:
 
-- [The Imperative Shell](/writing/imperative-shell)
+- [The Imperative Shell](/writing/imperative-shell/)
 
 Related deep dives:
 
-- [Errors as Data](/writing/errors-as-data)
+- [Errors as Data](/writing/errors-as-data/)
 
 ## Further Reading
 

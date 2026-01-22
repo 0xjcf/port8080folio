@@ -280,17 +280,17 @@ It’s direction.
 ## Series continuation
 
 Next in *Behavior & Boundaries*:
-**[Dependency Direction Is What Decides Whether Systems Age Gracefully or Rot](/writing/dependency-direction)**
+**[Dependency Direction Is What Decides Whether Systems Age Gracefully or Rot](/writing/dependency-direction/)**
 
 ## Series Context
 
 This essay builds on:
 
-* [When Code Becomes Cheap, Architecture Becomes Everything](/writing/when-code-becomes-cheap)
+* [When Code Becomes Cheap, Architecture Becomes Everything](/writing/when-code-becomes-cheap/)
 
 Related deep dives:
 
-* [Actors](/writing/actors)
+* [Actors](/writing/actors/)
 
 ## Further Reading
 

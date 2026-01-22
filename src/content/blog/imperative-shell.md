@@ -268,11 +268,11 @@ That boundary is where most systems quietly lose their flexibility.
 
 This essay builds on:
 
-- [Errors as Data](/writing/errors-as-data)
+- [Errors as Data](/writing/errors-as-data/)
 
 Related deep dives:
 
-- [Workflows](/writing/workflows)
+- [Workflows](/writing/workflows/)
 
 ## Further Reading
 

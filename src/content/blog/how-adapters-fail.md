@@ -251,16 +251,16 @@ The next question is unavoidable:
 **How do you know where a boundary belongs in the first place?**
 
 Next in *Behavior & Boundaries*:
-**[Lifecycle Is the Real Boundary](/writing/lifecycle-is-the-real-boundary)**
+**[Lifecycle Is the Real Boundary](/writing/lifecycle-is-the-real-boundary/)**
 
 ## Series Context
 
 This essay builds on:
 
-* [Why Adapters Exist](/writing/why-adapters-exist)
+* [Why Adapters Exist](/writing/why-adapters-exist/)
 
 Related deep dives:
 
-* [Errors as Data](/writing/errors-as-data)
+* [Errors as Data](/writing/errors-as-data/)
 
 ## Further Reading

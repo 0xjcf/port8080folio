@@ -668,6 +668,12 @@ input[type="hidden"],
     animation: fadeIn 0.4s ease-out forwards;
   }
 
+  /* Newsletter-only layout should always show its single card */
+  .contact__forms--newsletter .form-card {
+    display: flex;
+    opacity: 1;
+  }
+
   /* Show forms based on radio selection */
   .contact__forms #form-contact:checked ~ .forms-container .form-card[data-tab="contact"],
   .contact__forms #form-newsletter:checked ~ .forms-container .form-card[data-tab="newsletter"] {

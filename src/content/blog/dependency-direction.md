@@ -244,11 +244,11 @@ Future essays may return to these ideas as deep dives, but the foundation is now
 
 This essay builds on:
 
-* [Lifecycle Is the Real Boundary](/writing/lifecycle-is-the-real-boundary)
+* [Lifecycle Is the Real Boundary](/writing/lifecycle-is-the-real-boundary/)
 
 Related deep dives:
 
-* [Why Adapters Exist](/writing/why-adapters-exist)
+* [Why Adapters Exist](/writing/why-adapters-exist/)
 
 ## Further Reading
 

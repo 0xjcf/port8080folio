@@ -51,7 +51,7 @@ const seriesLatestEdition = seriesLatestPost?.data.edition;
                     {seriesLatestEdition && (
                       <span class="writing-series__edition">Edition {seriesLatestEdition}</span>
                     )}
-                    <a class="writing-series__link" href={`/writing/${seriesLatestPost.slug}`}>
+                    <a class="writing-series__link" href={`/writing/${seriesLatestPost.slug}/`}>
                       {seriesLatestPost.data.title} →
                     </a>
                   </span>
@@ -71,7 +71,7 @@ const seriesLatestEdition = seriesLatestPost?.data.edition;
                   {post.data.edition && (
                     <span class="writing-list__edition">Edition {post.data.edition}</span>
                   )}
-                  <a class="writing-list__link" href={`/writing/${post.slug}`}>{post.data.title}</a>
+                  <a class="writing-list__link" href={`/writing/${post.slug}/`}>{post.data.title}</a>
                 </div>
                 <p class="writing-list__description text-muted">{post.data.description}</p>
               </li>

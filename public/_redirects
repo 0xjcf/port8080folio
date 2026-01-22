@@ -1,0 +1,12 @@
+# Canonical trailing slash redirects for top-level and status routes
+/writing /writing/ 301
+/writing/:slug /writing/:slug/ 301
+/open-source /open-source/ 301
+/about /about/ 301
+/services /services/ 301
+/services/:slug /services/:slug/ 301
+/contact-thanks /contact-thanks/ 301
+/contact-error /contact-error/ 301
+/newsletter-thanks /newsletter-thanks/ 301
+/newsletter-error /newsletter-error/ 301
+/newsletter-check-email /newsletter-check-email/ 301

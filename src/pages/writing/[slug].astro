@@ -52,9 +52,13 @@ if (post.data.updatedDate) {
       set:html={JSON.stringify(blogSchema)}
     />
     <script defer type="module" src="/scripts/pe.js"></script>
-    <script defer src="/scripts/mermaid-diagrams.js"></script>
+    <script defer type="module" src="/scripts/mermaid-diagrams.js"></script>
   </Fragment>
-  <main id="main" role="main" class="section section--writing-page page-content">
+  <main
+    id="main"
+    role="main"
+    class="section section--writing-page page-content"
+  >
     <div class="container">
       <article class="writing-article">
         <header>
@@ -75,24 +79,25 @@ if (post.data.updatedDate) {
   <script is:inline>
     (() => {
       const applyLabelStyles = () => {
-        const root = document.querySelector('.writing-article');
+        const root = document.querySelector(".writing-article");
         if (!root) return;
         const styles = getComputedStyle(document.documentElement);
-        const surface = styles.getPropertyValue('--color-surface-alt') || '#f5f7fa';
-        const text = styles.getPropertyValue('--color-text') || '#111';
-        root
-          .querySelectorAll('svg[id^="mermaid-"] .labelBkg')
-          .forEach((el) => {
-            el.style.backgroundColor = surface;
-            el.style.color = text;
-            el.style.padding = '2px 6px';
-            el.style.borderRadius = '4px';
-            el.style.opacity = '1';
-          });
+        const surface =
+          styles.getPropertyValue("--color-surface-alt") || "#f5f7fa";
+        const text = styles.getPropertyValue("--color-text") || "#111";
+        root.querySelectorAll('svg[id^="mermaid-"] .labelBkg').forEach((el) => {
+          el.style.backgroundColor = surface;
+          el.style.color = text;
+          el.style.padding = "2px 6px";
+          el.style.borderRadius = "4px";
+          el.style.opacity = "1";
+        });
       };
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', applyLabelStyles, { once: true });
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", applyLabelStyles, {
+          once: true,
+        });
       } else {
         applyLabelStyles();
       }

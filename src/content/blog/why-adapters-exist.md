@@ -275,17 +275,17 @@ And it can be learned.
 ## Series continuation
 
 Next in *Behavior & Boundaries*:
-**[How Adapters Fail](/writing/how-adapters-fail)**
+**[How Adapters Fail](/writing/how-adapters-fail/)**
 
 ## Series Context
 
 This essay builds on:
 
-* [Actors](/writing/actors)
+* [Actors](/writing/actors/)
 
 Related deep dives:
 
-* [Errors as Data](/writing/errors-as-data)
+* [Errors as Data](/writing/errors-as-data/)
 
 ## Further Reading
 

@@ -233,11 +233,11 @@ That distinction turns out to matter more than most people expect.
 
 This essay builds on:
 
-- [Lifecycle Is the Real Boundary](/writing/lifecycle-is-the-real-boundary)
+- [Lifecycle Is the Real Boundary](/writing/lifecycle-is-the-real-boundary/)
 
 Related deep dives:
 
-- [Actors](/writing/actors)
+- [Actors](/writing/actors/)
 
 ## Further Reading
 

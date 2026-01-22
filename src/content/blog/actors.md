@@ -290,11 +290,13 @@ That boundary turns out to be where most systems quietly fail.
 ## Series Context
 
 This essay builds on:
-- [Lifecycle Is the Real Boundary](/writing/lifecycle-is-the-real-boundary)
+
+- [Lifecycle Is the Real Boundary](/writing/lifecycle-is-the-real-boundary/)
 
 Related deep dives:
-- [Why Adapters Exist](/writing/why-adapters-exist)
+
+- [Why Adapters Exist](/writing/why-adapters-exist/)
 
 ## Further Reading
 
-- Carl Hewitt, Peter Bishop, Richard Steiger — Actor Model (https://www.ijcai.org/Proceedings/73/Papers/027.pdf)
+- Carl Hewitt, Peter Bishop, Richard Steiger — Actor Model (<https://www.ijcai.org/Proceedings/73/Papers/027.pdf>)

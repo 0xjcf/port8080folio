@@ -164,8 +164,8 @@ nav a.site-nav__external:focus-visible {
   --button-color: var(--color-neutral-000);
   --button-border: transparent;
   --button-hover-shadow:
-    0 var(--space-3) var(--space-8) color-mix(in oklch, var(--button-accent) 45%, transparent),
-    0 0 0 1px var(--color-border) inset;
+    0 var(--space-3) var(--space-8) color-mix(in oklch, var(--button-accent) 45%, transparent), 0 0
+    0 1px var(--color-border) inset;
   font-weight: var(--font-semibold);
 }
 .button--primary:hover::after,

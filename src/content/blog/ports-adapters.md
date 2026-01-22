@@ -276,11 +276,11 @@ That omission turns out to be far more costly than it looks.
 
 This essay builds on:
 
-- [Why Adapters Exist](/writing/why-adapters-exist)
+- [Why Adapters Exist](/writing/why-adapters-exist/)
 
 Related deep dives:
 
-- [The Imperative Shell](/writing/imperative-shell)
+- [The Imperative Shell](/writing/imperative-shell/)
 
 ## Further Reading
 

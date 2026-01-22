@@ -606,9 +606,8 @@
     --color-card-bg: var(--card-surface);
     --color-card-border: var(--card-border);
     --card-shadow:
-      0 0 0 1px color-mix(in oklch, var(--card-border) 80%, transparent) inset,
-      0 8px 24px rgba(0, 0, 0, 0.55),
-      0 24px 64px rgba(0, 0, 0, 0.45);
+      0 0 0 1px color-mix(in oklch, var(--card-border) 80%, transparent) inset, 0 8px 24px
+      rgba(0, 0, 0, 0.55), 0 24px 64px rgba(0, 0, 0, 0.45);
 
     --color-border: oklch(100% 0 0 / 0.12); /* More visible borders */
     --color-border-light: oklch(100% 0 0 / 0.08);
@@ -650,9 +649,8 @@
   --color-card-bg: var(--card-surface);
   --color-card-border: var(--card-border);
   --card-shadow:
-    0 0 0 1px color-mix(in oklch, var(--card-border) 80%, transparent) inset,
-    0 8px 24px rgba(0, 0, 0, 0.55),
-    0 24px 64px rgba(0, 0, 0, 0.45);
+    0 0 0 1px color-mix(in oklch, var(--card-border) 80%, transparent) inset, 0 8px 24px
+    rgba(0, 0, 0, 0.55), 0 24px 64px rgba(0, 0, 0, 0.45);
 
   --color-border: oklch(100% 0 0 / 0.12); /* More visible borders */
   --color-border-light: oklch(100% 0 0 / 0.08);
