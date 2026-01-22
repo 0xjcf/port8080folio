@@ -21,7 +21,7 @@ NEWSLETTER_FORM_URL = "http://127.0.0.1:8080/#newsletter-form"
 NEWSLETTER_THANKS_URL = "http://127.0.0.1:8080/newsletter-thanks/"
 
 # Email routing used by contact form
-FROM_EMAIL = "Website <noreply@resend.dev>"
+FROM_EMAIL = "0xjcf <newsletter@0xjcf.com>"
 TO_EMAIL = "bluejf.llc@gmail.com"
 
 # Anti-bot timing thresholds (milliseconds)

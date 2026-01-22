@@ -483,7 +483,7 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
   const redirectBase = getRedirectBase(request, env);
   const CONTACT_SUCCESS = rewriteUrlOrigin(CONTACT_THANKS, redirectBase);
   const CONTACT_ERROR = rewriteUrlOrigin(
-    new URL('contact-error/', CONTACT_THANKS).toString(),
+    new URL('../contact-error/', CONTACT_THANKS).toString(),
     redirectBase
   );
 
@@ -635,7 +635,7 @@ async function handleNewsletter(request: Request, env: Env, ctx: ExecutionContex
   const redirectBase = getRedirectBase(request, env);
   const NEWSLETTER_SUCCESS = rewriteUrlOrigin(NEWSLETTER_THANKS, redirectBase);
   const NEWSLETTER_ERROR = rewriteUrlOrigin(
-    new URL('newsletter-error/', NEWSLETTER_THANKS).toString(),
+    new URL('../newsletter-error/', NEWSLETTER_THANKS).toString(),
     redirectBase
   );
 
