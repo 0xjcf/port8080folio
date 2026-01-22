@@ -4,7 +4,7 @@
   const loadMermaid = async () => {
     if (!mermaidPromise) {
       mermaidPromise = import(
-        'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'
+        'https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.esm.min.mjs'
       ).then((mod) => mod.default ?? mod);
     }
     return mermaidPromise;
