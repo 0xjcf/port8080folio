@@ -63,7 +63,7 @@
 
 .hero__claim {
   /* Fallback color for browsers that don't support background-clip: text */
-  color: var(--color-primary, currentColor);
+  color: var(--hero-claim-color, var(--color-primary, currentColor));
   display: block;
   font-weight: 600;
   letter-spacing: -0.005em;
@@ -79,7 +79,7 @@
 /* Apply gradient text effect only when background-clip: text is supported */
 @supports (background-clip: text) or (-webkit-background-clip: text) {
   .hero__claim {
-    background-image: var(--brand-grad-text);
+    background-image: var(--hero-claim-grad, var(--brand-grad-text));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -258,7 +258,7 @@
 
 #hero .button--primary {
   background: var(--brand-grad-cta);
-  color: oklch(0.08 0 0); /* Near-black for 7.38:1 contrast with orange */
+  color: var(--color-neutral-000);
   border: none;
   box-shadow: var(--shadow-md);
 }
@@ -540,7 +540,7 @@
 
 /* Proof strip (below hero to keep focus on CTAs) */
 .section--proof {
-  --section-bg: var(--color-surface);
+  --section-bg: var(--page-bg);
   --section-color: var(--color-text);
   padding: var(--space-10) var(--space-4);
 }

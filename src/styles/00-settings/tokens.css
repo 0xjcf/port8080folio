@@ -86,6 +86,10 @@
   --color-primary-dark: var(--color-primary-600);
   --color-primary-light: var(--color-primary-400);
   --color-primary-visited: var(--color-primary-700); /* Darker for visited links */
+  --color-accent-edge: var(--color-primary-500);
+  --color-accent-edge-strong: var(--color-primary-600);
+  --button-accent: var(--color-accent-edge);
+  --button-accent-strong: var(--color-accent-edge-strong);
 
   /* Link tokens */
   --link-secondary: var(--color-primary);
@@ -107,10 +111,14 @@
   --color-background: var(--color-neutral-000);
   --color-surface: var(--color-neutral-050);
   --color-surface-alt: var(--color-neutral-100);
+  --page-bg: var(--color-background);
 
   /* Card/testimonial specific */
-  --color-card-bg: var(--color-neutral-000);
-  --color-card-border: var(--color-neutral-200);
+  --color-card-bg: var(--card-surface);
+  --color-card-border: var(--card-border);
+  --card-shadow: var(--panel-shadow);
+  --card-surface: color-mix(in oklch, var(--color-surface) 92%, var(--color-text) 4%);
+  --card-border: color-mix(in oklch, var(--color-border) 70%, transparent);
 
   --color-border: var(--color-neutral-200);
   --color-border-light: var(--color-neutral-100);
@@ -156,7 +164,11 @@
      ====================== */
 
   --brand-grad-text: linear-gradient(90deg, oklch(67.5% 0.21 16), oklch(75% 0.18 41));
-  --brand-grad-cta: linear-gradient(90deg, oklch(70% 0.2 25), oklch(82% 0.15 55));
+  --hero-claim-color: var(--color-primary-600);
+  --hero-claim-grad: linear-gradient(90deg, var(--color-primary-500), var(--color-primary-600));
+  --section-title-accent: var(--hero-claim-color);
+  --section-title-accent-grad: var(--hero-claim-grad);
+  --brand-grad-cta: linear-gradient(90deg, var(--button-accent), var(--button-accent-strong));
 
   /* ======================
      Typography
@@ -475,7 +487,7 @@
      From unified-theme
      ====================== */
 
-  --section-bg: var(--color-background);
+  --section-bg: var(--page-bg);
   --section-grid-color: color-mix(in oklch, var(--color-text) 3%, transparent);
   --section-grid-size: 56px;
   --section-fg: var(--color-text);
@@ -588,10 +600,15 @@
     --color-background: oklch(6% 0 0);
     --color-surface: oklch(14% 0 0 / 0.8); /* Increased lightness and opacity */
     --color-surface-alt: oklch(18% 0 0); /* Lighter surface for better hierarchy */
+    --page-bg: var(--card-surface);
 
     /* Card/testimonial specific for dark theme */
-    --color-card-bg: oklch(12% 0 0 / 0.65); /* Better contrast against dark background */
-    --color-card-border: oklch(100% 0 0 / 0.15); /* More visible borders */
+    --color-card-bg: var(--card-surface);
+    --color-card-border: var(--card-border);
+    --card-shadow:
+      0 0 0 1px color-mix(in oklch, var(--card-border) 80%, transparent) inset,
+      0 8px 24px rgba(0, 0, 0, 0.55),
+      0 24px 64px rgba(0, 0, 0, 0.45);
 
     --color-border: oklch(100% 0 0 / 0.12); /* More visible borders */
     --color-border-light: oklch(100% 0 0 / 0.08);
@@ -627,10 +644,15 @@
   --color-background: oklch(6% 0 0);
   --color-surface: oklch(14% 0 0 / 0.8); /* Increased lightness and opacity */
   --color-surface-alt: oklch(18% 0 0); /* Lighter surface for better hierarchy */
+  --page-bg: var(--card-surface);
 
   /* Card/testimonial specific for dark theme */
-  --color-card-bg: oklch(12% 0 0 / 0.65); /* Better contrast against dark background */
-  --color-card-border: oklch(100% 0 0 / 0.15); /* More visible borders */
+  --color-card-bg: var(--card-surface);
+  --color-card-border: var(--card-border);
+  --card-shadow:
+    0 0 0 1px color-mix(in oklch, var(--card-border) 80%, transparent) inset,
+    0 8px 24px rgba(0, 0, 0, 0.55),
+    0 24px 64px rgba(0, 0, 0, 0.45);
 
   --color-border: oklch(100% 0 0 / 0.12); /* More visible borders */
   --color-border-light: oklch(100% 0 0 / 0.08);
@@ -665,6 +687,8 @@
   --color-background: var(--color-neutral-000);
   --color-surface: var(--color-neutral-050);
   --color-surface-alt: var(--color-neutral-100);
+  --card-border: color-mix(in oklch, var(--color-accent-edge) 20%, transparent);
+  --page-bg: var(--color-background);
   --color-card-bg: var(--color-neutral-000);
   --color-card-border: var(--color-neutral-200);
   --color-border: var(--color-neutral-200);

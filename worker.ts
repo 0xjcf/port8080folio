@@ -15,7 +15,7 @@
  *   NEWSLETTER_FORM_URL    = "https://0xjcf.com/#newsletter-form"
  *   NEWSLETTER_THANKS_URL  = "https://0xjcf.com/newsletter-thanks.html"
  *   // Optional:
- *   // NEWSLETTER_CONFIRM_URL = "https://0xjcf.com/newsletter-check-email.html"
+ *   // NEWSLETTER_CONFIRM_URL = "https://0xjcf.com/newsletter-check-email"
  *
  *   // Environment toggle:
  *   ENV = "prod" | "dev"
@@ -124,13 +124,13 @@ function getUrls(env: Env) {
 
   // ---- Newsletter ----
   const NEWSLETTER_THANKS = safeSameOrigin(env.NEWSLETTER_THANKS_URL, SITE_URL)
-    || new URL('newsletter-thanks.html', SITE_URL).toString();
+    || new URL('newsletter-thanks', SITE_URL).toString();
 
   const NEWSLETTER_FORM = safeSameOrigin(env.NEWSLETTER_FORM_URL, SITE_URL)
     || new URL('#newsletter-form', SITE_URL).toString();
 
   const NEWSLETTER_CONFIRM = safeSameOrigin(env.NEWSLETTER_CONFIRM_URL, SITE_URL)
-    || new URL('newsletter-check-email.html', SITE_URL).toString();
+    || new URL('newsletter-check-email', SITE_URL).toString();
 
   return {
     SITE_URL,

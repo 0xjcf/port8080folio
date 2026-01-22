@@ -302,7 +302,7 @@ i {
    ====================== */
 
 blockquote {
-  border-left: var(--space-1) solid var(--color-primary);
+  border-left: var(--space-1) solid var(--color-accent-edge);
   padding-left: var(--space-6);
   margin-block: var(--space-8);
   font-style: italic;

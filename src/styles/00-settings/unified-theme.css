@@ -10,18 +10,13 @@
 
 /* Prevent white overscroll on all devices */
 html {
-  background: var(--color-background); /* Match darkest body color */
+  background: var(--page-bg); /* Match page background */
   /* Modern overscroll control - prevents pull-to-refresh and elastic bounce */
   overscroll-behavior-y: none;
 }
 
 body {
-  background:
-    radial-gradient(
-      1800px 900px at 50% 15%,
-      color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
-      transparent 55%
-    ), linear-gradient(oklch(0.015 0 0), var(--color-background) 35%, var(--color-background));
+  background: var(--page-bg);
   position: relative;
   overflow-x: hidden;
   min-height: 100vh;
@@ -50,32 +45,17 @@ body::before {
   mix-blend-mode: screen;
 }
 
-/* Override global canvas for standalone status pages */
+/* Status pages share the global canvas */
 body.status-page {
-  background: color-mix(in oklch, var(--color-brand-primary) 6%, var(--color-neutral-000));
+  background: var(--page-bg);
 }
 
 body.status-page::before {
-  mix-blend-mode: normal;
-  opacity: 1;
-  z-index: var(--z-below);
+  content: none;
 }
 
 body.status-page::after {
-  content: "";
-  position: fixed;
-  inset-inline: 8%;
-  top: 12%;
-  height: 68%;
-  pointer-events: none;
-  background: radial-gradient(
-    60% 62% at 50% 44%,
-    color-mix(in oklch, var(--color-brand-primary) 22%, var(--color-neutral-000)) 0%,
-    transparent 78%
-  );
-  filter: blur(90px);
-  opacity: 0.55;
-  z-index: calc(var(--z-below) + 1);
+  content: none;
 }
 
 @media (forced-colors: active) {
@@ -91,49 +71,18 @@ body.status-page::after {
 
 /* Section-local vignette/spotlight controlled by vars */
 .section::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--space-20) * -1) 0 calc(var(--space-20) * -1) 0;
-  z-index: var(--z-below);
-  background:
-    radial-gradient(
-      600px 300px at 50% var(--spot-y, 32%),
-      color-mix(in oklch, var(--color-brand-primary) var(--spot-alpha, 18%), transparent),
-      transparent 60%
-    ),
-    radial-gradient(
-      1200px 600px at 50% 100%,
-      color-mix(in oklch, var(--color-brand-secondary) var(--tint-alpha, 14%), transparent),
-      transparent 70%
-    );
-  mix-blend-mode: var(--section-blend-mode, screen);
-  pointer-events: none;
+  content: none;
 }
 
 /* Consistent gutter between all sections */
 .section + .section {
-  box-shadow: inset 0 var(--space-6) var(--space-15)
-    color-mix(in oklch, var(--color-background) 35%, transparent);
+  box-shadow: none;
   position: relative;
 }
 
 /* Subtle top border for additional definition */
 .section + .section::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 10%;
-  right: 10%;
-  height: var(--space-px);
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--section-grid-color) 20%,
-    var(--section-grid-color) 80%,
-    transparent
-  );
-  pointer-events: none;
-  z-index: var(--z-elevated);
+  content: none;
 }
 
 /* Chapter sections don't get the generic divider line */
@@ -170,12 +119,7 @@ body.status-page::after {
 }
 
 [data-theme="dark"] #about.section {
-  background:
-    radial-gradient(
-      ellipse 1200px 600px at 50% 30%,
-      color-mix(in oklch, var(--color-brand-secondary) 8%, transparent),
-      transparent 70%
-    ), var(--color-background);
+  background: var(--page-bg);
 }
 
 /* Services – neutral dark with warm undertone and accent */
@@ -190,32 +134,12 @@ body.status-page::after {
 /* Add subtle accent for Services section in dark mode */
 @media (prefers-color-scheme: dark) {
   #services.section::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      135deg,
-      color-mix(in oklch, var(--color-brand-secondary) 5%, transparent) 0%,
-      transparent 40%,
-      color-mix(in oklch, var(--color-brand-primary) 5%, transparent) 100%
-    );
-    pointer-events: none;
-    z-index: var(--z-base);
+    content: none;
   }
 }
 
 [data-theme="dark"] #services.section::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    color-mix(in oklch, var(--color-brand-secondary) 5%, transparent) 0%,
-    transparent 40%,
-    color-mix(in oklch, var(--color-brand-primary) 5%, transparent) 100%
-  );
-  pointer-events: none;
-  z-index: var(--z-base);
+  content: none;
 }
 
 /* Contact CTA – gentle warm center on dark with accent */
@@ -230,32 +154,12 @@ body.status-page::after {
 /* Add gradient accent for Contact section in dark mode */
 @media (prefers-color-scheme: dark) {
   #contact.section {
-    background:
-      radial-gradient(
-        ellipse 1000px 500px at 50% 40%,
-        color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
-        transparent 60%
-      ),
-      linear-gradient(
-        180deg,
-        var(--color-background),
-        color-mix(in oklch, var(--color-brand-primary) 3%, var(--color-background))
-      );
+    background: var(--page-bg);
   }
 }
 
 [data-theme="dark"] #contact.section {
-  background:
-    radial-gradient(
-      ellipse 1000px 500px at 50% 40%,
-      color-mix(in oklch, var(--color-brand-primary) 10%, transparent),
-      transparent 60%
-    ),
-    linear-gradient(
-      180deg,
-      var(--color-background),
-      color-mix(in oklch, var(--color-brand-primary) 3%, var(--color-background))
-    );
+  background: var(--page-bg);
 }
 
 /* Contact Forms – move spotlight lower and cooler */
@@ -282,24 +186,14 @@ body.status-page::after {
 
 /* Section gradient accents - base styles in sections-base.css */
 .section__title .gradient {
-  background: var(--brand-grad-text);
+  background: var(--section-title-accent-grad);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
 
-/* Unified gradient divider */
-.section__title::after {
-  content: "";
-  display: block;
-  width: var(--space-10);
-  height: var(--space-0-5);
-  margin: var(--space-4) auto 0;
-  border-radius: var(--radius-full);
-  background: var(--brand-grad-text);
-  opacity: 0.45;
-}
+/* Unified title underline uses accent token from sections-base.css */
 
 /* ======================
    Elevation Classes

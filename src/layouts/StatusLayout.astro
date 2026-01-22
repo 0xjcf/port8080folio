@@ -1,0 +1,97 @@
+---
+import mainCss from "../styles/main.css?url";
+
+const {
+  title,
+  description,
+  bodyClass = "status-page",
+  noindex = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    {title ? <title>{title}</title> : null}
+    {description ? <meta name="description" content={description} /> : null}
+    {noindex ? <meta name="robots" content="noindex,follow" /> : null}
+    <script is:inline>
+      (function () {
+        let savedTheme = null;
+        try {
+          savedTheme = localStorage.getItem("preferred-theme");
+        } catch (error) {
+          console.warn(
+            "Theme: localStorage access failed, using system preference",
+          );
+        }
+
+        let systemPrefersDark = false;
+        try {
+          systemPrefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+        } catch (error) {
+          console.warn("Theme: matchMedia not supported, defaulting to light");
+        }
+
+        if (savedTheme === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+          document.documentElement.setAttribute("data-theme-mode", "manual");
+        } else if (savedTheme === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.setAttribute("data-theme-mode", "manual");
+        } else if (savedTheme === "auto") {
+          document.documentElement.setAttribute(
+            "data-theme",
+            systemPrefersDark ? "dark" : "light",
+          );
+          document.documentElement.setAttribute("data-theme-mode", "auto");
+        } else if (savedTheme === null || savedTheme === undefined) {
+          document.documentElement.setAttribute(
+            "data-theme",
+            systemPrefersDark ? "dark" : "light",
+          );
+          document.documentElement.setAttribute("data-theme-mode", "auto");
+        } else {
+          document.documentElement.setAttribute(
+            "data-theme",
+            systemPrefersDark ? "dark" : "light",
+          );
+          document.documentElement.setAttribute("data-theme-mode", "auto");
+        }
+      })();
+    </script>
+    <link rel="preload" href={mainCss} as="style" />
+    <link rel="stylesheet" href={mainCss} />
+    <script is:inline>
+      (function () {
+        var GA_ID = "{{GA_MEASUREMENT_ID}}";
+        if (!GA_ID || /\{\{.+\}\}/.test(GA_ID)) return;
+        var s = document.createElement("script");
+        s.async = true;
+        s.src =
+          "https://www.googletagmanager.com/gtag/js?id=" +
+          encodeURIComponent(GA_ID);
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        window.gtag = gtag;
+        gtag("js", new Date());
+        gtag("config", GA_ID, { anonymize_ip: true, transport_type: "beacon" });
+      })();
+    </script>
+  </head>
+  <body class={bodyClass}>
+    <main id="main" class="status-page__wrapper" role="main">
+      <slot />
+    </main>
+    <script defer src="/scripts/theme-toggle.js"></script>
+    <script defer src="/scripts/analytics.js"></script>
+  </body>
+</html>

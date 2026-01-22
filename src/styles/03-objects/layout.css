@@ -68,10 +68,10 @@ main {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: color-mix(in oklab, var(--color-surface, #fff) 70%, transparent);
+  background: var(--page-bg);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid
-    color-mix(in oklab, var(--color-border, rgba(0, 0, 0, 0.08)) 65%, transparent);
+    color-mix(in oklab, var(--color-accent-edge, rgba(0, 0, 0, 0.08)) 65%, transparent);
   transition:
     box-shadow 0.2s ease,
     background 0.2s ease,
@@ -154,9 +154,9 @@ main {
 
 /* Scrolled state */
 .site-nav.is-scrolled {
-  background: color-mix(in oklab, var(--color-surface, #fff) 95%, transparent);
+  background: var(--page-bg);
   box-shadow: 0 8px 24px color-mix(in oklab, var(--color-text) 8%, transparent);
-  border-color: color-mix(in oklab, var(--color-border) 80%, transparent);
+  border-color: color-mix(in oklab, var(--color-accent-edge) 80%, transparent);
 }
 
 html.nav-open body {

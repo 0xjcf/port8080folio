@@ -1,0 +1,30 @@
+---
+import StatusLayout from "../../layouts/StatusLayout.astro";
+
+const title = "Thank You - Jose Flores";
+const description = "Thanks for your message. I'll reply within 24 hours.";
+---
+
+<StatusLayout
+  title={title}
+  description={description}
+  bodyClass="status-page status-page--success"
+  noindex
+>
+  <section class="status-card" role="status" aria-live="polite">
+    <div class="status-card__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 6 9 17l-5-5"></path>
+      </svg>
+    </div>
+    <p class="status-card__eyebrow">Success</p>
+    <h1 class="status-card__title">Message sent successfully!</h1>
+    <p class="status-card__message">
+      Thanks for reaching out. I've received your message and will respond within a day.
+    </p>
+    <div class="status-card__actions">
+      <a href="/" class="status-page__btn status-page__btn--primary">Back to home</a>
+      <a href="/writing" class="status-page__btn status-page__btn--secondary">Read my writing</a>
+    </div>
+  </section>
+</StatusLayout>

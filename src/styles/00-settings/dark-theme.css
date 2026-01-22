@@ -34,6 +34,12 @@
   --color-primary: var(--color-brand-primary, oklch(0.75 0.18 55));
   --color-primary-dark: oklch(0.52 0.25 25);
   --color-primary-light: oklch(0.73 0.19 25);
+  --color-accent-edge: var(--color-brand-secondary-high-contrast);
+  --color-accent-edge-strong: var(--color-brand-primary-high-contrast);
+  --button-accent: var(--color-accent-edge);
+  --button-accent-strong: var(--color-accent-edge-strong);
+  --hero-claim-color: var(--color-brand-primary);
+  --hero-claim-grad: var(--brand-grad-text);
 
   --color-secondary: oklch(0.75 0.18 55);
   --color-secondary-dark: oklch(0.63 0.22 45);
@@ -84,7 +90,7 @@
   --color-surface-alt: var(--color-neutral-800);
 
   /* Background and text color application */
-  background: oklch(0 0 0);
+  background: var(--page-bg);
   color: var(--color-text-primary);
 
   /* Create stacking context on body */
@@ -99,18 +105,7 @@
 
 /* Apply unified canvas background to body */
 [data-theme="dark"] body {
-  /* Single continuous gradient stage */
-  /* Top glow - subtle warm accent */
-  background:
-    radial-gradient(60rem 32rem at 50% -10rem, oklch(0.61 0.24 25 / 0.1), transparent 60%),
-    /* Bottom glow - softer ambient */
-    radial-gradient(80rem 40rem at 50% 110%, oklch(0.75 0.18 55 / 0.06), transparent 55%),
-    /* Base gradient */
-    linear-gradient(
-      to bottom,
-      oklch(0 0 0) /* Deepest background at top */,
-      oklch(0.06 0.013 247) /* Slight lift at bottom */
-    );
+  background: var(--page-bg);
 }
 
 /* Subtle noise overlay to prevent gradient banding */
@@ -126,7 +121,7 @@
 
 /* Let the hero's own layers (bg-grad/grid/vignette/glows) render the BG */
 [data-theme="dark"] #hero {
-  background: transparent;
+  background: var(--page-bg);
 }
 
 /* ================================================
@@ -134,9 +129,9 @@
    Sections inherit canvas, with edge fading
    ================================================ */
 
-/* Make all sections transparent to show unified canvas */
+/* Make all sections use the same page background */
 [data-theme="dark"] .section {
-  background: transparent;
+  background: var(--page-bg);
   position: relative;
   /* Remove any shadows that create visible seams */
   box-shadow: none;
@@ -148,21 +143,8 @@
 [data-theme="dark"] .section--hero,
 [data-theme="dark"] .section--proof,
 [data-theme="dark"] .section--about {
-  /* Fade top and bottom edges into shared canvas */
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black 64px,
-    black calc(100% - 64px),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black 64px,
-    black calc(100% - 64px),
-    transparent 100%
-  );
+  -webkit-mask-image: none;
+  mask-image: none;
   /* Consistent vertical rhythm */
   padding-block: clamp(6rem, 12vh, 10rem);
   scroll-margin-top: 12vh;
@@ -170,15 +152,15 @@
 
 /* Hero section special case - only fade bottom */
 [data-theme="dark"] .section--hero {
-  -webkit-mask-image: linear-gradient(to bottom, black 0, black calc(100% - 96px), transparent 100%);
-  mask-image: linear-gradient(to bottom, black 0, black calc(100% - 96px), transparent 100%);
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 /* About section - fade both edges for seamless blend */
 [data-theme="dark"] #about,
 [data-theme="dark"] #contact {
   border-top: 0;
-  background: transparent;
+  background: var(--page-bg);
 }
 
 /* Let components decide when to use text-shadow */
@@ -219,24 +201,9 @@
 [data-theme="dark"] .service-card,
 [data-theme="dark"] .highlight-card,
 [data-theme="dark"] .form-card {
-  background: color-mix(in oklch, var(--color-neutral-900) 92%, var(--color-neutral-000) 8%);
-  border: var(--space-px) solid rgba(255, 255, 255, 0.04);
-  border-radius: var(--radius-xl);
-  /* Crisp box-shadow instead of filter for better performance */
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 8px 24px rgba(0, 0, 0, 0.55),
-    0 24px 64px rgba(0, 0, 0, 0.45);
-}
-
-[data-theme="dark"] .service-card:hover,
-[data-theme="dark"] .highlight-card:hover,
-[data-theme="dark"] .form-card:hover {
-  border-color: rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
-    0 12px 32px rgba(0, 0, 0, 0.65),
-    0 32px 80px rgba(0, 0, 0, 0.55);
+  background: var(--card-surface);
+  border: var(--space-px) solid var(--card-border);
+  box-shadow: var(--card-shadow);
 }
 
 /* ================================================
@@ -311,7 +278,7 @@
   border-radius: var(--space-3);
   position: relative;
   overflow: hidden;
-  background: var(--color-neutral-900);
+  background: var(--card-surface);
 }
 
 [data-theme="dark"] .form-card::before {
@@ -508,33 +475,15 @@
   --status-shadow: 0 42px 96px color-mix(in oklch, var(--status-accent) 26%, oklch(0 0 0 / 0.65));
   --status-muted: color-mix(in oklch, var(--color-neutral-200) 72%, transparent);
   --status-icon-color: var(--color-neutral-050);
-  background: oklch(0.035 0.01 250);
+  background: oklch(0 0 0);
 }
 
 [data-theme="dark"] body.status-page::before {
-  background:
-    radial-gradient(
-      120% 120% at 50% -12%,
-      color-mix(in oklch, var(--status-accent) 24%, transparent) 0%,
-      transparent 55%
-    ),
-    linear-gradient(
-      180deg,
-      oklch(0.13 0.01 250) 0%,
-      oklch(0.07 0.009 250) 44%,
-      oklch(0.03 0 250) 100%
-    );
-  opacity: 0.75;
+  content: none;
 }
 
 [data-theme="dark"] body.status-page::after {
-  background: radial-gradient(
-    65% 60% at 50% 40%,
-    color-mix(in oklch, var(--status-accent) 38%, transparent) 0%,
-    transparent 72%
-  );
-  filter: blur(120px);
-  opacity: 0.65;
+  content: none;
 }
 
 @supports not (backdrop-filter: blur(1px)) {
@@ -544,31 +493,31 @@
 }
 
 [data-theme="dark"] .status-card__list {
-  background: color-mix(in oklch, var(--status-accent) 18%, var(--color-neutral-950));
-  border-color: color-mix(in oklch, var(--status-accent) 36%, transparent);
+  background: var(--color-surface);
+  border-color: var(--color-border);
 }
 
 [data-theme="dark"] .status-card__list h2 {
-  color: color-mix(in oklch, var(--status-accent) 48%, var(--color-neutral-050) 52%);
+  color: var(--color-text-light);
 }
 
 [data-theme="dark"] .status-card__list li {
-  color: color-mix(in oklch, var(--color-neutral-050) 85%, transparent);
+  color: var(--color-text-light);
 }
 
 [data-theme="dark"] .status-card__list li::before {
-  color: color-mix(in oklch, var(--status-accent) 70%, var(--color-neutral-050) 30%);
+  color: var(--status-accent);
 }
 
 [data-theme="dark"] .status-page__btn--secondary {
-  background: color-mix(in oklch, var(--status-accent) 24%, var(--color-neutral-950));
-  border-color: color-mix(in oklch, var(--status-accent) 38%, transparent);
-  color: color-mix(in oklch, var(--status-accent) 75%, var(--color-neutral-050) 25%);
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
 }
 
 [data-theme="dark"] .status-page__btn--ghost {
-  border-color: color-mix(in oklch, var(--status-muted) 50%, transparent);
-  color: color-mix(in oklch, var(--status-muted) 90%, transparent);
+  border-color: var(--color-border);
+  color: var(--color-text-light);
 }
 
 [data-theme="dark"] .status-page--error .status-page__btn--ghost {
@@ -596,7 +545,7 @@
 
 /* Ensure hero gradient text always wins */
 [data-theme="dark"] .hero__claim {
-  background-image: var(--brand-grad-text); /* Use token for consistency */
+  background-image: var(--hero-claim-grad, var(--brand-grad-text)); /* Use token for consistency */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -832,7 +781,7 @@
 
 [data-theme="dark"] .service-card-std .proof {
   color: var(--color-neutral-400);
-  border-left-color: oklch(0.61 0.24 25 / 0.3);
+  border-left-color: color-mix(in oklch, var(--color-accent-edge) 35%, transparent);
 }
 
 [data-theme="dark"] .service-card-std details.labor {
@@ -1097,7 +1046,7 @@
   /* Maintain consistent padding with light theme */
   padding: var(--space-10) var(--space-4);
   /* Remove any inherited background that affects layout */
-  background: transparent;
+  background: var(--page-bg);
   box-shadow: none;
 }
 

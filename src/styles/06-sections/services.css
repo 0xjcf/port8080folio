@@ -242,20 +242,15 @@
 }
 
 .win-card {
-  background: var(--color-surface);
-  border: var(--space-px) solid var(--color-border);
+  background: var(--card-surface);
+  border: var(--space-px) solid var(--card-border);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
   transition: all var(--transition-base);
-}
-
-.win-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-  border-color: var(--color-primary-200);
+  box-shadow: var(--card-shadow);
 }
 
 .win-card__icon {
@@ -591,25 +586,6 @@
   margin-bottom: var(--space-5);
 }
 
-/* Hover / focus lift effect restricted to desktop to avoid interfering with mobile carousel X transforms */
-@media (min-width: 640px) {
-  .service-card:hover,
-  .service-card:focus-within {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-primary-200);
-  }
-}
-
-/* Neutralize hover transform on small screens (keep other visual states if needed) */
-@media (max-width: 639px) {
-  .service-card:hover,
-  .service-card:focus-within {
-    transform: none; /* Preserve carousel translateX positions */
-    box-shadow: var(--shadow-lg); /* Optional: still show elevated feedback */
-    border-color: var(--color-primary-200);
-  }
-}
 
 /* Service Card Icon */
 .service-card__icon {
@@ -1571,14 +1547,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  background: var(--color-neutral-000);
-  border: var(--space-px) solid var(--color-border);
+  background: var(--card-surface);
+  border: var(--space-px) solid var(--card-border);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
-  box-shadow: var(--shadow-sm);
-}
-.service-card-std.is-popular {
-  box-shadow: 0 12px 28px color-mix(in oklch, var(--color-primary) 18%, transparent);
+  box-shadow: var(--card-shadow);
 }
 .service-card-std .card-badge-slot {
   min-height: 29px; /* Reserve space for badge */

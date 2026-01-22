@@ -229,8 +229,8 @@
 
 /* Form Card */
 .contact__forms .form-card {
-  background: var(--color-surface);
-  border: var(--space-px) solid color-mix(in oklch, var(--color-border) 70%, transparent);
+  background: var(--card-surface);
+  border: var(--space-px) solid var(--card-border);
   border-radius: var(--radius-lg);
   padding: var(--space-8);
   display: flex;
@@ -241,7 +241,7 @@
   margin: 0 auto; /* Center on mobile */
   position: relative; /* allow top accent stripe */
   overflow: hidden; /* keep accent inside radius */
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--card-shadow);
 }
 
 /* Light theme parity: top accent stripe like dark mode */

@@ -10,7 +10,7 @@
   padding: var(--space-16) var(--space-5); /* Mobile-first padding */
   overflow: hidden;
   --about-avatar-blur: var(--space-3); /* Mobile blur setting */
-  background: color-mix(in oklch, var(--color-primary) 3%, var(--color-surface));
+  background: var(--page-bg);
 }
 
 @media (min-width: 768px) {
@@ -1182,11 +1182,11 @@
 }
 
 #about .about__card {
-  background: var(--color-surface-alt);
-  border: var(--space-px) solid color-mix(in oklch, var(--color-text) 10%, transparent);
+  background: var(--card-surface);
+  border: var(--space-px) solid var(--card-border);
   border-radius: var(--radius-2xl);
   padding: var(--space-5);
-  box-shadow: 0 12px 28px color-mix(in oklch, var(--color-text) 6%, transparent);
+  box-shadow: var(--card-shadow);
   display: grid;
   gap: var(--space-6);
   width: 100%;

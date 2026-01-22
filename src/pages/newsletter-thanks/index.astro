@@ -1,0 +1,41 @@
+---
+import StatusLayout from "../../layouts/StatusLayout.astro";
+
+const title = "Welcome to Weekly Insights - Jose Flores";
+const description =
+  "You're subscribed! Expect architecture patterns, optimization tactics, and hands-on guidance directly in your inbox.";
+---
+
+<StatusLayout
+  title={title}
+  description={description}
+  bodyClass="status-page status-page--success"
+  noindex
+>
+  <section class="status-card" role="status" aria-live="polite">
+    <div class="status-card__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="m4 13 5 5 11-13"></path>
+      </svg>
+    </div>
+    <p class="status-card__eyebrow">You're in</p>
+    <h1 class="status-card__title">Welcome to Weekly Insights!</h1>
+    <p class="status-card__message">
+      Thanks for subscribing. Expect first-hand tactics on statecharts, performance, and delivery
+      every week or two.
+    </p>
+    <div class="status-card__list">
+      <h2>What you'll receive</h2>
+      <ul>
+        <li>Architecture patterns that scale without the overhead.</li>
+        <li>Process tweaks that keep teams shipping confidently.</li>
+        <li>Automation and tooling that actually save time.</li>
+        <li>Early access to templates and open-source updates.</li>
+      </ul>
+    </div>
+    <div class="status-card__actions">
+      <a href="/" class="status-page__btn status-page__btn--primary">Back to home</a>
+      <a href="/writing" class="status-page__btn status-page__btn--secondary">Read recent writing</a>
+    </div>
+  </section>
+</StatusLayout>

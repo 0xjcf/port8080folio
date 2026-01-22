@@ -1,0 +1,28 @@
+---
+import StatusLayout from "../../layouts/StatusLayout.astro";
+
+const title = "We couldn't add your email - Jose Flores";
+---
+
+<StatusLayout title={title} bodyClass="status-page status-page--error" noindex>
+  <section class="status-card" role="status" aria-live="polite">
+    <div class="status-card__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="m15 9-6 6"></path>
+        <path d="m9 9 6 6"></path>
+      </svg>
+    </div>
+    <p class="status-card__eyebrow">Signup issue</p>
+    <h1 class="status-card__title">We couldn't add your email</h1>
+    <p class="status-card__message">
+      This can happen if the address looks invalid, a lot of signups happened at once, or the
+      provider had a momentary hiccup. Try again shortly.
+    </p>
+    <div class="status-card__actions">
+      <a class="status-page__btn status-page__btn--primary" href="/#contact">Try again</a>
+      <a class="status-page__btn status-page__btn--secondary" href="/writing">Read writing</a>
+      <a class="status-page__btn status-page__btn--ghost" href="/">Back to home</a>
+    </div>
+  </section>
+</StatusLayout>

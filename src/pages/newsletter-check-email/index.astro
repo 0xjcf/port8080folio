@@ -1,0 +1,36 @@
+---
+import StatusLayout from "../../layouts/StatusLayout.astro";
+
+const title = "Check Your Email - Jose Flores";
+const description =
+  "Please check your email to confirm your subscription to weekly insights.";
+---
+
+<StatusLayout
+  title={title}
+  description={description}
+  bodyClass="status-page status-page--success"
+>
+  <section class="status-card" role="status" aria-live="polite">
+    <div class="status-card__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="8" width="18" height="12" rx="2"></rect>
+        <polyline points="22 9 12 15 2 9"></polyline>
+      </svg>
+    </div>
+    <p class="status-card__eyebrow">Check your email</p>
+    <h1 class="status-card__title">Check your email!</h1>
+    <p class="status-card__message">
+      I've sent a confirmation email to your inbox. Please click the link in that email to
+      complete your subscription to Weekly Insights.
+    </p>
+    <p class="status-card__support">
+      Can't find the email? Check your spam folder or promotions tab. The email is from Mailchimp
+      on behalf of Jose Flores.
+    </p>
+    <div class="status-card__actions">
+      <a href="/" class="status-page__btn status-page__btn--primary">Back to home</a>
+      <a href="/writing" class="status-page__btn status-page__btn--secondary">Read writing</a>
+    </div>
+  </section>
+</StatusLayout>

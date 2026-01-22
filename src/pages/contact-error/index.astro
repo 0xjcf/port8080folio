@@ -1,0 +1,27 @@
+---
+import StatusLayout from "../../layouts/StatusLayout.astro";
+
+const title = "We couldn't send your message - Jose Flores";
+---
+
+<StatusLayout title={title} bodyClass="status-page status-page--error" noindex>
+  <section class="status-card" role="status" aria-live="polite">
+    <div class="status-card__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 9v4"></path>
+        <path d="M12 17h.01"></path>
+        <path d="M21 18 12 3 3 18z"></path>
+      </svg>
+    </div>
+    <p class="status-card__eyebrow">Something went wrong</p>
+    <h1 class="status-card__title">We couldn't send your message</h1>
+    <p class="status-card__message">
+      This might happen if too many requests were sent quickly or if there was a brief outage.
+      Give it another try in a moment.
+    </p>
+    <div class="status-card__actions">
+      <a class="status-page__btn status-page__btn--primary" href="/">Try again</a>
+      <a class="status-page__btn status-page__btn--ghost" href="/">Back to home</a>
+    </div>
+  </section>
+</StatusLayout>
