@@ -23,7 +23,7 @@ You had to wire async logic carefully.
 First it was nested callbacks, until you hit *callback hell*.
 Then it was Promises, until they became hard to reason about.
 
-Even now, with the elegance of `async/await`, the underlying complexity of asynchronous flow still demands respect.
+Even now, with the elegance of async/await, asynchronous flow still demands respect.
 
 That friction slowed us down just enough to think.
 
@@ -72,7 +72,7 @@ You only feel it later, when you try to change something.
 ```mermaid
 flowchart LR
   ENV["Environment<br/>platform + IO"] -->|bindings| AD["Adapters<br/>side effects + translation"]
-  AD -->|events| BEH["Behavior<br/>state machines"]
+  AD -->|events| BEH["Behavior<br/>core (machines, reducers)"]
   BEH -->|state| PROJ["Projection<br/>UI meaning"]
   PROJ --> UI["UI<br/>renders intent"]
   UI -->|commands| BEH
@@ -119,7 +119,11 @@ At first glance, nothing seems wrong.
 
 But look closer — not at the syntax, but at the **responsibilities**.
 
-Another way to name this boundary is **Functional Core / Imperative Shell**.
+This boundary does more than separate concerns.
+It limits where decisions are allowed to exist.
+
+When behavior is confined to a core, responsibility has fewer places to hide.
+When it isn’t, decisions spread — quietly, incrementally — across the system.
 
 The behavior of the system — the rules that decide *what happens next* — must remain pure, inspectable, and deterministic.
 
@@ -142,7 +146,7 @@ Once behavior depends on the environment, clarity disappears — even if the cod
 
 ## State machines helped us express behavior more clearly
 
-But they also made it easier to blur the line between **description** and **execution**.
+But they also made it easier to blur the line between **describing behavior** and **executing it**
 
 That line is architectural.
 
@@ -230,9 +234,7 @@ Eventually, it all collapsed into a single idea:
   [Learn more →](https://www.erlang.org/doc/design_principles/des_princ.html)
 
 This isn’t a framework rule.
-
 It’s a systems rule.
-I haven't found a real counterexample in the wild yet.
 
 ---
 
@@ -345,7 +347,7 @@ The machine never calls this.
 It only reacts to events.
 That’s why it remains stable even when the world isn’t.
 
-Another way to name this boundary is Functional Core / Imperative Shell.  
+This boundary is often described as Functional Core / Imperative Shell.  
 
 I’ll use those terms more explicitly later in the series.  
 
