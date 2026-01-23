@@ -213,7 +213,7 @@ That mismatch was the instability.
 
 Eventually, it all collapsed into a single idea:
 
-• **Behavior lives in state machines** — because behavior must remain deterministic.  
+• **Behavior lives in the core** — because behavior must remain deterministic.  
   *(Functional Core / Imperative Shell)*  
   [Learn more →](https://youtu.be/P1vES9AgfC4?si=UGbUEGexlkK9axkG)
 
