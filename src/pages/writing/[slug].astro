@@ -21,8 +21,8 @@ const subscribeVariant = post.data.series
     : "seriesActive"
   : "generic";
 const canonicalUrl = Astro.site
-  ? new URL(Astro.url.pathname, Astro.site).toString()
-  : Astro.url.toString();
+  ? new URL(`/writing/${post.slug}/`, Astro.site).toString()
+  : new URL(`/writing/${post.slug}/`, Astro.url).toString();
 const blogSchema: Record<string, unknown> = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -42,7 +42,13 @@ if (post.data.updatedDate) {
 }
 ---
 
-<BaseLayout title={title} description={description} bodyClass="no-js">
+<BaseLayout
+  title={title}
+  description={description}
+  bodyClass="no-js"
+  canonical={canonicalUrl}
+  ogType="article"
+>
   <Fragment slot="head">
     <script
       type="application/ld+json"
