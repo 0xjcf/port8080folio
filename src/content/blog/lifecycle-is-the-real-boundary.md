@@ -558,7 +558,7 @@ So far, the series has established:
 
 That leaves one final question:
 
-Once lifecycles are clearly bounded, the next question becomes simpler—and harder to get right: **what doesn’t need a lifecycle at all?**
+**What doesn’t need a lifecycle at all?**
 
 The answer isn’t more structure.
 

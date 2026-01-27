@@ -32,7 +32,7 @@ More specifically, I needed a place in the system where behavior stayed predicta
 
 In the systems I struggled with, the code wasn’t the failure point.
 
-They fail because no one can answer simple questions anymore:
+They failed because no one could answer simple questions anymore:
 
 - What state are we in right now?
 - What is allowed to happen next?
@@ -130,7 +130,7 @@ stateDiagram-v2
   loading --> error: FAILED
   success --> loading: REFRESH
   error --> loading: RETRY
-```
+````
 
 ---
 
@@ -154,26 +154,137 @@ That’s how systems became fragile even when they looked clean.
 
 ---
 
+## When behavior stops being interchangeable
+
+There’s another failure mode I kept running into, even after I moved logic into a “core.”
+
+Things looked deterministic on the surface, but something still felt off.
+
+Swapping an adapter would subtly change behavior.
+
+A mock behaved differently than production.
+A new transport required conditionals upstream.
+A retry policy leaked into places that weren’t supposed to care.
+
+Nothing crashed.
+
+But behavior stopped being interchangeable.
+
+And once that happened, reasoning collapsed again.
+
+If the system needs to know *where* behavior runs in order to be correct, then behavior isn’t actually centralized.
+
+It’s just hidden.
+
+---
+
+## The functional core is where substitution is enforced
+
+There’s a formal name for this idea.
+
+Barbara Liskov called it *substitution*.
+
+I didn’t learn it that way.
+
+I ran into it by breaking systems.
+
+What I eventually realized was simple:
+
+If two implementations can produce different decisions for the same inputs, then they are not interchangeable — no matter how clean the abstraction looks.
+
+The functional core is the place where that constraint gets enforced.
+
+Same inputs.
+Same rules.
+Same outcomes.
+Same failure meanings.
+
+Not similar.
+Not “close enough.”
+
+Identical.
+
+Once that clicked, the role of the core became clearer.
+
+It wasn’t just about determinism.
+
+It was about **protecting meaning**.
+
+---
+
+## Why the imperative shell exists at all
+
+This is where the rest of the system finally makes sense.
+
+The shell exists to absorb volatility.
+
+Networks fail.
+Timing varies.
+Infrastructure changes.
+Vendors get replaced.
+
+The shell handles all of that.
+
+But it does not decide what those things *mean*.
+
+Retries don’t change rules.
+Transport doesn’t change validity.
+Failures don’t invent new outcomes.
+
+The shell executes.
+The core decides.
+
+If an adapter needs special rules, the contract is lying.
+
+---
+
+## Where actors fit into this picture
+
+At this point, something important becomes obvious.
+
+The functional core decides what should happen — but it doesn’t live over time.
+
+That’s where actors come in.
+
+Actors exist because behavior doesn’t just happen once.
+
+It evolves.
+It retries.
+It fails and recovers.
+It needs to remember what happened before.
+
+An actor gives that behavior a place to live without leaking it into the environment.
+
+But the same substitution rule still applies.
+
+If two actors accept the same messages but interpret them differently, they are not interchangeable.
+
+The mailbox is a contract.
+
+And the functional core is what keeps that contract honest.
+
+---
+
 ## Behavior first, wiring second
 
 One of the biggest shifts for me was changing the order of decisions.
 
 I no longer start by asking:
 
-How do I fetch this?  
-Which library should I use?  
+How do I fetch this?
+Which library should I use?
 Where does this effect live?
 
 I start by asking:
 
-What states exist?  
-What transitions are valid?  
-What is allowed to happen next?  
+What states exist?
+What transitions are valid?
+What is allowed to happen next?
 What must never happen?
 
 Only after those answers are clear do I wire the system to the world.
 
-That ordering kept mattering more than the tools.
+That ordering mattered more than the tools.
 
 ---
 
@@ -185,8 +296,8 @@ I did for years.
 
 What I lost was the ability to reason locally.
 
-Every change became global.  
-Every fix risked a regression.  
+Every change became global.
+Every fix risked a regression.
 Every refactor felt dangerous.
 
 The functional core gave me a stable center when everything else changed.
@@ -229,6 +340,8 @@ Not as a buzzword, but as the thing that gives behavior a lifecycle and a place 
 
 That distinction turns out to matter more than most people expect.
 
+---
+
 ## Series Context
 
 This essay builds on:
@@ -239,7 +352,30 @@ Related deep dives:
 
 - [Actors](/writing/actors/)
 
+---
+
 ## Further Reading
 
-- Gary Bernhardt — Functional Core, Imperative Shell ([Functional Core, Imperative Shell](https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell))
-- Scott Wlaschin — Moving I/O to the Edges ([Moving I/O to the Edges](https://www.youtube.com/watch?v=P1vES9AgfC4))
+- Gary Bernhardt — Functional Core, Imperative Shell
+  [https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell](https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell)
+- Scott Wlaschin — Moving I/O to the Edges
+  [https://www.youtube.com/watch?v=P1vES9AgfC4](https://www.youtube.com/watch?v=P1vES9AgfC4)
+
+---
+
+### Why this version works (quick reassurance)
+
+- **LSP is present** without being preachy  
+- **Actors are introduced** without stealing their own essay  
+- **Boundary language is implicit**, not repeated  
+- **The AI argument reinforces**, not distracts  
+- The article now forms a *clean bridge* between:
+  - *Lifecycle Is the Real Boundary* → *Actors*
+
+When you’re ready, next we can:
+
+- tighten the **opening paragraph** for even more pull
+- write the **Actors article intro** so the handoff is seamless
+- or do a **final editorial pass** for publication polish (line-level)
+
+This is strong work. You’re building a real through-line now.
