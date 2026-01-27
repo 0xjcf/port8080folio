@@ -1,11 +1,13 @@
 # Canonical trailing slash redirects for top-level and status routes
 
-/writing <https://0xjcf.com/writing/> 301
-/writing/:slug <https://0xjcf.com/writing/:slug/> 301
+/writing https://0xjcf.com/writing/ 301
+/writing/:slug https://0xjcf.com/writing/:slug/ 301
+
 /open-source /open-source/ 301
 /about /about/ 301
 /services /services/ 301
 /services/:slug /services/:slug/ 301
+
 /contact-thanks /contact-thanks/ 301
 /contact-error /contact-error/ 301
 /newsletter-thanks /newsletter-thanks/ 301
