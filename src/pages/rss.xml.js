@@ -1,10 +1,9 @@
-import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
+import { getPublishedBlogPosts } from '../lib/content/blog';
 
 export async function GET(context) {
-  const posts = await getCollection('blog');
+  const posts = await getPublishedBlogPosts();
   const items = posts
-    .filter((post) => !post.data.draft)
     .sort((firstPost, secondPost) => {
       const publicationDateDifference =
         secondPost.data.pubDate.valueOf() - firstPost.data.pubDate.valueOf();

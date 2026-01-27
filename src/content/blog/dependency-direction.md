@@ -12,7 +12,7 @@ tags:
   - dependency-direction
   - systems-thinking
   - maintainability
-draft: false
+draft: true
 ---
 
 By the time most systems fail, nothing is technically broken.

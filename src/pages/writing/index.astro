@@ -1,23 +1,20 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPublishedBlogPosts } from "../../lib/content/blog";
 
-const title = 'Writing | Jose Flores';
-const description = 'Writing on frontend architecture, statecharts, and the actor model.';
+const title = "Writing | Jose Flores";
+const description =
+  "Writing on frontend architecture, statecharts, and the actor model.";
 
-const allowedSlugs = ['when-code-becomes-cheap'];
+const posts = (await getPublishedBlogPosts()).sort((firstPost, secondPost) => {
+  const firstEditionValue = firstPost.data.edition ?? 0;
+  const secondEditionValue = secondPost.data.edition ?? 0;
+  return firstEditionValue - secondEditionValue;
+});
 
-const posts = (await getCollection('blog'))
-  .filter((post) => !post.data.draft && allowedSlugs.includes(post.slug))
-  .sort((firstPost, secondPost) => {
-    const firstEditionValue = firstPost.data.edition ?? 0;
-    const secondEditionValue = secondPost.data.edition ?? 0;
-    return firstEditionValue - secondEditionValue;
-  });
-
-const seriesName = 'Behavior & Boundaries';
+const seriesName = "Behavior & Boundaries";
 const seriesDescription =
-  'Essays on responsibility, boundaries, and why architecture matters when code is cheap.';
+  "Essays on responsibility, boundaries, and why architecture matters when code is cheap.";
 const seriesPosts = posts.filter((post) => post.data.series === seriesName);
 const seriesCount = seriesPosts.length;
 const seriesLatestPost = [...seriesPosts].sort((firstPost, secondPost) => {
@@ -29,55 +26,92 @@ const seriesLatestEdition = seriesLatestPost?.data.edition;
 ---
 
 <BaseLayout title={title} description={description} bodyClass="no-js">
-  <main id="main" role="main" class="section section--writing-page page-content">
+  <main
+    id="main"
+    role="main"
+    class="section section--writing-page page-content"
+  >
     <div class="container">
       <h1 class="section__title">Writing</h1>
-      <p class="section__subtitle">Notes on frontend architecture, statecharts, and the actor model.</p>
+      <p class="section__subtitle">
+        Notes on frontend architecture, statecharts, and the actor model.
+      </p>
 
       <div class="section__content">
-        {seriesCount > 0 && (
-          <section class="writing-series" aria-labelledby="writing-series-title">
-            <h2 id="writing-series-title" class="writing-series__heading">Series</h2>
-            <div class="writing-series__card" role="group" aria-label={`${seriesName} series`}>
-              <div class="writing-series__intro">
-                <p class="writing-series__title">{seriesName}</p>
-                <p class="writing-series__description">{seriesDescription}</p>
-              </div>
-              <div class="writing-series__meta">
-                <span class="writing-series__count">{seriesCount} posts</span>
-                {seriesLatestPost && (
-                  <span class="writing-series__start">
-                    Latest:
-                    {seriesLatestEdition && (
-                      <span class="writing-series__edition">Edition {seriesLatestEdition}</span>
-                    )}
-                    <a class="writing-series__link" href={`/writing/${seriesLatestPost.slug}/`}>
-                      {seriesLatestPost.data.title} →
-                    </a>
-                  </span>
-                )}
-              </div>
-            </div>
-          </section>
-        )}
-        {seriesCount > 0 && <div class="writing-series__divider" aria-hidden="true"></div>}
-        {posts.length === 0 ? (
-          <p class="text-muted">Posts are coming soon.</p>
-        ) : (
-          <ul class="writing-list">
-            {posts.map((post) => (
-              <li class="writing-list__item">
-                <div class="writing-list__title">
-                  {post.data.edition && (
-                    <span class="writing-list__edition">Edition {post.data.edition}</span>
-                  )}
-                  <a class="writing-list__link" href={`/writing/${post.slug}/`}>{post.data.title}</a>
+        {
+          seriesCount > 0 && (
+            <section
+              class="writing-series"
+              aria-labelledby="writing-series-title"
+            >
+              <h2 id="writing-series-title" class="writing-series__heading">
+                Series
+              </h2>
+              <div
+                class="writing-series__card"
+                role="group"
+                aria-label={`${seriesName} series`}
+              >
+                <div class="writing-series__intro">
+                  <p class="writing-series__title">{seriesName}</p>
+                  <p class="writing-series__description">{seriesDescription}</p>
                 </div>
-                <p class="writing-list__description text-muted">{post.data.description}</p>
-              </li>
-            ))}
-          </ul>
-        )}
+                <div class="writing-series__meta">
+                  <span class="writing-series__count">{seriesCount} posts</span>
+                  {seriesLatestPost && (
+                    <span class="writing-series__start">
+                      Latest:
+                      {seriesLatestEdition && (
+                        <span class="writing-series__edition">
+                          Edition {seriesLatestEdition}
+                        </span>
+                      )}
+                      <a
+                        class="writing-series__link"
+                        href={`/writing/${seriesLatestPost.slug}/`}
+                      >
+                        {seriesLatestPost.data.title} →
+                      </a>
+                    </span>
+                  )}
+                </div>
+              </div>
+            </section>
+          )
+        }
+        {
+          seriesCount > 0 && (
+            <div class="writing-series__divider" aria-hidden="true" />
+          )
+        }
+        {
+          posts.length === 0 ? (
+            <p class="text-muted">Posts are coming soon.</p>
+          ) : (
+            <ul class="writing-list">
+              {posts.map((post) => (
+                <li class="writing-list__item">
+                  <div class="writing-list__title">
+                    {post.data.edition && (
+                      <span class="writing-list__edition">
+                        Edition {post.data.edition}
+                      </span>
+                    )}
+                    <a
+                      class="writing-list__link"
+                      href={`/writing/${post.slug}/`}
+                    >
+                      {post.data.title}
+                    </a>
+                  </div>
+                  <p class="writing-list__description text-muted">
+                    {post.data.description}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )
+        }
       </div>
     </div>
   </main>

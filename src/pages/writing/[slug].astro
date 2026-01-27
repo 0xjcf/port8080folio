@@ -1,16 +1,14 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getPublishedBlogPosts, type BlogPost } from "../../lib/content/blog";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SubscribeInline from "../../components/SubscribeInline.astro";
 
-type BlogPost = CollectionEntry<"blog">;
-
 export async function getStaticPaths() {
-  const posts = (await getCollection("blog")) as BlogPost[];
-  const allowedSlugs = ["when-code-becomes-cheap"];
-  return posts
-    .filter((post) => !post.data.draft && allowedSlugs.includes(post.slug))
-    .map((post) => ({ params: { slug: post.slug }, props: { post } }));
+  const posts = await getPublishedBlogPosts();
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
 }
 
 const { post } = Astro.props as { post: BlogPost };

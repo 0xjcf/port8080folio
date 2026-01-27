@@ -11,7 +11,7 @@ tags:
   - actor-model
   - boundaries
   - systems-thinking
-draft: false
+draft: true
 ---
 
 ## The Imperative Shell

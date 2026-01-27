@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
+import { getPublishedBlogPosts, type BlogPost } from "../lib/content/blog";
 
 const title =
     "Jose Flores | Statecharts & Actor Model in TypeScript | Writing & Open Source";
@@ -28,54 +27,25 @@ type WritingPreviewItem = {
     edition?: number;
 };
 
-const allowedSlugs = ["when-code-becomes-cheap"];
-
-const writingEntries: CollectionEntry<"blog">[] = (await getCollection("blog"))
-    .filter(
-        (writingEntry: CollectionEntry<"blog">) =>
-            !writingEntry.data.draft &&
-            allowedSlugs.includes(writingEntry.slug),
-    )
-    .sort(
-        (
-            firstWritingEntry: CollectionEntry<"blog">,
-            secondWritingEntry: CollectionEntry<"blog">,
-        ) => {
-            const publicationDateDifference =
-                secondWritingEntry.data.pubDate.valueOf() -
-                firstWritingEntry.data.pubDate.valueOf();
-            if (publicationDateDifference !== 0) {
-                return publicationDateDifference;
-            }
-
-            const firstEditionValue = firstWritingEntry.data.edition ?? 0;
-            const secondEditionValue = secondWritingEntry.data.edition ?? 0;
-            return secondEditionValue - firstEditionValue;
-        },
-    );
-
-const seriesName = "Behavior & Boundaries";
-const seriesStartPost = writingEntries
-    .filter((writingEntry) => writingEntry.data.series === seriesName)
-    .sort((firstWritingEntry, secondWritingEntry) => {
-        const firstEditionValue = firstWritingEntry.data.edition ?? 0;
-        const secondEditionValue = secondWritingEntry.data.edition ?? 0;
-        if (firstEditionValue !== secondEditionValue) {
-            return firstEditionValue - secondEditionValue;
+const writingEntries = (await getPublishedBlogPosts()).sort(
+    (firstWritingEntry: BlogPost, secondWritingEntry: BlogPost) => {
+        const publicationDateDifference =
+            secondWritingEntry.data.pubDate.valueOf() -
+            firstWritingEntry.data.pubDate.valueOf();
+        if (publicationDateDifference !== 0) {
+            return publicationDateDifference;
         }
 
-        return (
-            firstWritingEntry.data.pubDate.valueOf() -
-            secondWritingEntry.data.pubDate.valueOf()
-        );
-    })[0];
+        const firstEditionValue = firstWritingEntry.data.edition ?? 0;
+        const secondEditionValue = secondWritingEntry.data.edition ?? 0;
+        return secondEditionValue - firstEditionValue;
+    },
+);
 
-const writingPreviewEntries = seriesStartPost
-    ? [seriesStartPost]
-    : writingEntries.slice(0, 1);
+const writingPreviewEntries = writingEntries.slice(0, 1);
 
 const writingPreviewItems: WritingPreviewItem[] = writingPreviewEntries.map(
-    (writingEntry: CollectionEntry<"blog">) => ({
+    (writingEntry: BlogPost) => ({
         pathSegment: writingEntry.slug,
         title: writingEntry.data.title,
         description: writingEntry.data.description,
@@ -274,7 +244,7 @@ const writingPreviewItems: WritingPreviewItem[] = writingPreviewEntries.map(
                                         )}
                                         <a
                                             class="writing__link"
-                                            href={`/writing/${writingPreviewItem.pathSegment}`}
+                                            href={`/writing/${writingPreviewItem.pathSegment}/`}
                                             data-cta={`writing_preview_${writingPreviewItem.pathSegment}`}
                                         >
                                             {writingPreviewItem.title}

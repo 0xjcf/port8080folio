@@ -10,7 +10,7 @@ tags:
   - actor-model
   - boundaries
   - systems-thinking
-draft: false
+draft: true
 ---
 
 I didn’t sit down one day and decide to change how I handle errors.

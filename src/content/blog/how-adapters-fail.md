@@ -11,7 +11,7 @@ tags:
   - adapters
   - responsibility
   - systems-thinking
-draft: false
+draft: true
 ---
 
 By the time I heard teams talk about adapters, it was usually too late.
