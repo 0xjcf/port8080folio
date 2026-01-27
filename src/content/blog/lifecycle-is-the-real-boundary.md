@@ -569,5 +569,5 @@ It’s knowing which parts of the system should never carry time in the first pl
 ## Series continuation
 
 **Next in Behavior & Boundaries:**.  
-**The Function Core**  
+**The Functional Core**  
 **What remains once time, coordination, and side effects are removed**
