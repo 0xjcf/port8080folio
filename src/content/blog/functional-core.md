@@ -562,9 +562,7 @@ The functional core can make the difference.
 
 ## Final thought
 
-The functional core isn’t about style.
-
-It’s about responsibility.
+The functional core is about responsibility.
 
 It’s the place where behavior is owned, named, and protected.
 

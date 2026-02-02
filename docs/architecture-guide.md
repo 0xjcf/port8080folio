@@ -283,11 +283,11 @@ export function createEligibilityStore(fsmActor) {
     if (result.emit) {
       const snapshot = fsmActor.getSnapshot();
 
-      if (!snapshot.can(result.emit as any)) {
+      if (!snapshot.can(result.emit)) {
         throw new Error(`Illegal lifecycle event: ${result.emit.type}`);
       }
 
-      fsmActor.send(result.emit as any);
+      fsmActor.send(result.emit);
     }
   }
 
