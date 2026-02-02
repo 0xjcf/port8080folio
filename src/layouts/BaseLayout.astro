@@ -10,6 +10,7 @@ const {
   ogType = "website",
   twitterCard = "summary_large_image",
   noindex = false,
+  showTocToggle = false,
 } = Astro.props;
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
@@ -161,6 +162,17 @@ const imageUrl =
           -->
         </nav>
         <div class="site-nav__controls">
+          {showTocToggle ? (
+            <button
+              class="site-nav__toc"
+              type="button"
+              data-toc-toggle
+              aria-controls="writing-toc-panel"
+              aria-expanded="false"
+            >
+              On this page
+            </button>
+          ) : null}
           <button
             class="site-nav__toggle"
             type="button"

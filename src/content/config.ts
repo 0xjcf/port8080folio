@@ -12,6 +12,14 @@ const blog = defineCollection({
     isSeriesFinal: z.boolean().optional(),
     tags: z.array(z.string()).optional(),
     draft: z.boolean().optional(),
+    glossary: z
+      .array(
+        z.object({
+          term: z.string(),
+          definition: z.string(),
+        }),
+      )
+      .optional(),
   }),
 });
 

@@ -26,22 +26,20 @@
     "pre > code[data-lang='mermaid']",
   ].join(', ');
 
-  const getThemeVars = () => {
-    const styles = getComputedStyle(document.documentElement);
-    const readFont = (name, fallback) => {
-      const value = styles.getPropertyValue(name).trim();
-      return value || fallback;
-    };
+  const cssVar = (name, fallback = '') =>
+    getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
 
-    return {
-      text: '#111827',
-      border: '#cbd5e1',
-      surfaceAlt: '#f1f5f9',
-      labelBg: '#e2e8f0',
-      labelText: '#111827',
-      font: readFont('--font-sans', 'Inter, system-ui, sans-serif'),
-    };
-  };
+  const getThemeVars = () => ({
+    text: '#475569',
+    nodeText: '#111827',
+    border: '#cbd5e1',
+    surfaceAlt: '#f1f5f9',
+    labelBg: 'rgba(241, 245, 249, 0.95)',
+    labelText: '#111827',
+    line: '#94a3b8',
+    bg: 'transparent',
+    font: cssVar('--font-sans', 'Inter, system-ui, sans-serif'),
+  });
 
   const applyLabelStyles = (svg) => {
     if (!svg) return;
@@ -54,25 +52,42 @@
     if (diagram.rendered && !force) return;
     diagram.rendering = true;
     const theme = getThemeVars();
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
     try {
       const mermaid = await loadMermaid();
+      const isSequenceDiagram = /^\s*sequenceDiagram/.test(diagram.source);
+      const sequenceThemeVars = isSequenceDiagram
+        ? {
+          actorBkg: theme.surfaceAlt,
+          actorBorder: theme.border,
+          actorTextColor: theme.nodeText,
+          signalColor: theme.line,
+          signalTextColor: theme.line,
+          noteBkg: theme.labelBg,
+          noteTextColor: theme.labelText,
+        }
+        : {};
       mermaid.initialize({
         startOnLoad: false,
         securityLevel: 'strict',
         theme: 'base',
         themeVariables: {
+          background: theme.bg,
           fontFamily: theme.font,
           fontSize: '18px',
           primaryColor: theme.surfaceAlt,
-          primaryTextColor: theme.text,
+          primaryTextColor: theme.nodeText,
           primaryBorderColor: theme.border,
           secondaryColor: theme.surfaceAlt,
           tertiaryColor: theme.surfaceAlt,
-          lineColor: '#94a3b8',
+          lineColor: theme.line,
           edgeLabelBackground: theme.labelBg,
           edgeLabelColor: theme.labelText,
+          labelBackground: theme.labelBg,
+          labelTextColor: theme.labelText,
           padding: 16,
+          ...sequenceThemeVars,
         },
         flowchart: {
           htmlLabels: true,
@@ -99,9 +114,25 @@
             line-height: 1.4;
             text-align: center;
           }
+          /* Sequence diagram message labels */
+          .messageText,
+          .messageText tspan,
+          .messageText span,
+          .messageText p {
+            fill: ${theme.line};
+            color: ${theme.line};
+          }
           .node .label {
             text-align: center;
           }
+          ${isDark ? `
+          marker path,
+          .marker path,
+          .arrowheadPath {
+            fill: ${theme.line};
+            stroke: ${theme.line};
+          }
+          ` : ''}
         `,
       });
 
@@ -174,17 +205,17 @@
     const observer =
       'IntersectionObserver' in window
         ? new IntersectionObserver(
-            (entries) => {
-              entries.forEach((entry) => {
-                const diagram = entry.target.__diagramRef;
-                if (!diagram) return;
-                if (entry.isIntersecting) {
-                  renderDiagram(diagram);
-                }
-              });
-            },
-            { rootMargin: '300px 0px', threshold: 0 },
-          )
+          (entries) => {
+            entries.forEach((entry) => {
+              const diagram = entry.target.__diagramRef;
+              if (!diagram) return;
+              if (entry.isIntersecting) {
+                renderDiagram(diagram);
+              }
+            });
+          },
+          { rootMargin: '300px 0px', threshold: 0 },
+        )
         : null;
 
     diagrams.forEach((diagram) => {
@@ -195,5 +226,6 @@
         renderDiagram(diagram);
       }
     });
+
   });
 })();

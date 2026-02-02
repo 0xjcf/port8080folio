@@ -71,6 +71,17 @@
   --color-code-block-text: #cfd8e6;
   --color-code-block-border: #243042;
 
+  /* Mermaid tokens (dark overrides for legible labels/edges) */
+  --mermaid-bg: #0e1217;
+  --mermaid-fg: #e5e7eb;
+  --mermaid-node-bg: #f1f5f9;
+  --mermaid-node-border: #cbd5e1;
+  --mermaid-node-text: #e5e7eb;
+  --mermaid-edge: #e5e7eb;
+  --mermaid-label-bg: rgba(241, 245, 249, 0.08);
+  --mermaid-label-text: #e5e7eb;
+  --mermaid-accent: #ef4444;
+
   /* Keep the same neutral token NAMES as light mode so components don't break */
   --color-neutral-000: oklch(96% 0 0);
   --color-neutral-050: oklch(90% 0 0);

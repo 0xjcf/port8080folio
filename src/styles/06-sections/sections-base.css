@@ -509,6 +509,48 @@
   max-width: 72ch;
 }
 
+.writing-shell {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.writing-shell__main {
+  grid-area: main;
+}
+
+.writing-shell__sidebar {
+  grid-area: toc;
+}
+
+@media (min-width: 960px) {
+  .section--writing-page {
+    --toc-height: 44rem;
+  }
+
+  .writing-shell {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+    grid-template-areas: "main toc";
+    align-items: start;
+  }
+
+  .writing-shell__sidebar {
+    --toc-offset: max(
+      var(--space-6),
+      calc((100vh - var(--toc-height, 44rem)) / 2)
+    );
+    position: sticky;
+    top: var(--toc-offset);
+    align-self: start;
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+    min-height: var(--toc-height, 44rem);
+  }
+}
+
+.writing-shell__main {
+  min-width: 0;
+}
+
 .page-content .writing-article header {
   margin-bottom: var(--space-8);
 }
@@ -560,6 +602,248 @@
 .page-content .writing-article pre {
   margin-block: var(--space-8);
   border-radius: var(--radius-lg);
+}
+
+.page-content .writing-toc {
+  margin-block: 0;
+  padding: 0;
+  border-radius: var(--radius-lg);
+  border: var(--space-px) solid var(--color-border);
+  background: var(--color-surface);
+  height: var(--toc-height, 44rem);
+  max-height: var(--toc-height, 44rem);
+  position: static;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--color-text) 30%, transparent)
+    transparent;
+}
+
+.page-content .writing-toc.is-fixed {
+  position: fixed;
+  top: var(--toc-fixed-top, 0px);
+  left: var(--toc-fixed-left, 0px);
+  width: var(--toc-fixed-width, 0px);
+}
+
+.page-content .writing-toc__header {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  box-shadow: 0 var(--space-px) 0 var(--color-border);
+  border-bottom: var(--space-px) solid var(--color-border);
+}
+
+.page-content .writing-toc__title {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.page-content .writing-toc__close {
+  display: none;
+  border: var(--space-px) solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.75rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+  background: transparent;
+}
+
+.page-content .writing-toc-toggle {
+  display: none;
+  margin-top: var(--space-4);
+  border: var(--space-px) solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.9rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+  background: var(--color-surface);
+  align-self: flex-start;
+}
+
+.writing-toc-backdrop {
+  display: none;
+}
+
+.page-content .writing-toc-backdrop {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: transparent;
+}
+
+.page-content .writing-toc__list {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-3) var(--space-4) var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+  border-left: var(--space-px) solid var(--color-border);
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.page-content .writing-toc__item {
+  position: relative;
+}
+
+.page-content .writing-toc__item[data-depth="3"] {
+  padding-left: var(--space-4);
+}
+
+.page-content .writing-toc__link {
+  color: var(--color-text);
+  opacity: 0.85;
+  text-decoration: none;
+  display: block;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+.page-content .writing-toc__item.is-active::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--space-4));
+  top: 0.1em;
+  bottom: 0.1em;
+  width: var(--space-0-5);
+  border-radius: var(--radius-full);
+  background: var(--color-accent-edge);
+}
+
+.page-content .writing-toc__link.is-active {
+  color: var(--color-accent-edge);
+  font-weight: var(--font-semibold);
+  opacity: 1;
+}
+
+.page-content .writing-toc__link:hover,
+.page-content .writing-toc__link:focus-visible {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: var(--space-1);
+}
+
+@media (max-width: 959.98px) {
+  .page-content .writing-toc-toggle {
+    display: inline-flex;
+  }
+
+  .writing-shell__sidebar {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0;
+    z-index: var(--z-overlay);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.35s ease,
+      visibility 0s linear 0.35s;
+  }
+
+  .writing-shell__sidebar.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      opacity 0.35s ease,
+      visibility 0s linear 0s;
+  }
+
+  .writing-toc-backdrop {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: color-mix(in oklch, var(--color-text) 35%, transparent);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .page-content .writing-toc {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+    padding-top: var(--space-16);
+    transform: translateY(100%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .page-content .writing-toc__close {
+    display: inline-flex;
+  }
+
+  .writing-shell__sidebar.is-open .writing-toc-backdrop {
+    opacity: 1;
+  }
+
+  .writing-shell__sidebar.is-open .writing-toc {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .writing-shell__sidebar,
+  .writing-toc-backdrop,
+  .page-content .writing-toc {
+    transition: none;
+    animation: none;
+  }
+}
+
+
+.page-content .writing-glossary {
+  margin-block: var(--space-10);
+  padding-top: var(--space-6);
+  border-top: var(--space-px) solid var(--color-border);
+}
+
+.page-content .writing-glossary__title {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+}
+
+.page-content .writing-glossary__list {
+  margin: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.page-content .writing-glossary__item {
+  margin: 0;
+}
+
+.page-content .writing-glossary__term {
+  font-weight: var(--font-semibold);
+}
+
+.page-content .writing-glossary__definition {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-light);
 }
 
 .page-content .writing-article .diagram,

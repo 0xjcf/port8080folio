@@ -12,9 +12,10 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props as { post: BlogPost };
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 const title = `${post.data.title} | Jose Flores`;
 const description = post.data.description;
+const titleSlug = "article-title";
 const subscribeVariant = post.data.series
   ? post.data.isSeriesFinal
     ? "seriesComplete"
@@ -48,6 +49,7 @@ if (post.data.updatedDate) {
   bodyClass="no-js"
   canonical={canonicalUrl}
   ogType="article"
+  showTocToggle={Boolean(headings?.length)}
 >
   <Fragment slot="head">
     <script
@@ -58,28 +60,333 @@ if (post.data.updatedDate) {
     <script defer type="module" src="/scripts/pe.js"></script>
     <script defer type="module" src="/scripts/mermaid-diagrams.js"></script>
   </Fragment>
-  <main
-    id="main"
-    role="main"
-    class="section section--writing-page page-content"
-  >
-    <div class="container">
-      <article class="writing-article">
-        <header>
-          <h1 class="section__title">{post.data.title}</h1>
-          <p class="lead writing-article__summary">{post.data.description}</p>
-        </header>
-        <div class="section__content writing-article__content">
-          <Content />
-        </div>
-        <SubscribeInline
-          seriesName={post.data.series}
-          variant={subscribeVariant}
-          formId={`subscribe-${post.slug}`}
-        />
-      </article>
-    </div>
-  </main>
+  <div class="writing-shell section section--writing-page page-content">
+    <main id="main" role="main" class="writing-shell__main">
+      <div class="container">
+        <article class="writing-article" id="writing-article">
+          <header>
+            <h1 class="section__title" id={titleSlug}>
+              {post.data.title}
+            </h1>
+            <p class="lead writing-article__summary">{post.data.description}</p>
+          </header>
+          <div class="section__content writing-article__content">
+            <Content />
+          </div>
+          {post.data.glossary?.length ? (
+            <section class="writing-glossary" aria-labelledby="glossary-title">
+              <h2 id="glossary-title" class="writing-glossary__title">
+                Glossary
+              </h2>
+              <dl class="writing-glossary__list">
+                {post.data.glossary.map((entry) => (
+                  <div class="writing-glossary__item">
+                    <dt class="writing-glossary__term">{entry.term}</dt>
+                    <dd class="writing-glossary__definition">
+                      {entry.definition}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ) : null}
+          <SubscribeInline
+            seriesName={post.data.series}
+            variant={subscribeVariant}
+            formId={`subscribe-${post.slug}`}
+          />
+        </article>
+      </div>
+    </main>
+    {headings?.length ? (
+      <aside class="writing-shell__sidebar" aria-label="Table of contents">
+        <button class="writing-toc-backdrop" type="button" data-toc-dismiss>
+          Close table of contents
+        </button>
+        <nav class="writing-toc" id="writing-toc-panel">
+          <div class="writing-toc__header">
+            <p class="writing-toc__title">On this page</p>
+            <button
+              class="writing-toc__close"
+              type="button"
+              data-toc-dismiss
+              aria-label="Close table of contents"
+            >
+              Close
+            </button>
+          </div>
+          <ol
+            class="writing-toc__list"
+            id="writing-toc-list"
+            data-toc-scroll="true"
+          >
+            <li class="writing-toc__item" data-depth="1">
+              <a
+                class="writing-toc__link"
+                href={`#${titleSlug}`}
+                data-toc-link={titleSlug}
+              >
+                {post.data.title}
+              </a>
+            </li>
+            {headings
+              .filter((heading) => heading.depth >= 2 && heading.depth <= 3)
+              .map((heading) => (
+                <li class="writing-toc__item" data-depth={heading.depth}>
+                  <a
+                    class="writing-toc__link"
+                    href={`#${heading.slug}`}
+                    data-toc-link={heading.slug}
+                  >
+                    {heading.text}
+                  </a>
+                </li>
+              ))}
+          </ol>
+        </nav>
+      </aside>
+    ) : null}
+  </div>
+  <script is:inline type="module">
+    (() => {
+      const tocList = document.getElementById("writing-toc-list");
+      const article = document.getElementById("writing-article");
+      const tocScroll = document.querySelector('[data-toc-scroll="true"]');
+      if (!tocList || !article || !tocScroll) return;
+
+      const headings = Array.from(
+        article.querySelectorAll("h1[id], h2[id], h3[id]")
+      );
+      if (!headings.length) return;
+
+      const links = Array.from(tocList.querySelectorAll("[data-toc-link]"));
+      if (!links.length) return;
+
+      let activeId = null;
+      let isUserInteracting = false;
+      let interactionTimeout;
+
+      const setActive = (id) => {
+        if (!id || id === activeId) return;
+        activeId = id;
+        links.forEach((link) => {
+          const isActive = link.getAttribute("data-toc-link") === id;
+          link.classList.toggle("is-active", isActive);
+          if (isActive) {
+            link.setAttribute("aria-current", "true");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+          link.parentElement?.classList.toggle("is-active", isActive);
+        });
+        ensureActiveVisible(id);
+      };
+
+      const markInteracting = () => {
+        isUserInteracting = true;
+        if (interactionTimeout) {
+          window.clearTimeout(interactionTimeout);
+        }
+        interactionTimeout = window.setTimeout(() => {
+          isUserInteracting = false;
+        }, 800);
+      };
+
+      tocScroll.addEventListener("mouseenter", () => {
+        isUserInteracting = true;
+      });
+      tocScroll.addEventListener("mouseleave", () => {
+        isUserInteracting = false;
+      });
+      tocScroll.addEventListener("focusin", () => {
+        isUserInteracting = true;
+      });
+      tocScroll.addEventListener("focusout", () => {
+        isUserInteracting = false;
+      });
+      tocScroll.addEventListener("wheel", markInteracting, {
+        passive: true,
+      });
+      tocScroll.addEventListener("touchstart", markInteracting, {
+        passive: true,
+      });
+
+      const ensureActiveVisible = (id) => {
+        if (isUserInteracting) return;
+        const link = tocList.querySelector(`a[data-toc-link="${id}"]`);
+        if (!link) return;
+
+        const containerRect = tocScroll.getBoundingClientRect();
+        const linkRect = link.getBoundingClientRect();
+
+        if (
+          linkRect.top >= containerRect.top &&
+          linkRect.bottom <= containerRect.bottom
+        ) {
+          return;
+        }
+
+        const containerHeight = containerRect.height;
+        let distance = 0;
+        if (linkRect.bottom < containerRect.top) {
+          distance = containerRect.top - linkRect.bottom;
+        } else if (linkRect.top > containerRect.bottom) {
+          distance = linkRect.top - containerRect.bottom;
+        }
+
+        if (distance > containerHeight) {
+          link.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" });
+        } else {
+          link.scrollIntoView({ block: "nearest", inline: "nearest" });
+        }
+      };
+
+      const setInitialActive = () => {
+        const threshold = window.innerHeight * 0.25;
+        let current = headings[0]?.id;
+        headings.forEach((heading) => {
+          if (heading.getBoundingClientRect().top <= threshold) {
+            current = heading.id;
+          }
+        });
+        setActive(current);
+      };
+
+      setInitialActive();
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActive(entry.target.id);
+            }
+          });
+        },
+        {
+          root: null,
+          threshold: 0,
+          rootMargin: "-25% 0px -70% 0px",
+        }
+      );
+
+      headings.forEach((heading) => observer.observe(heading));
+    })();
+  </script>
+  <script is:inline>
+    (() => {
+      const toggles = Array.from(
+        document.querySelectorAll("[data-toc-toggle]"),
+      );
+      const sidebar = document.querySelector(".writing-shell__sidebar");
+      if (!toggles.length || !sidebar) return;
+
+      const dismissers = sidebar.querySelectorAll("[data-toc-dismiss]");
+      const links = sidebar.querySelectorAll("a[href^=\"#\"]");
+      let previousOverflow = "";
+
+      const setOpen = (open) => {
+        sidebar.classList.toggle("is-open", open);
+        toggles.forEach((btn) =>
+          btn.setAttribute("aria-expanded", open ? "true" : "false"),
+        );
+        if (open) {
+          previousOverflow = document.body.style.overflow;
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = previousOverflow;
+        }
+      };
+
+      toggles.forEach((btn) =>
+        btn.addEventListener("click", () => {
+          const isOpen = sidebar.classList.contains("is-open");
+          setOpen(!isOpen);
+        }),
+      );
+
+      dismissers.forEach((btn) =>
+        btn.addEventListener("click", () => setOpen(false)),
+      );
+
+      links.forEach((link) =>
+        link.addEventListener("click", () => setOpen(false)),
+      );
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") setOpen(false);
+      });
+    })();
+  </script>
+  <script is:inline>
+    (() => {
+      const toc = document.querySelector(".writing-toc");
+      const sidebar = document.querySelector(".writing-shell__sidebar");
+      if (!toc || !sidebar) return;
+
+      const mq = window.matchMedia("(min-width: 960px)");
+      let rafId;
+
+      const clearFixed = () => {
+        toc.classList.remove("is-fixed");
+        document.documentElement.style.removeProperty("--toc-fixed-top");
+        document.documentElement.style.removeProperty("--toc-fixed-left");
+        document.documentElement.style.removeProperty("--toc-fixed-width");
+      };
+
+      const applyFixed = () => {
+        if (!mq.matches) {
+          clearFixed();
+          return;
+        }
+
+        if (sidebar.classList.contains("is-open")) {
+          return;
+        }
+
+        toc.classList.remove("is-fixed");
+        const rect = toc.getBoundingClientRect();
+        document.documentElement.style.setProperty(
+          "--toc-fixed-top",
+          `${rect.top}px`,
+        );
+        document.documentElement.style.setProperty(
+          "--toc-fixed-left",
+          `${rect.left}px`,
+        );
+        document.documentElement.style.setProperty(
+          "--toc-fixed-width",
+          `${rect.width}px`,
+        );
+        toc.classList.add("is-fixed");
+      };
+
+      const scheduleApply = () => {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() =>
+          requestAnimationFrame(applyFixed),
+        );
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", scheduleApply, {
+          once: true,
+        });
+      } else {
+        scheduleApply();
+      }
+
+      mq.addEventListener("change", () => {
+        if (mq.matches) {
+          sidebar.classList.remove("is-open");
+          scheduleApply();
+        } else {
+          clearFixed();
+        }
+      });
+
+      window.addEventListener("resize", scheduleApply, { passive: true });
+    })();
+  </script>
   <script is:inline>
     (() => {
       const applyLabelStyles = () => {
