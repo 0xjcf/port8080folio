@@ -1,6 +1,7 @@
 ---
 import { getPublishedBlogPosts, type BlogPost } from "../../lib/content/blog";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProgressSpineTocMobile from "../../components/ProgressSpineTocMobile.astro";
 import SubscribeInline from "../../components/SubscribeInline.astro";
 
 export async function getStaticPaths() {
@@ -49,7 +50,6 @@ if (post.data.updatedDate) {
   bodyClass="no-js"
   canonical={canonicalUrl}
   ogType="article"
-  showTocToggle={Boolean(headings?.length)}
 >
   <Fragment slot="head">
     <script
@@ -100,26 +100,11 @@ if (post.data.updatedDate) {
     </main>
     {headings?.length ? (
       <aside class="writing-shell__sidebar" aria-label="Table of contents">
-        <button class="writing-toc-backdrop" type="button" data-toc-dismiss>
-          Close table of contents
-        </button>
         <nav class="writing-toc" id="writing-toc-panel">
           <div class="writing-toc__header">
             <p class="writing-toc__title">On this page</p>
-            <button
-              class="writing-toc__close"
-              type="button"
-              data-toc-dismiss
-              aria-label="Close table of contents"
-            >
-              Close
-            </button>
           </div>
-          <ol
-            class="writing-toc__list"
-            id="writing-toc-list"
-            data-toc-scroll="true"
-          >
+          <ol class="writing-toc__list" id="writing-toc-list" data-toc-scroll="true">
             <li class="writing-toc__item" data-depth="1">
               <a
                 class="writing-toc__link"
@@ -146,6 +131,7 @@ if (post.data.updatedDate) {
         </nav>
       </aside>
     ) : null}
+    {headings?.length ? <ProgressSpineTocMobile client:load /> : null}
   </div>
   <script is:inline type="module">
     (() => {
@@ -155,12 +141,59 @@ if (post.data.updatedDate) {
       if (!tocList || !article || !tocScroll) return;
 
       const headings = Array.from(
-        article.querySelectorAll("h1[id], h2[id], h3[id]")
+        article.querySelectorAll("h1[id], h2[id], h3[id]"),
       );
       if (!headings.length) return;
 
+      const endSentinel = document.createElement("div");
+      endSentinel.dataset.tocEndSentinel = "true";
+      endSentinel.setAttribute("aria-hidden", "true");
+      endSentinel.style.cssText = "position: relative; width: 100%; height: 1px;";
+      article.append(endSentinel);
+
+      let sentinelId = "article-end-sentinel";
+      let sentinelCounter = 2;
+      while (document.getElementById(sentinelId)) {
+        sentinelId = `article-end-sentinel-${sentinelCounter}`;
+        sentinelCounter += 1;
+      }
+      endSentinel.id = sentinelId;
+
+      const endHeading = headings.find(
+        (heading) =>
+          (heading.textContent || "").trim().toLowerCase() ===
+          "series continuation",
+      );
+      let endId = endHeading?.id;
+
+      if (!endId) {
+        let fallbackId = "article-end";
+        let endCounter = 2;
+        while (document.getElementById(fallbackId)) {
+          fallbackId = `article-end-${endCounter}`;
+          endCounter += 1;
+        }
+        endId = fallbackId;
+
+        const endItem = document.createElement("li");
+        endItem.className = "writing-toc__item";
+        endItem.dataset.depth = "2";
+        const endLink = document.createElement("a");
+        endLink.className = "writing-toc__link";
+        endLink.href = `#${endId}`;
+        endLink.dataset.tocLink = endId;
+        endLink.textContent = "Series continuation";
+        endItem.append(endLink);
+        tocList.append(endItem);
+      }
+
       const links = Array.from(tocList.querySelectorAll("[data-toc-link]"));
       if (!links.length) return;
+      const tocIds = new Set(
+        links.map((link) => link.getAttribute("data-toc-link")).filter(Boolean),
+      );
+      const tocHeadings = headings.filter((heading) => tocIds.has(heading.id));
+      if (!tocHeadings.length) return;
 
       let activeId = null;
       let isUserInteracting = false;
@@ -241,80 +274,56 @@ if (post.data.updatedDate) {
         }
       };
 
-      const setInitialActive = () => {
-        const threshold = window.innerHeight * 0.25;
-        let current = headings[0]?.id;
-        headings.forEach((heading) => {
-          if (heading.getBoundingClientRect().top <= threshold) {
+      const isTopLocked = () => window.scrollY <= 80;
+      let endIntersecting = false;
+
+      const updateActive = () => {
+        if (isTopLocked()) {
+          setActive(tocHeadings[0]?.id);
+          return;
+        }
+        const readingLine = window.innerHeight * 0.35;
+        const endRect = endSentinel.getBoundingClientRect();
+        const endReached = endIntersecting || endRect.top <= readingLine;
+        if (endReached) {
+          setActive(endId);
+          return;
+        }
+        let current = tocHeadings[0]?.id;
+        tocHeadings.forEach((heading) => {
+          if (heading.getBoundingClientRect().top <= readingLine) {
             current = heading.id;
           }
         });
-        setActive(current);
+        if (current) setActive(current);
       };
 
-      setInitialActive();
-
       const observer = new IntersectionObserver(
+        () => updateActive(),
+        {
+          root: null,
+          threshold: 0,
+          rootMargin: "-35% 0px -55% 0px",
+        },
+      );
+
+      const endObserver = new IntersectionObserver(
         (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActive(entry.target.id);
-            }
-          });
+          endIntersecting = entries.some((entry) => entry.isIntersecting);
+          updateActive();
         },
         {
           root: null,
           threshold: 0,
-          rootMargin: "-25% 0px -70% 0px",
-        }
+          rootMargin: "-35% 0px -45% 0px",
+        },
       );
 
-      headings.forEach((heading) => observer.observe(heading));
-    })();
-  </script>
-  <script is:inline>
-    (() => {
-      const toggles = Array.from(
-        document.querySelectorAll("[data-toc-toggle]"),
-      );
-      const sidebar = document.querySelector(".writing-shell__sidebar");
-      if (!toggles.length || !sidebar) return;
-
-      const dismissers = sidebar.querySelectorAll("[data-toc-dismiss]");
-      const links = sidebar.querySelectorAll("a[href^=\"#\"]");
-      let previousOverflow = "";
-
-      const setOpen = (open) => {
-        sidebar.classList.toggle("is-open", open);
-        toggles.forEach((btn) =>
-          btn.setAttribute("aria-expanded", open ? "true" : "false"),
-        );
-        if (open) {
-          previousOverflow = document.body.style.overflow;
-          document.body.style.overflow = "hidden";
-        } else {
-          document.body.style.overflow = previousOverflow;
-        }
-      };
-
-      toggles.forEach((btn) =>
-        btn.addEventListener("click", () => {
-          const isOpen = sidebar.classList.contains("is-open");
-          setOpen(!isOpen);
-        }),
-      );
-
-      dismissers.forEach((btn) =>
-        btn.addEventListener("click", () => setOpen(false)),
-      );
-
-      links.forEach((link) =>
-        link.addEventListener("click", () => setOpen(false)),
-      );
-
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") setOpen(false);
-      });
+      tocHeadings.forEach((heading) => observer.observe(heading));
+      endObserver.observe(endSentinel);
+      updateActive();
+      window.addEventListener("scroll", updateActive, { passive: true });
+      window.addEventListener("resize", updateActive, { passive: true });
     })();
   </script>
   <script is:inline>
@@ -336,10 +345,6 @@ if (post.data.updatedDate) {
       const applyFixed = () => {
         if (!mq.matches) {
           clearFixed();
-          return;
-        }
-
-        if (sidebar.classList.contains("is-open")) {
           return;
         }
 
@@ -377,7 +382,6 @@ if (post.data.updatedDate) {
 
       mq.addEventListener("change", () => {
         if (mq.matches) {
-          sidebar.classList.remove("is-open");
           scheduleApply();
         } else {
           clearFixed();

@@ -604,6 +604,8 @@
   border-radius: var(--radius-lg);
 }
 
+
+
 .page-content .writing-toc {
   margin-block: 0;
   padding: 0;
@@ -650,42 +652,6 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--color-text-muted);
-}
-
-.page-content .writing-toc__close {
-  display: none;
-  border: var(--space-px) solid var(--color-border);
-  border-radius: var(--radius-full);
-  padding: var(--space-1) var(--space-3);
-  font-size: 0.75rem;
-  font-weight: var(--font-semibold);
-  color: var(--color-text);
-  background: transparent;
-}
-
-.page-content .writing-toc-toggle {
-  display: none;
-  margin-top: var(--space-4);
-  border: var(--space-px) solid var(--color-border);
-  border-radius: var(--radius-full);
-  padding: var(--space-2) var(--space-4);
-  font-size: 0.9rem;
-  font-weight: var(--font-semibold);
-  color: var(--color-text);
-  background: var(--color-surface);
-  align-self: flex-start;
-}
-
-.writing-toc-backdrop {
-  display: none;
-}
-
-.page-content .writing-toc-backdrop {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  background: transparent;
-  color: transparent;
 }
 
 .page-content .writing-toc__list {
@@ -742,75 +708,214 @@
   text-underline-offset: var(--space-1);
 }
 
+.progress-spine {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) 0;
+}
+
+.progress-spine--mobile {
+  display: none;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.progress-spine--mobile.is-scrolled {
+  opacity: 0.9;
+}
+
+.progress-spine--mobile.is-interacting {
+  opacity: 1;
+}
+
+.progress-spine__list {
+  position: relative;
+  display: block;
+  padding: 0;
+  height: 100%;
+  width: var(--spine-hit-size, 36px);
+  overflow: visible;
+}
+
+.progress-spine__list::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--spine-track-width, var(--space-px));
+  background: color-mix(in oklch, var(--color-text) 22%, transparent);
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.progress-spine__list::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--spine-track-width, var(--space-px));
+  height: var(--spine-fill-px, 0px);
+  background: color-mix(in oklch, var(--color-text) 35%, transparent);
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.progress-spine__item {
+  position: absolute;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spine-hit-size, 36px);
+  height: var(--spine-hit-size, 36px);
+  transform: translateX(-50%);
+}
+
+.progress-spine__node {
+  width: var(--spine-hit-size, 36px);
+  height: var(--spine-hit-size, 36px);
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  position: relative;
+  z-index: 2;
+  transition: opacity 0.2s ease;
+}
+
+.progress-spine__node::before {
+  content: "";
+  width: var(--spine-node-size, 0.55rem);
+  height: var(--spine-node-size, 0.55rem);
+  border-radius: var(--radius-full);
+  border: var(--space-px) solid var(--color-border);
+  background: var(--color-surface);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.progress-spine__node.is-upcoming::before {
+  border-color: color-mix(in oklch, var(--color-text) 18%, transparent);
+  background: var(--color-surface);
+}
+
+.progress-spine__node.is-visited::before {
+  border-color: color-mix(in oklch, var(--color-text) 50%, transparent);
+  background: color-mix(in oklch, var(--color-text) 12%, var(--color-surface));
+}
+
+.progress-spine__node.is-active::before {
+  background: var(--color-accent-edge);
+  border-color: transparent;
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-accent-edge) 20%, transparent);
+  transform: scale(1.25);
+}
+
+.progress-spine__node--start::before {
+  width: var(--spine-start-width, 1.35rem);
+  height: var(--spine-start-height, 0.4rem);
+  border-radius: var(--radius-full);
+}
+
+.progress-spine__node--end::before {
+  width: var(--spine-end-width, 1.15rem);
+  height: var(--spine-end-height, 0.4rem);
+  border-radius: var(--radius-full);
+}
+
+.progress-spine__item:first-child {
+  margin-top: 0;
+}
+
+.progress-spine__node--start.is-active::before {
+  transform: none;
+}
+
+.progress-spine__node--end.is-active::before {
+  transform: none;
+}
+
+.progress-spine__node:focus-visible {
+  outline: 2px solid var(--color-accent-edge);
+  outline-offset: 3px;
+}
+
+.toc-toast {
+  display: none;
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--space-3) + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  max-width: min(92vw, 32rem);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-alt, var(--color-surface));
+  color: var(--color-text);
+  border: var(--space-px) solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: calc(var(--z-overlay) + 2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.toc-toast.is-visible {
+  opacity: 1;
+}
+
 @media (max-width: 959.98px) {
-  .page-content .writing-toc-toggle {
-    display: inline-flex;
-  }
-
   .writing-shell__sidebar {
-    position: fixed;
-    inset: 0;
+    display: none;
+  }
+
+  .progress-spine--mobile {
     display: flex;
-    align-items: flex-start;
+    position: fixed;
+    right: calc(10px + env(safe-area-inset-right));
+    top: calc(var(--site-header-h, 64px) + 20px + env(safe-area-inset-top));
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    max-height: calc(100dvh - 140px);
+    height: auto;
+    transform: none;
     justify-content: center;
-    padding: 0;
-    z-index: var(--z-overlay);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition:
-      opacity 0.35s ease,
-      visibility 0s linear 0.35s;
+    align-items: stretch;
+    z-index: calc(var(--z-overlay) + 1);
+    --spine-gap: clamp(0.25rem, 1.2vh, var(--space-2));
+    --spine-node-size: clamp(0.4rem, 1.1vh, 0.55rem);
+    --spine-hit-size: 36px;
+    --spine-track-width: 2px;
+    --spine-start-width: clamp(1.1rem, 2.2vh, 1.4rem);
+    --spine-start-height: 0.4rem;
   }
 
-  .writing-shell__sidebar.is-open {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transition:
-      opacity 0.35s ease,
-      visibility 0s linear 0s;
-  }
-
-  .writing-toc-backdrop {
-    display: block;
-    position: absolute;
-    inset: 0;
-    background: color-mix(in oklch, var(--color-text) 35%, transparent);
-    opacity: 0;
-    transition: opacity 0.35s ease;
-  }
-
-  .page-content .writing-toc {
-    position: relative;
-    width: 100%;
+  .progress-spine--mobile .progress-spine__list {
     height: 100%;
-    max-height: none;
-    border-radius: 0;
-    padding-top: var(--space-16);
-    transform: translateY(100%);
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .page-content .writing-toc__close {
-    display: inline-flex;
-  }
-
-  .writing-shell__sidebar.is-open .writing-toc-backdrop {
-    opacity: 1;
-  }
-
-  .writing-shell__sidebar.is-open .writing-toc {
-    transform: translateY(0);
+  .toc-toast {
+    display: block;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .writing-shell__sidebar,
-  .writing-toc-backdrop,
-  .page-content .writing-toc {
+  .progress-spine__node,
+  .progress-spine__node::before,
+  .toc-toast {
     transition: none;
-    animation: none;
+  }
+  .progress-spine--mobile {
+    transition: none;
   }
 }
 

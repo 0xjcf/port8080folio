@@ -1,0 +1,313 @@
+---
+const { selector = ".writing-article" } = Astro.props as {
+  selector?: string;
+};
+---
+
+<nav
+  class="progress-spine progress-spine--mobile"
+  data-progress-spine
+  data-progress-spine-selector={selector}
+  aria-label="On this page"
+>
+  <div class="progress-spine__list" data-progress-spine-list></div>
+</nav>
+<div
+  class="toc-toast"
+  data-toc-toast
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+></div>
+
+<script is:inline type="module">
+  (() => {
+    const container = document.querySelector("[data-progress-spine]");
+    if (!container) return;
+
+    const list = container.querySelector("[data-progress-spine-list]");
+    if (!list) return;
+    const toast = document.querySelector("[data-toc-toast]");
+
+    const selector =
+      container.getAttribute("data-progress-spine-selector") ||
+      ".writing-article";
+    const article = document.querySelector(selector);
+    if (!article) {
+      container.setAttribute("hidden", "");
+      return;
+    }
+
+    const headings = Array.from(article.querySelectorAll("h2"));
+    if (!headings.length) {
+      container.setAttribute("hidden", "");
+      return;
+    }
+
+    const existingIds = new Set(
+      Array.from(document.querySelectorAll("[id]")).map((el) => el.id),
+    );
+
+    const slugify = (value) =>
+      value
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+
+    const ensureId = (heading) => {
+      if (heading.id) return heading.id;
+      const base = slugify(heading.textContent || "section") || "section";
+      let id = base;
+      let counter = 2;
+      while (existingIds.has(id)) {
+        id = `${base}-${counter}`;
+        counter += 1;
+      }
+      existingIds.add(id);
+      heading.id = id;
+      return id;
+    };
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    let toastTimeout;
+    let suppressHideUntil = 0;
+    let interactionTimeout;
+
+    const setInteracting = (active) => {
+      container.classList.toggle("is-interacting", active);
+    };
+
+    const bumpInteracting = () => {
+      setInteracting(true);
+      if (interactionTimeout) window.clearTimeout(interactionTimeout);
+      interactionTimeout = window.setTimeout(() => {
+        setInteracting(false);
+      }, 1200);
+    };
+
+    const isTopLocked = () => window.scrollY <= 80;
+
+    const updateScrollState = () => {
+      container.classList.toggle("is-scrolled", !isTopLocked());
+    };
+
+    const showToast = (message) => {
+      if (!toast) return;
+      toast.textContent = message;
+      toast.classList.add("is-visible");
+      suppressHideUntil = Date.now() + 1200;
+      if (toastTimeout) window.clearTimeout(toastTimeout);
+      toastTimeout = window.setTimeout(() => {
+        toast.classList.remove("is-visible");
+      }, 1100);
+    };
+
+    const hideToast = () => {
+      if (!toast) return;
+      toast.classList.remove("is-visible");
+    };
+
+    const nodes = [];
+    const startHeading = article.querySelector("h1");
+    const startTarget = startHeading || article;
+    const startId = startHeading
+      ? ensureId(startHeading)
+      : (startTarget.id ||= "article-top");
+    const startLabel =
+      (startHeading?.textContent || "").trim() || "Top";
+
+    const makeNode = (id, labelText, target, variant = "default") => {
+      const item = document.createElement("div");
+      item.className = "progress-spine__item";
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "progress-spine__node";
+      if (variant === "start") {
+        button.classList.add("progress-spine__node--start");
+      } else if (variant === "end") {
+        button.classList.add("progress-spine__node--end");
+      }
+      button.setAttribute("aria-label", `Jump to: ${labelText}`);
+      button.dataset.target = id;
+
+      item.append(button);
+      list.append(item);
+
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        bumpInteracting();
+        showToast(labelText);
+        target.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start",
+        });
+      });
+
+      nodes.push({ id, target, button, item, labelText });
+    };
+
+    makeNode(startId, startLabel, startTarget, "start");
+
+    headings.forEach((heading, index) => {
+      const id = ensureId(heading);
+      const labelText =
+        (heading.textContent || "").trim() || `Section ${index + 1}`;
+      makeNode(id, labelText, heading, "default");
+    });
+
+    const endSentinel = document.createElement("div");
+    endSentinel.dataset.spineEndSentinel = "true";
+    endSentinel.setAttribute("aria-hidden", "true");
+    endSentinel.style.cssText = "position: relative; width: 100%; height: 1px;";
+    article.append(endSentinel);
+
+    const endIdBase = "article-end";
+    let endId = endIdBase;
+    let endCounter = 2;
+    while (existingIds.has(endId)) {
+      endId = `${endIdBase}-${endCounter}`;
+      endCounter += 1;
+    }
+    existingIds.add(endId);
+    endSentinel.id = endId;
+
+    makeNode(endId, "End", endSentinel, "end");
+
+    const layoutNodes = () => {
+      const total = nodes.length;
+      if (!total) return;
+      const listRect = list.getBoundingClientRect();
+      if (!listRect.height) return;
+      const styles = getComputedStyle(list);
+      const hitSizeValue = parseFloat(
+        styles.getPropertyValue("--spine-hit-size"),
+      );
+      const fallbackSize =
+        nodes[0]?.button.getBoundingClientRect().height || 36;
+      const hitSize =
+        Number.isFinite(hitSizeValue) && hitSizeValue > 0
+          ? hitSizeValue
+          : fallbackSize;
+      const maxY = Math.max(0, listRect.height - hitSize);
+
+      nodes.forEach(({ item }, index) => {
+        const y = total > 1 ? (index / (total - 1)) * maxY : 0;
+        item.style.top = `${y}px`;
+      });
+    };
+
+    let activeId = null;
+    let endIntersecting = false;
+    const setActive = (id) => {
+      if (!id || id === activeId) return;
+      activeId = id;
+      const activeIndex = Math.max(
+        0,
+        nodes.findIndex(({ id: nodeId }) => nodeId === id),
+      );
+      nodes.forEach(({ id: nodeId, button, item }, index) => {
+        const isActive = nodeId === id;
+        const isVisited = index < activeIndex;
+        const isUpcoming = index > activeIndex;
+        button.classList.toggle("is-active", isActive);
+        button.classList.toggle("is-visited", isVisited);
+        button.classList.toggle("is-upcoming", isUpcoming);
+        item.classList.toggle("is-active", isActive);
+        if (isActive) {
+          button.setAttribute("aria-current", "true");
+        } else {
+          button.removeAttribute("aria-current");
+        }
+      });
+      const activeNode = nodes[activeIndex]?.button;
+      if (!activeNode) {
+        list.style.setProperty("--spine-fill-px", "0px");
+        return;
+      }
+      const listRect = list.getBoundingClientRect();
+      const nodeRect = activeNode.getBoundingClientRect();
+      const activeCenterY = nodeRect.top + nodeRect.height / 2;
+      const fillPx = Math.max(0, activeCenterY - listRect.top);
+      list.style.setProperty("--spine-fill-px", `${fillPx}px`);
+    };
+
+    const updateActive = () => {
+      if (isTopLocked()) {
+        setActive(startId);
+        return;
+      }
+      const readingLine = window.innerHeight * 0.35;
+      const endRect = endSentinel.getBoundingClientRect();
+      const endReached = endIntersecting || endRect.top <= readingLine;
+      if (endReached) {
+        setActive(endId);
+        return;
+      }
+      let current = startId;
+      headings.forEach((heading) => {
+        if (heading.getBoundingClientRect().top <= readingLine) {
+          current = heading.id;
+        }
+      });
+      if (current) setActive(current);
+    };
+
+    const observer = new IntersectionObserver(
+      () => updateActive(),
+      {
+        root: null,
+        threshold: 0,
+        rootMargin: "-35% 0px -55% 0px",
+      },
+    );
+
+    const endObserver = new IntersectionObserver(
+      (entries) => {
+        endIntersecting = entries.some((entry) => entry.isIntersecting);
+        updateActive();
+      },
+      {
+        root: null,
+        threshold: 0,
+        rootMargin: "-35% 0px -45% 0px",
+      },
+    );
+
+    headings.forEach((heading) => observer.observe(heading));
+    endObserver.observe(endSentinel);
+    layoutNodes();
+    setActive(startId);
+    updateActive();
+    updateScrollState();
+
+    window.addEventListener(
+      "resize",
+      () => {
+        layoutNodes();
+        updateActive();
+      },
+      { passive: true },
+    );
+    window.addEventListener("scroll", () => {
+      if (Date.now() >= suppressHideUntil) hideToast();
+      updateScrollState();
+      setInteracting(false);
+    }, { passive: true });
+    container.addEventListener("pointerenter", () => setInteracting(true));
+    container.addEventListener("pointerleave", () => setInteracting(false));
+    container.addEventListener("focusin", () => setInteracting(true));
+    container.addEventListener("focusout", () => setInteracting(false));
+    container.addEventListener("pointerdown", bumpInteracting);
+    document.addEventListener("pointerdown", (event) => {
+      if (!toast) return;
+      if (container.contains(event.target)) return;
+      hideToast();
+    });
+  })();
+</script>
