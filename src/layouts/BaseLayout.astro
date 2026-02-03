@@ -143,6 +143,12 @@ const imageUrl =
             >Writing</a
           >
           <a
+            class:list={[isActive("/reference-systems/") && "is-active"]}
+            href="/reference-systems/"
+          >
+            The Lab
+          </a>
+          <a
             class:list={[isActive("/open-source/") && "is-active"]}
             href="/open-source/">Open Source</a
           >
@@ -174,6 +180,7 @@ const imageUrl =
       <div class="site-nav__mobile" hidden>
         <a href="/">Home</a>
         <a href="/writing/">Writing</a>
+        <a href="/reference-systems/">The Lab</a>
         <a href="/open-source/">Open Source</a>
         <a href="/about/">About</a>
         <!-- Business site link disabled until site is ready.

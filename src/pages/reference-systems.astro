@@ -1,0 +1,99 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { referenceSystems } from "../lib/reference-systems";
+
+const title = "The Lab | Jose Flores";
+const description =
+  "Small, real experiments that reveal lifecycles, boundaries, and behavior in motion.";
+---
+
+<BaseLayout title={title} description={description} bodyClass="no-js">
+  <main id="main" role="main" class="section section--lab page-content">
+    <div class="container">
+      <h1 class="section__title">The Lab</h1>
+      <p class="section__subtitle">{description}</p>
+
+      <section class="lab__section" aria-labelledby="lab-featured">
+        <h2 id="lab-featured">Featured experiments</h2>
+        <div class="section-grid lab__cards">
+          {referenceSystems.map((system) => (
+            <article class="card card--highlight lab-card">
+              <header class="card__header">
+                <span class="badge badge--primary lab-card__badge">
+                  Lab Experiment
+                </span>
+                <h3 class="card__title">{system.title}</h3>
+                <p class="card__description">{system.summary}</p>
+              </header>
+              <div class="card__content">
+                <p class="text-muted lab-card__label">Demonstrates</p>
+                <ul class="lab-card__list">
+                  {system.demonstrates.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <footer class="card__footer">
+                <div class="lab-card__actions">
+                  <a
+                    class="button button--primary"
+                    href={system.repoUrl}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    GitHub repo
+                  </a>
+                  {system.demoUrl && (
+                    <a
+                      class="button button--secondary"
+                      href={system.demoUrl}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      Run experiment
+                    </a>
+                  )}
+                  {system.writingLinks?.length
+                    ? system.writingLinks.map((link) => (
+                        <a class="button button--secondary" href={link.url}>
+                          Read: {link.title}
+                        </a>
+                      ))
+                    : null}
+                </div>
+              </footer>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="lab__section" aria-labelledby="lab-how">
+        <h2 id="lab-how">How to use these experiments</h2>
+        <ul>
+          <li>Start with the related post, then open the repo.</li>
+          <li>Look for the core/shell boundary first.</li>
+          <li>Use the "demonstrates" list as a checklist while reading code.</li>
+        </ul>
+      </section>
+
+      <section class="lab__section lab__cta" aria-labelledby="lab-cta">
+        <div class="card card--highlight">
+          <div class="card__header">
+            <h2 id="lab-cta" class="card__title">
+              Want the reasoning behind these experiments?
+            </h2>
+            <p class="card__description">
+              Each experiment maps to writing that explains the architecture,
+              boundaries, and tradeoffs.
+            </p>
+          </div>
+          <div class="card__footer">
+            <a class="button button--primary" href="/writing/">
+              Read the writing
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
