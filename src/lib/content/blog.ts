@@ -1,10 +1,14 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 
-export type BlogPost = CollectionEntry<'blog'>;
+type BlogEntry = CollectionEntry<'blog'>;
+
+export type BlogPost = BlogEntry & {
+  slug: string;
+};
 
 export const isPublished = (post: BlogPost) => !post.data.draft;
 
 export async function getPublishedBlogPosts(): Promise<BlogPost[]> {
   const posts = await getCollection('blog');
-  return posts.filter(isPublished);
+  return posts.map((post) => ({ ...post, slug: post.id })).filter(isPublished);
 }
