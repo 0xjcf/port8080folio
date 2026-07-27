@@ -4,7 +4,8 @@ description: "Why AI shifts the bottleneck from producing code to assigning resp
 date: 2025-01-04
 pubDate: 2025-01-04
 updatedDate: 2026-07-27
-edition: 5
+edition: 1
+revision: 5
 series: "Behavior & Boundaries"
 tags:
   - architecture
@@ -13,7 +14,7 @@ tags:
   - statecharts
   - boundaries
   - systems-thinking
-draft: true
+draft: false
 ---
 
 Earlier in my career, getting the implementation written was often the main constraint. Remembering syntax, learning unfamiliar APIs, and wiring asynchronous logic so it wouldn’t collapse under timing issues, failures, or retries took real effort.
