@@ -37,6 +37,8 @@ That is the claim behind the title. I don’t mean every feature needs more laye
 
 That speed is useful. I can try an idea, see where it breaks, and discard it without losing a day.
 
+## Where the ownership problem showed up
+
 Generated code is not inherently worse than handwritten code. The risk is that it can spread an unresolved ownership decision before we notice it. If an API lets several layers change the same workflow, every new use inherits that ambiguity.
 
 The feature can look clean and pass its first tests even though no single part clearly owns failure, retry, or cleanup.
@@ -126,6 +128,8 @@ I had often seen asynchronous behavior split across callbacks, flags, and compon
 
 A statechart also gives generated handlers rules we can check: Does this event exist? Is it allowed in the current state? Which state owns the resulting work?
 
+### Start with the lifecycle
+
 The first example only needs a simple machine.
 
 You don’t need an actor-model background to follow the example. For now, three ideas are enough:
@@ -190,6 +194,8 @@ That doesn’t mean cancellation happens by magic. Stopping a [promise actor](ht
 `loadData` names the work without hardcoding how it is performed. A provided actor can use HTTP, a queue, a local file, or a test fixture while the machine keeps the same states and events.
 
 Because the machine does not import platform APIs, we can use it in a browser, a Node process, or a test and provide different `loadData` actor logic in each.
+
+### Supply the environment at the boundary
 
 Let’s say `apiLoadData` is the production actor logic—maybe a promise actor created with `fromPromise`. The production and test versions both return the same application-level `Data` shape. Here, a contract simply means what the machine is allowed to expect:
 
@@ -276,6 +282,8 @@ Through its [inspection API](https://stately.ai/docs/inspection), XState can rep
 
 The same machine definition can be reviewed before execution, run in production, and inspected in tests. That reduces the chance that the design, implementation, and tests describe different workflows.
 
+### What XState cannot decide
+
 XState does not prevent a poor contract.
 
 If `loadData` exposes raw provider responses or transport-specific errors, the statechart may still become coupled to details that should have been translated first. If two actors both decide what the same failure means, naming them does not resolve the split authority.
@@ -284,7 +292,7 @@ XState shows which actor owns a transition. It cannot tell us whether that actor
 
 Not every small application needs a state machine, and not every asynchronous function needs its own actor. A function may be enough when its caller can own invocation, cancellation, cleanup, and result handling without giving the work an independent lifecycle.
 
-### What I carried into Actor-Web
+### Applying the same rule in Actor-Web
 
 I use the same ownership rules in [Actor-Web](https://0xjcf.github.io/actor-web/), a JavaScript runtime I’m building for actors that communicate through messages.
 
