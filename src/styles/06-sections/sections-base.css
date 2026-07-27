@@ -567,7 +567,7 @@
 
 @media (min-width: 960px) {
   .section--writing-page {
-    --toc-height: 44rem;
+    --toc-max-height: 44rem;
   }
 
   .writing-shell {
@@ -577,13 +577,12 @@
   }
 
   .writing-shell__sidebar {
-    --toc-offset: max(var(--space-6), calc((100vh - var(--toc-height, 44rem)) / 2));
     position: sticky;
-    top: var(--toc-offset);
+    top: var(--space-6);
     align-self: start;
     padding-left: var(--space-6);
     padding-right: var(--space-6);
-    min-height: var(--toc-height, 44rem);
+    min-height: 0;
   }
 }
 
@@ -650,8 +649,8 @@
   border-radius: var(--radius-lg);
   border: var(--space-px) solid var(--color-border);
   background: var(--color-surface);
-  height: var(--toc-height, 44rem);
-  max-height: var(--toc-height, 44rem);
+  height: auto;
+  max-height: min(var(--toc-max-height, 44rem), calc(100vh - var(--space-12)));
   position: static;
   display: flex;
   flex-direction: column;

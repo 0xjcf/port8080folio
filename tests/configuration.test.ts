@@ -7,6 +7,7 @@ import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 import { execSync } from 'node:child_process';
+import { Window } from 'happy-dom';
 
 import { loadVariables } from '../scripts/build-replace-vars';
 
@@ -78,5 +79,40 @@ describe('production configuration sanity checks', () => {
     // Forms should point at worker endpoints (relative paths are fine)
     // Contact form is no longer rendered on the landing page; newsletter remains.
     expect(html.includes('/api/newsletter')).toBe(true);
+
+    const articlePath = path.join(
+      distDir,
+      'writing',
+      'when-code-becomes-cheap',
+      'index.html',
+    );
+    expect(fs.existsSync(articlePath)).toBe(true);
+
+    const articleHtml = fs.readFileSync(articlePath, 'utf-8');
+    const articleWindow = new Window({
+      url: 'https://0xjcf.com/writing/when-code-becomes-cheap/',
+      settings: {
+        disableCSSFileLoading: true,
+        disableJavaScriptFileLoading: true,
+      },
+    });
+    articleWindow.document.write(articleHtml);
+    const tocLabels = Array.from(
+      articleWindow.document.querySelectorAll('#writing-toc-list [data-toc-link]'),
+    ).map((link) => link.textContent?.trim());
+
+    expect(tocLabels).toEqual([
+      'Where the ownership problem showed up',
+      'Architecture is about who owns what',
+      'What XState makes explicit',
+      'Start with the lifecycle',
+      'Supply the environment at the boundary',
+      'What XState cannot decide',
+      'Applying the same rule in Actor-Web',
+      'A quick responsibility check',
+      'Next in the series',
+    ]);
+    expect(articleHtml).not.toContain('Series continuation');
+    articleWindow.close();
   });
 });

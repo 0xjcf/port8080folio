@@ -38,7 +38,8 @@ const { selector = ".writing-article" } = Astro.props as {
       return;
     }
 
-    const headings = Array.from(article.querySelectorAll("h2"));
+    const articleContent = article.querySelector(".writing-article__content");
+    const headings = Array.from(articleContent?.querySelectorAll("h2") ?? []);
     if (!headings.length) {
       container.setAttribute("hidden", "");
       return;
@@ -77,6 +78,56 @@ const { selector = ".writing-article" } = Astro.props as {
     let toastTimeout;
     let suppressHideUntil = 0;
     let interactionTimeout;
+    let targetCorrectionObserver = null;
+    let targetCorrectionTimeout;
+    const correctionCancelEvents = [
+      "wheel",
+      "touchstart",
+      "pointerdown",
+      "keydown",
+    ];
+
+    const stopTargetCorrection = () => {
+      targetCorrectionObserver?.disconnect();
+      targetCorrectionObserver = null;
+      if (targetCorrectionTimeout) {
+        window.clearTimeout(targetCorrectionTimeout);
+        targetCorrectionTimeout = null;
+      }
+      correctionCancelEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, stopTargetCorrection);
+      });
+    };
+
+    const keepTargetVisible = (target) => {
+      stopTargetCorrection();
+      if (!("ResizeObserver" in window)) return;
+
+      let observedInitialSize = false;
+      targetCorrectionObserver = new ResizeObserver(() => {
+        if (!observedInitialSize) {
+          observedInitialSize = true;
+          return;
+        }
+
+        window.requestAnimationFrame(() => {
+          const siteNav = document.querySelector(".site-nav");
+          const siteNavHeight = siteNav?.getBoundingClientRect().height ?? 0;
+          const offset =
+            target.getBoundingClientRect().top - siteNavHeight - 24;
+          if (Math.abs(offset) > 1) {
+            window.scrollBy({ top: offset, behavior: "auto" });
+          }
+        });
+      });
+      targetCorrectionObserver.observe(article);
+      targetCorrectionTimeout = window.setTimeout(stopTargetCorrection, 3000);
+      correctionCancelEvents.forEach((eventName) => {
+        window.addEventListener(eventName, stopTargetCorrection, {
+          passive: true,
+        });
+      });
+    };
 
     const setInteracting = (active) => {
       container.classList.toggle("is-interacting", active);
@@ -143,10 +194,20 @@ const { selector = ".writing-article" } = Astro.props as {
         event.preventDefault();
         bumpInteracting();
         showToast(labelText);
-        target.scrollIntoView({
+        const siteNav = document.querySelector(".site-nav");
+        const siteNavHeight = siteNav?.getBoundingClientRect().height ?? 0;
+        const targetTop =
+          target.getBoundingClientRect().top +
+          window.scrollY -
+          siteNavHeight -
+          24;
+
+        window.history.pushState(null, "", `#${id}`);
+        window.scrollTo({
+          top: Math.max(0, targetTop),
           behavior: prefersReducedMotion ? "auto" : "smooth",
-          block: "start",
         });
+        keepTargetVisible(target);
       });
 
       nodes.push({ id, target, button, item, labelText });
