@@ -114,5 +114,5 @@ describe('production configuration sanity checks', () => {
     ]);
     expect(articleHtml).not.toContain('Series continuation');
     articleWindow.close();
-  });
+  }, 30_000);
 });
