@@ -146,6 +146,15 @@ describe('production configuration sanity checks', () => {
       'Part 4',
       'Part 5',
     ]);
+    const latestSeriesPost = writingWindow.document.querySelector(
+      '.writing-series__start',
+    );
+    expect(latestSeriesPost?.textContent).toContain('Part 5');
+    expect(
+      latestSeriesPost
+        ?.querySelector('.writing-series__link')
+        ?.getAttribute('href'),
+    ).toBe('/writing/lifecycle-is-the-real-boundary/');
     expect(writingIndexHtml).not.toContain('Edition 5');
     expect(
       fs.existsSync(

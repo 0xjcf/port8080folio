@@ -26,7 +26,9 @@ const standalonePosts = publishedPosts
   );
 const posts = [...seriesPosts, ...standalonePosts];
 const seriesCount = seriesPosts.length;
-const seriesLatestPost = seriesPosts.at(-1);
+const seriesLatestPost = seriesPosts
+  .filter((post) => post.data.seriesOrder !== undefined)
+  .at(-1);
 const seriesLatestPart = seriesLatestPost?.data.seriesOrder;
 ---
 
