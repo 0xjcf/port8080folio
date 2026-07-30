@@ -3,8 +3,6 @@ title: "Why Adapters Exist"
 description: "Adapters are not utilities. They are responsibility boundaries that keep behavior stable while the world changes."
 data: 2025-01-04
 pubDate: 2025-01-04
-edition: 5
-series: "Behavior & Boundaries"
 tags:
   - architecture
   - boundaries
@@ -13,6 +11,11 @@ tags:
   - actor-model
 draft: true
 ---
+
+<!--
+Editorial status: retired from the numbered Behavior & Boundaries series.
+Its lived adapter context is being reconciled into ports-adapters.md.
+-->
 
 Writing code is no longer the hard part.
 

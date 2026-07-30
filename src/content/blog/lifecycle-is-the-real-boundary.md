@@ -1,8 +1,11 @@
 ---
-title: "Lifecycle Is the Real Boundary"
-description: "Boundaries aren’t discovered through diagrams or patterns. They emerge wherever something has a lifecycle that must be protected."
+title: "Lifecycle Boundaries in Actor and State Machine Architecture"
+description: "How moving browser navigation beyond an Ignite effect revealed the lifecycle owner for observation, commits, failures, and cleanup."
 pubDate: 2025-01-04
-edition: 2
+updatedDate: 2026-07-30
+edition: 1
+revision: 16
+seriesOrder: 5
 series: "Behavior & Boundaries"
 tags:
   - architecture
@@ -13,575 +16,194 @@ tags:
 draft: false
 ---
 
-In the last piece, *When Code Becomes Cheap, Architecture Becomes Everything*, I argued that cheap code makes responsibility — not syntax — the real bottleneck. This essay narrows that lens: the only boundaries that matter are the ones that protect behavior over time.
+The functional core gave the router one place to decide which route the application accepts.
 
-I kept running into the same kind of discomfort.
+I still had to connect that decision to the browser.
 
-Systems would start out clean.  
-The structure made sense.  
-The abstractions felt reasonable.  
+I was using a newer Navigation API iteration of the beta router examples to test that boundary against native navigation.
 
-But a few months in, it became harder to answer simple questions.
+My first version used an Ignite effect. When the accepted route changed, the effect called the browser's Navigation API. That preserved an important boundary: the resolver decided the route without importing `window`, and the effect handled the outward update.
 
-Where does this decision actually live?  
-Why does this behavior exist here instead of there?  
-And why does fixing one thing keep forcing changes somewhere else?  
+For a single rendered element, that approach felt natural.
 
-Nothing was obviously broken.  
-It just felt like the system was slowly losing its shape.
+The problem became clearer when I followed everything else the router had to do. It needed to read the initial path, observe browser navigation, receive requests from several surfaces, commit accepted paths, record failures, and remove the observer when it stopped.
 
-At first, I assumed this was just how things go as systems grow.
+The route element was only one projection of that behavior. It was not the lifetime owner of the router.
 
-But the same feeling kept showing up — in different systems, written by different teams, using different tools.
+## The effect solved direction, not ownership
 
-Eventually, I stopped looking at structure alone and started paying attention to how behavior changed over time.
+The effect established the direction of the dependency. Router state changed first, then browser navigation followed.
 
----
+It did not answer which running part of the system owned the browser relationship.
 
-## What I kept getting wrong about boundaries
-
-For a long time, I drew boundaries based on what I could see.
-
-Files.  
-Folders.  
-Components.  
-Services.  
-Databases.  
-
-Those things are tangible. You can point at them. You can move them around.
-
-But when the system became hard to reason about, it wasn’t because anything was obviously misplaced.
-
-It was because some behavior needed to keep working reliably while unrelated parts of the system kept changing around it.
-
-I’d fix a problem in one place, feel good about it, and then later run into a related issue somewhere else. Not the same bug — just the same uncertainty about where a decision was actually supposed to live.
-
-That’s when it stopped feeling like a structural problem and started feeling like an ownership problem that played out over time.
-
----
-
-## What a lifecycle actually is
-
-I didn’t start with a definition.
-
-What I noticed first was a pattern.
-
-Whenever things felt unstable, there was usually something in the system that:
-
-* had a beginning and an end
-* changed behavior over time
-* could fail and recover
-* needed to stay coherent while other parts moved around
-
-Eventually, I started calling that a lifecycle.
-
-Not in the academic sense. Just as a way to name the thing that kept needing protection.
-
-A lifecycle isn’t a class.  
-It isn’t a module.  
-It isn’t a function.  
-
-It’s the part of the system you’re trusting to keep its behavior straight as time passes.  
-
-And once I started seeing systems that way, it became obvious that every promise already implied responsibility, whether I acknowledged it or not.
-
----
-
-## Boundaries don’t isolate; they protect lifecycles
-
-I used to think boundaries were mostly about separation.
-
-Split things up.  
-Isolate concerns.  
-Reduce surface area.  
-
-That helps — up to a point.
-
-What surprised me was how little abstraction actually helped.
-
-The systems that held up weren’t the ones with the most structure. They were the ones where the parts that couldn’t afford to break were deliberately kept out of the blast radius.
-
-That’s when it clicked for me: boundaries don’t exist to isolate everything.
-
-They exist to protect lifecycles that can’t afford to be interrupted every time the environment changes.
-
-If nothing needs that protection, a boundary doesn’t earn its keep.
-
----
-
-## The simplest rule I design around now
-
-I eventually needed a shorter way to describe what I was seeing.
-
-This was the version that stuck:
-
-**If something has a lifecycle, it probably needs a boundary.
-If it doesn’t, adding one usually just creates noise.**
-
-It’s not a law.
-It’s a check I run on my own designs.
-
-It helps me decide:
-
-* when introducing an actor makes sense
-* when a function is enough
-* when state needs to exist
-* and when state should just be derived
-
-More importantly, it helps me avoid modeling things too early — especially when the tools make it easy to add structure before there’s anything real to protect.
-
----
-
-## Why helpers don’t need boundaries
-
-Most code I touch doesn’t actually have a lifecycle.
-
-Pure functions.  
-Formatters.  
-Mappers.  
-Calculations.  
-Stateless transforms.  
-
-These things are valuable — but they don’t evolve independently.  
-They don’t recover. They don’t need to stay consistent while the rest of the system changes.
-
-I used to wrap them in structure anyway, hoping it would make the system feel more “architected.”
-
-I did this a lot early on with Redux, and later with XState, modeling state and events for things that never actually needed to change meaningfully over time.
+An earlier version started the shared router actor in one module and registered the browser observer beside it:
 
 ```ts
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-  
-declare function formatPhone(input: string): string;
-declare function validatePhone(input: string): string | null;
-  
-type CheckoutState = {
-  phoneInput: string;
-  formattedPhone: string;
-  phoneError: string | null;
-};
-  
-const initialState: CheckoutState = {
-  phoneInput: "",
-  formattedPhone: "",
-  phoneError: null
-};
-  
-const checkoutSlice = createSlice({
-  name: "checkout",
-  initialState,
-  reducers: {
-    phoneChanged(state, action: PayloadAction<string>) {
-      state.phoneInput = action.payload;
-      state.formattedPhone = formatPhone(action.payload);
-      state.phoneError = null;
-    },
-    phoneBlurred(state) {
-      state.phoneError = validatePhone(state.phoneInput);
-    }
-  }
-});
-  
-export const checkoutReducer = checkoutSlice.reducer;
-export const { phoneChanged, phoneBlurred } = checkoutSlice.actions;
+export const routerActor = createActor(routerMachine, {
+  input: { path: currentPath() },
+}).start();
+
+onPopState((path) =>
+  routerActor.send({
+    type: "POPSTATE",
+    path,
+  }),
+);
 ```
 
-It usually did the opposite of what I intended.
+The Ignite effect handled the opposite direction by writing accepted paths back to browser history.
 
-The system got heavier.  
-There was more ceremony.  
-But nothing felt more stable.  
+Each piece worked, but their lifetimes did not line up.
 
-Once I stopped giving boundaries to things that didn’t have a lifecycle, responsibility became clearer — and a lot of that unnecessary weight disappeared.
+`onPopState` returned an unsubscribe function, and this call discarded it. Stopping the actor did not remove the observer. The Ignite effect belonged to a route element even though the shared actor and browser observer could outlive that element.
 
----
+The nested router made this harder to ignore. Parent navigation, documentation sections, and settings panels all projected the same router source. If one of those elements connected or disconnected, it should not decide whether the application router was still observing the browser.
 
-## Why actors exist
+The question that helped me move forward was not, "Where should this code live?"
 
-Actors started showing up in my designs for a very practical reason.
+It was:
 
-I kept running into behavior that needed to remember what happened before, behave differently over time, survive partial failure, and stay stable while the rest of the system kept changing.
+> Which parts of this behavior must start and stop together?
 
-Actors weren’t something I reached for because they were elegant.
+The router state, browser observation, accepted-path commits, failure handling, and cleanup described one running lifecycle. They needed an owner whose lifetime contained all of them.
 
-They showed up because I kept tripping over the same kind of instability — and this was the shape that could actually contain it.
+## Removing `host` made the next boundary visible
 
-Once I saw that pattern clearly, it wasn’t surprising that other systems had already landed here.
+The earlier API change also mattered here.
 
-Actor-based systems assume from the start that behavior lives over time and that failure is normal, not exceptional — whether they’re built in Erlang, on the JVM with Akka, or elsewhere. On the frontend, XState was where this finally clicked for me — not as a framework choice, but as a constraint that forced lifecycles, decisions, and invalid states to be named explicitly instead of drifting across components, hooks, and effects.
+Once `host` was removed from `igniteCore` command and effect callbacks on the v3 beta line, the custom element could no longer act as an implicit path to browser capabilities. Commands received explicit application inputs. Effects had to use explicitly provided capabilities instead of discovering them through the element.
 
-Whenever I introduced an actor where no lifecycle existed, it felt like unnecessary ceremony.
+That was intentional, but it raised another design question: how should the router receive navigation without turning Ignite Element into a browser integration framework?
 
-And whenever I ignored a lifecycle that was already there, the system felt fragile — no matter how clean the code looked.
+I considered introducing another Ignite abstraction, something like a driver or `igniteEnvironment`. The idea was to give effects and sources a standard place to find browser, storage, network, or other environment capabilities.
 
----
+The more I worked through it, the less it fit.
 
-## A concrete example you already know
+Ignite Element already has a behavioral input: the source. That source may be an XState machine or actor, a Redux store, a MobX object, or another supported runtime. Adding a second behavior runtime to `igniteCore` would create more configuration while making Ignite Element responsible for how every state library provisions external capabilities.
 
-One of the first places I noticed this clearly was in UI work — because that’s where lifecycles are easy to feel, even when they aren’t explicitly named.
+XState already has its own composition tools, including machine provisioning with `.provide()`. Other sources have their own construction patterns. Ignite Element does not need to replace them.
 
-Think about a modal that:
+The direction we landed on was simpler: provide the environment capability while constructing the source, then give the resulting source to `igniteCore`.
 
-* opens, closes, and reopens
-* retries a request
-* survives route changes
-* behaves differently after a failure
+For the router, that capability became `NavigationPort`.
 
-That modal has a lifecycle whether you model it or not.
+## The source owns navigation over time
 
-If you don’t protect it, something else will try.
+The navigation port answers three questions the source has about its environment:
 
-A component.  
-A hook.  
-A reducer.  
-An adapter.
+- What is the current path?
+- How can the router observe external path changes?
+- How can it commit a path the application accepted?
 
-None of those choices are wrong in isolation.
+The browser implementation uses `window.navigation`. A memory implementation provides the same capability for headless tests. Neither implementation owns route matching, authentication redirects, or nested route policy.
 
-They’re all just compensating for a lifecycle boundary that was never made explicit.
+Those decisions remain in the project resolver.
 
-Here’s one version of that compensation I’ve written myself.
+The source uses the port to assemble the running behavior. Its observer is expressed as XState callback actor logic:
 
-It looks clean at first because the lifecycle is “not in the component.”
-
-But it’s still living in React.  
-Specifically, it’s bound to React’s render and teardown lifecycle.
-
-```tsx
-function useConfirm() {
-  const [phase, setPhase] = React.useState<"idle" | "confirming" | "error">("idle");
-  const [attempts, setAttempts] = React.useState(0);
-  const [message, setMessage] = React.useState<string | null>(null);
-
-  const busy = phase === "confirming";
-  const canRetry = phase === "error" && attempts < 3;
-
-  const confirm = async () => {
-    if (busy) return { ok: false as const, error: "busy" };
-  
-    setPhase("confirming");
-    setMessage(null);
-  
-    try {
-      const res = await fetch("/api/confirm", { method: "POST" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      setAttempts(0);
-      setPhase("idle");
-      return { ok: true as const };
-    } catch (e) {
-      const err = e instanceof Error ? e.message : String(e);
-      setAttempts((a) => a + 1);
-      setMessage(err);
-      setPhase("error");
-      return { ok: false as const, error: err };
-    }
-  };
-
-  const reset = () => {
-    setPhase("idle");
-    setMessage(null);
-    setAttempts(0);
-  };
-  
-  return { phase, busy, canRetry, message, confirm, reset };
-}
+```ts
+observeNavigation: fromCallback<RouterEvent>(
+  ({ sendBack }) =>
+    navigation.observe((path) =>
+      sendBack({
+        type: "NAVIGATION_OBSERVED",
+        path,
+      }),
+    ),
+),
 ```
 
-This hook is now responsible for retry policy, timing, and error meaning.
+`navigation.observe` returns its cleanup function. Because the router invokes this callback actor at its root, observation begins when the router starts and cleanup runs when the router stops.
 
-That responsibility didn’t disappear.  
-It just moved.
-
-```tsx
-export function ConfirmModal({ open, onClose }: { open: boolean; onClose(): void }) {
-  const { phase, busy, canRetry, message, confirm, reset } = useConfirm();
-
-  if (!open) return null;
-
-  return (
-    <div role="dialog" aria-modal="true">
-      <p>Are you sure?</p>
-
-      <button
-        disabled={busy}
-        onClick={async () => {
-          const result = await confirm();
-          if (result.ok) onClose();
-        }}
-      >
-        {busy ? "Confirming…" : "Confirm"}
-      </button>
-
-      {phase === "error" && (
-        <>
-          <p>{message ?? "Something went wrong."}</p>
-          {canRetry && <button onClick={reset}>Try again</button>}
-        </>
-      )}
-
-      <button onClick={onClose}>Cancel</button>
-    </div>
-  );
-}
-```
-
-Nothing here is “wrong.”
-
-The problem is more subtle: the hook has become the lifecycle owner.
-
-Retries, timing, cancellation, and error meaning are now tied to React’s lifecycle instead of having one of their own.
-
-That’s fine — until you want that same behavior somewhere else, without pulling React along with it.
-
-That’s when the question of *where this lifecycle should actually live* becomes unavoidable.
-
----
-
-## What it looks like when a lifecycle isn’t protected
-
-When a lifecycle doesn’t have a clear boundary, the symptoms are subtle.
-
-You start touching more files than you expect.
-You coordinate changes across layers that don’t feel related.
-You debate where logic belongs instead of why it exists.
-
-Retries show up in the UI.
-Async phases creep into reducers.
-Hooks start coordinating side effects.
-
-Each piece makes sense locally.
-
-What’s missing is a place where responsibility can live *across time* — a place where behavior doesn’t get reshuffled every time something around it changes.
-
----
-
-## Lifecycle mismatch is where systems become confusing
-
-Most of the architectural pain I’ve felt hasn’t come from bad code.
-
-It’s come from lifecycles moving at different speeds while sharing responsibility.
-
-Long-lived behavior tied to short-lived UI.
-Environment concerns baked into otherwise stable logic.
-Time-based decisions mixed into places that weren’t meant to care about time at all.
-
-Nothing explodes.  
-Things just get harder to reason about.
-
-And over time, that confusion quietly becomes the dominant cost.
-
----
-
-## Lifecycle mismatch in the wild (infrastructure example)
-
-This isn’t just an application concern. The same failure mode shows up at infrastructure scale.
-
-I ran into the same pattern again during a recent infrastructure incident.
-
-At first, it looked like an SSL problem.
-
-Certificates didn’t line up.  
-A firewall returned fallback responses.  
-Automation tools refused validation.  
-Diagnostics pointed in different directions.
-
-Nothing about it looked architectural.
-
-What was actually happening was more fundamental.
-
-Two origin lifecycles existed at the same time.
-
-One was still receiving traffic.  
-Another contained the active behavior.  
-DNS pointed to one.  
-Configuration changes were made to the other.  
-Edge services tried to compensate.
-
-Every individual piece behaved correctly in isolation.
-
-But no single lifecycle was clearly authoritative across time.
-
-Responsibility wasn’t missing.
-It was shared unintentionally.
-
-The result wasn’t a crash.
-It was confusion.
-
-The same kind of confusion I’d felt in application code — just at a different scale.
-
-The fix wasn’t more configuration.
-
-It was re-establishing a single lifecycle as authoritative, and letting everything else report facts instead of guessing.
-
-Once that happened, the system became understandable again.
-
----
-
-## Why lifecycles must *request* work, not execute it
-
-At this point, it helps to be explicit about what I mean by “the lifecycle.”
-
-I’m talking about the decision-making part of the system — the place where behavior is allowed to evolve over time and where coordination is initiated, even if execution happens elsewhere.
-
-In practice, the lifecycle spans the core that decides and the shell that coordinates time. Execution itself always stays in the environment.
+That is the lifecycle boundary I was missing in the first version.
 
 ```mermaid
 flowchart LR
-  Lifecycle["Lifecycle<br/>core + shell<br/>(decisions · state · time)"]
-  Environment["Environment<br/>adapters + external systems<br/>(HTTP · DB · UI · IO)"]
+  Browser["Browser navigation"]
+  Port["NavigationPort"]
+  Observer["Source-owned observer"]
+  Actor["Router actor"]
+  Resolver["Route resolver"]
 
-  Lifecycle -->|"request work"| Environment
-  Environment -->|"facts / results"| Lifecycle
+  Browser -->|"external navigation"| Port
+  Port --> Observer
+  Observer -->|"NAVIGATION_OBSERVED"| Actor
+  Actor -->|"path + application facts"| Resolver
+  Resolver -->|"accepted route"| Actor
+  Actor -->|"commit accepted path"| Port
+  Port --> Browser
 ```
 
-The lifecycle initiates work and remains authoritative; the environment executes and reports facts back.
+The Ignite effect was useful because it showed that the browser update belonged outside the deterministic resolver. Moving navigation under the source answered the next question: the router's running owner, not the rendered element, should coordinate that update with observation and cleanup.
 
-This part took me longer to internalize.
+Ignite Element remains the projection boundary. It receives the source, derives the view, exposes commands, and renders components. The source owns behavior that must remain coherent even when a particular projection disconnects.
 
-My instinct was always to push work into the core.  
-If something needs to happen, why not just do it there?
+## The environment can change without rebuilding the router
 
-And honestly, that works for a while.
+Once navigation was supplied to the source, the same router behavior could run with browser and memory implementations:
 
-But over time, I kept running into the same problem: the lifecycle of the behavior started to drift toward the lifecycle of the environment.
+```ts
+const browserSource = createRouterSource({
+  navigation: createBrowserNavigation(
+    resolveBrowserNavigation(),
+  ),
+});
 
-The parts deciding what should happen aged very differently from the parts actually doing the work.
+const memory = createMemoryNavigation("/");
 
-When the core executes work directly, it quietly takes on assumptions about where it’s running, what’s available, and how failure should be handled.
-
-Those assumptions don’t hold forever.
-
-What worked better was letting the lifecycle **request** work, and letting the environment carry it out.
-
-The lifecycle decides.  
-The environment executes.  
-The lifecycle reacts to facts.
-
-That separation kept responsibility from sliding around as systems evolved.
-
----
-
-## Why real boundaries make layers replaceable
-
-This is where things got interesting.
-
-I didn’t set out to make systems swappable.
-
-But once lifecycles were clearly bounded — and authority stopped drifting — replaceability started showing up on its own.
-
-### Projections become replaceable
-
-When projections stop deciding anything, they become interchangeable.
-
-A web UI, a CLI, a test harness, or a background worker are all doing the same thing:
-
-They’re projecting snapshots of the same lifecycle.
-
-If switching interfaces forces changes to lifecycle logic, then the lifecycle was never really protected.
-
-### Adapters become replaceable
-
-When execution lives behind ports, adapters stop coordinating behavior.
-
-They don’t decide when to retry.  
-They don’t decide what failure means.  
-They don’t decide what matters.  
-
-They just perform work and report results.
-
-That’s why the same lifecycle can talk to HTTP today, a queue tomorrow, or a mock in tests — without rewriting behavior.
-
-### The core engine becomes replaceable
-
-This one surprised me.
-
-Once decisions were clearly scoped to the lifecycle boundary, the engine itself stopped being precious.
-
-A reducer.  
-A state machine.  
-A store.  
-
-They’re all just ways of answering the same question:
-
-Given this state and this event, what happens next?
-
-If swapping the engine forces you to rethink responsibility, then the engine was doing boundary work it shouldn’t have been doing.
-
----
-
-## The shape this creates
-
-```mermaid
-flowchart TB
-  Lifecycle["Lifecycle Boundary<br/>core + shell<br />(decisions · time)"]
-  Projections["Projections<br/>(Web · CLI · Tests)"]
-  Adapters["Adapters<br/>(HTTP · Queue · File · Mock)"]
-
-  Lifecycle -->|"state"| Projections
-  Lifecycle -->|"effects"| Adapters
+const headlessSource = createRouterSource({
+  navigation: memory.port,
+});
 ```
 
-Once authority is centralized in the lifecycle, projections and adapters become replaceable consumers of state and effects.
+This was important for dogfooding Ignite Element. The [headless runtime](https://0xjcf.github.io/ignite-element/api/headless-runtime/) should be able to exercise the same router behavior without fabricating a custom element or pretending to be a browser.
 
----
+The memory implementation can report an externally observed path. It can also record paths the router asks it to commit. The browser implementation translates those operations into the native Navigation API.
 
-## The invariant I trust now
+Changing the implementation does not move route policy. It also does not move the observer lifetime. Both remain under the same source.
 
-This is the sentence I use to sanity-check my own designs:
+This is where ports became useful in a way that felt less abstract to me. The port is not another layer added for ceremony. It is the application-facing shape of a capability the source needs in more than one environment.
 
-**In practice, the only place I let time really matter is inside the lifecycle.
-Everything else should be replaceable.**
+The adapter answers, "How does navigation work here?" The resolver answers, "Which route does this application accept?" The actor keeps those answers coherent as events arrive over time.
 
-When that’s true, systems stay understandable — and stay that way — longer than I expect them to.
+## The current commit protocol has a limit
 
----
+The browser's Navigation API exposes more lifecycle detail than the current router port preserves. A call to `navigation.navigate()` provides separate `committed` and `finished` promises. One represents the URL and history entry changing. The other represents the navigation finishing, including intercepted work.
 
-## Discovery, not design
+Our current `NavigationPort.commit()` returns `Promise<void>`.
 
-I don’t try to design boundaries up front anymore.
+The router resolves the accepted route, updates its context, and asks the port to commit the path. If the promise rejects, the source records the failure. If it resolves, the source does not receive a separate application fact.
 
-Instead, I look for where state has to persist.  
-Where failure has to be handled.  
-Where time actually matters.
+That means router context currently represents the route accepted by application policy. It does not prove that the environment confirmed every part of the navigation lifecycle.
 
-Those places reveal themselves.
+I think this is an important limit to keep visible without designing a larger protocol before the example needs one.
 
-Actors aren’t invented.  
-They’re uncovered.
+If a future application needs to distinguish accepted, browser-committed, and fully-finished navigation, the port and actor protocol will need to preserve the milestone that matters. We would also have to decide what happens when a second request arrives before the first one finishes and whether abandoned work can be cancelled.
 
----
+The current dogfooding projects do not answer those questions. They demonstrate optimistic context updates, commit rejection handling, source-owned observation, and cleanup.
 
-## Why lifecycle comes before everything else
+That is enough evidence for the boundary we changed. It is not evidence for a pending-route or confirmed-navigation protocol we have not implemented.
 
-Until lifecycles are clearly bounded, dependency rules don’t really stick.
+## Why the actor owns this behavior
 
-If you don’t know what must remain stable over time, it’s hard to know what should depend on what.
+The resolver can remain a function because its work ends when it returns an accepted route.
 
-At least for me, everything else only started making sense once lifecycle was settled.
+The router cannot end there. It remembers state, receives requests from multiple navigation surfaces, observes the browser while running, commits accepted paths, records failures, and releases its observer when it stops.
 
----
+I use an actor because those responsibilities already form a protocol over time. The meaning of a request depends on current route and authentication state. Observation can arrive between application requests. Cleanup has to occur even if no route element remains connected.
 
-## Where this leaves us
+That does not mean every router needs XState. An imperative controller with `start()`, `navigate()`, and `stop()` could own the same lifecycle in a smaller application.
 
-So far, the series has established:
+The architectural requirement is narrower: the behavior that must remain coherent from start to stop needs one owner with the right lifetime.
 
-* confusion shows up when responsibility drifts across time  
-* lifecycles determine where responsibility must live  
-* boundaries exist to protect those lifecycles  
-* when lifecycles are right, everything else becomes replaceable  
+For Ignite Element, this also protects the library boundary. `igniteCore` does not need `host` in commands or effects, and it does not need a new environment runtime. It receives a source whose behavior and capabilities were already composed using the tools native to that source.
 
-That leaves one final question:
+That feels closer to the framework-agnostic design I want. Ignite Element projects behavior without quietly becoming its lifecycle authority.
 
-**What doesn’t need a lifecycle at all?**
+## Next in the series
 
-The answer isn’t more structure.
+The router source now depends on a navigation capability without depending on `window.navigation` directly. The browser and memory implementations can change while route policy and lifecycle ownership remain in the same place.
 
-It’s knowing which parts of the system should never be allowed to carry time in the first place.
+The next article examines that capability boundary more closely: what belongs in a port, what belongs in an adapter, and how external values become application meaning without moving policy into the integration.
 
----
-
-## Series continuation
-
-**Next in Behavior & Boundaries:**  
-**The Functional Core**  
-*What remains once time, coordination, and side effects are removed*
+If you want to follow this work in the project itself, the [Ignite Element v3 beta documentation](https://0xjcf.github.io/ignite-element/) describes the current runtime model, and the [beta branch on GitHub](https://github.com/0xjcf/ignite-element/tree/beta) contains the source and dogfooding examples behind this series.

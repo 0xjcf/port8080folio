@@ -1,11 +1,11 @@
 ---
-title: "When Code Becomes Cheap, Architecture Becomes Everything"
-description: "Why AI shifts the bottleneck from producing code to assigning responsibility."
-date: 2025-01-04
+title: "AI-Generated Code and Software Architecture: Why Ownership Matters"
+description: "How AI-assisted development shifts the difficult work from producing code to deciding which part of the system should own each decision."
 pubDate: 2025-01-04
-updatedDate: 2026-07-27
+updatedDate: 2026-07-30
 edition: 1
-revision: 5
+revision: 21
+seriesOrder: 1
 series: "Behavior & Boundaries"
 tags:
   - architecture
@@ -17,310 +17,216 @@ tags:
 draft: false
 ---
 
-Earlier in my career, getting the implementation written was often the main constraint. Remembering syntax, learning unfamiliar APIs, and wiring asynchronous logic so it wouldn’t collapse under timing issues, failures, or retries took real effort.
+There was a time when writing the code was the hard part.
 
-Nested callbacks could turn control flow into a mess. Promises helped. Then `async` and `await` made the code easier to read. But none of those tools removed the need to understand what the system was actually doing.
+You had to remember the syntax, learn an unfamiliar API, and wire asynchronous logic carefully enough that it would survive timing, failure, and retries. I do not miss callback hell, but that friction did limit how quickly a vague decision could become part of a system.
 
-Getting comfortable with JavaScript meant slowing down and learning what the language was really doing with objects, prototypes, functions, and inheritance. Copying the right syntax wasn’t enough. I wanted to understand why the code behaved the way it did.
+Today, I can describe a feature and receive a plausible implementation in seconds. It may include loading states, error handling, retries, and tests. Sometimes it is shockingly good.
 
-That kind of knowledge still matters, but that has changed. Knowing every bit of syntax is no longer the thing that determines how quickly I can get a feature on the screen.
+But I started noticing a different kind of failure.
 
-That slower process wasn’t inherently better, but a feature took long enough to build that I had more chances to notice which code owned a transition, what an error meant, and how external systems were allowed to affect it.
+The logic looked correct, yet the system still felt unstable. A small change required knowledge from several files. Tests passed, but the code felt risky to touch. Replacing an integration changed behavior that should have had nothing to do with the provider.
 
-AI shortened the time between a request and a working first version.
+The problem was not syntax. It was not even the tool.
 
-I can now ask a model for a plausible implementation and receive one in seconds, often including loading states, error handling, and basic tests.
+It was ownership.
 
-The harder work is deciding which part may change application state, call external systems, interpret failures, and own cleanup.
+## The bottleneck moved
 
-That is the claim behind the title. I don’t mean every feature needs more layers, interfaces, or diagrams. I mean those ownership rules determine how many places we have to change when a feature evolves.
+AI is very good at completing the local story.
 
-That speed is useful. I can try an idea, see where it breaks, and discard it without losing a day.
+Ask it to load some data and it must decide where loading state lives, who calls the API, how errors are translated, and whether a retry belongs in the component, machine, or request helper. If those decisions are missing from the request, the implementation still has to put them somewhere.
 
-## Where the ownership problem showed up
+Usually, it chooses the nearest convenient place.
 
-Generated code is not inherently worse than handwritten code. The risk is that it can spread an unresolved ownership decision before we notice it. If an API lets several layers change the same workflow, every new use inherits that ambiguity.
+That does not make the generated code inherently bad. A human working quickly will make the same choice. The difference is that we can now repeat the choice across a codebase much faster than we can inspect its consequences.
 
-The feature can look clean and pass its first tests even though no single part clearly owns failure, retry, or cleanup.
+AI did not create unclear responsibility. It made unclear responsibility cheaper to multiply.
 
-In my experience, that ownership problem becomes visible when a provider changes, a second interface needs the same behavior, or a failure no longer fits the assumptions of the first implementation.
+This is why I think the bottleneck moved. Producing a possible implementation is becoming easier. Deciding which part of the system is allowed to know, choose, mutate, start, stop, retry, and clean up is still design work.
 
-We ran into this while building Ignite Element, a component runtime I’m working on. Imagine a screen that lists several modules, each with a Start button. An XState actor tracks which module is running, and Ignite Element renders that state.
+That is the architectural work I care about.
 
-Our first command did not receive the module ID directly. It found the ID on the rendered HTML element:
+## A small command with a hidden decision
+
+I ran into this while dogfooding [Ignite Element](https://0xjcf.github.io/ignite-element/), a component runtime that projects actor state into Web Components.
+
+As the maintainer, I often build small projects to stress-test the API against realistic behavior. These projects are not client case studies. They give me a place to see whether Ignite Element's contracts still make sense when the same behavior is exercised through a rendered interface and a headless runtime.
+
+One of those projects included a screen that lists several modules. Each module has a Start button, an XState actor tracks which one is running, and Ignite Element renders the resulting state.
+
+The first version of the command discovered the module ID from the rendered element:
 
 ```ts
 commands: ({ actor, host }) => ({
-  startModule: () => {
-    const moduleId = host.dataset.moduleId;
+  startModule: () =>
+    actor.send({
+      type: "START_MODULE",
+      moduleId: host.dataset.moduleId ?? "missing",
+    }),
+});
+```
+
+Nothing about this looked alarming. It worked in the browser because the element contained the expected `data-module-id`. The `"missing"` fallback even looked defensive.
+
+As part of that stress test, I tried to exercise the same behavior through the headless runtime.
+
+The test did not need a DOM element. It only needed to say which module should start. But the command contract forced the test to create an element and attach data to it before it could express that intent.
+
+That awkward setup was useful evidence.
+
+When a test has to impersonate an unrelated boundary, the production contract may be giving that boundary too much responsibility.
+
+Starting a module requires a module ID whether the request comes from a button, a test, a keyboard shortcut, or another interface. Reading `dataset` is only one way a browser view might find that value. It is not part of the application intent.
+
+The command became:
+
+```ts
+commands: ({ actor }) => ({
+  startModule: (moduleId: string) => {
     actor.send({ type: "START_MODULE", moduleId });
   },
 });
 ```
 
-This worked in the browser because the element contained the expected `data-module-id`. It became awkward when we tested the same behavior without a browser. There was no HTML element to read, so the test had to construct one just to tell the command which module to start.
+The important change is not the extra parameter. It is the decision that disappeared from the command.
 
-That was the clue. Starting a module was application intent, but its input was hidden inside the current presentation.
+The caller now supplies `moduleId`. A browser binding may read it from the current view. A headless test can pass it directly. The command carries the request into the actor, and the machine defines whether that request is allowed in the current state.
 
-We changed the command to receive that intent explicitly:
+That callback shape also became part of the Ignite Element v3 beta. The beta removes `host` from command and effect callbacks, so a callback no longer receives the rendered element as an implicit dependency. Commands receive explicit application inputs, while effects receive or close over the capabilities they need.
 
-```ts
-commands: ({ actor, command }) => ({
-  startModule: command((moduleId: string) => {
-    actor.send({ type: "START_MODULE", moduleId });
-  }),
-});
-```
-
-The important change is the function signature. `moduleId` is now an argument instead of data discovered in HTML.
-
-Now a button, test, command-line tool, or agent can provide the same module ID. The command forwards the request. The actor handles it according to the machine’s transitions, and the view displays the resulting state.
-
-AI didn’t create that contract. It made it easier to produce reasonable-looking uses of every capability the contract exposed before we had decided which layer should own each decision.
-
-## Architecture is about who owns what
-
-When I say architecture, I don’t mean folder structure, diagrams, or a prescribed number of layers. Those things can record a decision, but they don’t make the decision for us.
-
-I use architecture to answer two practical questions: which part owns each behavior, and what is that part allowed to decide?
-
-Here, behavior means the rules that decide how the application responds to an event: whether a transition is allowed, how state changes, what work begins, and how a result is interpreted. Responsibility is what a part must do. Authority is which decisions only that part may make.
-
-In the Ignite example, the view may expose a `startModule` command and display the resulting state. It cannot mutate actor state or add a transition that the machine does not define.
-
-Once those rules are explicit, we can review whether generated code follows them: commands may send intent but cannot read the DOM; adapters may call external APIs but must translate their results; views may render state but cannot change actor state.
-
-When the rules are implicit, each new implementation makes the decision locally. One callback may retry a failure while another treats it as final. A later change then requires tracing the same policy through several files.
-
-This way of thinking isn’t new. Software design has always had to ask who is responsible for what and who is allowed to decide.
+The tool sees a missing value and fills it. The architecture decides who was allowed to provide that value in the first place.
 
 ```mermaid
-flowchart LR
-  BEH["Behavior<br/>core: machines + reducers + policies"]
-  AD["Adapters<br/>I/O + translation"]
-  ENV["Environment<br/>platform + I/O"]
+flowchart TB
+  Caller["Caller<br/>button binding / headless test / other interface"]
+  Command["Ignite command<br/>startModule(moduleId)"]
+  Actor["XState actor<br/>handles START_MODULE"]
+  View["Ignite projection<br/>snapshot to rendered view"]
 
-  BEH -->|requests through ports| AD
-  AD -->|facts through ports| BEH
-  AD -->|platform calls| ENV
-  ENV -->|external results| AD
+  Caller -->|"passes intent"| Command
+  Command -->|"sends event"| Actor
+  Actor -->|"emits snapshot"| View
 ```
 
-In this model, the machine or reducer owns application decisions. The adapter owns I/O and translation. The environment supplies mechanisms such as `fetch`, a database, a filesystem, or a clock.
+## The logic was correct. The boundary was not
 
-A port names what the application may ask the environment to do and what result it expects back. In the loader example below, `loadData` names the requested work and `Data` describes the expected result. The adapter implements that contract with `fetch` and converts network responses into application data or errors.
+The original command worked. That is what made the problem easy to miss.
 
-The diagram shows ports on the arrows rather than as another runtime box. In TypeScript, a port and its adapter may each be a single function, which is why they can look like the same thing. The port defines the request and result. The adapter performs the I/O and translation for a browser, server, or test.
+Architecture problems rarely announce themselves with a syntax error. They appear later as knowledge that spreads farther than the change should require.
 
-The adapter calls those mechanisms and maps their results into application types. Behavior decides what happens next. In the small example below, every failed load enters `error`, where `RETRY` is allowed.
+In this example, the ownership problem is concrete. The command knew how one browser view stored `moduleId`, and the headless test exposed that dependency by forcing us to recreate the view just to express the same intent.
 
-Requests and results cross the adapter in both directions. That lets us replace an HTTP adapter with a test implementation without moving the retry rule out of the behavior.
+That gives us a more useful question to ask during review:
 
-The useful test is not whether the diagram has three boxes. It is whether the code prevents one layer from making another layer’s decision.
+> Does this part of the system know something because the behavior requires it, or only because one interface happens to provide it that way?
 
-If a boundary does not restrict a decision, prevent an unwanted dependency, or translate data, it has only added another interface to maintain.
+The behavior required a module ID. It did not require a `dataset`. That detail belonged to the browser binding.
 
-## What XState makes explicit
+Product policy should change when the product decision changes. An integration should change when the provider changes. Presentation should change when the experience changes. When those responsibilities are mixed, a change in one part travels through all three.
 
-With [XState](https://stately.ai/docs/xstate), those ownership rules become executable: states name the modes, events name the messages, transitions say which changes are legal, and actors run the behavior over time.
+That is often the feeling behind, "The code works, so why is this so difficult to change?"
 
-I had often seen asynchronous behavior split across callbacks, flags, and component hooks. A machine puts the transition rules in one place that can be inspected and tested.
+## Architecture distributes authority
 
-A statechart also gives generated handlers rules we can check: Does this event exist? Is it allowed in the current state? Which state owns the resulting work?
+When I say architecture, I am not talking about folder names, diagrams, or a prescribed number of layers. Those things can record a decision, but they cannot make the decision for us.
 
-### Start with the lifecycle
+I am talking about the distribution of authority through a system:
 
-The first example only needs a simple machine.
+- Who may interpret an intent?
+- Who may decide whether it is valid now?
+- Who may change state?
+- Who may start external work?
+- Who owns the result, failure, retry, and cleanup?
 
-You don’t need an actor-model background to follow the example. For now, three ideas are enough:
+Responsibility and authority are related, but they are not the same.
 
-- A **machine** describes behavior.
-- A **machine actor** is that behavior running. It owns its state, receives events, and changes over time.
-- An **invoked actor** is child work started by a state and stopped when that state is exited.
+**Responsibility** is what a part must do. **Authority** is what that part alone is allowed to decide.
 
-Start with the story, not the notation: the actor is idle, receives `LOAD`, starts some work, and then succeeds or fails. In this example, `loadData` performs one attempt. The machine decides whether another attempt may begin.
+In the Ignite example, the caller supplies the module it wants to start. The command translates that request into an actor event. The machine defines the legal transition. The running actor owns the state and lifecycle. The view renders the result.
 
-```ts
-import { createActor, createMachine, fromPromise } from "xstate";
+The command is responsible for carrying intent, but it does not have authority to invent a transition. The view is responsible for presentation, but it does not have authority to mutate actor state. The actor owns the lifecycle, but it should not have to understand how a particular button encoded the request.
 
-const dataMachine = createMachine({
-  initial: "idle",
-  states: {
-    idle: {
-      on: {
-        LOAD: "loading",
-      },
-    },
-    loading: {
-      invoke: {
-        src: "loadData",
-        onDone: {
-          target: "success",
-        },
-        onError: {
-          target: "error",
-        },
-      },
-    },
-    success: {
-      on: {
-        RELOAD: "loading",
-      },
-    },
-    error: {
-      on: {
-        RETRY: "loading",
-      },
-    },
-  },
-});
-```
+Once those rules are explicit, generated code has something concrete to follow. We can review whether a new implementation respects an existing owner instead of judging each callback in isolation.
 
-Read it from top to bottom:
+## Why state machines help, and where they stop
 
-1. An actor created from this machine starts in `idle`.
-2. A `LOAD` event moves it to `loading`.
-3. Entering `loading` starts the `loadData` actor.
-4. Completion moves the workflow to `success`; failure moves it to `error`.
-5. `RETRY` or `RELOAD` starts a new attempt.
-6. Leaving `loading` stops the invoked actor if it is still active.
+[XState](https://stately.ai/docs/xstate) is useful here because it makes part of this authority executable.
 
-That is the complete lifecycle represented by this small example. The machine owns this sequence without choosing a transport or provider.
+States name the modes the system can be in. Events name the messages it can receive. Transitions say which changes are legal. When the machine runs, its actor owns the current state and processes those events over time.
 
-The machine definition declares that entering `loading` starts the [`loadData` actor](https://stately.ai/docs/invoke). Exiting `loading` tells the XState runtime to stop it.
+That gives us concrete questions during review:
 
-That doesn’t mean cancellation happens by magic. Stopping a [promise actor](https://stately.ai/docs/promise-actors#stopping-promise-actors) discards a late result, but the underlying operation still has to participate. For `fetch`, the promise actor can pass XState’s `AbortSignal` to the request. A [callback actor](https://stately.ai/docs/callback-actors) can return cleanup logic.
+- Does this event exist in the protocol?
+- Is it allowed in the current state?
+- Which transition handles it?
+- Which actor owns the resulting lifecycle?
 
-`loadData` names the work without hardcoding how it is performed. A provided actor can use HTTP, a queue, a local file, or a test fixture while the machine keeps the same states and events.
+There is an important caveat: making a contract executable does not make it a good contract.
 
-Because the machine does not import platform APIs, we can use it in a browser, a Node process, or a test and provide different `loadData` actor logic in each.
+A machine can faithfully accept a `MouseEvent` that should have remained in the UI. It can expose a provider payload that should have been translated at the boundary. It can divide one policy decision across several guards, actions, and adapters.
 
-### Supply the environment at the boundary
+Invoking external work from a state is not automatically the problem either. A machine may own when and why work begins while a supplied actor or adapter owns how one attempt is performed. The boundary becomes useful when those responsibilities are explicit and the result returns as a fact the application understands.
 
-Let’s say `apiLoadData` is the production actor logic—maybe a promise actor created with `fromPromise`. The production and test versions both return the same application-level `Data` shape. Here, a contract simply means what the machine is allowed to expect:
+XState helps us see the contract. It cannot choose the contract for us.
 
-```ts
-type Data = {
-  items: string[];
-};
+It also does not mean every function needs a machine. A pure calculation or stateless transformation may already have a clear owner. Actors become useful when behavior changes over time and the state, work, results, and cleanup need to remain coherent.
 
-type ApiResponse = {
-  records: Array<{ label: string }>;
-};
+## How to recognize an ownership leak
 
-function hasLabel(value: unknown): value is { label: string } {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "label" in value &&
-    typeof value.label === "string"
-  );
-}
+The leak usually appears as friction around a change:
 
-function parseApiResponse(value: unknown): ApiResponse {
-  if (
-    typeof value !== "object" ||
-    value === null ||
-    !("records" in value) ||
-    !Array.isArray(value.records) ||
-    !value.records.every(hasLabel)
-  ) {
-    throw new Error("Invalid data response");
-  }
+- A test must recreate a UI, provider, or runtime just to express application intent.
+- The same decision appears in a component, handler, adapter, and state machine.
+- Changing an API response forces unrelated behavior and presentation changes.
+- Timing or message order changes the meaning of a result.
+- The system works, but changing it safely requires someone who remembers its history.
 
-  return { records: value.records };
-}
+None of these observations proves the boundary is wrong. They are signals that responsibility may be distributed more widely than the behavior requires.
 
-const apiLoadData = fromPromise<Data>(async ({ signal }) => {
-  const response = await fetch("/api/data", { signal });
+That is enough reason to pause and ask who actually owns the decision.
 
-  if (!response.ok) {
-    throw new Error("Could not load data");
-  }
+## A responsibility check before implementation
 
-  const result = parseApiResponse(await response.json());
+Before I ask for more code, I now try to answer a few questions in plain language:
 
-  return {
-    items: result.records.map((record) => record.label),
-  };
-});
+- Who is trying to make progress, and in what context?
+- What observable result would tell us the behavior helped?
+- What intent enters the system?
+- Which part decides whether the request is valid now?
+- Which part is allowed to change state?
+- Which details belong only to the current UI, provider, or runtime?
+- Could another caller express the same intent without pretending to be that interface?
 
-const productionMachine = dataMachine.provide({
-  actors: {
-    loadData: apiLoadData,
-  },
-});
+Then I check whether the code tells the same story.
 
-const testMachine = dataMachine.provide({
-  actors: {
-    loadData: fromPromise(async (): Promise<Data> => ({
-      items: ["fixture"],
-    })),
-  },
-});
+In the Ignite example, the answer is visible in the command signature and the event it sends. The caller provides `moduleId`. The actor receives `START_MODULE`. The machine defines the legal transition, and the running actor owns its execution over time.
 
-const dataActor = createActor(productionMachine).start();
+This does not mean every dependency needs an adapter or every decision needs another interface. A boundary is useful when it stops one part from making a decision that belongs somewhere else. If it does not protect a meaningful decision, the extra abstraction probably makes the system harder to understand.
 
-dataActor.send({ type: "LOAD" });
-```
+## The first draft is cheap
 
-`parseApiResponse` checks the unknown JSON before the adapter maps it into `Data`. The machine receives application data or an error, never a raw `Response` or provider payload.
+Faster implementation is a real advantage. I can explore an idea, discover where it breaks, and discard it without losing a day.
 
-`.provide()` supplies the HTTP actor in production and an in-memory actor in tests. The machine’s states and start-and-stop rules stay the same, and the test exercises its transitions without making a network request.
+But the time saved by generation should create more room for judgment, not less.
 
-If you’ve used dependency injection, that part will feel familiar. The machine definition also shows which state invokes the work and when the runtime stops that actor.
+AI did not change how systems work. It changed how quickly an unnamed assumption can become a dependency.
 
-In the earlier diagram, `dataMachine` is behavior, `apiLoadData` is an adapter packaged as XState actor logic, and the network is the environment. `onDone` and `onError` turn the result into a success or error transition.
+I do not think architecture matters more because AI writes worse code. It matters more because we can multiply ownership decisions faster than we notice them.
 
-XState also lets guards, actions, delays, and actors be referenced by name and [supplied as implementations](https://stately.ai/docs/machines#providing-implementations). A guard decides whether a transition is allowed. An action runs as part of a transition but does not own an independent lifecycle. In this example, work whose completion, failure, or cancellation changes behavior belongs in an actor.
-
-Those primitives do not decide where every rule belongs. The machine may own both workflow and domain policy, or it may call a pure function or another actor for a domain decision.
-
-A real system may distinguish retryable failures from final ones. The adapter should translate transport failures into application-level error facts; the machine or a pure policy function should make the retry decision.
-
-Through its [inspection API](https://stately.ai/docs/inspection), XState can report actor creation, sent events, snapshots, and transition steps. Its [graph utilities](https://stately.ai/docs/graph) can derive possible paths through the machine.
-
-The same machine definition can be reviewed before execution, run in production, and inspected in tests. That reduces the chance that the design, implementation, and tests describe different workflows.
-
-### What XState cannot decide
-
-XState does not prevent a poor contract.
-
-If `loadData` exposes raw provider responses or transport-specific errors, the statechart may still become coupled to details that should have been translated first. If two actors both decide what the same failure means, naming them does not resolve the split authority.
-
-XState shows which actor owns a transition. It cannot tell us whether that actor should own it.
-
-Not every small application needs a state machine, and not every asynchronous function needs its own actor. A function may be enough when its caller can own invocation, cancellation, cleanup, and result handling without giving the work an independent lifecycle.
-
-### Applying the same rule in Actor-Web
-
-I use the same ownership rules in [Actor-Web](https://0xjcf.github.io/actor-web/), a JavaScript runtime I’m building for actors that communicate through messages.
-
-Actor-Web can run an XState machine directly. A behavior with only a few state-and-event transitions can use a smaller transition map. In either case, one owner decides which transitions are legal, actors exchange messages, and adapters call the network, DOM, filesystem, or transport.
-
-## A quick responsibility check
-
-Before asking for an implementation, I write down which part may change state, which adapter touches the network or DOM, and what result comes back. I ask:
-
-- Can I point to the machine or function that decides whether each event causes a transition?
-- Can I list the code allowed to call the network, filesystem, clock, or DOM?
-- Do adapter outputs use application types instead of provider responses?
-- Can I replace a provider without changing transition rules?
-- Which trace or test covers the start, success, failure, and cancellation paths?
-
-The answers can be checked in imports, callback types, and tests: which modules call `fetch`, which callbacks send actor events, and which data types cross a boundary.
-
-Not every dependency needs an adapter. Not every internal decision needs a new abstraction.
-
-One sign a boundary is useful is that we can replace one API client with another, or a browser adapter with a test implementation, without rewriting the behavior itself. If every change still crosses the boundary, the abstraction is not helping.
+The first draft is becoming cheap. A coherent answer to who owns what is not.
 
 ## Next in the series
 
-Finding the same retry or error rule in a component, adapter, and test tells us ownership is unclear. It does not tell us where that responsibility begins and ends.
+The project gave me a concrete behavior for stress-testing the Ignite Element API. Passing `moduleId` directly made `startModule` easier to exercise from both a browser binding and a headless test. That gives us evidence that the command no longer depends on one view's markup.
 
-Structure alone rarely answers that. One useful clue is lifecycle: what starts, changes, fails, recovers, and must remain coherent as time passes.
+It does not prove that starting a module is the right feature for a client's product, and that was not the question this project could answer. The immediate question was whether Ignite Element lets a developer express the same intent across supported environments without carrying one view's markup into the command.
 
-That’s the question the next post, [*Lifecycle Is the Real Boundary*](/writing/lifecycle-is-the-real-boundary/), takes up.
+Before we model a command, actor, or port, we need to understand who is trying to make progress, what is getting in their way, and what evidence would show that the behavior helped.
+
+That is where the next post, [*Product Framing Before Software Design: Deciding What to Build*](/writing/before-behavior-product-frame/), begins.
+
+The examples in this series come from dogfooding Ignite Element. You can [read the v3 beta documentation](https://0xjcf.github.io/ignite-element/) or [follow the implementation and examples on GitHub](https://github.com/0xjcf/ignite-element/tree/beta).
 
 <!-- CTA disabled until business site is ready.
 

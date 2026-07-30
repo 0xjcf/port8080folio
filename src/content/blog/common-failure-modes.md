@@ -12,6 +12,11 @@ tags:
 draft: true
 ---
 
+<!--
+Editorial status: retained as source material for a possible diagnostic field
+guide. It is not part of the numbered Behavior & Boundaries series.
+-->
+
 ## Common Failure Modes
 
 Most systems do not fail all at once.

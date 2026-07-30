@@ -1,9 +1,11 @@
 ---
-title: The Functional Core
-description: Why deterministic behavior is the only stable foundation when everything else keeps changing.
-date: 2025-01-20
+title: "Functional Core Architecture: Where Deterministic Decisions Belong"
+description: "How building an Ignite Element router with the browser's Navigation API led me to separate semantic commands, deterministic route policy, and environment effects."
 pubDate: 2025-01-20
-edition: 3
+updatedDate: 2026-07-30
+edition: 1
+revision: 15
+seriesOrder: 4
 series: "Behavior & Boundaries"
 tags:
   - architecture
@@ -14,564 +16,220 @@ tags:
 draft: false
 ---
 
-In the last essay, *Lifecycle Is the Real Boundary*, I argued that boundaries earn their keep only when they protect behavior over time. This one picks up that thread and asks the next question I couldn’t avoid:
-
-**If a lifecycle needs protection, what has to remain constant — and what doesn’t?**
-
-What I was looking for wasn’t a new pattern or a better abstraction.
-It was a way to keep behavior coherent even as the environment changed — without time, retries, and transports quietly reshaping outcomes behind my back.
-
-That search eventually led me to the idea of a functional core.
-
-When I first heard the phrase “functional core,” I assumed it meant functional programming.
-
-It didn’t.
-
----
-
-## The questions I couldn’t answer anymore
-
-In the systems I struggled with, the code itself wasn’t obviously broken.
-
-What broke first was my ability to answer simple questions:
-
-What state are we in right now?  
-What is allowed to happen next?  
-Why did this screen end up like this?  
-Was this behavior intentional — or did it just emerge?  
-
-As behavior spread across components, effects, callbacks, and adapters, those questions stopped having clear answers.
-
-Nothing crashed.
-Nothing screamed.
-
-But reasoning became guesswork.
-
-And once that happened, I no longer had a reliable way to tell whether the system was behaving correctly — or just coincidentally.
-
----
-
-## What all those moments had in common
-
-At first, I treated each incident as its own problem.
-
-A messy reducer here.  
-An overgrown hook there.  
-A side effect in the wrong place.  
-
-But over time, the pattern became impossible to ignore.
-
-Whenever a system felt unpredictable, the same thing was true:
-behavior depended on *when* something happened, *where* it happened, or *what environment* it happened in.
-
-If I replayed the same sequence of events, I didn’t always get the same outcome.
-
-That’s when the word *determinism* finally stuck.
-
----
-
-## Determinism over time
-
-This isn’t determinism in the mathematical sense.
-
-It’s determinism over time.
-
-Given the same inputs, the same events, and the same starting state, the system should reach the same conclusions — every time.
-
-Once I started treating that as a requirement instead of a preference, everything else fell into place. It gave me a way to reason about behavior directly, instead of debugging symptoms after the fact.
-
-Without that property, no amount of structure made the system easier to understand — it only made failures harder to trace.
-
----
-
-## What lives in the functional core
-
-In the systems I build now, the functional core contains a very specific set of things — the parts of the system that need to remain stable for behavior to make sense over time:
-
-* explicit states
-* explicit transitions
-* guards and rules
-* decisions about what is allowed and what is not
-
-That list stays short on purpose.
-
-The functional core doesn’t execute work.  
-It doesn’t coordinate time.  
-And it doesn’t adapt to its environment.
-
-There are no network calls.  
-No timers.  
-No subscriptions.  
-No knowledge of where it’s running or what it’s talking to.
-
-Just behavior.
-
-Anything that could vary depending on timing, infrastructure, or execution context stays out — not because it’s unimportant, but because letting it in would quietly change the meaning of decisions.
-
----
-
-## Why I kept ending up with state machines
-
-I didn’t start using state machines because I was looking for a new abstraction.
-
-I started because XState gave me a visualizer.
-
-Being able to map the entire system as a statechart — before writing a single line of code — changed how I reasoned about behavior. For the first time, I could see all the states, all the transitions, and all the places uncertainty could enter the system, laid out explicitly.
-
-That experience made something click.
-
-It wasn’t about machines.  
-It was about making behavior visible.
-
-```mermaid
-stateDiagram-v2
-  [*] --> idle
-  idle --> editing: INPUT
-  editing --> saving: SAVE
-  saving --> saved: SUCCESS
-  saving --> error: FAILURE
-  error --> editing: RETRY
-```
-
-Statecharts make behavior observable over time by showing how an actor responds to events; the authority to decide what those events mean lives in the actor, not in the chart.
-
-Over time, something else happened.
-
-The statechart stopped being just a design tool and started becoming a runtime artifact. Instead of living only in diagrams, it became a small, pure finite state machine that could observe decisions made elsewhere and reflect that back to the system.
-
-The functional core decided what happened.  
-The FSM showed where we were.
-
-That separation mattered.
-
-The FSM didn’t own business rules. It didn’t talk to the network. It didn’t decide policy. It existed to make workflow and lifecycle explicit — and observable.
-
-Around the same time, *Constructing the User Interface with Statecharts* reframed how I thought about UIs altogether. Screens weren’t components anymore; they were states. User actions weren’t callbacks; they were events. Rendering became a consequence of state, not something to orchestrate by hand.
-
-Once you start thinking that way, it’s hard to go back.
-
-From there, the path forward became clearer.  
-Statecharts led me to the actor model.  
-Actors led me to clearer boundaries.  
-and those boundaries eventually forced me to separate deciding what should happen from executing it.
-
----
-
-## When the core takes over
-
-What I didn’t realize at the time was that making behavior visible also made its fragility obvious.
-
-Once you can see every state and every transition, you start noticing something else: the behavior you carefully mapped out is still being reinterpreted by the environment around it. Network timing changes outcomes. Adapters leak meaning. Effects quietly rewrite intent.
-
-The statechart shows you what should happen.  
-The architecture decides whether that behavior survives contact with reality.
-
-That’s where the functional core comes in.
-
-```mermaid
-flowchart LR
-  Core["Functional Core<br/>(decisions & rules)"]
-  FSM["FSM<br/>(workflow projection)"]
-  Env["Environment<br/>(IO, time, adapters)"]
-
-  Env --> Core
-  Core --> FSM
-```
-
-**The functional core is where decisions are enforced; the FSM projects those decisions over time, and the environment supplies facts without being allowed to redefine meaning.**
-
-It’s the place where behavior stops being advisory and starts being authoritative — where the rules implied by the diagram become rules the system is not allowed to violate.
-
-The statechart made behavior visible.  
-The functional core was where it finally stopped shifting underneath me.
-
----
-
-## Why this became the only stable shape
-
-At first, I treated the state machine as the source of truth.
-
-That worked — until it didn’t.
-
-The moment the machine started caring about network timing, retries, cancellation, or adapter quirks, it stopped being a description of behavior and started becoming a negotiation with the environment. States that were meant to be stable began to reflect execution details instead of intent. Transitions accumulated guards that had nothing to do with what the system was actually trying to decide.
-
-The machine was still correct.  
-But it was no longer authoritative.
-
-What finally clicked was this: a statechart can only stay trustworthy if it reflects decisions made somewhere else.
-
-Behavior has to be decided in a place that is:
-
-* deterministic
-* free of time
-* free of IO
-* free of implementation detail
-
-Once those decisions exist, the machine becomes what it was always best at being: a projection of behavior over time.
-
-The functional core decides what happened.  
-The FSM answers where we are now.
-
-That separation wasn’t aesthetic.  
-It was the only way to keep the diagram honest as the system grew.
-
-After that, every system that lasted ended up with the same shape.
-
-A pure core that owned meaning,  
-and a small machine that made workflow visible.
-
----
-
-## A concrete example
-
-Consider a simple data loading flow.
-
-Not the code.  
-The behavior.
-
-Are we idle?  
-Are we loading for the first time?  
-Are we refreshing existing data?  
-Did something fail?  
-Can the user retry?
-
-Those questions have nothing to do with `fetch`, caching libraries, or frameworks.
-
-They are questions about behavior.
-
-And that behavior needs a single place where its meaning doesn’t shift depending on timing or environment.
-
-When I sketch it out, it usually looks something like this:
-
-```mermaid
-stateDiagram-v2
-  [*] --> idle
-  idle --> loading: LOAD
-  loading --> success: DATA_LOADED
-  loading --> error: FAILED
-  success --> loading: REFRESH
-  error --> loading: RETRY
-```
-
----
-
-## What does not belong in the functional core
-
-This part mattered just as much.
-
-The functional core should not:
-
-* call APIs
-* read from storage
-* subscribe to observers
-* decide how often to retry
-* depend on the browser, the network, or a provider
-
-Every time I let those concerns in, the meaning of behavior started to depend on execution details instead of intent.
-
-The system could still look clean.
-But it stopped being something I could trust.
-
----
-
-## When behavior stops being interchangeable
-
-Even after moving logic into a “core,” I ran into another failure mode.
-
-Things looked deterministic, but swapping implementations quietly changed behavior.
-
-A mock behaved differently than production.  
-A new transport required conditionals upstream.  
-A retry policy leaked into places that weren’t supposed to care.
-
-Nothing crashed.
-
-But behavior stopped being interchangeable — the same inputs no longer led to the same outcomes once the implementation changed.
-
-And once that happened, reasoning collapsed again.
-
----
-
-## Where substitution actually breaks
-
-There’s a formal name for this idea.
-
-Barbara Liskov described it as substitution.
-
-If two implementations can accept the same inputs but produce different decisions implied by those inputs, they are not interchangeable — even if the interface looks clean.
-
-Two payment adapters can expose the same method, return the same shape, and still encode different meanings for failure.
-
-Once the rest of the system needs to know *which* adapter it’s talking to in order to behave correctly, meaning has already fractured.
-
-That usually shows up as logic branching on the adapter itself.
-
-And once behavior branches there, substitution has already failed.
-
----
-
-## Normalize inputs at the boundary (not inside the core)
-
-```mermaid
-flowchart LR
-  Unknown["Unknown Input"]
-  Boundary["Boundary<br/>(validate + normalize)"]
-  Event["Domain Event"]
-  Core["Functional Core"]
-
-  Unknown --> Boundary
-  Boundary --> Event
-  Event --> Core
-```
-
-Before behavior can be centralized, adapter-specific meaning has to be collapsed into something the system actually understands. This is a **boundary responsibility**, not core logic.
-
-UI components and editors are adapters too. They produce values you don’t control and can’t fully trust — often typed as `unknown`, often shaped by plugin behavior, versions, or timing.
-
-If that raw output reaches the core, determinism is already gone. The core is no longer deciding — it’s reacting to ambiguity.
-
-Instead, treat the boundary like any other port:
-
-1. Validate the unknown value
-2. Normalize it into domain events
-3. Only then let it enter the core
-
-Here’s the same idea from this project: <https://github.com/0xjcf/editor-save-loop>
+The previous article ended with a semantic navigation request:
 
 ```ts
-type DocChangedEvent = { type: "DOC_CHANGED"; doc: DocSnapshot };
-type DocInvalidEvent = { type: "DOC_INVALID"; message: string };
-type DocChangeEvent = DocChangedEvent | DocInvalidEvent;
-  
-function toDocEvent(input: unknown): DocChangeEvent {
-  if (isDocSnapshot(input)) {
-    return { type: "DOC_CHANGED", doc: input };
+{ type: "NAVIGATE_REQUESTED", to: "/dashboard" }
+```
+
+That gave the router a stable message. A link, a test, or another interface could request the same destination without sending a click event or reconstructing browser markup.
+
+I thought the next step would be straightforward. I wanted to build the router around the browser's [Navigation API](https://developer.mozilla.org/en-US/docs/Web/API/Navigation_API), which is now available as `window.navigation`. It gives applications one place to observe, intercept, and initiate navigation without rebuilding everything around `popstate` and the History API.
+
+It seemed like a good project for dogfooding the [Ignite Element v3 beta](https://0xjcf.github.io/ignite-element/).
+
+The beta already contained SPA and nested-router examples built around the History API. I used the Navigation API iteration described here to revisit the same route-policy and lifecycle questions.
+
+What I did not know was where the browser's responsibility should end.
+
+The Navigation API could tell me which destination was requested. It could update browser history and report how navigation progressed. It could not decide whether `/dashboard` was a route this application recognized or whether a signed-out user should be redirected to `/login`.
+
+I had started with one routing problem. The native API made me see at least two:
+
+- What route does the application accept?
+- How does the current environment observe and commit that route?
+
+The first question is a decision. The second is a capability and a lifecycle.
+
+## The first bridge was an Ignite effect
+
+My first instinct was to keep the browser update close to Ignite Element. A command would carry the request to the router actor, and an Ignite effect would observe the resulting snapshot and update the Navigation API.
+
+A reduced version of that direction looked like this:
+
+```ts
+const browserNavigation = window.navigation;
+
+const routerCore = igniteCore({
+  source: routerActor,
+
+  commands: ({ actor }) => ({
+    navigate: (to: string) => {
+      actor.send({
+        type: "NAVIGATE_REQUESTED",
+        to,
+      });
+    },
+  }),
+
+  effects: ({ snapshot, prevSnapshot }) => {
+    const nextPath = snapshot.context.route.path;
+    const previousPath = prevSnapshot.context.route.path;
+
+    if (nextPath !== previousPath) {
+      void browserNavigation.navigate(nextPath).finished;
+    }
+  },
+});
+```
+
+This was a reasonable place to begin. The command expressed intent. The effect synchronized accepted router state with the browser. The machine did not import `window`.
+
+It also exposed a problem in Ignite Element's API.
+
+At the time, command and effect callbacks received the custom element as `host`. That made it possible for a command to discover intent from `host.dataset`, which was the problem the `startModule` example exposed earlier in the series. It also gave effects a convenient path back into the element and its browser environment.
+
+The router made the broader issue easier to see. A navigation effect did not need a rendered element. It needed a navigation capability. Giving it `host` encouraged the component to become a service locator for whichever browser details the effect wanted to reach.
+
+That pressure led me to remove `host` from the `igniteCore` command and effect callbacks on the v3 beta line. This was not only a preference in the router example. It became part of the beta API.
+
+The custom element still owns rendering and browser interaction at its boundary. What changed is that core callbacks no longer receive the element simply because one happens to exist. A command must receive the application value it needs:
+
+```ts
+commands: ({ actor }) => ({
+  navigate: (to: string) => {
+    actor.send({
+      type: "NAVIGATE_REQUESTED",
+      to,
+    });
+  },
+});
+```
+
+The [v3 beta documentation](https://0xjcf.github.io/ignite-element/) introduces the current runtime, and the [beta branch on GitHub](https://github.com/0xjcf/ignite-element/tree/beta) contains the implementation and dogfooding projects as they evolve.
+
+An effect that needs an environment capability must receive or close over that capability explicitly. It should not discover the environment by reaching sideways through the rendered host.
+
+Removing `host` did not solve routing by itself. It made the unanswered responsibility visible.
+
+The effect knew which accepted path to send to the browser because router state already contained one. Something still had to decide which path belonged in that state.
+
+## The browser request was not the application decision
+
+Consider an unauthenticated request for `/dashboard`.
+
+The browser can report `/dashboard` as the destination. The semantic command can carry that path to the router. Neither one has enough authority to say whether the application accepts it.
+
+That answer depends on application facts:
+
+- Which routes exist?
+- Which route matched the requested path?
+- Does it require authentication?
+- Is the current user authenticated?
+- Should the application redirect to `/login`?
+
+I initially described this as "policy equals decisions." That is close, but it helps to be more specific. Policy is the rule that chooses an answer from the current state and facts. The state transition records that answer. The running actor then carries the behavior forward over time.
+
+For the [SPA router dogfooding project](https://github.com/0xjcf/ignite-element/tree/beta/examples/apps/spa-router), the smallest useful policy became a pure function named `resolveNavigation`:
+
+```ts
+const requiresAuth = (name: RouteName): boolean =>
+  routes.find((route) => route.name === name)
+    ?.requiresAuth ?? false;
+
+export const resolveNavigation = (
+  toPath: string,
+  authed: boolean,
+): Resolved => {
+  const match = matchRoute(toPath);
+
+  if (requiresAuth(match.name) && !authed) {
+    const login = matchRoute(LOGIN_PATH);
+
+    return {
+      path: login.path,
+      route: login.name,
+      params: login.params,
+      redirected: true,
+    };
   }
-  
+
   return {
-    type: "DOC_INVALID",
-    message: "Editor produced an invalid document snapshot.",
+    path: match.path,
+    route: match.name,
+    params: match.params,
+    redirected: false,
   };
-}
+};
 ```
 
-Adapters still return facts.  
-The shell still orchestrates.  
-But the core only ever sees **events**.
+The route table, dynamic path matching, and authentication redirect are application policy in this project. `resolveNavigation` does not observe `window.navigation`, inspect an element, or commit browser history. It receives the requested path and authentication fact, then returns the route the application accepts.
 
----
-
-## From facts to authority
-
-Once inputs are normalized, something important changes.
-
-The shell stops deciding.
-
-It doesn’t interpret results.  
-It doesn’t branch on adapter meaning.  
-It doesn’t encode policy.
-
-It simply raises events and hands them to the functional core.
-
-That’s where decisions finally live — not as helper functions scattered across the system, but in a single place that owns how state is allowed to change.
-
-```mermaid
-sequenceDiagram
-  participant Adapter
-  participant Shell
-  participant Core
-  participant FSM
-
-  Shell->>Adapter: perform IO
-  Adapter-->>Shell: result (fact)
-  Shell->>Shell: normalize to domain event
-  Shell->>Core: raise event
-  Core-->>FSM: emit workflow state
-```
-
-In the editor-save-loop project, this boundary is explicit.
-
-The editor produces values the system doesn’t control — JSON snapshots shaped by plugins, versions, and timing. The shell treats those values as *facts*, not intent, and normalizes them before the core ever sees them:
-
-By the time an event reaches the core, adapter-specific meaning has already been resolved.
-
-The core doesn’t validate.  
-It doesn’t parse.  
-It doesn’t guess.  
-
-It decides.
-
-In practice, that decision-making core often takes the shape of a reducer — a pure function that accepts the current state and a domain event, and returns the next state:
+That gives the decision a small test surface:
 
 ```ts
-export function reduceDoc(
-  state: DocState,
-  event: DocEvent
-): DocState {
-  switch (event.type) {
-    case "DOC_CHANGED":
-      return {
-        ...state,
-        status: "dirty",
-        doc: event.doc,
-        error: null,
-      };
-  
-    case "DOC_INVALID":
-      return {
-        ...state,
-        status: "error",
-        error: event.message,
-      };
-  
-    case "SAVE_SUCCEEDED":
-      return {
-        ...state,
-        status: "saved",
-        revision: state.revision + 1,
-        lastSavedAt: event.at,
-      };
-  }
-}
+expect(
+  resolveNavigation("/dashboard", false).route,
+).toBe("login");
+
+expect(
+  resolveNavigation("/dashboard", true).route,
+).toBe("dashboard");
+
+expect(
+  resolveNavigation("/missing", false).route,
+).toBe("not-found");
 ```
 
-There are no network calls here.  
-No retries.  
-No timing logic.
+These tests do not prove that the browser navigated. They prove that the same path and authentication state produce the same application answer.
 
-Just decisions about what the system is allowed to do next.
+That is what made the phrase functional core useful to me. I am not using it to mean that the whole application must adopt functional programming. I mean the deterministic part of the system that owns an application decision.
 
-The shell’s role is now purely mechanical: perform work, normalize results, and raise events. It no longer needs to know *why* something happened — only *what* happened.
+The effect can perform an outward update. The Navigation API can perform browser navigation. Neither one should quietly create route policy while doing that work.
 
-That’s the shift from facts to authority.
+## The nested router tested the same boundary again
 
-Once behavior is decided in one place, the rest of the system stops caring which adapter produced the result. Adapter-specific meaning was collapsed **once**, at the boundary.
+The SPA example gave me a clean resolver, but I wondered whether the boundary would hold once navigation was divided across parent and child surfaces.
 
-That’s what makes substitution possible — and reasoning local again.
+That became the [nested child-router dogfooding project](https://github.com/0xjcf/ignite-element/tree/beta/examples/apps/nested-child-router).
 
-> Want to see this end-to-end in real code?  
-> The **[editor-save-loop](<https://github.com/0xjcf/editor-save-loop>)** project implements this architecture directly.
-> (boundary mapper → reducer core → FSM projection → shell orchestration).
+The name can make it sound like a child router runs inside a parent router. That is not how the example works. One application-owned XState router source is shared by the parent and child outlets. Parent navigation, documentation sections, and settings panels expose commands scoped to the choices available in each surface, but all of those requests reach the same router actor.
 
----
+The nested resolver owns a different route policy. Instead of applying authentication redirects, it maps a root-relative path into the `parent`, `child`, and `label` the outlets need.
 
-## The functional core is where substitution is enforced
+The important result was not that both projects shared one generic resolver. They do not. Each project owns a stable, closed route policy for the behavior it is testing.
 
-This is where the functional core earns its keep.
-
-It’s where rules live.  
-Where decisions are made.  
-Where failure has a consistent meaning.
-
-Same inputs.  
-Same rules.  
-Same outcomes.
-
-Anything else isn’t a substitute — it’s a fork in behavior, whether you acknowledge it or not.
-
----
-
-## Why the imperative shell exists at all
-
-If behavior is deterministic and rules are consistent, then all nondeterminism has to go somewhere else.
-
-Networks fail.
-Requests arrive out of order.
-Time passes.
-Things restart.
-
-None of that belongs in the functional core.
-
-But pretending it doesn’t exist doesn’t work either.
-
-The imperative shell exists to absorb that nondeterminism — to perform side effects, coordinate time, and interact with the environment — without being allowed to rewrite the rules.
+What they share is the responsibility split:
 
 ```mermaid
-sequenceDiagram
-  participant Core
-  participant Shell
-  participant Env
+flowchart LR
+  Surface["Link, test, or scoped navigation surface"]
+  Command["Semantic navigation command"]
+  Actor["Router actor"]
+  Policy["Deterministic resolver"]
+  Effect["Environment effect"]
+  Browser["Navigation API"]
 
-  Core->>Core: decide next state
-  Core->>Shell: emit effect
-  Shell->>Env: perform IO
-  Env-->>Shell: return facts
-  Shell-->>Core: raise event
+  Surface -->|"requested path"| Command
+  Command --> Actor
+  Actor -->|"path + application facts"| Policy
+  Policy -->|"accepted route"| Actor
+  Actor --> Effect
+  Effect --> Browser
 ```
 
-This separation is what keeps the core authoritative while still allowing the system to function in the real world.
+Different surfaces may offer different commands. Different projects may apply different route rules. The route decision still has one application authority.
 
-The details of how the shell does this — and what it must never be allowed to decide — deserve their own discussion.  
-That’s the focus of the next article in this series.
+This answered one of the questions I had while working through ports and policies. A port does not make the decision deterministic. The resolver does that. A port gives the running behavior a provider-neutral way to reach the environment after the decision is made.
 
----
+## What the functional core changed
 
-## Behavior first, wiring second
+Before this project, it was easy for me to think about routing as one feature. The application receives a path and the browser moves.
 
-That shift changed the order I approach problems.
+Dogfooding the Navigation API forced me to slow that sentence down.
 
-I no longer start with:
+The interface captures a destination. The command carries the request. The resolver applies route policy. The actor records the accepted route. An environment capability performs the browser work.
 
-How do I fetch this?  
-Which library should I use?  
-Where does this effect live?
+Those steps can live close together in a small implementation. They still own different decisions.
 
-I start with:
+This also explains why removing `host` from `igniteCore` mattered. The change was not only about making headless tests easier. It prevented command and effect callbacks from treating the current custom element as the source of application intent or environment capability.
 
-What states exist?  
-What transitions are valid?  
-What is allowed to happen next?  
-What must never happen?
+The current router source still uses an optimistic commit. It updates router context with the accepted route, asks its navigation capability to commit the path, and records a failure if that promise rejects. A successful commit does not return an application fact, and the source does not keep separate pending and confirmed routes.
 
-Only after those answers are clear do I wire the system to the world.
+I do not want to describe a stronger protocol than the example implements. The resolver gives us a deterministic application decision. It does not prove that the browser and application state have been reconciled after every commit.
 
----
+That limit led to the next question.
 
-## Why the functional core isn’t optional
+The Ignite effect could update the browser after router state changed, but the router also needed to observe browser navigation, own the subscription, handle commit failures, and clean everything up when it stopped. Those responsibilities did not belong to one route decision, and tying them to whichever element rendered the route gave them the wrong lifetime.
 
-You can build without this layer.
-
-I did for years.
-
-What I lost was local reasoning.
-
-Every change became global.
-Every fix risked a regression.
-Every refactor felt dangerous.
-
-The functional core gave me a stable center while everything else changed.
-
-And right now, the pace of change in our field is accelerating — driven by AI and the rapid evolution of tech stacks.
-
----
-
-## Why this matters more now
-
-AI can generate code faster than we can review it.
-
-That doesn’t make architecture less important.  
-It makes it impossible to fake.
-
-If behavior is implicit, AI will happily reproduce your mistakes at scale.
-
-If behavior is explicit, AI becomes a force multiplier instead of a liability.
-
-The functional core can make the difference.
-
----
-
-## Final thought
-
-The functional core is about responsibility.
-
-It’s the place where behavior is owned, named, and protected.
-
-Everything else exists to support that responsibility.
-
----
-
-## Series continuation
-
-**Next in Behavior & Boundaries:**
-**The Imperative Shell**
-*Where nondeterminism is absorbed without being allowed to decide.*
+The next post, [*The Boundary Should Follow the Lifecycle*](/writing/lifecycle-is-the-real-boundary/), follows the router from the Ignite effect into the running source that owns observation, commits, failure, and cleanup.

@@ -1,289 +1,267 @@
 ---
-title: Ports and Adapters
-description: Why infrastructure should be replaceable, not influential.
-date: 2025-01-20
+title: "Ports Define Capabilities; Adapters Translate Environments"
+description: "How an application-owned navigation contract can support browser and headless runtimes without moving policy out of the router."
 pubDate: 2025-01-20
-edition: 6
+updatedDate: 2026-07-28
+edition: 1
+revision: 1
+seriesOrder: 6
 series: "Behavior & Boundaries"
 tags:
   - architecture
-  - statecharts
+  - ports
+  - adapters
   - actor-model
   - boundaries
-  - systems-thinking
 draft: true
 ---
 
-## Ports and Adapters
+The router from the previous article receives a `navigation` implementation.
 
-At this point, we have behavior, actors, and an imperative shell.
+The actor owns route policy and lifecycle. The implementation reads, observes, and commits paths in a particular environment.
 
-The system knows what should happen.  
-It has a place where that behavior lives.  
-It has a way to talk to the world without letting chaos leak inward.
+Calling that implementation an adapter is reasonable, but it leaves one question unanswered:
 
-Now we need to deal with a quieter problem.
+What exactly is it adapting to?
 
-Infrastructure changes.
+The answer is the port: an application-owned contract that names the capability the router needs.
 
----
+## Start with the capability
 
-## The real problem with infrastructure
+The router does not need “the browser.” That phrase carries more surface area than the behavior actually uses.
 
-Libraries get replaced.  
-APIs evolve.  
-Vendors change pricing.  
-New standards appear.  
-Old assumptions break.
+It needs three capabilities:
 
-Most of the systems I worked on were not designed for this.
+- read the current path;
+- observe external path changes;
+- attempt to commit a path.
 
-Instead, infrastructure slowly becomes *part of the behavior*, even when no one intended it to.
-
-That is where ports and adapters come in.
-
----
-
-## What a port actually is
-
-A port is not a library.
-
-A port is not an implementation.
-
-The simplest definition that held up for me is this:
-
-A port is simply a **contract**.
-
-It answers one question:
-
-What does the system need from the outside world in order to behave correctly?
-
-Nothing more.
-
-No performance assumptions.  
-No vendor-specific concepts.  
-No runtime details.
-
-Just the shape of the interaction.
-
----
-
-## What an adapter actually is
-
-In practice, the adapter is how that contract gets fulfilled.
-
-It knows about:
-
-- APIs
-- protocols
-- runtimes
-- libraries
-- quirks
-
-It translates those details into something the system understands.
-
-Adapters are concrete.  
-Ports are abstract.
-
-That distinction kept mattering more than I expected.
-
----
-
-## Direction matters
-
-Ports face inward.
-
-They are defined in terms the system understands.
-
-Adapters face outward.
-
-They deal with whatever the world happens to look like today.
-
-When I reversed that direction, infrastructure started rewriting behavior.
-
-It never ended well.
-
-Here’s the shape I keep in mind:
-
-```mermaid
-flowchart LR
-  Core["Functional core"]
-  Port["Port (contract)"]
-  Adapter["Adapter (concrete)"]
-  World["External world"]
-
-  Core --> Port
-  Port --> Adapter
-  Adapter --> World
-```
-
-And the contract usually looks something like this:
+We can express those needs without mentioning `window`, the Navigation API, or an in-memory test implementation:
 
 ```ts
-type DataPort = {
-  load(): Promise<Result>;
-  subscribe(onChange: (data: Result) => void): () => void;
+type NavigationInstruction = {
+  path: string;
+  history: "push" | "replace";
+};
+
+type NavigationCommit =
+  | { ok: true; path: string }
+  | {
+      ok: false;
+      reason: "aborted" | "unavailable";
+      message: string;
+    };
+
+type NavigationPort = {
+  currentPath(): string;
+  observe(
+    listener: (path: string) => void,
+  ): () => void;
+  commit(
+    instruction: NavigationInstruction,
+    signal: AbortSignal,
+  ): Promise<NavigationCommit>;
 };
 ```
 
----
+This contract is a port because it is written from the application’s side of the boundary.
 
-## A practical example
+The router owns the words `path`, `push`, `replace`, `aborted`, and `unavailable`. A browser implementation may need to translate those words into a platform API. A memory implementation may not need a platform at all.
 
-Think about a data query.
+## A port is not the translation
 
-The system might need:
+Ports and translation are closely related, but they are not the same thing.
 
-- a way to subscribe to updates
-- a way to trigger a refresh
-- a snapshot of the current result
+The port defines what the application needs and which results it understands.
 
-That is the port.
+The adapter performs the translation between that contract and a concrete environment.
 
-It does not care if the data comes from:
+```mermaid
+flowchart LR
+  Behavior["Router actor<br/>policy + lifecycle"]
+  Port["Navigation port<br/>application contract"]
+  Adapter["Browser or memory adapter<br/>translation"]
+  Environment["Navigation API<br/>or in-memory state"]
 
-- TanStack
-- fetch
-- GraphQL
-- WebSockets
-- local storage
+  Behavior -->|"requests capability"| Port
+  Adapter -. "implements" .-> Port
+  Adapter -->|"uses"| Environment
+  Environment -->|"external result"| Adapter
+  Adapter -->|"application result"| Behavior
+```
 
-Those are adapter concerns.
+The dashed arrow matters: the port does not call the adapter as a separate runtime hop. It is the contract the concrete adapter satisfies.
 
-The port stays the same even when everything else changes.
+At assembly time, the application supplies an implementation to `createRouterSource`. At runtime, the source-owned actors call that implementation through the port.
 
----
+## The browser adapter translates platform behavior
 
-## Adapters report facts
+A browser adapter knows about platform details the router should not need to understand.
 
-This is the rule that kept things sane for me.
+Its shape might look like this:
 
-Adapters report facts.  
-They do not make decisions.
+```ts
+function createBrowserNavigation(
+  browser: BrowserNavigation,
+): NavigationPort {
+  return {
+    currentPath: () => browser.currentPath(),
 
-An adapter can say:
+    observe: (listener) =>
+      browser.onPathChange(listener),
 
-- data arrived
-- an error occurred
-- a request is in flight
-- a connection was lost
+    commit: async (instruction, signal) => {
+      try {
+        const path = await browser.commit({
+          path: instruction.path,
+          replace:
+            instruction.history === "replace",
+          signal,
+        });
 
-It cannot say:
+        return { ok: true, path };
+      } catch (error) {
+        if (signal.aborted) {
+          return {
+            ok: false,
+            reason: "aborted",
+            message: "Navigation was replaced",
+          };
+        }
 
-- we are loading
-- we should retry
-- the UI should block
-- this error is fatal
+        return {
+          ok: false,
+          reason: "unavailable",
+          message: toErrorMessage(error),
+        };
+      }
+    },
+  };
+}
+```
 
-Those are behavior decisions.
+The exact platform calls are less important than the direction of translation.
 
-They belong in the functional core.
+The adapter receives an application instruction. It converts that instruction into platform work. It then converts the platform result or expected failure into a value the application understands.
 
----
+The adapter does not decide whether `/dashboard` should redirect to `/login`. That decision has already been made by `resolveNavigation`.
 
-## Why adapters must stay boring
+## The memory adapter implements the same capability
 
-Boring adapters are a feature.
+A headless implementation can satisfy the same port without pretending to be a browser:
 
-When adapters are simple:
+```ts
+function createMemoryNavigation(
+  initialPath: string,
+) {
+  let currentPath = initialPath;
+  const listeners = new Set<
+    (path: string) => void
+  >();
 
-- they are easy to replace
-- they are easy to test
-- they are easy to reason about
-- they do not accumulate hidden logic
+  return {
+    port: {
+      currentPath: () => currentPath,
 
-Every time adapters got clever for me, they became sticky.
+      observe: (listener) => {
+        listeners.add(listener);
+        return () => listeners.delete(listener);
+      },
 
-And once infrastructure becomes sticky, behavior becomes trapped.
+      commit: async ({ path }, signal) => {
+        if (signal.aborted) {
+          return {
+            ok: false,
+            reason: "aborted",
+            message: "Navigation was replaced",
+          };
+        }
 
----
+        currentPath = path;
+        return { ok: true, path };
+      },
+    } satisfies NavigationPort,
 
-## Ports protect the core from drift
+    externalNavigate: (path: string) => {
+      currentPath = path;
+      listeners.forEach((listener) =>
+        listener(path),
+      );
+    },
+  };
+}
+```
 
-Without ports, every infrastructure choice I made leaked inward.
+The memory adapter is not a fake DOM. It is a real implementation of the smaller capability the router owns.
 
-A new API requires new behavior.  
-A runtime change forces a refactor.  
-A library update breaks assumptions.
+That makes the headless runtime useful for more than a unit test. It can exercise the same actor lifecycle and route policy while replacing only the environmental mechanism.
 
-Ports act as a buffer.
+The separate `externalNavigate` test driver protects an important distinction. An application commit returns through `commit`; an independently observed change enters through `observe`. If the adapter echoes its own commit through both paths, the router may process one navigation twice. A browser adapter needs the equivalent distinction, often by recognizing notifications caused by its own programmatic commit.
 
-They make it possible to change how the system connects to the world without redefining what the system *is*.
+## Expected failure should return to behavior
 
----
+External APIs often throw. The application still needs to decide what an expected failure means.
 
-## This is not abstraction for abstraction’s sake
+That does not require banning exceptions everywhere.
 
-It looked that way to me at first.
+The adapter can catch platform exceptions at the boundary and translate expected outcomes into an application result. An unexpected programming error may still reject and reach the actor’s unexpected-error path.
 
-Why not just call the library directly?
+For navigation:
 
-Because direct calls become dependencies.  
-Dependencies become assumptions.  
-Assumptions become behavior.
+- an aborted commit may be expected when a newer request replaces it;
+- an unavailable navigation service may move the router to `failed`;
+- an impossible adapter invariant should remain loud.
 
-Ports and adapters exist to keep those assumptions out of places where they do not belong.
+The adapter identifies the environmental outcome. The actor interprets that outcome under its current policy.
 
----
+This is the useful part of “errors as data”: expected failure returns through the contract instead of silently selecting a different control-flow owner.
 
-## Where ports live
+## Where adapters start deciding too much
 
-Ports belong close to the functional core.
+An adapter has crossed the boundary when it begins to answer application questions:
 
-They are part of the system’s vocabulary.
+```ts
+if (!authed && path === "/dashboard") {
+  return commit("/login");
+}
+```
 
-Adapters belong at the edges.
+That branch may work, but route policy now lives in both the resolver and the browser adapter.
 
-They are allowed to be replaced, rewritten, or removed entirely.
+The same drift happens when an adapter:
 
-That physical separation reinforces the conceptual one.
+- chooses whether a retry is allowed;
+- maps provider status directly to UI state;
+- reads actor context to special-case one machine state;
+- publishes success before the external operation completes.
 
----
+Mechanisms can still contain operational choices. An HTTP adapter may follow protocol redirects, and a database client may manage connection pooling. The boundary is crossed when those mechanisms start deciding application meaning.
 
-## The quiet benefit
+## Not every dependency needs a port
 
-When we kept ports and adapters consistent, something subtle happened.
+A port is useful when the application needs to protect its vocabulary, run against more than one environment, or keep provider details from becoming policy.
 
-Infrastructure stopped being scary.
+It is not useful merely because an import exists.
 
-You can experiment without fear.  
-You can swap libraries without rewrites.  
-You can isolate failures without cascading effects.
+If a library is already expressed in application terms, has no meaningful replacement or test seam, and does not pull environmental decisions inward, an extra interface may only make the call harder to follow.
 
-The system becomes resilient not because it is clever, but because it is honest about where responsibilities live.
+The router earned a port because browser observation, memory observation, commit failures, and cleanup all needed the same application-facing contract.
 
----
+## A ports-and-adapters check
 
-## Final thought
+When I review a boundary, I ask:
 
-Ports define what the system needs.
+- Is the port named after a capability the behavior needs?
+- Are its inputs and results expressed in application terms?
+- Can an adapter implement it without importing behavior policy?
+- Does the adapter translate expected environmental outcomes back into facts?
+- Would a second implementation replace mechanism without redefining meaning?
+- Does the running actor still own when the capability is used and what its result means?
 
-Adapters deal with how the world provides it.
-
-Keeping those two apart is one of the simplest ways to prevent infrastructure from quietly taking control.
-
----
+If the last answer is no, the adapter has probably become another behavior owner.
 
 ## Next in the series
 
-Next, we’ll talk about **projection**.
+The port explains what the router needs, and the adapters explain how different environments provide it.
 
-The layer that translates internal state into UI meaning, and the one most systems never explicitly name.
-
-That omission turns out to be far more costly than it looks.
-
-## Series Context
-
-This essay builds on:
-
-- [Why Adapters Exist](/writing/why-adapters-exist/)
-
-Related deep dives:
-
-- [The Imperative Shell](/writing/imperative-shell/)
-
-## Further Reading
-
-- Alistair Cockburn — Hexagonal Architecture ([Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/))
-- Eric Evans — Domain-Driven Design ([Domain-Driven Design](https://www.domainlanguage.com/ddd/reference/))
-- Robert C. Martin — Clean Architecture ([Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html))
+Something still has to choose the browser implementation, supply it to the source, start the root actor, and stop the application. The next article places that work in a small imperative shell without turning the shell into another workflow engine.

@@ -3,8 +3,6 @@ title: "How Adapters Fail"
 description: "The failures that hurt most weren’t missing boundaries, but boundaries that quietly leaked responsibility back into the system."
 date: 2025-01-04
 pubDate: 2025-01-04
-edition: 9
-series: "Behavior & Boundaries"
 tags:
   - architecture
   - boundaries
@@ -13,6 +11,12 @@ tags:
   - systems-thinking
 draft: true
 ---
+
+<!--
+Editorial status: retired from the numbered Behavior & Boundaries series.
+The useful adapter warning signs are being reconciled into ports-adapters.md
+and dependency-direction.md.
+-->
 
 By the time I heard teams talk about adapters, it was usually too late.
 

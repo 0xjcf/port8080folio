@@ -1,280 +1,240 @@
 ---
-title: The Imperative Shell
-description: Why side effects need coordination, not control.
-date: 2025-01-20
+title: "The Imperative Shell Assembles the Runtime"
+description: "Where environment-specific implementations are selected, root actors are started, and application resources are released."
 pubDate: 2025-01-20
-edition: 8
+updatedDate: 2026-07-28
+edition: 1
+revision: 1
+seriesOrder: 7
 series: "Behavior & Boundaries"
 tags:
   - architecture
-  - statecharts
+  - composition
   - actor-model
+  - ports
   - boundaries
-  - systems-thinking
 draft: true
 ---
 
-## The Imperative Shell
+The previous article gave the router an application-facing `NavigationPort` and two implementations.
 
-So far, we’ve talked about behavior and ownership.
+The actor logic still does not choose which implementation to use. A browser application needs the browser adapter. A headless runtime needs the memory adapter.
 
-The functional core defines what should happen.  
-Actors give that behavior a place to live over time.
+Something has to make that choice, supply the implementation, start the root actor, and eventually stop it.
 
-But none of that does anything on its own.
+That small effectful boundary is what I mean by the imperative shell.
 
-At some point, the system has to talk to the world.
+## The shell is the application’s assembly point
 
-That is where the imperative shell comes in.
+The shell sits where configuration becomes a running application.
 
-I didn’t start with it as a diagram.
-I noticed it after side effects kept drifting through everything else.
+For the browser router, the assembly can remain direct:
 
----
+```ts
+export function startBrowserApplication() {
+  const navigation = createBrowserNavigation(
+    resolveBrowserNavigation(),
+  );
 
-## The part everyone underestimates
+  const routerSource = createRouterSource({
+    navigation,
+  });
 
-In the systems I saw fall over, bad logic wasn’t the culprit.
+  const routerActor = createActor(routerSource, {
+    input: {
+      path: navigation.currentPath(),
+    },
+  });
 
-Side effects slowly took over instead.
+  routerActor.start();
 
-Network calls creep into behavior.  
-Subscriptions get scattered across components.  
-Timers and retries appear wherever they feel convenient.  
-
-Nothing breaks immediately.
-
-Things just get harder to reason about.
-
-The imperative shell exists to prevent that.
-
----
-
-## What the imperative shell actually is
-
-The imperative shell is not a dumping ground for messy code.
-
-It has a very specific job:
-
-To coordinate side effects without being allowed to decide behavior.
-
-That means the shell can:
-
-- subscribe and unsubscribe
-- call APIs
-- start and stop things
-- sequence effects
-- manage lifecycles
-
-But it cannot:
-
-- decide what a state means
-- decide when something is allowed
-- interpret success or failure
-- encode UI rules
-
-Those decisions belong elsewhere.
-
----
-
-## Orchestration, not logic
-
-This distinction matters.
-
-The shell is about orchestration.
-
-It wires things together.
-
-It listens for facts from the outside world and reports them inward.  
-It listens for decisions from behavior and makes them real.
-
-It is a translator and a coordinator.
-
-Not a judge.
-
-Here’s the orchestration I keep in mind when I draw it:
-
-```mermaid
-sequenceDiagram
-  participant UI as Delivery / UI
-  participant Shell as Imperative Shell
-  participant Adapter as Adapter
-  participant Actor as Actor
-
-  UI->>Shell: intent / command
-  Shell->>Adapter: execute side effect
-  Adapter-->>Shell: fact / result
-  Shell->>Actor: event
-  Actor-->>Shell: decision
-  Shell-->>UI: derived meaning
+  return () => {
+    routerActor.stop();
+  };
+}
 ```
 
----
+This code is imperative. It creates concrete objects, starts a runtime, and returns cleanup.
 
-## Why the shell must be thin
+It does not decide whether `/dashboard` requires authentication. It does not keep `pending` and `current` routes synchronized. It does not decide what an aborted commit means.
 
-If the shell grows large, it becomes a second brain.
+Those decisions remain inside the router’s behavior.
 
-And two brains means disagreement.
+## The shell should not become the workflow
 
-When logic crept into the shell, I started seeing things like:
+It is tempting to put the sequence in the startup code:
 
-- special cases based on timing
-- retries that only happen sometimes
-- hidden assumptions about state
-- behavior that cannot be replayed
+```ts
+const route = resolveNavigation(to, authed);
+const result = await navigation.commit(route);
 
-At that point, determinism was already gone.
+if (result.ok) {
+  routerActor.send({
+    type: "ROUTE_CHANGED",
+    route,
+  });
+}
+```
 
-Keeping the shell thin was the only way I kept it from becoming a second brain.
+That code now owns the order of the navigation lifecycle. It decides when work starts, which result changes state, and which event represents success.
 
----
+The actor becomes a passive store while the shell becomes the real workflow.
 
-## The shell is where nondeterminism lives
+In the architecture developed through this series, the direction is different:
 
-This is important.
+1. The shell supplies `navigation`.
+2. A semantic command sends `NAVIGATE_REQUESTED`.
+3. The router actor resolves the request.
+4. Entering `committing` invokes the supplied commit actor.
+5. Completion or failure returns to the router.
+6. The router decides how its state changes.
 
-The world is nondeterministic.
+The shell assembles the participants. It does not reenact their behavior.
 
-Networks fail.  
-Events arrive out of order.  
-Time passes.  
-Things restart.
+## What belongs in the shell
 
-The functional core must be protected from all of that.
+The shell may:
 
-The shell absorbs the chaos so behavior does not have to.
+- read startup configuration;
+- choose concrete adapters;
+- supply implementations to actor logic;
+- create and start root actors;
+- attach top-level delivery integrations;
+- stop actors and release application-level resources.
 
-It turns unpredictable inputs into explicit events.
+Those operations depend on the runtime in which the application starts.
 
-Over time, that translation became the whole job.
+The shell should not:
 
----
+- decide application policy;
+- maintain a second copy of actor state;
+- interpret capability results;
+- own retries, replacement, or completion rules already modeled by behavior;
+- translate snapshots into UI meaning.
 
-## A concrete example
+The last responsibility belongs to projection, which we will address next.
 
-Think about a data query.
+## Time is not owned by one miscellaneous layer
 
-The shell might:
+An earlier version of this article described the shell as the place where time lives.
 
-- subscribe to a query runtime
-- receive updates when data changes
-- trigger refetches when told to
-- clean up when the actor stops
+That was too broad.
 
-But when data arrives, the shell does not decide what that means.
+Clocks, delays, cancellation, and asynchronous operations are environmental mechanisms. Their concrete implementations belong outside deterministic decision code.
 
-It does not decide whether this is loading or refreshing.  
-It does not decide whether the UI should show a spinner.  
-It does not decide whether retries are allowed.
+But their meaning may still be application policy:
 
-It just reports facts.
+- a session expires after a particular duration;
+- a retry is allowed only three times;
+- a newer save replaces an older pending save;
+- an aborted navigation should not appear as a user-facing failure.
 
----
+In an actor-based system, the actor lifecycle often owns those rules. XState can invoke cancellable work, model delays, and stop child actors when their state exits. The shell can supply a clock, scheduler, or adapter without taking authority over the workflow.
+
+The more precise rule is:
+
+> Environmental mechanisms are supplied at the edge. The behavior that owns the lifecycle decides what their results and timing mean.
+
+## Autosave shows the distinction
+
+Consider a document editor with autosave.
+
+The application may need concrete capabilities for measuring a document and saving it:
+
+```ts
+type DocumentPort = {
+  measure(document: Document): SizeResult;
+  save(
+    document: Document,
+    signal: AbortSignal,
+  ): Promise<SaveResult>;
+};
+```
+
+The shell can choose implementations and supply them:
+
+```ts
+const documentPort = createBrowserDocumentPort({
+  storage,
+  serializer,
+});
+
+const editorSource = createEditorSource({
+  documentPort,
+});
+
+const editorActor = createActor(editorSource);
+editorActor.start();
+```
+
+The editor actor still owns:
+
+- whether the document is allowed to save;
+- when an autosave attempt begins;
+- whether a newer edit replaces pending work;
+- whether an abort is expected;
+- when a successful save creates a revision.
+
+The adapter measures and attempts. The actor interprets.
+
+Moving the latest-request rule into a shell counter may work locally, but it hides lifecycle policy from the machine that claims to own saving. If latest-wins is part of the accepted behavior, it should be visible in that behavior and its tests.
 
 ## The shell is not an adapter
 
-This is a common point of confusion.
+An adapter implements one application-facing port.
 
-Adapters talk to specific systems.
+The shell chooses and connects several implementations to create one running application.
 
-The shell talks to adapters.
+For example:
 
-Adapters translate protocols.  
-The shell coordinates lifecycles.
+- `createBrowserNavigation` implements `NavigationPort`;
+- `createHttpSession` implements `SessionPort`;
+- `startBrowserApplication` supplies both and starts the root actors.
 
-They are related, but not interchangeable.
+The adapter translates a capability. The shell composes the runtime.
 
-When these two got merged, the systems I worked on became brittle very quickly.
+They may live near one another in a small project. The distinction is about responsibility, not folders.
 
----
+## The shell does not need a framework
 
-## Why this layer is often missing
+“Imperative shell” can sound like another architectural layer that needs interfaces and base classes.
 
-In most codebases I worked in, no one named the imperative shell.
+Often it is one short startup function.
 
-As a result, it ends up smeared across:
+Its value comes from keeping concrete assembly visible:
 
-- components
-- hooks
-- services
-- effects
-- middleware
+```mermaid
+flowchart LR
+  Config["Runtime configuration"]
+  Shell["Imperative shell"]
+  Adapters["Concrete adapters"]
+  Sources["Actor sources"]
+  Actors["Running root actors"]
 
-Nothing owns it.
+  Config --> Shell
+  Shell --> Adapters
+  Shell --> Sources
+  Adapters --> Sources
+  Sources --> Actors
+```
 
-And when no one owns the shell, side effects end up everywhere.
+The diagram does not require every application to use a dependency-injection container. Plain constructors and function arguments usually make the decisions easier to see.
 
-Naming the shell is the first step to containing it.
+## An imperative-shell check
 
----
+When I review startup and orchestration code, I ask:
 
-## What changes when the shell is explicit
+- Is this selecting implementations or deciding application behavior?
+- Does the actor own the progression after a semantic command arrives?
+- Can I replace the browser adapter without rewriting the policy?
+- Does stopping the root actor release the resources started under it?
+- Is the shell maintaining state that should belong to an actor?
+- Could this assembly be understood without tracing through a framework container?
 
-Once the shell is explicit, a few things become easier.
-
-Behavior becomes testable without infrastructure.  
-Adapters become swappable.  
-Lifecycle becomes predictable.  
-Cleanup becomes intentional.
-
-Most importantly, the system regains a clear direction of responsibility.
-
----
-
-## The order matters
-
-One of the most common mistakes I made was designing the shell first.
-
-I’d pick a library.  
-Wire it up.  
-Add effects.  
-
-Then try to reason about behavior after the fact.
-
-That ordering was backwards for me.
-
-Behavior first.  
-Actors second.  
-Shell last.
-
-That sequence kept the shell honest.
-
----
-
-## Final thought
-
-The imperative shell is not glamorous.
-
-It is not clever.
-
-It is not where ideas should live.
-
-Its value comes from restraint.
-
-When the shell does only what it must, the rest of the system stays understandable.
-
----
+The shell is doing its job when the answers point back toward one behavior owner.
 
 ## Next in the series
 
-Next, we’ll talk about **ports and adapters**.
+The application is now assembled and running. Ignite Element still needs a stable contract for rendering that actor state and exposing commands to a delivery interface.
 
-Not as an abstract architecture pattern, but as a practical way to keep infrastructure from rewriting your system over time.
-
-That boundary is where most systems quietly lose their flexibility.
-
-## Series Context
-
-This essay builds on:
-
-- [Errors as Data](/writing/errors-as-data/)
-
-Related deep dives:
-
-- [Workflows](/writing/workflows/)
-
-## Further Reading
-
-- Scott Wlaschin — Moving I/O to the Edges ([Moving I/O to the Edges](https://www.youtube.com/watch?v=P1vES9AgfC4))
-- Gregor Hohpe, Bobby Woolf — Enterprise Integration Patterns ([Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/))
+The next article treats projection as that public application contract rather than a collection of UI-specific flags.

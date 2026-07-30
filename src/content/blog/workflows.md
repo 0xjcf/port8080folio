@@ -3,8 +3,6 @@ title: Workflows
 description: How intent turns into progress over time.
 date: 2025-01-20
 pubDate: 2025-01-20
-edition: 10
-series: "Behavior & Boundaries"
 tags:
   - architecture
   - statecharts
@@ -13,6 +11,13 @@ tags:
   - systems-thinking
 draft: true
 ---
+
+<!--
+Editorial status: retained for a future rewrite around a real multi-step
+workflow. The current draft is not part of the numbered Behavior & Boundaries
+series because workflow authority belongs with the lifecycle owner rather than
+an imperative shell by default.
+-->
 
 ## Workflows
 
