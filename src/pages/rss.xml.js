@@ -1,26 +1,18 @@
 import rss from '@astrojs/rss';
-import { getPublishedBlogPosts } from '../lib/content/blog';
+import {
+  getBlogPostActivityDate,
+  getPublishedBlogPosts,
+  sortBlogPostsByRecency,
+} from '../lib/content/blog';
 
 export async function GET(context) {
-  const posts = await getPublishedBlogPosts();
-  const items = posts
-    .sort((firstPost, secondPost) => {
-      const publicationDateDifference =
-        secondPost.data.pubDate.valueOf() - firstPost.data.pubDate.valueOf();
-      if (publicationDateDifference !== 0) {
-        return publicationDateDifference;
-      }
-
-      const firstSeriesOrder = firstPost.data.seriesOrder ?? 0;
-      const secondSeriesOrder = secondPost.data.seriesOrder ?? 0;
-      return secondSeriesOrder - firstSeriesOrder;
-    })
-    .map((post) => ({
-      title: post.data.title,
-      description: post.data.description,
-      pubDate: post.data.pubDate,
-      link: `/writing/${post.slug}`,
-    }));
+  const posts = sortBlogPostsByRecency(await getPublishedBlogPosts());
+  const items = posts.map((post) => ({
+    title: post.data.title,
+    description: post.data.description,
+    pubDate: getBlogPostActivityDate(post),
+    link: `/writing/${post.slug}/`,
+  }));
 
   return rss({
     title: 'Jose Flores | Writing',

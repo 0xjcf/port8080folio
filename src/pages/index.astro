@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getPublishedBlogPosts, type BlogPost } from "../lib/content/blog";
+import {
+    getPublishedBlogPosts,
+    sortBlogPostsByRecency,
+    type BlogPost,
+} from "../lib/content/blog";
 
 const title =
     "Jose Flores | Statecharts & Actor Model in TypeScript | Writing & Open Source";
@@ -27,19 +31,8 @@ type WritingPreviewItem = {
     seriesOrder?: number;
 };
 
-const writingEntries = (await getPublishedBlogPosts()).sort(
-    (firstWritingEntry: BlogPost, secondWritingEntry: BlogPost) => {
-        const publicationDateDifference =
-            secondWritingEntry.data.pubDate.valueOf() -
-            firstWritingEntry.data.pubDate.valueOf();
-        if (publicationDateDifference !== 0) {
-            return publicationDateDifference;
-        }
-
-        const firstSeriesOrder = firstWritingEntry.data.seriesOrder ?? 0;
-        const secondSeriesOrder = secondWritingEntry.data.seriesOrder ?? 0;
-        return secondSeriesOrder - firstSeriesOrder;
-    },
+const writingEntries = sortBlogPostsByRecency(
+    await getPublishedBlogPosts(),
 );
 
 const writingPreviewEntries = writingEntries.slice(0, 1);

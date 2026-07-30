@@ -245,4 +245,4 @@ If those answers are clear, the command forms a useful seam between delivery and
 
 Something still has to interpret the destination under the current routes, authentication state, and navigation policy. That interpretation should produce the same answer for the same state and facts, regardless of which interface delivered the request.
 
-The next post, [*The Functional Core*](/writing/functional-core/), isolates that deterministic decision before we add browser history, observers, or asynchronous commits.
+The next post, [*Functional Core Architecture: Where Deterministic Decisions Belong*](/writing/functional-core/), isolates that deterministic decision before we add browser history, observers, or asynchronous commits.
