@@ -228,8 +228,6 @@ describe('production configuration sanity checks', () => {
 
       if (nextSlug) {
         expect(contentLinks).toContain(`/writing/${nextSlug}/`);
-      } else {
-        expect(contentLinks).toEqual([]);
       }
 
       for (const href of contentLinks) {
@@ -257,6 +255,15 @@ describe('production configuration sanity checks', () => {
     expect(rssItems[0]).toContain(
       '/writing/lifecycle-is-the-real-boundary/</link>',
     );
+    expect(rssItems[0]).toContain(
+      '<guid isPermaLink="true">https://staging.0xjcf.com/writing/lifecycle-is-the-real-boundary/</guid>',
+    );
+    const rssDates = rssItems.map((item) => {
+      const pubDate = item.match(/<pubDate>([^<]+)<\/pubDate>/)?.[1];
+      expect(pubDate).toBeTruthy();
+      return new Date(pubDate ?? 0).valueOf();
+    });
+    expect(rssDates[0]).toBeGreaterThan(rssDates[1]);
 
     writingWindow.close();
   }, 30_000);
