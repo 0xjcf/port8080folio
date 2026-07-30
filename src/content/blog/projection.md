@@ -1,241 +1,204 @@
 ---
-title: Projection
-description: Why UI should consume meaning, not internal state.
-date: 2025-01-20
+title: "Projection Is an Application Contract"
+description: "How to expose stable state and semantic commands without making a delivery interface interpret actor internals."
 pubDate: 2025-01-20
+updatedDate: 2026-07-28
+edition: 1
+revision: 1
+seriesOrder: 8
+series: "Behavior & Boundaries"
 tags:
   - architecture
-  - statecharts
+  - projection
+  - ignite-element
   - actor-model
   - boundaries
-  - systems-thinking
 draft: true
 ---
 
-## Projection
+At this point, the router has an accepted policy, a running actor, a navigation port, concrete adapters, and an application shell.
 
-At this point in the series, we have a system that behaves correctly.
+The browser still needs to render something.
 
-We have deterministic behavior in the functional core.  
-We have actors that own state over time.  
-We have an imperative shell that talks to the world.  
-We have ports and adapters that keep infrastructure from leaking inward.
+It could subscribe to the actor and inspect every state and context field directly. That is convenient, but it makes the current machine structure the public contract for every view.
 
-And yet, many systems still feel hard to work with.
+Ignite Element gives us another choice: project the actor snapshot into a smaller application-facing state and expose semantic commands beside it.
 
-The problem usually shows up at the UI boundary.
+## Projection is a deliberate public view
 
----
+A projection is a deterministic transformation from authoritative state into the information a consumer is allowed to use.
 
-## The silent leak
+For the router, an Ignite source might expose:
 
-Most UIs are wired directly to internal state.
+```ts
+igniteCore({
+  source: routerSource,
 
-Components inspect machine states.  
-Views branch on raw flags.  
-Templates know more than they should.
+  states: ({ snapshot }) => ({
+    path:
+      snapshot.context.current?.path ?? "/",
+    route:
+      snapshot.context.current?.route ??
+      "not-found",
+    isNavigating:
+      snapshot.matches("committing"),
+    canRetry:
+      snapshot.matches("failed"),
+    error: snapshot.context.error,
+  }),
 
-It works at first.
+  commands: ({ actor, command }) => ({
+    navigate: command((to: string) => {
+      actor.send({
+        type: "NAVIGATE_REQUESTED",
+        to,
+      });
+    }),
+    retry: command(() => {
+      actor.send({ type: "RETRY" });
+    }),
+  }),
+});
+```
 
-But over time, the UI starts to depend on details it was never meant to understand.
+The exact API will evolve with Ignite Element. The architectural point is the shape of the boundary:
 
-That dependency is subtle, and it is expensive.
+- state flows out through a named projection;
+- intent flows in through semantic commands;
+- neither direction lets the delivery surface mutate actor state.
 
----
+## Raw actor state is not automatically wrong
 
-## What projection actually is
+“Never expose raw state” is too absolute.
 
-Projection is the layer that translates internal state into **meaning**.
+A small application may intentionally make an actor snapshot its public contract. Developer tooling may need the complete snapshot for inspection. A machine state such as `committing` may already be the clearest value a consumer can receive.
 
-Not data.  
-Not transitions.  
-Not flags.
+The question is whether that coupling is deliberate.
 
-Meaning.
+If every component reaches into `snapshot.context.pending.route.path`, a later change from `pending` to a queue affects every component. If the application contract exposes `isNavigating` and the last reconciled `path`, the internal lifecycle can change without forcing the delivery surface to reinterpret it.
 
-It answers questions like:
+Projection is useful when it protects consumers from details they do not own.
 
-- What should the user see right now?
-- What actions are allowed?
-- What is disabled?
-- What is in progress?
-- What matters on this screen?
+## Projection must not repair behavior
 
-The UI should not have to figure that out.
+Suppose the router promotes a pending route before the browser commit succeeds.
 
----
+A projection could hide the problem by continuing to display the previous path until another flag changes. That would make the UI look correct while the actor state remained contradictory.
 
-## Internal state is not a UI contract
+The projection should not reconcile two competing sources of truth.
 
-Internal state exists to make behavior correct.
+The actor owns whether a route is current. The projection reads that accepted fact:
 
-UI exists to communicate intent.
+```ts
+path: snapshot.context.current?.path ?? "/"
+```
 
-Those are different responsibilities.
+It does not compare browser state, rerun authentication policy, or decide which pending route should win.
 
-When UI consumes raw state, it inherits all of the complexity of the system.
+If projection needs enough logic to correct the behavior, the authority boundary is already split.
 
-That complexity spreads quickly.
+## Projection and presentation are different
 
-A small internal change becomes a breaking UI change.  
-A refactor requires touching every component.  
-Behavior leaks into templates.
+Projection provides an application-facing read model.
 
-Projection exists to stop that.
+Presentation decides how a particular interface renders that model.
 
----
+For example, projection may expose:
 
-## A boundary that changes everything
+```ts
+{
+  isNavigating: true,
+  canRetry: false,
+  error: null,
+}
+```
 
-With projection, the UI does not ask:
+A web component might render a progress indicator. A speech interface might announce that navigation is in progress. A headless test might assert the same state without rendering anything.
 
-Are we in the loading state?  
-Are we refreshing?  
-Did this transition happen already?
+The projection does not select CSS, markup, animation, or spoken wording. It gives those delivery surfaces a stable contract.
 
-Instead, it receives:
+## Commands complete the boundary
 
-- isLoading
-- canRetry
-- items
-- errorMessage
-- actions it is allowed to invoke
+Projection is often described only as data flowing outward. Ignite’s command binding makes the other direction equally important.
 
-The UI renders meaning.  
-Nothing else.
+```mermaid
+flowchart LR
+  Delivery["DOM / headless / other delivery"]
+  Commands["Semantic commands"]
+  Actor["Authoritative actor"]
+  Projection["Application projection"]
 
----
+  Delivery -->|"intent"| Commands
+  Commands -->|"events"| Actor
+  Actor -->|"snapshots"| Projection
+  Projection -->|"read model"| Delivery
+```
 
-## Why this layer is usually missing
+Commands and projection do not form another behavior loop.
 
-Most frameworks do not force you to create a projection layer.
+The command carries intent to the actor. The projection carries accepted state back to consumers. Policy remains inside the behavior that owns the lifecycle.
 
-So people skip it.
+This is why the `startModule(moduleId)` change from the first article mattered. The command could be shared by browser and headless delivery because it was not shaped like either one.
 
-They reach into state because it is convenient.  
-They branch on internals because they are available.
+## Projection gives change a smaller surface
 
-That convenience compounds into coupling.
+The router might later add:
 
-By the time it hurts, the dependency graph is already tangled.
+- a `restoring` state during bootstrap;
+- multiple internal commit substates;
+- richer error provenance;
+- an authentication refresh actor.
 
----
+Consumers should only change if those additions alter the application contract they depend on.
 
-## Projection is not presentation logic
+A projection makes that contract reviewable. We can ask:
 
-This distinction matters.
+- Did the public route shape change?
+- Can a caller still send the same semantic command?
+- Does `isNavigating` retain the same meaning?
+- Are new failure details meant for every delivery surface or only diagnostics?
 
-Projection does not decide behavior.  
-It does not trigger effects.  
-It does not manage lifecycle.
+Without that boundary, every internal refactor is also a delivery-contract review.
 
-It is a pure transformation.
+## Test the projection as a contract
 
-Given the current state of the actor, projection produces a view of the world that the UI can safely consume.
+A machine test proves the router reaches the expected snapshot.
 
-Nothing more.
+A projection test proves consumers receive the expected public view:
 
----
+```ts
+expect(projectRouter(committingSnapshot)).toEqual({
+  path: "/",
+  route: "home",
+  isNavigating: true,
+  canRetry: false,
+  error: null,
+});
+```
 
-## A practical example
+That test is intentionally narrower than rendering a web component. It tells us the projection follows its contract for a known actor snapshot.
 
-Imagine a data query.
+An integration test can then verify that a delivery surface binds to that contract correctly.
 
-Internally, the system might have states like:
+Neither test proves that someone understands the navigation experience or completes their task. That is a different evidence question.
 
-- idle
-- loading
-- success
-- error
-- refreshing
+## A projection check
 
-The UI does not need to know that.
+When I define a projection, I ask:
 
-The UI needs to know:
+- Which actor state is authoritative?
+- What does this consumer actually need to know?
+- Is the projected value stable enough to become a contract?
+- Am I exposing an internal detail because it is useful or merely because it is available?
+- Is projection translating accepted state or compensating for incorrect state?
+- Can another delivery surface use the same commands and read model?
 
-- do I show a spinner?
-- do I show stale data?
-- can the user retry?
-- should this button be disabled?
-
-Projection answers those questions once.
-
-Every component benefits.
-
----
-
-## Why projection improves refactoring
-
-When projection exists, internal behavior can change without breaking the UI.
-
-You can add states.  
-You can refine transitions.  
-You can introduce new policy.
-
-As long as projection stays stable, the UI remains untouched.
-
-That stability is rare, and it is valuable.
-
----
-
-## Projection is where intent becomes visible
-
-This is one of the quiet benefits.
-
-Projection forces you to name what matters.
-
-If you cannot explain what the UI should see in simple terms, behavior is probably unclear.
-
-Projection becomes a mirror.
-
-It reflects whether your system actually makes sense.
-
----
-
-## What happens without projection
-
-Without projection, UIs become brittle.
-
-They depend on implementation details.  
-They break during refactors.  
-They duplicate logic across components.  
-
-Eventually, no one knows which parts of the UI are safe to change.
-
-That is not a styling problem.
-
-It is a boundary problem.
-
----
-
-## The calm effect
-
-Systems with projection feel calmer to work in.
-
-Components are simpler.  
-Tests are easier to write.  
-Behavior changes feel contained.
-
-The UI stops being a second behavior engine.
-
-That alone is worth the cost of the layer.
-
----
-
-## Final thought
-
-Projection is the final boundary between behavior and presentation.
-
-It protects the UI from the complexity it should never have to understand.
-
-When that boundary is explicit, systems become easier to change, easier to explain, and easier to trust.
-
----
+Projection earns its place when those answers reduce the number of consumers that need to understand actor internals.
 
 ## Next in the series
 
-Next, we’ll put everything together.
+We can now trace a narrative into a command, policy, lifecycle, capability, adapter, runtime, and projection.
 
-We’ll walk through a full example using **ignite-query**, end to end, and show how behavior, actors, shells, adapters, and projection fit together in real code.
+Tests can prove that those pieces conform to their accepted contracts. They still cannot prove that the product decision helped the person described at the start.
 
-This is where the model becomes tangible.
+The next article separates conformance evidence from product-outcome evidence and shows why the series needs both.

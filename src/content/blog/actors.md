@@ -3,8 +3,6 @@ title: Actors
 description: Why behavior needs a place to live, not just rules to follow.
 date: 2025-01-20
 pubDate: 2025-01-20
-edition: 4
-series: "Behavior & Boundaries"
 tags:
   - architecture
   - statecharts
@@ -13,6 +11,12 @@ tags:
   - systems-thinking
 draft: true
 ---
+
+<!--
+Editorial status: retired from the numbered Behavior & Boundaries series.
+The actor ownership material is being reconciled into
+lifecycle-is-the-real-boundary.md.
+-->
 
 ## Actors
 

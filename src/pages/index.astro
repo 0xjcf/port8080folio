@@ -24,7 +24,7 @@ type WritingPreviewItem = {
     pathSegment: string;
     title: string;
     description: string;
-    edition?: number;
+    seriesOrder?: number;
 };
 
 const writingEntries = (await getPublishedBlogPosts()).sort(
@@ -36,9 +36,9 @@ const writingEntries = (await getPublishedBlogPosts()).sort(
             return publicationDateDifference;
         }
 
-        const firstEditionValue = firstWritingEntry.data.edition ?? 0;
-        const secondEditionValue = secondWritingEntry.data.edition ?? 0;
-        return secondEditionValue - firstEditionValue;
+        const firstSeriesOrder = firstWritingEntry.data.seriesOrder ?? 0;
+        const secondSeriesOrder = secondWritingEntry.data.seriesOrder ?? 0;
+        return secondSeriesOrder - firstSeriesOrder;
     },
 );
 
@@ -49,7 +49,7 @@ const writingPreviewItems: WritingPreviewItem[] = writingPreviewEntries.map(
         pathSegment: writingEntry.slug,
         title: writingEntry.data.title,
         description: writingEntry.data.description,
-        edition: writingEntry.data.edition,
+        seriesOrder: writingEntry.data.seriesOrder,
     }),
 );
 ---
@@ -236,10 +236,10 @@ const writingPreviewItems: WritingPreviewItem[] = writingPreviewEntries.map(
                             {writingPreviewItems.map((writingPreviewItem) => (
                                 <li class="writing__item">
                                     <div class="writing-list__title">
-                                        {writingPreviewItem.edition && (
-                                            <span class="writing-list__edition">
-                                                Edition{" "}
-                                                {writingPreviewItem.edition}
+                                        {writingPreviewItem.seriesOrder && (
+                                            <span class="writing-list__part">
+                                                Part{" "}
+                                                {writingPreviewItem.seriesOrder}
                                             </span>
                                         )}
                                         <a

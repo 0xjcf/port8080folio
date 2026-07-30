@@ -6,23 +6,30 @@ const title = "Writing | Jose Flores";
 const description =
   "Writing on frontend architecture, statecharts, and the actor model.";
 
-const posts = (await getPublishedBlogPosts()).sort((firstPost, secondPost) => {
-  const firstEditionValue = firstPost.data.edition ?? 0;
-  const secondEditionValue = secondPost.data.edition ?? 0;
-  return firstEditionValue - secondEditionValue;
-});
-
 const seriesName = "Behavior & Boundaries";
 const seriesDescription =
   "Essays on responsibility, boundaries, and why architecture matters when code is cheap.";
-const seriesPosts = posts.filter((post) => post.data.series === seriesName);
+const publishedPosts = await getPublishedBlogPosts();
+const seriesPosts = publishedPosts
+  .filter((post) => post.data.series === seriesName)
+  .sort((firstPost, secondPost) => {
+    const firstSeriesOrder = firstPost.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
+    const secondSeriesOrder =
+      secondPost.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
+    return firstSeriesOrder - secondSeriesOrder;
+  });
+const standalonePosts = publishedPosts
+  .filter((post) => post.data.series !== seriesName)
+  .sort(
+    (firstPost, secondPost) =>
+      secondPost.data.pubDate.valueOf() - firstPost.data.pubDate.valueOf(),
+  );
+const posts = [...seriesPosts, ...standalonePosts];
 const seriesCount = seriesPosts.length;
-const seriesLatestPost = [...seriesPosts].sort((firstPost, secondPost) => {
-  const firstEditionValue = firstPost.data.edition ?? 0;
-  const secondEditionValue = secondPost.data.edition ?? 0;
-  return secondEditionValue - firstEditionValue;
-})[0];
-const seriesLatestEdition = seriesLatestPost?.data.edition;
+const seriesLatestPost = seriesPosts
+  .filter((post) => post.data.seriesOrder !== undefined)
+  .at(-1);
+const seriesLatestPart = seriesLatestPost?.data.seriesOrder;
 ---
 
 <BaseLayout title={title} description={description} bodyClass="no-js">
@@ -61,9 +68,9 @@ const seriesLatestEdition = seriesLatestPost?.data.edition;
                   {seriesLatestPost && (
                     <span class="writing-series__start">
                       Latest:
-                      {seriesLatestEdition && (
-                        <span class="writing-series__edition">
-                          Edition {seriesLatestEdition}
+                      {seriesLatestPart && (
+                        <span class="writing-series__part">
+                          Part {seriesLatestPart}
                         </span>
                       )}
                       <a
@@ -92,9 +99,9 @@ const seriesLatestEdition = seriesLatestPost?.data.edition;
               {posts.map((post) => (
                 <li class="writing-list__item">
                   <div class="writing-list__title">
-                    {post.data.edition && (
-                      <span class="writing-list__edition">
-                        Edition {post.data.edition}
+                    {post.data.seriesOrder && (
+                      <span class="writing-list__part">
+                        Part {post.data.seriesOrder}
                       </span>
                     )}
                     <a

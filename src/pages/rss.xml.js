@@ -11,9 +11,9 @@ export async function GET(context) {
         return publicationDateDifference;
       }
 
-      const firstEditionValue = firstPost.data.edition ?? 0;
-      const secondEditionValue = secondPost.data.edition ?? 0;
-      return secondEditionValue - firstEditionValue;
+      const firstSeriesOrder = firstPost.data.seriesOrder ?? 0;
+      const secondSeriesOrder = secondPost.data.seriesOrder ?? 0;
+      return secondSeriesOrder - firstSeriesOrder;
     })
     .map((post) => ({
       title: post.data.title,

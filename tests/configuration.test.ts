@@ -102,17 +102,81 @@ describe('production configuration sanity checks', () => {
     ).map((link) => link.textContent?.trim());
 
     expect(tocLabels).toEqual([
-      'Where the ownership problem showed up',
-      'Architecture is about who owns what',
-      'What XState makes explicit',
-      'Start with the lifecycle',
-      'Supply the environment at the boundary',
-      'What XState cannot decide',
-      'Applying the same rule in Actor-Web',
-      'A quick responsibility check',
+      'The bottleneck moved',
+      'A small command with a hidden decision',
+      'The logic was correct. The boundary was not',
+      'Architecture distributes authority',
+      'Why state machines help, and where they stop',
+      'How to recognize an ownership leak',
+      'A responsibility check before implementation',
+      'The first draft is cheap',
       'Next in the series',
     ]);
     expect(articleHtml).not.toContain('Series continuation');
     articleWindow.close();
+
+    const writingIndexPath = path.join(
+      distDir,
+      'writing',
+      'index.html',
+    );
+    const writingIndexHtml = fs.readFileSync(
+      writingIndexPath,
+      'utf-8',
+    );
+    const writingWindow = new Window({
+      url: 'https://0xjcf.com/writing/',
+      settings: {
+        disableCSSFileLoading: true,
+        disableJavaScriptFileLoading: true,
+      },
+    });
+    writingWindow.document.write(writingIndexHtml);
+
+    const publishedSeriesParts = Array.from(
+      writingWindow.document.querySelectorAll(
+        '.writing-list__part',
+      ),
+    ).map((part) => part.textContent?.trim());
+
+    expect(publishedSeriesParts).toEqual([
+      'Part 1',
+      'Part 2',
+      'Part 3',
+      'Part 4',
+      'Part 5',
+    ]);
+    const latestSeriesPost = writingWindow.document.querySelector(
+      '.writing-series__start',
+    );
+    expect(latestSeriesPost?.textContent).toContain('Part 5');
+    expect(
+      latestSeriesPost
+        ?.querySelector('.writing-series__link')
+        ?.getAttribute('href'),
+    ).toBe('/writing/lifecycle-is-the-real-boundary/');
+    expect(writingIndexHtml).not.toContain('Edition 5');
+    expect(
+      fs.existsSync(
+        path.join(
+          distDir,
+          'writing',
+          'before-behavior-product-frame',
+          'index.html',
+        ),
+      ),
+    ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(
+          distDir,
+          'writing',
+          'narrative-to-semantic-command',
+          'index.html',
+        ),
+      ),
+    ).toBe(true);
+
+    writingWindow.close();
   }, 30_000);
 });

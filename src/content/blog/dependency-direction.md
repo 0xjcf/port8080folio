@@ -1,255 +1,245 @@
 ---
-title: "Dependency Direction Decides Whether Systems Age Gracefully or Rot"
-description: "Good architecture isn’t about predicting change. It’s about deciding what is allowed to depend on what when change inevitably arrives."
-date: 2025-01-04
+title: "Dependency Direction Protects Authority"
+description: "How to keep product framing, behavior, lifecycle, adapters, projection, and evidence from becoming competing sources of truth."
 pubDate: 2025-01-04
-edition: 11
+updatedDate: 2026-07-28
+edition: 1
+revision: 1
+seriesOrder: 10
 series: "Behavior & Boundaries"
 isSeriesFinal: true
 tags:
   - architecture
   - boundaries
   - dependency-direction
+  - responsibility
   - systems-thinking
-  - maintainability
 draft: true
 ---
 
-By the time most systems fail, nothing is technically broken.
+The series has assigned several responsibilities:
 
-The code compiles.
-The tests pass.
-The features ship.
+- the product frame describes a human problem and an outcome hypothesis;
+- semantic commands carry application intent;
+- the functional core applies accepted policy;
+- actors own behavior over time;
+- ports name environmental capabilities;
+- adapters translate concrete environments;
+- the shell assembles the runtime;
+- projection exposes an application-facing contract;
+- evidence supports specific conformance or product claims.
 
-And yet, every change feels dangerous.
+Those names help only if the dependencies preserve the authority we assigned.
 
-This is the quiet end state of many architectures:
-not collapse, but **rot**.
+If a browser adapter imports router policy and decides redirects, the router is no longer authoritative. If a component interprets pending state differently from the projection, there are two view contracts. If a passing test is presented as product validation, implementation evidence has taken authority over a product question.
 
-Most of the failures I’ve seen looked exactly like this.
+Dependency direction is how we stop those shortcuts from becoming the architecture.
 
----
+## Code dependencies and decision dependencies
 
-## Change doesn’t break systems; direction does
+An import is one kind of dependency.
 
-Change is inevitable.
+There is also a decision dependency: one part cannot do its job without knowing a choice made somewhere else.
 
-New requirements.
-New platforms.
-New teams.
-New constraints.
+The browser adapter may import the application-owned `NavigationPort` type. That code dependency points toward the contract.
 
-But change itself was rarely what destabilized systems for me.
+The router may call a value satisfying that port. Its behavior does not depend on the Navigation API or the memory adapter.
 
-What determined whether a system adapted or decayed was **dependency direction**, who is allowed to depend on whom.
+The relationship looks like this:
 
----
+```mermaid
+flowchart LR
+  Delivery["Delivery binding"]
+  Command["Semantic command"]
+  Behavior["Behavior + policy"]
+  Port["Application port"]
+  Adapter["Environment adapter"]
+  World["Browser / network / storage"]
+  Projection["Application projection"]
 
-## The false promise of flexibility
+  Delivery --> Command
+  Command --> Behavior
+  Behavior --> Port
+  Adapter -. "implements" .-> Port
+  Adapter --> World
+  Behavior --> Projection
+  Projection --> Delivery
+```
 
-Many architectures chase flexibility as a goal.
+The outward data flow does not reverse authority.
 
-They add:
+An adapter result flows back to the actor, but the adapter does not become the owner of what that result means. A projection flows toward a UI, but the UI does not gain permission to mutate the actor.
 
-* abstractions
-* configuration layers
-* indirection
-* extension points “just in case”
+## The owner defines the contract
 
-But flexibility without direction just creates **more places for responsibility to leak**.
+The useful part of dependency inversion is not “put an interface in front of everything.”
 
-I learned this by adding indirection early “just in case” and watching fragility increase, not decrease.
+It is that the code needing a capability defines the contract in its own language.
 
----
+The router needs:
 
-## Direction is a constraint, and that’s the point
+```ts
+type NavigationPort = {
+  currentPath(): string;
+  observe(
+    listener: (path: string) => void,
+  ): () => void;
+  commit(
+    instruction: NavigationInstruction,
+    signal: AbortSignal,
+  ): Promise<NavigationCommit>;
+};
+```
 
-Good architecture constrains change.
+The browser adapter conforms to that contract. The router does not conform its policy to whichever methods the current platform happens to expose.
 
-Not by limiting what you *can* do,
-but by making it obvious what you *shouldn’t*.
+That direction protects the router’s vocabulary:
 
-That took me longer to accept than to describe.
+- `push` and `replace` are application instructions;
+- `aborted` and `unavailable` are results the application understands;
+- Navigation API objects remain inside the browser adapter.
 
-Dependency direction creates refusal points.
+If the port starts copying an entire provider API, the type may point inward while the concepts still point outward. Dependency direction is semantic as well as syntactic.
 
-Places where the system says:
+## Commands point toward authority
 
-> “This change does not belong here.”
+A delivery surface may know that a link was clicked. It translates that interaction into:
 
-Those refusals are what keep systems coherent over time.
+```ts
+{ type: "NAVIGATE_REQUESTED", to }
+```
 
----
+The event points toward the router actor because the actor is allowed to interpret the request.
 
-## Stable things must not depend on volatile things
+The binding should not ask the adapter to commit first and then notify the actor. That would place execution before policy.
 
-This is the simplest form of the rule that kept holding up:
+The order established through the series is:
 
-> **What changes slowly must not depend on what changes quickly.**
+```text
+interaction
+→ semantic command
+→ accepted behavior
+→ capability instruction
+→ environmental result
+→ behavior update
+→ projection
+```
 
-Behavior is usually stable.
-Environments are not.
+This is not a requirement for every function call in the application. It is a review tool for operations where ownership has been split before.
 
-Business rules evolve carefully.
-Infrastructure evolves constantly.
+## Facts may flow inward without bringing policy with them
 
-When dependency direction violates this rule, instability follows, even if the code is “clean.”
+External results have to enter the system.
 
----
+The adapter can report:
 
-## This is why boundaries come first
+```ts
+{ ok: false, reason: "aborted" }
+```
 
-Everything I kept learning in this series led here.
+The actor may interpret an abort as expected replacement while `committing`, and as an error in another workflow.
 
-* Boundaries assign responsibility
-* Adapters protect behavior from the environment
-* Lifecycles determine where boundaries belong
+The fact crosses the boundary. The adapter’s assumptions do not.
 
-But none of that matters if dependency direction is wrong.
+The same rule applies to time, provider responses, storage records, and user input. Boundary code validates and translates them before authoritative behavior uses them.
 
-If core behavior depends on UI state, network conditions, or infrastructure details, boundaries become decorative.
+That does not mean the core must distrust every value through layers of generic wrappers. It means external concepts should not quietly become policy simply because they arrived first.
 
-They exist, but they don’t protect anything.
+## Projection points outward without giving authority away
 
----
+Projection depends on authoritative actor state and produces a public read model.
 
-## Direction is how systems learn to say no
+A component can depend on:
 
-You don’t need to be “the architect” to care about this.
+```ts
+{
+  path: string;
+  isNavigating: boolean;
+  canRetry: boolean;
+}
+```
 
-Every conditional you add, every exception you carve out, is already taking a side.
+It should not reproduce route reconciliation by reading browser history beside the projection.
 
-This is the behavioral consequence of correct dependency direction.
+When consumers need a new value, we can decide whether it belongs in the public contract. That review is easier than allowing each consumer to create a local interpretation.
 
-A system that ages well is not one that anticipates every future.
+The dependency points from presentation toward the application contract, even though rendered output flows toward the person using the interface.
 
-It’s one that:
+## The shell depends on concrete choices
 
-* accepts change at the edges
-* refuses it at the core
-* forces new ideas to earn their way inward
+The imperative shell is allowed to know the concrete implementations:
 
-That refusal is architectural.
+```ts
+const navigation =
+  createBrowserNavigation(browser);
 
-It’s expressed through dependency direction, not documentation.
+const source = createRouterSource({
+  navigation,
+});
 
----
+const actor = createActor(source);
+actor.start();
+```
 
-## The cost of getting this wrong
+The shell depends on the adapter, source, and runtime because its job is to assemble them.
 
-When dependency direction is unclear, systems compensate.
+Nothing should depend on the shell for policy. It is the end of the dependency graph, not a reusable behavior service.
 
-You’ll see:
+This is one reason a small, explicit composition function is often easier to maintain than a container that can resolve dependencies from anywhere.
 
-* conditionals everywhere
-* feature flags in core logic
-* environment checks inside behavior
-* defensive code with no clear owner
+## Evidence attaches to claims
 
-Each fix works locally.
+Conformance evidence depends on the contract it claims to exercise.
 
-Together, they erase clarity.
+- resolver tests depend on route policy;
+- actor tests depend on lifecycle behavior;
+- contract tests depend on the port;
+- projection tests depend on the public read model.
 
-This is what rot looks like.
+Product-outcome evidence points back to the product frame.
 
----
+Neither evidence category should become runtime authority. A test describes and checks accepted behavior; the application does not import the test to decide what to do. An analytics metric may challenge a product policy; the browser adapter should not rewrite that policy on its own.
 
-## Aging gracefully looks boring
+Keeping those directions clear lets evidence cause a deliberate revision instead of an unreviewed exception.
 
-Well-directed systems don’t feel clever.
+## Volatility is a clue, not the rule
 
-They feel predictable.
+Architecture advice often says stable things should not depend on volatile things.
 
-Changes happen where you expect them to.
-Core logic remains calm.
-Failures are contained.
+That is a useful warning, but it does not decide the design by itself.
 
-Most of the work happens at the boundaries.
+Some product policies change frequently. Some platform contracts remain stable for years. A new interface around every dependency can add more maintenance than it removes.
 
-That’s not accidental.
+The stronger question is:
 
-That’s what direction enforces.
+> If this dependency changes, which part is allowed to reinterpret the application’s meaning?
 
----
+An adapter may absorb a platform API change. A product decision may intentionally revise policy. A projection may evolve its public contract.
 
-## What AI makes unavoidable
+The boundary helps us identify the owner of that change; it does not promise that the owner never changes.
 
-AI accelerates change.
+## A dependency-direction check
 
-It lowers the cost of:
+For a meaningful behavior, I ask:
 
-* rewriting code
-* scaffolding features
-* experimenting with ideas
+- Which part is allowed to interpret the semantic command?
+- Does the capability contract use application or provider vocabulary?
+- Can an adapter return a fact without deciding its meaning?
+- Does lifecycle policy remain visible in the actor that owns it?
+- Does presentation depend on a deliberate projection contract?
+- Does the shell assemble behavior without reenacting it?
+- Is each piece of evidence attached to the claim it can actually support?
 
-But it doesn’t understand what should remain stable.
+If the answer moves across several owners, that is where I look for an accidental second source of truth.
 
-That judgment is architectural.
+## End of the series
 
-When code is cheap, **direction is what keeps change from collapsing into chaos**.
+The series began with a small command that discovered intent from the DOM.
 
----
+Following that one dependency led outward to the product problem and inward to behavior, lifecycle, capabilities, adapters, projection, and evidence.
 
-## A moment of recognition
+The final structure is not a demand that every feature use ten layers. Most functions need nothing this elaborate.
 
-If your system:
+The useful habit is smaller: name the decision, identify its owner, and make dependencies point toward that authority.
 
-* requires defensive checks deep in core logic
-* feels risky to change even after tests pass
-* depends on knowing “where not to touch”
-
-then dependency direction is already doing work, just not intentionally.
-
-Once you can name it, you can shape it.
-
----
-
-## The full picture
-
-Taken together, the series forms a single system:
-
-* Boundaries assign responsibility
-* Adapters enforce boundaries
-* Lifecycles reveal where boundaries belong
-* Dependency direction determines how change flows
-
-None of these stand alone.
-
-They only work together.
-
----
-
-## Final thought
-
-Good architecture is not about control.
-
-It’s about restraint.
-
-It’s the discipline to decide explicitly
-what the system will protect,
-what it will allow to change,
-and what it will refuse to depend on.
-
-That’s how systems age gracefully.
-
----
-
-## End of series
-
-This concludes the *Behavior & Boundaries* series.
-
-Future essays may return to these ideas as deep dives, but the foundation is now complete.
-
-## Series Context
-
-This essay builds on:
-
-* [Lifecycle Is the Real Boundary](/writing/lifecycle-is-the-real-boundary/)
-
-Related deep dives:
-
-* [Why Adapters Exist](/writing/why-adapters-exist/)
-
-## Further Reading
-
-* Robert C. Martin — Dependency Rule (Clean Architecture) ([Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html))
+When the next implementation arrives quickly, that gives us a concrete way to decide whether it belongs.

@@ -16,9 +16,18 @@ title: "Post title"
 description: "Short summary used for previews and metadata."
 pubDate: 2025-03-15
 updatedDate: 2025-03-20 # optional
+edition: 1 # publication edition; usually 1
+revision: 1 # increment when substantially revising the same edition
+series: "Series name" # optional
+seriesOrder: 1 # position within the series; optional
 tags: ["tag-one", "tag-two"] # optional
 draft: false # optional
 ```
+
+`edition` and `seriesOrder` are intentionally separate. An edition identifies
+the published form of an article. `seriesOrder` identifies where that article
+belongs in a reading sequence. Revising an article should normally increment
+`revision`, not `edition` or `seriesOrder`.
 
 ## Write content
 

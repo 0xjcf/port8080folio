@@ -2,8 +2,6 @@
 title: Errors as Data
 description: Why I stopped throwing errors and started treating failure as part of behavior.
 pubDate: 2025-01-15
-series: "Behavior & Boundaries"
-edition: 7
 tags:
   - architecture
   - statecharts
@@ -12,6 +10,12 @@ tags:
   - systems-thinking
 draft: true
 ---
+
+<!--
+Editorial status: retained as a possible standalone field note, not a numbered
+Behavior & Boundaries article. The expected-failure material now appears in
+ports-adapters.md.
+-->
 
 I didn’t sit down one day and decide to change how I handle errors.
 

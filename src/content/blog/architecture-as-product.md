@@ -12,6 +12,12 @@ tags:
 draft: true
 ---
 
+<!--
+Editorial status: retained as source material for a possible standalone
+business-facing essay. It is not part of the numbered Behavior & Boundaries
+series.
+-->
+
 ## Architecture as a Product
 
 By now, the structure should be clear.
