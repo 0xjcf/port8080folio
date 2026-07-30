@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   getBlogPostActivityDate,
-  getBlogPostFeedDate,
+  getBlogPostFeedDates,
   sortBlogPostsByRecency,
   type OrderableBlogPost,
 } from '../src/lib/content/blog-order';
@@ -64,8 +64,51 @@ describe('blog post ordering', () => {
   it('gives same-day series parts distinct feed dates without changing activity dates', () => {
     expect(getBlogPostActivityDate(posts[0])).toEqual(activityDate);
     expect(getBlogPostActivityDate(posts[1])).toEqual(activityDate);
-    expect(getBlogPostFeedDate(posts[0]).valueOf()).toBeGreaterThan(
-      getBlogPostFeedDate(posts[1]).valueOf(),
+    const feedDates = getBlogPostFeedDates(
+      sortBlogPostsByRecency(posts),
+    ).map((date) => date.valueOf());
+
+    expect(feedDates[0]).toBeGreaterThan(feedDates[1]);
+    expect(feedDates[1]).toBeGreaterThan(feedDates[2]);
+  });
+
+  it('never offsets an older group past a genuinely newer activity timestamp', () => {
+    const nearTiedPosts: TestPost[] = [
+      {
+        slug: 'newer',
+        data: {
+          title: 'Newer',
+          pubDate: new Date('2026-07-30T00:00:00.500Z'),
+        },
+      },
+      {
+        slug: 'older-part-2',
+        data: {
+          title: 'Older Part 2',
+          pubDate: new Date('2026-07-30T00:00:00.000Z'),
+          seriesOrder: 2,
+        },
+      },
+      {
+        slug: 'older-part-1',
+        data: {
+          title: 'Older Part 1',
+          pubDate: new Date('2026-07-30T00:00:00.000Z'),
+          seriesOrder: 1,
+        },
+      },
+    ];
+    const orderedPosts = sortBlogPostsByRecency(nearTiedPosts);
+    const feedDates = getBlogPostFeedDates(orderedPosts).map((date) =>
+      date.valueOf(),
     );
+
+    expect(orderedPosts.map((post) => post.slug)).toEqual([
+      'newer',
+      'older-part-2',
+      'older-part-1',
+    ]);
+    expect(feedDates[0]).toBeGreaterThanOrEqual(feedDates[1]);
+    expect(feedDates[1]).toBeGreaterThanOrEqual(feedDates[2]);
   });
 });

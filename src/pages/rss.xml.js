@@ -1,20 +1,21 @@
 import rss from '@astrojs/rss';
 import {
-  getBlogPostFeedDate,
+  getBlogPostFeedDates,
   getPublishedBlogPosts,
   sortBlogPostsByRecency,
 } from '../lib/content/blog';
 
 export async function GET(context) {
   const posts = sortBlogPostsByRecency(await getPublishedBlogPosts());
-  const items = posts.map((post) => {
+  const feedDates = getBlogPostFeedDates(posts);
+  const items = posts.map((post, index) => {
     const link = `/writing/${post.slug}/`;
     const stableGuid = new URL(link, context.site).toString();
 
     return {
       title: post.data.title,
       description: post.data.description,
-      pubDate: getBlogPostFeedDate(post),
+      pubDate: feedDates[index],
       link,
       customData: `<guid isPermaLink="true">${stableGuid}</guid>`,
     };

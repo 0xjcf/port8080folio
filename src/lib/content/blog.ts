@@ -2,7 +2,7 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 
 export {
   getBlogPostActivityDate,
-  getBlogPostFeedDate,
+  getBlogPostFeedDates,
   sortBlogPostsByRecency,
 } from './blog-order';
 
