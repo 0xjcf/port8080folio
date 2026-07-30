@@ -210,4 +210,4 @@ That still does not give every caller permission to mutate state. "Start this mo
 
 The product frame gives us the context. The narrative describes the interaction. Neither one is a message the application can execute.
 
-The next post, [*From Narrative to Semantic Command*](/writing/narrative-to-semantic-command/), follows that translation and asks what the application should receive when a person clicks a button, a test invokes a function, or another interface requests the same behavior.
+The next post, [*Semantic Commands: Translating User Intent into Application Behavior*](/writing/narrative-to-semantic-command/), follows that translation and asks what the application should receive when a person clicks a button, a test invokes a function, or another interface requests the same behavior.

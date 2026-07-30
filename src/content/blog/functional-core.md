@@ -232,4 +232,4 @@ That limit led to the next question.
 
 The Ignite effect could update the browser after router state changed, but the router also needed to observe browser navigation, own the subscription, handle commit failures, and clean everything up when it stopped. Those responsibilities did not belong to one route decision, and tying them to whichever element rendered the route gave them the wrong lifetime.
 
-The next post, [*The Boundary Should Follow the Lifecycle*](/writing/lifecycle-is-the-real-boundary/), follows the router from the Ignite effect into the running source that owns observation, commits, failure, and cleanup.
+The next post, [*Lifecycle Boundaries in Actor and State Machine Architecture*](/writing/lifecycle-is-the-real-boundary/), follows the router from the Ignite effect into the running source that owns observation, commits, failure, and cleanup.

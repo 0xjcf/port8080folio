@@ -79,6 +79,27 @@ describe('production configuration sanity checks', () => {
     // Forms should point at worker endpoints (relative paths are fine)
     // Contact form is no longer rendered on the landing page; newsletter remains.
     expect(html.includes('/api/newsletter')).toBe(true);
+    const homeWindow = new Window({
+      url: 'https://0xjcf.com/',
+      settings: {
+        disableCSSFileLoading: true,
+        disableJavaScriptFileLoading: true,
+      },
+    });
+    homeWindow.document.write(html);
+    const homepageLatestPost = homeWindow.document.querySelector(
+      '.writing__item',
+    );
+    expect(
+      homepageLatestPost
+        ?.querySelector('.writing-list__part')
+        ?.textContent?.replace(/\s+/g, ' ')
+        .trim(),
+    ).toBe('Part 5');
+    expect(
+      homepageLatestPost?.querySelector('.writing__link')?.getAttribute('href'),
+    ).toBe('/writing/lifecycle-is-the-real-boundary/');
+    homeWindow.close();
 
     const articlePath = path.join(
       distDir,
@@ -156,26 +177,93 @@ describe('production configuration sanity checks', () => {
         ?.getAttribute('href'),
     ).toBe('/writing/lifecycle-is-the-real-boundary/');
     expect(writingIndexHtml).not.toContain('Edition 5');
-    expect(
-      fs.existsSync(
-        path.join(
-          distDir,
-          'writing',
-          'before-behavior-product-frame',
-          'index.html',
+
+    const publishedSlugs = [
+      'when-code-becomes-cheap',
+      'before-behavior-product-frame',
+      'narrative-to-semantic-command',
+      'functional-core',
+      'lifecycle-is-the-real-boundary',
+    ];
+    const generatedArticleSlugs = fs
+      .readdirSync(path.join(distDir, 'writing'), { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .sort();
+    expect(generatedArticleSlugs).toEqual([...publishedSlugs].sort());
+
+    const expectedHandoffs = new Map([
+      ['when-code-becomes-cheap', 'before-behavior-product-frame'],
+      ['before-behavior-product-frame', 'narrative-to-semantic-command'],
+      ['narrative-to-semantic-command', 'functional-core'],
+      ['functional-core', 'lifecycle-is-the-real-boundary'],
+    ]);
+
+    for (const slug of publishedSlugs) {
+      const publishedArticlePath = path.join(
+        distDir,
+        'writing',
+        slug,
+        'index.html',
+      );
+      const publishedArticleHtml = fs.readFileSync(
+        publishedArticlePath,
+        'utf-8',
+      );
+      const publishedArticleWindow = new Window({
+        url: `https://0xjcf.com/writing/${slug}/`,
+        settings: {
+          disableCSSFileLoading: true,
+          disableJavaScriptFileLoading: true,
+        },
+      });
+      publishedArticleWindow.document.write(publishedArticleHtml);
+
+      const contentLinks = Array.from(
+        publishedArticleWindow.document.querySelectorAll(
+          '.writing-article__content a[href^="/writing/"]',
         ),
-      ),
-    ).toBe(true);
-    expect(
-      fs.existsSync(
-        path.join(
-          distDir,
-          'writing',
-          'narrative-to-semantic-command',
-          'index.html',
-        ),
-      ),
-    ).toBe(true);
+      ).map((link) => link.getAttribute('href'));
+      const nextSlug = expectedHandoffs.get(slug);
+
+      if (nextSlug) {
+        expect(contentLinks).toContain(`/writing/${nextSlug}/`);
+      }
+
+      for (const href of contentLinks) {
+        expect(href).toBeTruthy();
+        if (!href) continue;
+
+        const destination = new URL(href, 'https://0xjcf.com');
+        expect(
+          fs.existsSync(
+            path.join(distDir, destination.pathname, 'index.html'),
+          ),
+          `${slug} links to an unpublished or missing article: ${href}`,
+        ).toBe(true);
+      }
+
+      publishedArticleWindow.close();
+    }
+
+    const rssXml = fs.readFileSync(path.join(distDir, 'rss.xml'), 'utf-8');
+    const rssItems = rssXml.match(/<item>[\s\S]*?<\/item>/g) ?? [];
+    expect(rssItems).toHaveLength(5);
+    expect(rssItems[0]).toContain(
+      '<title>Lifecycle Boundaries in Actor and State Machine Architecture</title>',
+    );
+    expect(rssItems[0]).toContain(
+      '/writing/lifecycle-is-the-real-boundary/</link>',
+    );
+    expect(rssItems[0]).toContain(
+      '<guid isPermaLink="true">https://staging.0xjcf.com/writing/lifecycle-is-the-real-boundary/</guid>',
+    );
+    const rssDates = rssItems.map((item) => {
+      const pubDate = item.match(/<pubDate>([^<]+)<\/pubDate>/)?.[1];
+      expect(pubDate).toBeTruthy();
+      return new Date(pubDate ?? 0).valueOf();
+    });
+    expect(rssDates[0]).toBeGreaterThan(rssDates[1]);
 
     writingWindow.close();
   }, 30_000);

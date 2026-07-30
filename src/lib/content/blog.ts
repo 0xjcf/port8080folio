@@ -1,5 +1,11 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 
+export {
+  getBlogPostActivityDate,
+  getBlogPostFeedDates,
+  sortBlogPostsByRecency,
+} from './blog-order';
+
 type BlogEntry = CollectionEntry<'blog'>;
 
 export type BlogPost = BlogEntry & {

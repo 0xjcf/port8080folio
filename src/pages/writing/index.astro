@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getPublishedBlogPosts } from "../../lib/content/blog";
+import {
+  getPublishedBlogPosts,
+  sortBlogPostsByRecency,
+} from "../../lib/content/blog";
 
 const title = "Writing | Jose Flores";
 const description =
@@ -18,12 +21,9 @@ const seriesPosts = publishedPosts
       secondPost.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
     return firstSeriesOrder - secondSeriesOrder;
   });
-const standalonePosts = publishedPosts
-  .filter((post) => post.data.series !== seriesName)
-  .sort(
-    (firstPost, secondPost) =>
-      secondPost.data.pubDate.valueOf() - firstPost.data.pubDate.valueOf(),
-  );
+const standalonePosts = sortBlogPostsByRecency(
+  publishedPosts.filter((post) => post.data.series !== seriesName),
+);
 const posts = [...seriesPosts, ...standalonePosts];
 const seriesCount = seriesPosts.length;
 const seriesLatestPost = seriesPosts
