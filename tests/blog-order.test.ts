@@ -78,7 +78,7 @@ describe('blog post ordering', () => {
         slug: 'newer',
         data: {
           title: 'Newer',
-          pubDate: new Date('2026-07-30T00:00:00.500Z'),
+          pubDate: new Date('2026-07-30T00:00:02.000Z'),
         },
       },
       {
@@ -108,7 +108,10 @@ describe('blog post ordering', () => {
       'older-part-2',
       'older-part-1',
     ]);
-    expect(feedDates[0]).toBeGreaterThanOrEqual(feedDates[1]);
-    expect(feedDates[1]).toBeGreaterThanOrEqual(feedDates[2]);
+    expect(feedDates).toEqual([
+      new Date('2026-07-30T00:00:02.000Z').valueOf(),
+      new Date('2026-07-30T00:00:01.000Z').valueOf(),
+      new Date('2026-07-30T00:00:00.000Z').valueOf(),
+    ]);
   });
 });
