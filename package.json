@@ -32,7 +32,7 @@
     "html-minifier-terser": "^7.2.0",
     "jsdom": "^24.0.0",
     "lightningcss-cli": "^1.30.1",
-    "mermaid": "^10.9.6",
+    "mermaid": "^11.16.1",
     "tsx": "^4.23.1",
     "typescript": "^5.9.2",
     "vitest": "^4.1.10",
@@ -51,7 +51,7 @@
   "license": "MIT",
   "dependencies": {
     "playwright": "^1.57.0",
-    "rehype-mermaid": "^2.1.0",
+    "rehype-mermaid": "^3.0.0",
     "valibot": "^1.4.2"
   }
 }
