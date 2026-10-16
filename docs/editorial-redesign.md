@@ -1,6 +1,6 @@
 # Editorial redesign
 
-Branch: `redesign/editorial-journal`. Preview for review before deployment.
+Branch: `redesign/editorial-journal`. Preview approved for production on October 16, 2026.
 
 ## Purpose and outcomes
 
@@ -33,4 +33,4 @@ Compare Markdown hashes and generated routes with the pre-redesign baseline. Che
 - Desktop and 390px/320px mobile checks confirm readable columns without page overflow. Theme choice survives navigation; mobile contents expand, navigate, and collapse.
 - `npm test`: 114 passing tests. `npm run typecheck`: passes. `SITE_URL=https://0xjcf.com npm run build`: passes.
 
-Production has not been deployed. Review the local preview before release.
+The user reviewed the hosted branch preview, including the sponsor and project-heading refinements, and approved production release on October 16, 2026. Production follows `main`; verify the Cloudflare deployment and live site after merging.
