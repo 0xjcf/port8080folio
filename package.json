@@ -28,7 +28,7 @@
     "@std/toml": "npm:@jsr/std__toml@^1.0.9",
     "@types/node": "^24.3.0",
     "@vitest/coverage-v8": "^4.1.10",
-    "astro": "^7.1.4",
+    "astro": "^7.2.8",
     "esbuild": "^0.28.1",
     "happy-dom": "^20.11.1",
     "html-minifier-terser": "^7.2.0",
