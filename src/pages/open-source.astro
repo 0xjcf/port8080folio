@@ -1,4 +1,5 @@
 ---
+import Arrow from '../components/Arrow.astro';
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "Open Source | Jose Flores | Behavior-First Tooling";
@@ -11,7 +12,7 @@ const description =
     <div class="container">
       <h1 class="section__title">Open Source</h1>
 
-      <nav class="project-directory" aria-label="Projects"><a href="#ignite-element">Ignite Element ↓</a><a href="#actor-web">Actor-Web ↓</a><a href="/reference-systems/">The Lab / Experiments →</a></nav>
+      <nav class="project-directory" aria-label="Projects"><a href="#ignite-element">Ignite Element <Arrow direction="down" /></a><a href="#actor-web">Actor-Web <Arrow direction="down" /></a><a href="/reference-systems/">The Lab / Experiments <Arrow direction="right" /></a></nav>
 
       <section class="open-source__section">
         <h2>Featured projects</h2>
@@ -36,7 +37,7 @@ const description =
             target="_blank"
             rel="noopener"
           >
-            Read the documentation →
+            Read the documentation <Arrow direction="right" />
           </a>
           <a
             class="button button--secondary"
@@ -44,7 +45,7 @@ const description =
             target="_blank"
             rel="noopener"
           >
-            View source on GitHub →
+            View source on GitHub <Arrow direction="right" />
           </a>
         </p>
 
@@ -77,7 +78,7 @@ const description =
             target="_blank"
             rel="noopener"
           >
-            View Actor-Web on GitHub →
+            View Actor-Web on GitHub <Arrow direction="right" />
           </a>
         </p>
       </section>
@@ -161,7 +162,7 @@ const description =
             <strong>Sponsor JOSΞ on GitHub</strong>
             <span>Support 0xjcf’s open-source work.</span>
           </span>
-          <span class="sponsor-link__arrow" aria-hidden="true">↗</span>
+          <span class="sponsor-link__arrow" aria-hidden="true"><Arrow /></span>
         </a>
       </section>
 

@@ -1,4 +1,5 @@
 ---
+import Arrow from '../components/Arrow.astro';
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "About | Jose Flores | Behavior-First Systems";
@@ -113,7 +114,7 @@ const personSchema = {
         <p>
           Teaching and writing help me sharpen these ideas. They also help
           others avoid the mistakes I’ve already made.
-          <a href="/open-source/">See open-source work →</a>
+          <a href="/open-source/">See open-source work <Arrow direction="right" /></a>
         </p>
       </section>
 
@@ -160,7 +161,7 @@ const personSchema = {
         </p>
         <!-- <p class="text-muted">Business inquiries are handled on bluejf.llc.</p> -->
       </section>
-      <section class="consulting-note" aria-labelledby="consulting-title"><p class="eyebrow">WORK TOGETHER</p><h2 id="consulting-title">A thinking partner for your team.</h2><p>Explore workshops, architecture advisory, and hands-on engineering.</p><p><a href="/services/">How I work with teams →</a> &nbsp; <a href="https://www.linkedin.com/in/joseflores-io/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn ↗</a></p></section>
+      <section class="consulting-note" aria-labelledby="consulting-title"><p class="eyebrow">WORK TOGETHER</p><h2 id="consulting-title">A thinking partner for your team.</h2><p>Explore workshops, architecture advisory, and hands-on engineering.</p><p><a href="/services/">How I work with teams <Arrow direction="right" /></a> &nbsp; <a href="https://www.linkedin.com/in/joseflores-io/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn <Arrow /></a></p></section>
     </div>
   </main>
 </BaseLayout>

@@ -1,4 +1,5 @@
 ---
+import Arrow from '../../components/Arrow.astro';
 import { render } from 'astro:content';
 import { getPublishedBlogPosts, type BlogPost } from '../../lib/content/blog';
 import { formatDate, readingMinutes, orderSeries, seriesUrl } from '../../lib/content/editorial';
@@ -46,13 +47,13 @@ const blogSchema = {
         <div class="writing-article__content"><Content /></div>
         {post.data.glossary?.length ? <section class="writing-glossary" aria-labelledby="glossary-title"><h2 id="glossary-title">Glossary</h2><dl>{post.data.glossary.map(entry => <div class="writing-glossary__item"><dt>{entry.term}</dt><dd>{entry.definition}</dd></div>)}</dl></section> : null}
         {post.data.series && <nav class="series-pagination" aria-label="Series navigation">
-          {previous ? <a href={`/writing/${previous.slug}/`}><span>← PREVIOUS / PART {previous.data.seriesOrder}</span>{previous.data.title}</a> : <a class="series-all" href={seriesUrl}><span>THE READING GUIDE</span>All essays in this series</a>}
-          {next ? <a class="next" href={`/writing/${next.slug}/`}><span>NEXT / PART {next.data.seriesOrder} →</span>{next.data.title}</a> : <a class="next series-all" href={seriesUrl}><span>YOU’RE UP TO DATE</span>Back to the series →</a>}
+          {previous ? <a href={`/writing/${previous.slug}/`}><span><Arrow direction="left" /> PREVIOUS / PART {previous.data.seriesOrder}</span>{previous.data.title}</a> : <a class="series-all" href={seriesUrl}><span>THE READING GUIDE</span>All essays in this series</a>}
+          {next ? <a class="next" href={`/writing/${next.slug}/`}><span>NEXT / PART {next.data.seriesOrder} <Arrow direction="right" /></span>{next.data.title}</a> : <a class="next series-all" href={seriesUrl}><span>YOU’RE UP TO DATE</span>Back to the series <Arrow direction="right" /></a>}
         </nav>}
         <FeedFollow compact titleId={`subscribe-${post.slug}-title`} />
       </article>
     </div></main>
-    {toc.length > 0 && <aside class="writing-shell__sidebar" aria-label="Table of contents"><nav class="writing-toc" id="writing-toc-panel"><p class="writing-toc__title">On this page</p><ol class="writing-toc__list" id="writing-toc-list">{toc.map(heading => <li class="writing-toc__item" data-depth={heading.depth}><a class="writing-toc__link" href={`#${heading.slug}`} data-toc-link={heading.slug}>{heading.text}</a></li>)}</ol><a class="toc-series-link" href={seriesUrl}>← Behavior &amp; Boundaries<br />{post.data.seriesOrder ? `Part ${post.data.seriesOrder} of ${series.length}` : 'The reading guide'}</a></nav></aside>}
+    {toc.length > 0 && <aside class="writing-shell__sidebar" aria-label="Table of contents"><nav class="writing-toc" id="writing-toc-panel"><p class="writing-toc__title">On this page</p><ol class="writing-toc__list" id="writing-toc-list">{toc.map(heading => <li class="writing-toc__item" data-depth={heading.depth}><a class="writing-toc__link" href={`#${heading.slug}`} data-toc-link={heading.slug}>{heading.text}</a></li>)}</ol><a class="toc-series-link" href={seriesUrl}><Arrow direction="left" /> Behavior &amp; Boundaries<br />{post.data.seriesOrder ? `Part ${post.data.seriesOrder} of ${series.length}` : 'The reading guide'}</a></nav></aside>}
   </div>
   <script is:inline>
     (() => {

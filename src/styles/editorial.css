@@ -82,6 +82,14 @@ svg {
 img {
   height: auto;
 }
+.icon-arrow {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  flex-shrink: 0;
+  pointer-events: none;
+}
 h1,
 h2,
 h3,
@@ -2176,6 +2184,20 @@ td {
   }
   .essay-row h3 {
     font-size: 24px;
+  }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .essay-row__arrow {
+    transition: transform 180ms ease-out;
+  }
+  .essay-row:hover .essay-row__arrow {
+    transform: translate(2px, -2px);
+  }
+  .button {
+    transition: background 180ms, color 180ms, transform 180ms ease-out;
+  }
+  .button:hover {
+    transform: translateY(-1px);
   }
 }
 @media (prefers-reduced-motion: reduce) {

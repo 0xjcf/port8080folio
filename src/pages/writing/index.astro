@@ -1,4 +1,5 @@
 ---
+import Arrow from '../../components/Arrow.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EssayList from '../../components/EssayList.astro';
 import FeedFollow from '../../components/FeedFollow.astro';
@@ -11,7 +12,7 @@ const series = orderSeries(posts);
   <main id="main" class="page-content archive-page">
     <div class="container">
       <header class="page-intro"><div><p class="eyebrow">THE ARCHIVE</p><h1>Writing<span style="color:var(--accent)">.</span></h1><p class="section__subtitle">Notes on frontend architecture, statecharts, and the actor model.</p></div><p class="page-intro__note">Ideas developed in practice.<br />Essays on what software does, who owns it, and how we make it easier to reason about.</p></header>
-      {series.length > 0 && <section class="archive-series" aria-label="Behavior & Boundaries series"><span class="series-count">01—{String(series.length).padStart(2, '0')}</span><div><p class="eyebrow">A READING PATH</p><h2>{seriesName}</h2><p>Essays on responsibility, boundaries, and why architecture matters when code is cheap.</p><a href={seriesUrl}>Start at the beginning →</a></div></section>}
+      {series.length > 0 && <section class="archive-series" aria-label="Behavior & Boundaries series"><span class="series-count">01—{String(series.length).padStart(2, '0')}</span><div><p class="eyebrow">A READING PATH</p><h2>{seriesName}</h2><p>Essays on responsibility, boundaries, and why architecture matters when code is cheap.</p><a href={seriesUrl}>Start at the beginning <Arrow direction="right" /></a></div></section>}
       <div class="section-kicker"><h2>ALL ESSAYS / {String(posts.length).padStart(2, '0')}</h2><span class="reading-time">Most recently updated first</span></div>
       <EssayList posts={posts} />
       <FeedFollow />
