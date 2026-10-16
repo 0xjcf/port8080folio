@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 import { execSync } from 'node:child_process';
 import { Window } from 'happy-dom';
+import { JSDOM } from 'jsdom';
 
 import { loadVariables } from '../scripts/build-replace-vars';
 
@@ -195,6 +196,8 @@ describe('production configuration sanity checks', () => {
     }
 
     let diagramCount = 0;
+    const articleContents = new Map<string, { text: string; code: string[]; image: string }>();
+    const normalizeText = (text: string | null) => text?.replace(/\s+/g, ' ').trim() ?? '';
 
     const expectedHandoffs = new Map([
       ['when-code-becomes-cheap', 'before-behavior-product-frame'],
@@ -222,6 +225,17 @@ describe('production configuration sanity checks', () => {
         },
       });
       publishedArticleWindow.document.write(publishedArticleHtml);
+      const previewImage = publishedArticleWindow.document.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? '';
+      expect(new URL(previewImage).pathname).toBe(`/assets/images/articles/${slug}-v1.jpg`);
+      expect(fs.existsSync(path.join(distDir, new URL(previewImage).pathname))).toBe(true);
+      expect(publishedArticleWindow.document.querySelector('meta[name="twitter:image"]')?.getAttribute('content')).toBe(previewImage);
+      expect(publishedArticleWindow.document.querySelector('meta[property="og:image:alt"]')?.getAttribute('content')).toBeTruthy();
+      expect(JSON.parse(publishedArticleWindow.document.querySelector('script[type="application/ld+json"]')?.textContent ?? '{}').image).toBe(previewImage);
+      articleContents.set(slug, {
+        text: normalizeText(publishedArticleWindow.document.querySelector('.writing-article__content')?.textContent ?? ''),
+        code: Array.from(publishedArticleWindow.document.querySelectorAll('.writing-article__content pre code')).map(code => code.textContent ?? ''),
+        image: previewImage,
+      });
       expect(publishedArticleWindow.document.querySelector('form')).toBeNull();
       expect(publishedArticleWindow.document.querySelector('pre code.language-mermaid')).toBeNull();
       for (const image of publishedArticleWindow.document.querySelectorAll('.article-diagram img')) {
@@ -257,6 +271,7 @@ describe('production configuration sanity checks', () => {
       publishedArticleWindow.close();
     }
     expect(diagramCount).toBe(4);
+    expect(new Set([...articleContents.values()].map(article => article.image)).size).toBe(5);
 
     const rssXml = fs.readFileSync(path.join(distDir, 'rss.xml'), 'utf-8');
     const rssItems = rssXml.match(/<item>[\s\S]*?<\/item>/g) ?? [];
@@ -276,6 +291,28 @@ describe('production configuration sanity checks', () => {
       return new Date(pubDate ?? 0).valueOf();
     });
     expect(rssDates[0]).toBeGreaterThan(rssDates[1]);
+    expect(rssDates).toEqual([4, 3, 2, 1, 0].map(seconds => Date.parse('2026-07-30T00:00:00Z') + seconds * 1000));
+
+    const rssDocument = new JSDOM(rssXml, { contentType: 'application/xml' });
+    for (const item of rssDocument.window.document.querySelectorAll('item')) {
+      const url = new URL(item.querySelector('link')?.textContent ?? '');
+      const slug = url.pathname.split('/').filter(Boolean).at(-1) ?? '';
+      const article = articleContents.get(slug)!;
+      expect(article, `RSS item must match a published article: ${slug}`).toBeTruthy();
+      const encoded = item.getElementsByTagNameNS('http://purl.org/rss/1.0/modules/content/', 'encoded')[0];
+      expect(encoded).toBeTruthy();
+      const reader = new JSDOM(encoded.textContent ?? '');
+      expect(normalizeText(reader.window.document.body.textContent)).toContain(article.text);
+      expect([...reader.window.document.querySelectorAll('pre code')].map(code => code.textContent ?? '')).toEqual(article.code);
+      expect(reader.window.document.images[0].src).toBe(article.image);
+      expect(item.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'content')[0].getAttribute('url')).toBe(article.image);
+      for (const element of reader.window.document.querySelectorAll('[src], [href]')) {
+        expect(element.getAttribute('src') ?? element.getAttribute('href')).toMatch(/^(https?:|mailto:)/);
+      }
+      expect(reader.window.document.querySelector('script, style, button, form')).toBeNull();
+      reader.window.close();
+    }
+    rssDocument.window.close();
 
     writingWindow.close();
   }, 30_000);
