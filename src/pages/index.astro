@@ -1,4 +1,5 @@
 ---
+import Arrow from '../components/Arrow.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EssayList from '../components/EssayList.astro';
 import FeedFollow from '../components/FeedFollow.astro';
@@ -21,41 +22,41 @@ const personSchema = { '@context':'https://schema.org', '@type':'Person', name:'
         {latest ? <>
           <h1><a href={`/writing/${latest.slug}/`}>{latest.data.title}</a></h1>
           <p class="feature-story__summary">{latest.data.description}</p>
-          <div class="feature-meta"><a href={`/writing/${latest.slug}/`}>Read the essay <span aria-hidden="true">↗</span></a><time datetime={getBlogPostActivityDate(latest).toISOString()}>Updated {formatDate(getBlogPostActivityDate(latest))}</time><span>{readingMinutes(latest)} min read</span></div>
-        </> : <><h1>Notes on software and systems.</h1><a href="/writing/">Explore writing →</a></>}
+          <div class="feature-meta"><a href={`/writing/${latest.slug}/`}>Read the essay <span aria-hidden="true"><Arrow /></span></a><time datetime={getBlogPostActivityDate(latest).toISOString()}>Updated {formatDate(getBlogPostActivityDate(latest))}</time><span>{readingMinutes(latest)} min read</span></div>
+        </> : <><h1>Notes on software and systems.</h1><a href="/writing/">Explore writing <Arrow direction="right" /></a></>}
       </article>
       <aside class="journal-aside" aria-label="About this journal">
         <div class="aside-intro"><p class="eyebrow">ABOUT THIS JOURNAL</p><h2>Making behavior<br /><em>explicit.</em></h2><p>Writing and open-source on statecharts, actor models, and system boundaries.</p></div>
-        <div class="series-note"><p class="eyebrow">READ IN ORDER</p><span class="series-count">01 — {String(series.length).padStart(2, '0')}</span><h3>Behavior &amp; Boundaries</h3><p>Essays on responsibility, boundaries, and why architecture matters when code is cheap.</p><a href={seriesUrl}>Explore the series ↗</a></div>
+        <div class="series-note"><p class="eyebrow">READ IN ORDER</p><span class="series-count">01 — {String(series.length).padStart(2, '0')}</span><h3>Behavior &amp; Boundaries</h3><p>Essays on responsibility, boundaries, and why architecture matters when code is cheap.</p><a href={seriesUrl}>Explore the series <Arrow /></a></div>
         <p class="byline">By <a href="/about/">Jose Flores</a><br />Software engineer &amp; open-source maintainer.</p>
       </aside>
     </section>
     <section class="latest-section" id="writing-preview" aria-label="Recent writing">
-      <div class="section-kicker"><h2>RECENT WRITING</h2><a href="/writing/">All essays <span aria-hidden="true">↗</span></a></div>
+      <div class="section-kicker"><h2>RECENT WRITING</h2><a href="/writing/">All essays <span aria-hidden="true"><Arrow /></span></a></div>
       <EssayList posts={posts.slice(1)} />
     </section>
     <section class="journal-bottom" aria-label="Projects and author">
       <div id="open-source-highlight">
-        <div class="section-kicker"><h2>BUILT IN THE OPEN</h2><a href="/open-source/">All projects <span aria-hidden="true">↗</span></a></div>
+        <div class="section-kicker"><h2>BUILT IN THE OPEN</h2><a href="/open-source/">All projects <span aria-hidden="true"><Arrow /></span></a></div>
         <h3>ignite-element</h3>
         <p>A production-grade library for building statechart-driven UI components.</p>
         <ul><li>Web-component-first integration for statecharts and actors</li><li>Explicit behavior boundaries, testable by design</li><li>Used to build real interfaces, not demos</li></ul>
-        <p><a href="https://0xjcf.github.io/ignite-element/" target="_blank" rel="noopener noreferrer">Read ignite-element docs ↗</a><br /><a href="https://github.com/0xjcf/ignite-element" target="_blank" rel="noopener noreferrer">View source on GitHub ↗</a></p>
-        <p><a href="/reference-systems/">The Lab: explore the ideas in working code →</a></p>
+        <p><a href="https://0xjcf.github.io/ignite-element/" target="_blank" rel="noopener noreferrer">Read ignite-element docs <Arrow /></a><br /><a href="https://github.com/0xjcf/ignite-element" target="_blank" rel="noopener noreferrer">View source on GitHub <Arrow /></a></p>
+        <p><a href="/reference-systems/">The Lab: explore the ideas in working code <Arrow direction="right" /></a></p>
       </div>
       <div id="about">
-        <div class="section-kicker"><h2>THE AUTHOR</h2><a href="/about/">Full background <span aria-hidden="true">↗</span></a></div>
+        <div class="section-kicker"><h2>THE AUTHOR</h2><a href="/about/">Full background <span aria-hidden="true"><Arrow /></span></a></div>
         <img class="about-portrait" src="/assets/images/gibli-pfp-200.webp" alt="Jose Flores" width="48" height="48" loading="lazy" />
         <h3>Jose Flores</h3><p class="about__name">Software Engineer • Technical Advisor</p>
         <p>I make behavior explicit so teams can ship complex systems with confidence.</p>
         <ul class="about__tags" aria-label="Focus areas"><li>Statecharts</li><li>Actor Model</li><li>TypeScript</li></ul>
         <ul class="about__proof-list"><li>Independent software engineer and technical advisor.</li><li>Statecharts and actor model specialist in TypeScript.</li><li>Open-source maintainer: Actor-Web, Ignite-Element.</li><li>Focus areas: architecture, delivery, developer experience.</li><li>Make behavior explicit, testable, and easy to evolve.</li></ul>
-        <a href="/open-source/">See open source →</a>
+        <a href="/open-source/">See open source <Arrow direction="right" /></a>
       </div>
     </section>
     <section class="journal-routes" aria-label="Explore my work">
       <div class="section-kicker"><h2>EXPLORE WORK</h2><span class="reading-time">Routes for learning, building, and collaborating.</span></div>
-      <div class="explore__grid"><article class="explore__card"><h3>Writing</h3><p>Systems, delivery, and behavior-driven architecture. Notes on architecture, statecharts, and delivery.</p><a href="/writing/">Read my writing →</a></article><article class="explore__card"><h3>Open Source</h3><p>Actor-Web, Ignite-Element, and other projects I maintain.</p><a href="/open-source/">See OSS work →</a></article><article class="explore__card"><h3>About</h3><p>Background, approach, and how I work with teams.</p><a href="/about/">Get to know me →</a></article></div>
+      <div class="explore__grid"><article class="explore__card"><h3>Writing</h3><p>Systems, delivery, and behavior-driven architecture. Notes on architecture, statecharts, and delivery.</p><a href="/writing/">Read my writing <Arrow direction="right" /></a></article><article class="explore__card"><h3>Open Source</h3><p>Actor-Web, Ignite-Element, and other projects I maintain.</p><a href="/open-source/">See OSS work <Arrow direction="right" /></a></article><article class="explore__card"><h3>About</h3><p>Background, approach, and how I work with teams.</p><a href="/about/">Get to know me <Arrow direction="right" /></a></article></div>
       {first && <p class="reading-time" style="margin-top: 26px">Start here: <a href={`/writing/${first.slug}/`}>When Code Becomes Cheap → Why architecture matters now</a></p>}
     </section>
     <div id="contact"><span id="newsletter-form"></span><FeedFollow /></div>

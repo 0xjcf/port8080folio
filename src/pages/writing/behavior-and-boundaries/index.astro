@@ -1,4 +1,5 @@
 ---
+import Arrow from '../../../components/Arrow.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import EssayList from '../../../components/EssayList.astro';
 import FeedFollow from '../../../components/FeedFollow.astro';
@@ -14,7 +15,7 @@ const posts = orderSeries(await getPublishedBlogPosts());
     <p>Follow the decisions behind a running system: understand the problem, express the intent, isolate the policy, and give behavior an owner with the right lifetime.</p>
     <p>The examples come from dogfooding Ignite Element. Start with the first essay for the full argument, or open the part that matches the question you are working through.</p>
     <EssayList posts={posts} numbered />
-    <section class="series-context"><h2>From the page to the code.</h2><p>These essays describe an evolving implementation. Read each article’s update date alongside its code references. The examples discuss the Ignite Element v3 beta and identify the limits of the current protocols.</p><p><a href="/open-source/">Explore the projects →</a> &nbsp; <a href="/reference-systems/">Visit the Lab →</a></p></section>
+    <section class="series-context"><h2>From the page to the code.</h2><p>These essays describe an evolving implementation. Read each article’s update date alongside its code references. The examples discuss the Ignite Element v3 beta and identify the limits of the current protocols.</p><p><a href="/open-source/">Explore the projects <Arrow direction="right" /></a> &nbsp; <a href="/reference-systems/">Visit the Lab <Arrow direction="right" /></a></p></section>
     <FeedFollow />
   </div></main>
 </BaseLayout>

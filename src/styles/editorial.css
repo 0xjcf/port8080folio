@@ -82,6 +82,14 @@ svg {
 img {
   height: auto;
 }
+.icon-arrow {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  flex-shrink: 0;
+  pointer-events: none;
+}
 h1,
 h2,
 h3,

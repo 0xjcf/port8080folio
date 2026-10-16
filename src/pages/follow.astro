@@ -1,4 +1,5 @@
 ---
+import Arrow from '../components/Arrow.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 // Preview visitors should subscribe to the permanent feed, too.
@@ -29,7 +30,7 @@ const feedUrl = 'https://0xjcf.com/rss.xml';
           </button>
         </div>
         <p id="feed-copy-status" class="feed-copy-status" role="status" aria-live="polite" aria-atomic="true">Copy this address, then paste it into your reader’s “Add feed” or “Follow” option.</p>
-        <a class="feed-address__raw" href="/rss.xml">View the raw RSS feed <span aria-hidden="true">↗</span></a>
+        <a class="feed-address__raw" href="/rss.xml">View the raw RSS feed <span aria-hidden="true"><Arrow /></span></a>
       </section>
 
       <section class="follow-explainer" aria-labelledby="rss-explained-title">
@@ -42,7 +43,7 @@ const feedUrl = 'https://0xjcf.com/rss.xml';
         </ol>
       </section>
 
-      <p class="follow-browse"><a href="/writing/">Browse all writing <span aria-hidden="true">→</span></a></p>
+      <p class="follow-browse"><a href="/writing/">Browse all writing <span aria-hidden="true"><Arrow direction="right" /></span></a></p>
     </div>
   </main>
 </BaseLayout>

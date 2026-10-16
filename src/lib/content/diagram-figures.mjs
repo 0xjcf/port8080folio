@@ -35,7 +35,12 @@ export default function diagramFigures() {
               ] },
               { type: 'element', tagName: 'figcaption', properties: {}, children: [
                 { type: 'text', value: 'Architecture diagram · Scroll horizontally to explore.' },
-                { type: 'element', tagName: 'a', properties: { href: src, target: '_blank', rel: ['noopener','noreferrer'] }, children: [{ type: 'text', value: 'Open full size ↗' }] },
+                { type: 'element', tagName: 'a', properties: { href: src, target: '_blank', rel: ['noopener','noreferrer'] }, children: [
+                  { type: 'text', value: 'Open full size ' },
+                  { type: 'element', tagName: 'svg', properties: { className: ['icon-arrow'], width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round', ariaHidden: 'true', focusable: 'false' }, children: [
+                    { type: 'element', tagName: 'path', properties: { d: 'M4 20 20 4M4 4h16v16' }, children: [] },
+                  ] },
+                ] },
               ] },
             ],
           };

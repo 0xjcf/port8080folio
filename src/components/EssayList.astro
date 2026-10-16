@@ -1,4 +1,5 @@
 ---
+import Arrow from './Arrow.astro';
 import type { BlogPost } from '../lib/content/blog';
 import { getBlogPostActivityDate } from '../lib/content/blog';
 import { formatDate, readingMinutes } from '../lib/content/editorial';
@@ -19,7 +20,7 @@ const { posts, numbered = false } = Astro.props as { posts: BlogPost[]; numbered
         <p class="essay-row__description">{post.data.description}</p>
         <span class="reading-time">{readingMinutes(post)} min read</span>
       </div>
-      <a class="essay-row__arrow" href={`/writing/${post.slug}/`} aria-label={`Read ${post.data.title}`}>↗</a>
+      <a class="essay-row__arrow" href={`/writing/${post.slug}/`} aria-label={`Read ${post.data.title}`}><Arrow /></a>
     </li>
   ))}
 </ol>
