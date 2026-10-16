@@ -1,81 +1,50 @@
-# Jose Flores - Technical Advisor Landing Page
+# 0xjcf.com
 
-A clean, performant landing page built with HTML and CSS only (minimal JavaScript for mobile sticky CTA).
+José Flores’s writing and open-source journal. Built as a static Astro site with Markdown articles, RSS, an editorial light/dark theme, and minimal progressive enhancement.
 
-## Quick Start
+## Develop and preview
 
-```bash
-# Development server (Python)
+Use Node 22 LTS or newer (see `package.json`).
+
+```sh
+npm ci
 npm run dev
-
-# Alternative server (Node)
-npm run serve
 ```
 
-Then open <http://localhost:8080>.
+Astro serves the development site at `http://localhost:4321`.
 
-## Project Structure
-
-```text
-src/
-├── index.html          # Main landing page
-├── gibli-pfp.png      # Profile image
-└── styles/            # CSS modules
-    ├── 00-unified-theme.css
-    ├── 01-reset.css
-    ├── 02-tokens.css
-    ├── 03-layout.css
-    ├── 04-typography.css
-    ├── 05-components.css
-    ├── 06-utilities.css
-    ├── 07-dark-theme.css
-    ├── 08-hero.css
-    ├── 09-about.css
-    ├── 10-services.css
-    ├── 11-contact.css
-    ├── 12-contact-forms.css
-    ├── 13-footer.css
-    ├── 14-sticky-cta.css
-    └── main.css       # Import aggregator
+```sh
+SITE_URL=https://0xjcf.com npm run build
+npm run preview
 ```
 
-## Design Principles
+The deployable static files are in `dist/`. No server runtime, database, email credentials, or newsletter form is needed for the journal.
 
-- **HTML + CSS First**: Minimal JavaScript (only for mobile sticky CTA)
-- **Performance**: Optimized for Core Web Vitals
-- **Accessibility**: WCAG 2.1 AA compliant
-- **Mobile First**: Responsive design with mobile-optimized interactions
-- **Dark Theme**: Aggressive black/red/orange premium aesthetic
+## Content and structure
 
-## Development
+- `src/content/blog/`: published articles and drafts; filenames determine existing `/writing/<slug>/` URLs.
+- `src/pages/writing/`: archive, articles, and the Behavior & Boundaries reading guide.
+- `src/pages/`: About, Open Source, Lab, consulting, and preserved legacy form-result pages.
+- `src/styles/editorial.css`: responsive light/dark design.
+- `public/assets/diagrams/`: committed static SVG diagrams and their content-hash manifest.
+- `worker.ts`: existing Cloudflare form Worker; retained separately, unused by the journal UI.
 
-### Worker Development
+When a published Mermaid block changes, run `npm run render:diagrams` and commit the generated SVGs and manifest. The renderer uses a local Chromium installation (`npx playwright install chromium` if needed). Normal site builds use committed assets and never launch a browser. Article text, diagrams, the mobile contents list, and RSS work without client JavaScript.
 
-```bash
-# Start Wrangler dev server for forms
-npm run dev:worker
+## Verify
 
-# To disable Wrangler metrics collection, set environment variable:
-WRANGLER_SEND_METRICS=false npm run dev:worker
-
-# Or create a .env file (see .env.example) with:
-# WRANGLER_SEND_METRICS=false
+```sh
+npm test
+npm run typecheck
 ```
 
-### Available Scripts
-
-- `npm run dev` - Static file server for frontend
-- `npm run dev:worker` - Wrangler dev server for form handling
-- `npm run deploy:worker` - Deploy worker to Cloudflare
-
-## Documentation
-
-- `css-audit.md` - Comprehensive CSS audit and recommendations
-- `docs/performance-optimization-plan.md` - Performance optimization strategy
+The suite checks article ordering, draft exclusion, RSS, routes, static diagrams, and the retained Worker and form utilities.
 
 ## Deployment
 
-This is a static site - simply serve the `src/` directory.
+Cloudflare Pages builds with `npm run build` and serves `dist/`. Set `SITE_URL` explicitly for the target environment. Production follows `main`; review the redesign branch in a preview before merging. Deploying the static site does not require deploying the legacy Worker.
+
+See [publishing articles](docs/how-to-publish.md), [deployment](docs/deploy-workflow.md), and [redesign intent and invariants](docs/editorial-redesign.md).
 
 ## License
 

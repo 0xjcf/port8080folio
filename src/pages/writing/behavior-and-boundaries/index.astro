@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import EssayList from '../../../components/EssayList.astro';
+import FeedFollow from '../../../components/FeedFollow.astro';
+import { getPublishedBlogPosts } from '../../../lib/content/blog';
+import { orderSeries, seriesName } from '../../../lib/content/editorial';
+const posts = orderSeries(await getPublishedBlogPosts());
+---
+<BaseLayout title="Behavior & Boundaries — A Reading Guide | Jose Flores" description="Read Behavior & Boundaries in order: product framing, semantic commands, functional cores, and lifecycle ownership.">
+  <main id="main" class="page-content series-guide"><div class="container">
+    <p class="eyebrow"><a href="/writing/">WRITING</a> / A SERIES IN {posts.length} ESSAYS</p>
+    <h1>{seriesName}</h1>
+    <p class="section__subtitle">Essays on responsibility, boundaries, and why architecture matters when code is cheap.</p>
+    <p>Follow the decisions behind a running system: understand the problem, express the intent, isolate the policy, and give behavior an owner with the right lifetime.</p>
+    <p>The examples come from dogfooding Ignite Element. Start with the first essay for the full argument, or open the part that matches the question you are working through.</p>
+    <EssayList posts={posts} numbered />
+    <section class="series-context"><h2>From the page to the code.</h2><p>These essays describe an evolving implementation. Read each article’s update date alongside its code references. The examples discuss the Ignite Element v3 beta and identify the limits of the current protocols.</p><p><a href="/open-source/">Explore the projects →</a> &nbsp; <a href="/reference-systems/">Visit the Lab →</a></p></section>
+    <FeedFollow />
+  </div></main>
+</BaseLayout>

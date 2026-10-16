@@ -1,125 +1,20 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import {
-  getPublishedBlogPosts,
-  sortBlogPostsByRecency,
-} from "../../lib/content/blog";
-
-const title = "Writing | Jose Flores";
-const description =
-  "Writing on frontend architecture, statecharts, and the actor model.";
-
-const seriesName = "Behavior & Boundaries";
-const seriesDescription =
-  "Essays on responsibility, boundaries, and why architecture matters when code is cheap.";
-const publishedPosts = await getPublishedBlogPosts();
-const seriesPosts = publishedPosts
-  .filter((post) => post.data.series === seriesName)
-  .sort((firstPost, secondPost) => {
-    const firstSeriesOrder = firstPost.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
-    const secondSeriesOrder =
-      secondPost.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
-    return firstSeriesOrder - secondSeriesOrder;
-  });
-const standalonePosts = sortBlogPostsByRecency(
-  publishedPosts.filter((post) => post.data.series !== seriesName),
-);
-const posts = [...seriesPosts, ...standalonePosts];
-const seriesCount = seriesPosts.length;
-const seriesLatestPost = seriesPosts
-  .filter((post) => post.data.seriesOrder !== undefined)
-  .at(-1);
-const seriesLatestPart = seriesLatestPost?.data.seriesOrder;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EssayList from '../../components/EssayList.astro';
+import FeedFollow from '../../components/FeedFollow.astro';
+import { getPublishedBlogPosts, sortBlogPostsByRecency } from '../../lib/content/blog';
+import { orderSeries, seriesName, seriesUrl } from '../../lib/content/editorial';
+const posts = sortBlogPostsByRecency(await getPublishedBlogPosts());
+const series = orderSeries(posts);
 ---
-
-<BaseLayout title={title} description={description} bodyClass="no-js">
-  <main
-    id="main"
-    role="main"
-    class="section section--writing-page page-content"
-  >
+<BaseLayout title="Writing | Jose Flores" description="Writing on frontend architecture, statecharts, and the actor model.">
+  <main id="main" class="page-content archive-page">
     <div class="container">
-      <h1 class="section__title">Writing</h1>
-      <p class="section__subtitle">
-        Notes on frontend architecture, statecharts, and the actor model.
-      </p>
-
-      <div class="section__content">
-        {
-          seriesCount > 0 && (
-            <section
-              class="writing-series"
-              aria-labelledby="writing-series-title"
-            >
-              <h2 id="writing-series-title" class="writing-series__heading">
-                Series
-              </h2>
-              <div
-                class="writing-series__card"
-                role="group"
-                aria-label={`${seriesName} series`}
-              >
-                <div class="writing-series__intro">
-                  <p class="writing-series__title">{seriesName}</p>
-                  <p class="writing-series__description">{seriesDescription}</p>
-                </div>
-                <div class="writing-series__meta">
-                  <span class="writing-series__count">{seriesCount} posts</span>
-                  {seriesLatestPost && (
-                    <span class="writing-series__start">
-                      Latest:
-                      {seriesLatestPart && (
-                        <span class="writing-series__part">
-                          Part {seriesLatestPart}
-                        </span>
-                      )}
-                      <a
-                        class="writing-series__link"
-                        href={`/writing/${seriesLatestPost.slug}/`}
-                      >
-                        {seriesLatestPost.data.title} →
-                      </a>
-                    </span>
-                  )}
-                </div>
-              </div>
-            </section>
-          )
-        }
-        {
-          seriesCount > 0 && (
-            <div class="writing-series__divider" aria-hidden="true" />
-          )
-        }
-        {
-          posts.length === 0 ? (
-            <p class="text-muted">Posts are coming soon.</p>
-          ) : (
-            <ul class="writing-list">
-              {posts.map((post) => (
-                <li class="writing-list__item">
-                  <div class="writing-list__title">
-                    {post.data.seriesOrder && (
-                      <span class="writing-list__part">
-                        Part {post.data.seriesOrder}
-                      </span>
-                    )}
-                    <a
-                      class="writing-list__link"
-                      href={`/writing/${post.slug}/`}
-                    >
-                      {post.data.title}
-                    </a>
-                  </div>
-                  <p class="writing-list__description text-muted">
-                    {post.data.description}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          )
-        }
-      </div>
+      <header class="page-intro"><div><p class="eyebrow">THE ARCHIVE</p><h1>Writing<span style="color:var(--accent)">.</span></h1><p class="section__subtitle">Notes on frontend architecture, statecharts, and the actor model.</p></div><p class="page-intro__note">Ideas developed in practice.<br />Essays on what software does, who owns it, and how we make it easier to reason about.</p></header>
+      {series.length > 0 && <section class="archive-series" aria-label="Behavior & Boundaries series"><span class="series-count">01—{String(series.length).padStart(2, '0')}</span><div><p class="eyebrow">A READING PATH</p><h2>{seriesName}</h2><p>Essays on responsibility, boundaries, and why architecture matters when code is cheap.</p><a href={seriesUrl}>Start at the beginning →</a></div></section>}
+      <div class="section-kicker"><h2>ALL ESSAYS / {String(posts.length).padStart(2, '0')}</h2><span class="reading-time">Most recently updated first</span></div>
+      <EssayList posts={posts} />
+      <FeedFollow />
     </div>
   </main>
 </BaseLayout>

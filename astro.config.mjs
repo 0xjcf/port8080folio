@@ -1,7 +1,9 @@
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
 import githubDarkTheme from '@shikijs/themes/github-dark';
 import githubLightTheme from '@shikijs/themes/github-light';
+import diagramFigures from './src/lib/content/diagram-figures.mjs';
 
 const site = process.env.SITE_URL || (process.env.NODE_ENV === 'production'
   ? 'https://0xjcf.com'
@@ -82,13 +84,15 @@ export default defineConfig({
   build: { format: 'directory' },
   trailingSlash: 'always',
   site,
-  integrations: [sitemap()],
+  integrations: [sitemap({
+    filter: page => !/^\/(?:contact-(?:thanks|error)|newsletter-(?:thanks|error|check-email))\/$/.test(new URL(page).pathname),
+  })],
   markdown: {
     syntaxHighlight: {
       type: 'shiki',
       excludeLangs: ['mermaid']
     },
-    rehypePlugins: [],
+    processor: unified({ rehypePlugins: [diagramFigures] }),
     shikiConfig: {
       themes: {
         light: githubLightTheme,

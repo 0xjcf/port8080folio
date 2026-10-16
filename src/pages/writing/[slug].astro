@@ -1,467 +1,71 @@
 ---
-import { render } from "astro:content";
-import { getPublishedBlogPosts, type BlogPost } from "../../lib/content/blog";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ProgressSpineTocMobile from "../../components/ProgressSpineTocMobile.astro";
-import SubscribeInline from "../../components/SubscribeInline.astro";
-
+import { render } from 'astro:content';
+import { getPublishedBlogPosts, type BlogPost } from '../../lib/content/blog';
+import { formatDate, readingMinutes, orderSeries, seriesUrl } from '../../lib/content/editorial';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FeedFollow from '../../components/FeedFollow.astro';
 export async function getStaticPaths() {
-  const posts = await getPublishedBlogPosts();
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+  return (await getPublishedBlogPosts()).map(post => ({ params:{slug:post.slug}, props:{post} }));
 }
-
 const { post } = Astro.props as { post: BlogPost };
 const { Content, headings } = await render(post);
-const title = `${post.data.title} | Jose Flores`;
-const description = post.data.description;
-const titleSlug = "article-title";
-const subscribeVariant = post.data.series
-  ? post.data.isSeriesFinal
-    ? "seriesComplete"
-    : "seriesActive"
-  : "generic";
-const canonicalUrl = Astro.site
-  ? new URL(`/writing/${post.slug}/`, Astro.site).toString()
-  : new URL(`/writing/${post.slug}/`, Astro.url).toString();
-const blogSchema: Record<string, unknown> = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: post.data.title,
-  description: post.data.description,
-  datePublished: post.data.pubDate.toISOString(),
-  author: {
-    "@type": "Person",
-    name: "Jose Flores",
-    url: "https://0xjcf.com",
-  },
-  mainEntityOfPage: canonicalUrl,
+const series = orderSeries(await getPublishedBlogPosts());
+const position = series.findIndex(entry => entry.slug === post.slug);
+const previous = position > 0 ? series[position - 1] : undefined;
+const next = position >= 0 ? series[position + 1] : undefined;
+const toc = headings.filter(heading => heading.depth === 2 || heading.depth === 3);
+const canonicalUrl = new URL(`/writing/${post.slug}/`, Astro.site ?? Astro.url).toString();
+const blogSchema = {
+  '@context':'https://schema.org', '@type':'BlogPosting', headline:post.data.title,
+  description:post.data.description, datePublished:post.data.pubDate.toISOString(),
+  ...(post.data.updatedDate ? {dateModified:post.data.updatedDate.toISOString()} : {}),
+  author:{'@type':'Person',name:'Jose Flores',url:'https://0xjcf.com'}, mainEntityOfPage:canonicalUrl,
 };
-
-if (post.data.updatedDate) {
-  blogSchema.dateModified = post.data.updatedDate.toISOString();
-}
 ---
-
-<BaseLayout
-  title={title}
-  description={description}
-  bodyClass="no-js"
-  canonical={canonicalUrl}
-  ogType="article"
->
-  <Fragment slot="head">
-    <script
-      type="application/ld+json"
-      is:inline
-      set:html={JSON.stringify(blogSchema)}
-    />
-    <script defer type="module" src="/scripts/pe.js"></script>
-    <script defer type="module" src="/scripts/mermaid-diagrams.js"></script>
-  </Fragment>
-  <div class="writing-shell section section--writing-page page-content">
-    <main id="main" role="main" class="writing-shell__main">
-      <div class="container">
-        <article class="writing-article" id="writing-article">
-          <header>
-            <h1 class="section__title" id={titleSlug}>
-              {post.data.title}
-            </h1>
-            <p class="lead writing-article__summary">{post.data.description}</p>
-          </header>
-          <div class="section__content writing-article__content">
-            <Content />
-          </div>
-          {post.data.glossary?.length ? (
-            <section class="writing-glossary" aria-labelledby="glossary-title">
-              <h2 id="glossary-title" class="writing-glossary__title">
-                Glossary
-              </h2>
-              <dl class="writing-glossary__list">
-                {post.data.glossary.map((entry) => (
-                  <div class="writing-glossary__item">
-                    <dt class="writing-glossary__term">{entry.term}</dt>
-                    <dd class="writing-glossary__definition">
-                      {entry.definition}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
-          ) : null}
-          <SubscribeInline
-            seriesName={post.data.series}
-            variant={subscribeVariant}
-            formId={`subscribe-${post.slug}`}
-          />
-        </article>
-      </div>
-    </main>
-    {headings?.length ? (
-      <aside class="writing-shell__sidebar" aria-label="Table of contents">
-        <nav class="writing-toc" id="writing-toc-panel">
-          <div class="writing-toc__header">
-            <p class="writing-toc__title">On this page</p>
-          </div>
-          <ol class="writing-toc__list" id="writing-toc-list" data-toc-scroll="true">
-            {headings
-              .filter((heading) => heading.depth >= 2 && heading.depth <= 3)
-              .map((heading) => (
-                <li class="writing-toc__item" data-depth={heading.depth}>
-                  <a
-                    class="writing-toc__link"
-                    href={`#${heading.slug}`}
-                    data-toc-link={heading.slug}
-                  >
-                    {heading.text}
-                  </a>
-                </li>
-              ))}
-          </ol>
-        </nav>
-      </aside>
-    ) : null}
-    {headings?.length ? <ProgressSpineTocMobile /> : null}
+<BaseLayout title={`${post.data.title} | Jose Flores`} description={post.data.description} canonical={canonicalUrl} ogType="article">
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(blogSchema)} />
+  <div class="reading-progress" aria-hidden="true"></div>
+  <div class="writing-shell">
+    <main id="main" class="writing-shell__main"><div class="container">
+      <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="/writing/">WRITING</a>{post.data.series && <><span>/</span><a href={seriesUrl}>{post.data.series.toUpperCase()}</a><span>/</span><span>PART {post.data.seriesOrder}</span></>}</nav>
+      <article class="writing-article" id="writing-article">
+        <header><h1 id="article-title">{post.data.title}</h1><p class="writing-article__summary">{post.data.description}</p><div class="article-meta"><a class="article-author" href="/about/">By Jose Flores</a><span>Published <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time></span>{post.data.updatedDate && <span>Updated <time datetime={post.data.updatedDate.toISOString()}>{formatDate(post.data.updatedDate)}</time></span>}<span>{readingMinutes(post)} min read</span></div></header>
+        {toc.length > 0 && <details class="mobile-contents"><summary>On this page</summary><ol>{toc.map(heading => <li><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol></details>}
+        <div class="writing-article__content"><Content /></div>
+        {post.data.glossary?.length ? <section class="writing-glossary" aria-labelledby="glossary-title"><h2 id="glossary-title">Glossary</h2><dl>{post.data.glossary.map(entry => <div class="writing-glossary__item"><dt>{entry.term}</dt><dd>{entry.definition}</dd></div>)}</dl></section> : null}
+        {post.data.series && <nav class="series-pagination" aria-label="Series navigation">
+          {previous ? <a href={`/writing/${previous.slug}/`}><span>← PREVIOUS / PART {previous.data.seriesOrder}</span>{previous.data.title}</a> : <a class="series-all" href={seriesUrl}><span>THE READING GUIDE</span>All essays in this series</a>}
+          {next ? <a class="next" href={`/writing/${next.slug}/`}><span>NEXT / PART {next.data.seriesOrder} →</span>{next.data.title}</a> : <a class="next series-all" href={seriesUrl}><span>YOU’RE UP TO DATE</span>Back to the series →</a>}
+        </nav>}
+        <FeedFollow compact titleId={`subscribe-${post.slug}-title`} />
+      </article>
+    </div></main>
+    {toc.length > 0 && <aside class="writing-shell__sidebar" aria-label="Table of contents"><nav class="writing-toc" id="writing-toc-panel"><p class="writing-toc__title">On this page</p><ol class="writing-toc__list" id="writing-toc-list">{toc.map(heading => <li class="writing-toc__item" data-depth={heading.depth}><a class="writing-toc__link" href={`#${heading.slug}`} data-toc-link={heading.slug}>{heading.text}</a></li>)}</ol><a class="toc-series-link" href={seriesUrl}>← Behavior &amp; Boundaries<br />{post.data.seriesOrder ? `Part ${post.data.seriesOrder} of ${series.length}` : 'The reading guide'}</a></nav></aside>}
   </div>
-  <script is:inline type="module">
-    (() => {
-      const tocList = document.getElementById("writing-toc-list");
-      const article = document.getElementById("writing-article");
-      const tocScroll = document.querySelector('[data-toc-scroll="true"]');
-      if (!tocList || !article || !tocScroll) return;
-
-      const headings = Array.from(
-        article.querySelectorAll("h2[id], h3[id]"),
-      );
-      if (!headings.length) return;
-
-      const endSentinel = document.createElement("div");
-      endSentinel.dataset.tocEndSentinel = "true";
-      endSentinel.setAttribute("aria-hidden", "true");
-      endSentinel.style.cssText = "position: relative; width: 100%; height: 1px;";
-      article.append(endSentinel);
-
-      const links = Array.from(tocList.querySelectorAll("[data-toc-link]"));
-      if (!links.length) return;
-      const tocIds = new Set(
-        links.map((link) => link.getAttribute("data-toc-link")).filter(Boolean),
-      );
-      const tocHeadings = headings.filter((heading) => tocIds.has(heading.id));
-      if (!tocHeadings.length) return;
-
-      let activeId = null;
-      let isUserInteracting = false;
-      let interactionTimeout;
-
-      const setActive = (id) => {
-        if (!id || id === activeId) return;
-        activeId = id;
-        links.forEach((link) => {
-          const isActive = link.getAttribute("data-toc-link") === id;
-          link.classList.toggle("is-active", isActive);
-          if (isActive) {
-            link.setAttribute("aria-current", "true");
-          } else {
-            link.removeAttribute("aria-current");
-          }
-          link.parentElement?.classList.toggle("is-active", isActive);
-        });
-        ensureActiveVisible(id);
-      };
-
-      const markInteracting = () => {
-        isUserInteracting = true;
-        if (interactionTimeout) {
-          window.clearTimeout(interactionTimeout);
-        }
-        interactionTimeout = window.setTimeout(() => {
-          isUserInteracting = false;
-        }, 800);
-      };
-
-      tocScroll.addEventListener("mouseenter", () => {
-        isUserInteracting = true;
-      });
-      tocScroll.addEventListener("mouseleave", () => {
-        isUserInteracting = false;
-      });
-      tocScroll.addEventListener("focusin", () => {
-        isUserInteracting = true;
-      });
-      tocScroll.addEventListener("focusout", () => {
-        isUserInteracting = false;
-      });
-      tocScroll.addEventListener("wheel", markInteracting, {
-        passive: true,
-      });
-      tocScroll.addEventListener("touchstart", markInteracting, {
-        passive: true,
-      });
-
-      const ensureActiveVisible = (id) => {
-        if (isUserInteracting) return;
-        const link = tocList.querySelector(`a[data-toc-link="${id}"]`);
-        if (!link) return;
-
-        const containerRect = tocScroll.getBoundingClientRect();
-        const linkRect = link.getBoundingClientRect();
-
-        if (
-          linkRect.top >= containerRect.top &&
-          linkRect.bottom <= containerRect.bottom
-        ) {
-          return;
-        }
-
-        const containerHeight = containerRect.height;
-        let distance = 0;
-        if (linkRect.bottom < containerRect.top) {
-          distance = containerRect.top - linkRect.bottom;
-        } else if (linkRect.top > containerRect.bottom) {
-          distance = linkRect.top - containerRect.bottom;
-        }
-
-        if (distance > containerHeight) {
-          const centeredOffset =
-            linkRect.top -
-            containerRect.top -
-            (containerHeight - linkRect.height) / 2;
-          tocScroll.scrollTo({
-            top: tocScroll.scrollTop + centeredOffset,
-            behavior: "smooth",
-          });
-        } else {
-          const nearestOffset =
-            linkRect.bottom < containerRect.top
-              ? linkRect.top - containerRect.top
-              : linkRect.bottom - containerRect.bottom;
-          tocScroll.scrollTop += nearestOffset;
-        }
-      };
-
-      let targetCorrectionObserver = null;
-      let targetCorrectionTimeout;
-      const correctionCancelEvents = [
-        "wheel",
-        "touchstart",
-        "pointerdown",
-        "keydown",
-      ];
-
-      const stopTargetCorrection = () => {
-        targetCorrectionObserver?.disconnect();
-        targetCorrectionObserver = null;
-        if (targetCorrectionTimeout) {
-          window.clearTimeout(targetCorrectionTimeout);
-          targetCorrectionTimeout = null;
-        }
-        correctionCancelEvents.forEach((eventName) => {
-          window.removeEventListener(eventName, stopTargetCorrection);
-        });
-      };
-
-      const keepTargetVisible = (target) => {
-        stopTargetCorrection();
-        if (!("ResizeObserver" in window)) return;
-
-        let observedInitialSize = false;
-        targetCorrectionObserver = new ResizeObserver(() => {
-          if (!observedInitialSize) {
-            observedInitialSize = true;
-            return;
-          }
-
-          window.requestAnimationFrame(() => {
-            const siteNav = document.querySelector(".site-nav");
-            const siteNavHeight = siteNav?.getBoundingClientRect().height ?? 0;
-            const offset = target.getBoundingClientRect().top - siteNavHeight - 24;
-            if (Math.abs(offset) > 1) {
-              window.scrollBy({ top: offset, behavior: "auto" });
-            }
-          });
-        });
-        targetCorrectionObserver.observe(article);
-        targetCorrectionTimeout = window.setTimeout(stopTargetCorrection, 3000);
-        correctionCancelEvents.forEach((eventName) => {
-          window.addEventListener(eventName, stopTargetCorrection, {
-            passive: true,
-          });
-        });
-      };
-
-      tocList.addEventListener("click", (event) => {
-        if (!(event.target instanceof Element)) return;
-        const link = event.target.closest("[data-toc-link]");
-        if (!(link instanceof HTMLAnchorElement)) return;
-
-        const id = link.dataset.tocLink;
-        const target = id ? document.getElementById(id) : null;
-        if (!id || !target) return;
-
-        event.preventDefault();
-        const siteNav = document.querySelector(".site-nav");
-        const siteNavHeight = siteNav?.getBoundingClientRect().height ?? 0;
-        const targetTop =
-          target.getBoundingClientRect().top +
-          window.scrollY -
-          siteNavHeight -
-          24;
-
-        window.history.pushState(null, "", `#${id}`);
-        window.scrollTo({
-          top: Math.max(0, targetTop),
-          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-            ? "auto"
-            : "smooth",
-        });
-        keepTargetVisible(target);
-        setActive(id);
-      });
-
-      const isTopLocked = () => window.scrollY <= 80;
-      let endIntersecting = false;
-
-      const updateActive = () => {
-        if (isTopLocked()) {
-          setActive(tocHeadings[0]?.id);
-          return;
-        }
-        const readingLine = window.innerHeight * 0.35;
-        const endRect = endSentinel.getBoundingClientRect();
-        const endReached = endIntersecting || endRect.top <= readingLine;
-        if (endReached) {
-          setActive(tocHeadings[tocHeadings.length - 1]?.id);
-          return;
-        }
-        let current = tocHeadings[0]?.id;
-        tocHeadings.forEach((heading) => {
-          if (heading.getBoundingClientRect().top <= readingLine) {
-            current = heading.id;
-          }
-        });
-        if (current) setActive(current);
-      };
-
-      const observer = new IntersectionObserver(
-        () => updateActive(),
-        {
-          root: null,
-          threshold: 0,
-          rootMargin: "-35% 0px -55% 0px",
-        },
-      );
-
-      const endObserver = new IntersectionObserver(
-        (entries) => {
-          endIntersecting = entries.some((entry) => entry.isIntersecting);
-          updateActive();
-        },
-        {
-          root: null,
-          threshold: 0,
-          rootMargin: "-35% 0px -45% 0px",
-        },
-      );
-
-      tocHeadings.forEach((heading) => observer.observe(heading));
-      endObserver.observe(endSentinel);
-      updateActive();
-      window.addEventListener("scroll", updateActive, { passive: true });
-      window.addEventListener("resize", updateActive, { passive: true });
-    })();
-  </script>
   <script is:inline>
     (() => {
-      const toc = document.querySelector(".writing-toc");
-      const sidebar = document.querySelector(".writing-shell__sidebar");
-      if (!toc || !sidebar) return;
-
-      const mq = window.matchMedia("(min-width: 960px)");
-      let rafId;
-
-      const clearFixed = () => {
-        toc.classList.remove("is-fixed");
-        document.documentElement.style.removeProperty("--toc-fixed-top");
-        document.documentElement.style.removeProperty("--toc-fixed-left");
-        document.documentElement.style.removeProperty("--toc-fixed-width");
-      };
-
-      const applyFixed = () => {
-        if (!mq.matches) {
-          clearFixed();
-          return;
+      const article = document.querySelector('.writing-article__content');
+      const progress = document.querySelector('.reading-progress');
+      const links = Array.from(document.querySelectorAll('[data-toc-link]'));
+      const headings = Array.from(article?.querySelectorAll('h2[id],h3[id]') || []);
+      let queued = false;
+      const update = () => {
+        queued = false;
+        const total = document.documentElement.scrollHeight - innerHeight;
+        if (progress) progress.style.width = `${total > 0 ? Math.min(100, scrollY / total * 100) : 0}%`;
+        let active = headings[0]?.id;
+        for (const heading of headings) if (heading.getBoundingClientRect().top <= innerHeight * .3) active = heading.id;
+        for (const link of links) {
+          if (link.dataset.tocLink === active) link.setAttribute('aria-current', 'true');
+          else link.removeAttribute('aria-current');
         }
-
-        toc.classList.remove("is-fixed");
-        const rect = toc.getBoundingClientRect();
-        document.documentElement.style.setProperty(
-          "--toc-fixed-top",
-          `${rect.top}px`,
-        );
-        document.documentElement.style.setProperty(
-          "--toc-fixed-left",
-          `${rect.left}px`,
-        );
-        document.documentElement.style.setProperty(
-          "--toc-fixed-width",
-          `${rect.width}px`,
-        );
-        toc.classList.add("is-fixed");
       };
-
-      const scheduleApply = () => {
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(() =>
-          requestAnimationFrame(applyFixed),
-        );
-      };
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", scheduleApply, {
-          once: true,
-        });
-      } else {
-        scheduleApply();
-      }
-
-      mq.addEventListener("change", () => {
-        if (mq.matches) {
-          scheduleApply();
-        } else {
-          clearFixed();
-        }
+      addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, {passive:true});
+      addEventListener('resize', update);
+      document.querySelector('.mobile-contents')?.addEventListener('click', event => {
+        if (event.target.closest('a')) event.currentTarget.open = false;
       });
-
-      window.addEventListener("resize", scheduleApply, { passive: true });
-    })();
-  </script>
-  <script is:inline>
-    (() => {
-      const applyLabelStyles = () => {
-        const root = document.querySelector(".writing-article");
-        if (!root) return;
-        const styles = getComputedStyle(document.documentElement);
-        const surface =
-          styles.getPropertyValue("--color-surface-alt") || "#f5f7fa";
-        const text = styles.getPropertyValue("--color-text") || "#111";
-        root.querySelectorAll('svg[id^="mermaid-"] .labelBkg').forEach((el) => {
-          el.style.backgroundColor = surface;
-          el.style.color = text;
-          el.style.padding = "2px 6px";
-          el.style.borderRadius = "4px";
-          el.style.opacity = "1";
-        });
-      };
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", applyLabelStyles, {
-          once: true,
-        });
-      } else {
-        applyLabelStyles();
-      }
+      update();
     })();
   </script>
 </BaseLayout>

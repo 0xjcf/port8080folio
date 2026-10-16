@@ -13,7 +13,7 @@ Astro is deployed to Cloudflare Pages. The Worker handles form APIs under `/api/
 
 ### Build settings
 
-- **Build command**: `npm run build:astro`
+- **Build command**: `npm run build`
 - **Build output directory**: `dist`
 
 ### Required environment variables
@@ -24,7 +24,7 @@ Astro is deployed to Cloudflare Pages. The Worker handles form APIs under `/api/
 
 ### Local preview
 
-- `npm run preview:astro`
+- `npm run preview`
 
 ## Worker (Cloudflare Workers)
 
@@ -51,8 +51,10 @@ Astro is deployed to Cloudflare Pages. The Worker handles form APIs under `/api/
 ## Release checklist
 
 - [ ] Staging Pages build succeeds with `SITE_URL=https://staging.0xjcf.com`.
-- [ ] Staging Worker deployed and `/api/*` routes configured.
-- [ ] Forms redirect to `.html` status pages.
+- [ ] Existing article URLs, heading anchors, and draft visibility are preserved.
+- [ ] No newsletter signup is rendered; RSS is linked from every page.
 - [ ] RSS and sitemap are available on staging.
 - [ ] Production Pages build succeeds with `SITE_URL=https://0xjcf.com`.
-- [ ] Production Worker deployed and `/api/*` routes configured.
+- [ ] User has approved the preview before a production release.
+
+The journal is fully static and has no signup or contact form. The existing Worker and form-result routes are retained for compatibility; this redesign does not deploy or reconfigure them. Run `npm run render:diagrams` locally when published Mermaid content changes, then commit the SVG assets. Ordinary Pages builds do not need Chromium.

@@ -1,0 +1,11 @@
+---
+const { compact = false, titleId } = Astro.props;
+---
+<section class:list={['feed-follow', compact && 'feed-follow--compact']} aria-label="Follow the writing">
+  <div>
+    <p class="eyebrow">KEEP READING</p>
+    <h2 id={titleId}>A place in your feed.</h2>
+    <p>New essays and updates, delivered to your RSS reader. Read at your own pace.</p>
+  </div>
+  <a class="button button--primary" href="/rss.xml"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="5" cy="19" r="1" fill="currentColor"/><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/></svg> Follow via RSS <span aria-hidden="true">↗</span></a>
+</section>

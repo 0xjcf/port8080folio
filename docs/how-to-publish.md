@@ -7,7 +7,7 @@
 
 Example filename:
 
-- `my-new-post.md` -> `/writing/my-new-post`
+- `my-new-post.md` -> `/writing/my-new-post/`
 
 ## Frontmatter fields
 
@@ -33,18 +33,22 @@ belongs in a reading sequence. Revising an article should normally increment
 
 Use standard Markdown. Keep the first paragraph concise; it often appears in previews.
 
+## Diagrams
+
+For a new or changed Mermaid code fence in a published article, run `npm run render:diagrams`. Commit the generated files in `public/assets/diagrams/` alongside the post. The build checks the content hash and reports missing diagrams. Regular site builds use static SVGs without launching a browser or loading a client renderer.
+
 ## Local testing
 
-- Start Astro: `npm run dev:astro`
+- Start Astro: `npm run dev`
 - Visit:
   - `/writing`
   - `/writing/<slug>`
   - `/rss.xml`
-  - `/sitemap.xml` (verify in build/preview if dev doesn’t serve it)
+  - `/sitemap-index.xml` (verify in build/preview if dev doesn’t serve it)
 
 ## Drafts
 
-Set `draft: true` to exclude a post from the index and RSS.
+Set `draft: true` to exclude a post from generated article routes, the index, the series guide, and RSS.
 
 ## Deployment
 
@@ -53,4 +57,4 @@ Commit the new post and deploy via Cloudflare Pages. The new post will appear in
 - `/writing`
 - `/writing/<slug>`
 - `/rss.xml`
-- `/sitemap.xml`
+- `/sitemap-index.xml`

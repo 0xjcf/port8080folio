@@ -11,46 +11,13 @@ const description =
     <div class="container">
       <h1 class="section__title">Open Source</h1>
 
-      <section class="open-source__section">
-        <h2>Tools, patterns, and ideas built in the open</h2>
-        <p>
-          I maintain and contribute to open-source projects because I care about
-          clarity, explicit behavior, and systems that scale cognitively.
-          Technical scale matters too. Open source is where I test ideas,
-          sharpen patterns, and share what works in real products.
-        </p>
-        <p>
-          These projects are where the questions in my writing get exercised
-          under real constraints.
-        </p>
-      </section>
-
-      <section class="open-source__section">
-        <h2>Why I build in the open</h2>
-        <p>
-          In the systems I worked on, the problems that stayed with me were
-          about unclear behavior, hidden assumptions, and systems that were hard
-          to reason about.
-        </p>
-        <p>
-          I started building in the open after noticing those patterns repeat:
-        </p>
-        <ul>
-          <li>Explore better ways to model behavior.</li>
-          <li>Reduce accidental complexity.</li>
-          <li>Improve developer experience.</li>
-          <li>Share patterns that survive real-world constraints.</li>
-        </ul>
-      </section>
+      <nav class="project-directory" aria-label="Projects"><a href="#ignite-element">Ignite Element ↓</a><a href="#actor-web">Actor-Web ↓</a><a href="/reference-systems/">The Lab / Experiments →</a></nav>
 
       <section class="open-source__section">
         <h2>Featured projects</h2>
 
         <p class="open-source__eyebrow">Primary project</p>
-        <h3>
-          Ignite-Element
-          <span class="open-source__badge">Start here</span>
-        </h3>
+        <h3 id="ignite-element">Ignite-Element</h3>
         <p><strong>Behavior-first web components.</strong></p>
         <p>
           Ignite-Element bridges state machines and custom elements, making it
@@ -82,7 +49,7 @@ const description =
         </p>
 
         <p class="open-source__eyebrow">Foundational work</p>
-        <h3>Actor-Web</h3>
+        <h3 id="actor-web">Actor-Web</h3>
         <p>
           <strong>A pure actor-model runtime for JavaScript/TypeScript.</strong>
         </p>
@@ -116,6 +83,38 @@ const description =
       </section>
 
       <section class="open-source__section">
+        <h2>Tools, patterns, and ideas built in the open</h2>
+        <p>
+          I maintain and contribute to open-source projects because I care about
+          clarity, explicit behavior, and systems that scale cognitively.
+          Technical scale matters too. Open source is where I test ideas,
+          sharpen patterns, and share what works in real products.
+        </p>
+        <p>
+          These projects are where the questions in my writing get exercised
+          under real constraints.
+        </p>
+      </section>
+
+      <section class="open-source__section">
+        <h2>Why I build in the open</h2>
+        <p>
+          In the systems I worked on, the problems that stayed with me were
+          about unclear behavior, hidden assumptions, and systems that were hard
+          to reason about.
+        </p>
+        <p>
+          I started building in the open after noticing those patterns repeat:
+        </p>
+        <ul>
+          <li>Explore better ways to model behavior.</li>
+          <li>Reduce accidental complexity.</li>
+          <li>Improve developer experience.</li>
+          <li>Share patterns that survive real-world constraints.</li>
+        </ul>
+      </section>
+
+      <section class="open-source__section">
         <h2>How this connects to my work</h2>
         <p>
           These projects aren’t side hobbies. They extend how I think about
@@ -141,7 +140,7 @@ const description =
         <p>If that resonates, you’re in the right place.</p>
       </section>
 
-      <section class="open-source__section">
+      <section class="open-source__section" id="supporting-the-work">
         <h2>Supporting the work</h2>
         <p>
           I split my time between client work and open source. Sponsorships and
@@ -151,12 +150,19 @@ const description =
           <li>Star or contribute on GitHub.</li>
           <li>Sponsor development when possible.</li>
         </ul>
-        <iframe
-          src="https://github.com/sponsors/0xjcf/card"
-          title="Sponsor 0xjcf"
-          class="sponsor-iframe"
-          loading="lazy"
-          referrerpolicy="no-referrer"></iframe>
+        <a
+          class="sponsor-link"
+          href="https://github.com/sponsors/0xjcf"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="sponsor-link__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+          <span class="sponsor-link__copy">
+            <strong>Sponsor JOSΞ on GitHub</strong>
+            <span>Support 0xjcf’s open-source work.</span>
+          </span>
+          <span class="sponsor-link__arrow" aria-hidden="true">↗</span>
+        </a>
       </section>
 
       <section class="open-source__section">
@@ -170,7 +176,7 @@ const description =
           >.
         </p>
         <p class="open-source__actions">
-          <a class="button button--primary" href="/writing/">Read my writing</a>
+          <a class="button button--primary" href="/writing/behavior-and-boundaries/">Read my writing</a>
           <!-- Business site link disabled until site is ready.
           <a
             class="button button--secondary"
