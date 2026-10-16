@@ -972,6 +972,15 @@ hr {
 .article-meta a {
   text-decoration: none;
 }
+.writing-article__cover {
+  margin: 0 0 32px;
+}
+.writing-article__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+}
 .writing-article__content {
   font: 19px / 1.85 var(--serif);
   overflow-wrap: break-word;

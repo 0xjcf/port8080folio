@@ -34,7 +34,14 @@ const blogSchema = {
     <main id="main" class="writing-shell__main"><div class="container">
       <nav class="article-breadcrumb" aria-label="Breadcrumb"><a href="/writing/">WRITING</a>{post.data.series && <><span>/</span><a href={seriesUrl}>{post.data.series.toUpperCase()}</a><span>/</span><span>PART {post.data.seriesOrder}</span></>}</nav>
       <article class="writing-article" id="writing-article">
-        <header><h1 id="article-title">{post.data.title}</h1><p class="writing-article__summary">{post.data.description}</p><div class="article-meta"><a class="article-author" href="/about/">By Jose Flores</a><span>Published <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time></span>{post.data.updatedDate && <span>Updated <time datetime={post.data.updatedDate.toISOString()}>{formatDate(post.data.updatedDate)}</time></span>}<span>{readingMinutes(post)} min read</span></div></header>
+        <header>
+          <h1 id="article-title">{post.data.title}</h1>
+          <p class="writing-article__summary">{post.data.description}</p>
+          <div class="article-meta"><a class="article-author" href="/about/">By Jose Flores</a><span>Published <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time></span>{post.data.updatedDate && <span>Updated <time datetime={post.data.updatedDate.toISOString()}>{formatDate(post.data.updatedDate)}</time></span>}<span>{readingMinutes(post)} min read</span></div>
+          {cover && <figure class="writing-article__cover">
+            <img src={coverUrl} alt={cover.alt} width={cover.width} height={cover.height} loading="eager" fetchpriority="high" decoding="async" />
+          </figure>}
+        </header>
         {toc.length > 0 && <details class="mobile-contents"><summary>On this page</summary><ol>{toc.map(heading => <li><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol></details>}
         <div class="writing-article__content"><Content /></div>
         {post.data.glossary?.length ? <section class="writing-glossary" aria-labelledby="glossary-title"><h2 id="glossary-title">Glossary</h2><dl>{post.data.glossary.map(entry => <div class="writing-glossary__item"><dt>{entry.term}</dt><dd>{entry.definition}</dd></div>)}</dl></section> : null}

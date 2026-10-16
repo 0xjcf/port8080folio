@@ -5,7 +5,7 @@ export interface ArticleCover {
   height: number;
 }
 
-// Preview artwork stays separate from the original article Markdown.
+// Header and preview artwork stays separate from the original article Markdown.
 // Use a new filename when replacing art so preview caches can fetch the new asset.
 const covers: Record<string, ArticleCover> = {
   'when-code-becomes-cheap': {
