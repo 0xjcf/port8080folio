@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Preview visitors should subscribe to the permanent feed, too.
+const feedUrl = 'https://0xjcf.com/rss.xml';
+---
+
+<BaseLayout title="Follow the writing | Jose Flores" description="Follow new essays on software architecture, statecharts, and the actor model in your RSS reader.">
+  <main id="main" class="page-content follow-page">
+    <div class="container">
+      <header class="follow-intro">
+        <p class="eyebrow">KEEP READING</p>
+        <h1>Follow the writing<span class="brand-dot">.</span></h1>
+        <p class="section__subtitle">New essays, in your own reading rhythm.</p>
+        <p>Add this feed to your RSS reader, and new articles will appear alongside the sites you follow. Read complete essays in your reader, or open them here.</p>
+      </header>
+
+      <section class="feed-address" aria-labelledby="feed-address-title">
+        <div class="feed-address__heading">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="5" cy="19" r="1" fill="currentColor"/><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/></svg>
+          <h2 id="feed-address-title">A place in your feed.</h2>
+        </div>
+        <label for="feed-url">Feed address</label>
+        <div class="feed-address__controls">
+          <input id="feed-url" class="feed-address__url" type="text" value={feedUrl} readonly spellcheck="false" aria-describedby="feed-copy-status" />
+          <button class="button button--primary feed-copy" type="button" data-copy-feed hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="1.5"/><path d="M16 8V3H3v13h5"/></svg>
+            <span data-copy-label>Copy feed URL</span>
+          </button>
+        </div>
+        <p id="feed-copy-status" class="feed-copy-status" role="status" aria-live="polite" aria-atomic="true">Copy this address, then paste it into your reader’s “Add feed” or “Follow” option.</p>
+        <a class="feed-address__raw" href="/rss.xml">View the raw RSS feed <span aria-hidden="true">↗</span></a>
+      </section>
+
+      <section class="follow-explainer" aria-labelledby="rss-explained-title">
+        <h2 id="rss-explained-title">New to RSS?</h2>
+        <p>Think of a feed reader as a reading list that updates itself. You choose the websites, and it gathers their new posts in one place.</p>
+        <ol class="follow-steps" role="list">
+          <li><span class="follow-steps__number" aria-hidden="true">01</span><div><h3>Open a feed reader.</h3><p>Use an RSS reader app on your phone or computer.</p></div></li>
+          <li><span class="follow-steps__number" aria-hidden="true">02</span><div><h3>Add the feed address.</h3><p>Copy the URL above and paste it into the reader’s option to follow a website.</p></div></li>
+          <li><span class="follow-steps__number" aria-hidden="true">03</span><div><h3>Read on your schedule.</h3><p>New essays appear when your reader checks for updates. Choose what to read, whenever you’re ready.</p></div></li>
+        </ol>
+      </section>
+
+      <p class="follow-browse"><a href="/writing/">Browse all writing <span aria-hidden="true">→</span></a></p>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-copy-feed]');
+  const input = document.querySelector<HTMLInputElement>('#feed-url');
+  const status = document.querySelector<HTMLElement>('#feed-copy-status');
+  const label = document.querySelector<HTMLElement>('[data-copy-label]');
+
+  if (button && input && status && label) {
+    let resetTimer: number | undefined;
+    button.hidden = false;
+    button.addEventListener('click', async () => {
+      window.clearTimeout(resetTimer);
+      button.disabled = true;
+      label.textContent = 'Copying…';
+      try {
+        await navigator.clipboard.writeText(input.value);
+        label.textContent = 'Copied!';
+        status.textContent = 'Feed URL copied. Paste it into your RSS reader to follow new essays.';
+        resetTimer = window.setTimeout(() => { label.textContent = 'Copy feed URL'; }, 3000);
+      } catch {
+        input.focus();
+        input.select();
+        label.textContent = 'Copy feed URL';
+        status.textContent = 'The feed address is selected. Use your device’s copy command, then paste it into your reader.';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+</script>

@@ -4,6 +4,8 @@ import { getPublishedBlogPosts, type BlogPost } from '../../lib/content/blog';
 import { formatDate, readingMinutes, orderSeries, seriesUrl } from '../../lib/content/editorial';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FeedFollow from '../../components/FeedFollow.astro';
+import { getArticleCover } from '../../lib/content/article-covers';
+import { siteAssetUrl } from '../../lib/site-assets';
 export async function getStaticPaths() {
   return (await getPublishedBlogPosts()).map(post => ({ params:{slug:post.slug}, props:{post} }));
 }
@@ -15,14 +17,17 @@ const previous = position > 0 ? series[position - 1] : undefined;
 const next = position >= 0 ? series[position + 1] : undefined;
 const toc = headings.filter(heading => heading.depth === 2 || heading.depth === 3);
 const canonicalUrl = new URL(`/writing/${post.slug}/`, Astro.site ?? Astro.url).toString();
+const cover = getArticleCover(post.slug);
+const coverUrl = cover ? siteAssetUrl(cover.src, canonicalUrl) : undefined;
 const blogSchema = {
   '@context':'https://schema.org', '@type':'BlogPosting', headline:post.data.title,
   description:post.data.description, datePublished:post.data.pubDate.toISOString(),
+  ...(coverUrl ? {image:coverUrl} : {}),
   ...(post.data.updatedDate ? {dateModified:post.data.updatedDate.toISOString()} : {}),
   author:{'@type':'Person',name:'Jose Flores',url:'https://0xjcf.com'}, mainEntityOfPage:canonicalUrl,
 };
 ---
-<BaseLayout title={`${post.data.title} | Jose Flores`} description={post.data.description} canonical={canonicalUrl} ogType="article">
+<BaseLayout title={`${post.data.title} | Jose Flores`} description={post.data.description} canonical={canonicalUrl} ogType="article" ogImage={coverUrl} ogImageAlt={cover?.alt} ogImageWidth={cover?.width} ogImageHeight={cover?.height} ogImageType={cover ? 'image/jpeg' : undefined}>
   <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(blogSchema)} />
   <div class="reading-progress" aria-hidden="true"></div>
   <div class="writing-shell">
