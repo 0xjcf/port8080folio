@@ -5,7 +5,7 @@ const isNewsletter = Astro.url.pathname.startsWith('/newsletter-');
 ---
 <BaseLayout title={title} description={description} bodyClass={bodyClass} noindex={noindex}>
   <main id="main" class="status-page__wrapper">
-    {isNewsletter && <p class="legacy-notice">This is a response page from the earlier email signup flow. Email signup is currently paused. You can <a href="/rss.xml">follow new writing via RSS</a>.</p>}
+    {isNewsletter && <p class="legacy-notice">This is a response page from the earlier email signup flow. Email signup is currently paused. You can <a href="/follow/">follow new writing via RSS</a>.</p>}
     <slot />
   </main>
 </BaseLayout>
