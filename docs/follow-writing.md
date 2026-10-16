@@ -2,6 +2,8 @@
 
 Follow-up scope change: after reviewing this page, the user explicitly approved adding full articles and covers to `/rss.xml` because Feedly displayed only the summary. The original byte-for-byte invariant below records the initial page-only change; it is superseded for feed contents by `article-preview-images.md`. The permanent feed URL and item identities remain unchanged. The page now explains that complete essays can be read in the reader.
 
+Release approval: on October 16, 2026, the user approved the combined preview and requested merging it to `main`.
+
 This page exists so readers can confidently choose how to follow new essays, even if they have never used RSS. Success means understanding the next step and having the correct feed address ready to add to a reader.
 
 The user requested an explanatory page and copy button, with a preview before production release. The existing raw feed link remains a viable direct path for experienced readers; a dedicated explanatory page provides context for everyone else. Styling the feed document itself would couple the explanation to its machine-readable format. The chosen page keeps those responsibilities separate and is reversible.

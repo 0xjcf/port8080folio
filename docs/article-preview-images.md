@@ -31,7 +31,7 @@ The user then reported that Feedly showed only the summary and explicitly approv
 
 ## Scope and reversibility
 
-No newsletter, provider changes, new article copy, Feedly account actions, publishing-date changes, reader-specific cache workarounds, or production deployment. Cover assets and preview metadata are reversible presentation decisions. User approval is required before merging the preview branch to production, as requested in the conversation.
+No newsletter, provider changes, new article copy, Feedly account actions, publishing-date changes, reader-specific cache workarounds, or production deployment before preview approval. Cover assets and preview metadata are reversible presentation decisions.
 
 ## Implementation
 
@@ -40,3 +40,7 @@ Keep a slug-keyed cover registry separate from article Markdown. Use it for each
 ## Validation
 
 Before sharing the preview, verify all five images and their thumbnail crops, unique absolute image URLs, image metadata and served assets, unchanged source content and RSS item identities/dates, complete reader bodies and glossary, safe absolute links, existing tests, type checking, and the static build. A local reader rendering is a preview, not proof that Feedly has refreshed cached entries; verify that distinction in the handoff.
+
+Verification: 119 tests, TypeScript checks, and the production static build pass. All 21 original content files match their baseline hashes. The hosted branch serves five distinct JPEG covers with matching Open Graph, Twitter, and RSS metadata, and five complete essays containing 17 code blocks and four diagrams. The five feed titles, summaries, links, GUIDs, dates, and order match the previous feed. Preview images use the preview deployment origin; production images use the permanent site origin.
+
+Release approval: on October 16, 2026, the user reviewed the result and explicitly requested merging to `main`. This approval covers the full-text feed, editorial article covers, and the Follow page included in this branch.
