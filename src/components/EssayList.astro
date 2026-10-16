@@ -1,0 +1,25 @@
+---
+import type { BlogPost } from '../lib/content/blog';
+import { getBlogPostActivityDate } from '../lib/content/blog';
+import { formatDate, readingMinutes } from '../lib/content/editorial';
+const { posts, numbered = false } = Astro.props as { posts: BlogPost[]; numbered?: boolean };
+---
+
+<ol class:list={['essay-list', numbered && 'essay-list--numbered']}>
+  {posts.map(post => (
+    <li class="essay-row">
+      <div class="essay-row__index">
+        {numbered && post.data.seriesOrder
+          ? <span class="essay-number">{String(post.data.seriesOrder).padStart(2, '0')}</span>
+          : <time datetime={getBlogPostActivityDate(post).toISOString()}>{formatDate(getBlogPostActivityDate(post))}</time>}
+      </div>
+      <div class="essay-row__body">
+        <p class="eyebrow">{post.data.series}{post.data.seriesOrder && <span> / Part {post.data.seriesOrder}</span>}</p>
+        <h3><a href={`/writing/${post.slug}/`}>{post.data.title}</a></h3>
+        <p class="essay-row__description">{post.data.description}</p>
+        <span class="reading-time">{readingMinutes(post)} min read</span>
+      </div>
+      <a class="essay-row__arrow" href={`/writing/${post.slug}/`} aria-label={`Read ${post.data.title}`}>↗</a>
+    </li>
+  ))}
+</ol>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { resolveFormRedirect } from '../src/scripts/form-redirect';
+import { resolveFormRedirect } from '../public/scripts/form-redirect';
 
 const safeFallback = '#contact-success';
 const origin = 'https://0xjcf.github.io';

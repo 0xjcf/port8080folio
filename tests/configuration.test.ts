@@ -67,7 +67,7 @@ describe('production configuration sanity checks', () => {
     expect(newsletterApi.pathname).toBe('/api/newsletter');
   });
 
-  it('produces production HTML assets with worker endpoints baked in', () => {
+  it('builds an RSS-first journal with published articles and preserved routes', () => {
     // Build the Astro site so we validate the actual shipped HTML
     execSync('npm run build', { cwd: projectRoot, stdio: 'ignore' });
 
@@ -76,9 +76,7 @@ describe('production configuration sanity checks', () => {
     expect(fs.existsSync(indexPath)).toBe(true);
 
     const html = fs.readFileSync(indexPath, 'utf-8');
-    // Forms should point at worker endpoints (relative paths are fine)
-    // Contact form is no longer rendered on the landing page; newsletter remains.
-    expect(html.includes('/api/newsletter')).toBe(true);
+    expect(html).not.toContain('/api/newsletter');
     const homeWindow = new Window({
       url: 'https://0xjcf.com/',
       settings: {
@@ -88,17 +86,19 @@ describe('production configuration sanity checks', () => {
     });
     homeWindow.document.write(html);
     const homepageLatestPost = homeWindow.document.querySelector(
-      '.writing__item',
+      '.feature-story',
     );
     expect(
       homepageLatestPost
-        ?.querySelector('.writing-list__part')
+        ?.querySelector('h1')
         ?.textContent?.replace(/\s+/g, ' ')
         .trim(),
-    ).toBe('Part 5');
+    ).toBe('Lifecycle Boundaries in Actor and State Machine Architecture');
     expect(
-      homepageLatestPost?.querySelector('.writing__link')?.getAttribute('href'),
+      homepageLatestPost?.querySelector('h1 a')?.getAttribute('href'),
     ).toBe('/writing/lifecycle-is-the-real-boundary/');
+    expect(homeWindow.document.querySelector('form')).toBeNull();
+    expect(homeWindow.document.querySelector('link[rel="alternate"]')?.getAttribute('href')).toBe('/rss.xml');
     homeWindow.close();
 
     const articlePath = path.join(
@@ -156,26 +156,18 @@ describe('production configuration sanity checks', () => {
 
     const publishedSeriesParts = Array.from(
       writingWindow.document.querySelectorAll(
-        '.writing-list__part',
+        '.essay-row .eyebrow span',
       ),
-    ).map((part) => part.textContent?.trim());
+    ).map((part) => part.textContent?.trim().replace(/^\/\s*/, ''));
 
     expect(publishedSeriesParts).toEqual([
-      'Part 1',
-      'Part 2',
-      'Part 3',
-      'Part 4',
       'Part 5',
+      'Part 4',
+      'Part 3',
+      'Part 2',
+      'Part 1',
     ]);
-    const latestSeriesPost = writingWindow.document.querySelector(
-      '.writing-series__start',
-    );
-    expect(latestSeriesPost?.textContent).toContain('Part 5');
-    expect(
-      latestSeriesPost
-        ?.querySelector('.writing-series__link')
-        ?.getAttribute('href'),
-    ).toBe('/writing/lifecycle-is-the-real-boundary/');
+    expect(writingWindow.document.querySelector('a[href="/writing/behavior-and-boundaries/"]')).not.toBeNull();
     expect(writingIndexHtml).not.toContain('Edition 5');
 
     const publishedSlugs = [
@@ -190,7 +182,19 @@ describe('production configuration sanity checks', () => {
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
       .sort();
-    expect(generatedArticleSlugs).toEqual([...publishedSlugs].sort());
+    expect(generatedArticleSlugs).toEqual([...publishedSlugs, 'behavior-and-boundaries'].sort());
+
+    const guideWindow = new Window({ settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true } });
+    guideWindow.document.write(fs.readFileSync(path.join(distDir, 'writing/behavior-and-boundaries/index.html'), 'utf8'));
+    expect(Array.from(guideWindow.document.querySelectorAll('.essay-row h3 a')).map(link => link.getAttribute('href')))
+      .toEqual(publishedSlugs.map(slug => `/writing/${slug}/`));
+    guideWindow.close();
+
+    for (const route of ['about', 'open-source', 'reference-systems', 'services', 'services/local-business', 'services/product-teams', 'contact-error', 'newsletter-check-email', 'contact-thanks', 'newsletter-error', 'newsletter-thanks']) {
+      expect(fs.existsSync(path.join(distDir, route, 'index.html')), `preserved route: /${route}/`).toBe(true);
+    }
+
+    let diagramCount = 0;
 
     const expectedHandoffs = new Map([
       ['when-code-becomes-cheap', 'before-behavior-product-frame'],
@@ -218,6 +222,13 @@ describe('production configuration sanity checks', () => {
         },
       });
       publishedArticleWindow.document.write(publishedArticleHtml);
+      expect(publishedArticleWindow.document.querySelector('form')).toBeNull();
+      expect(publishedArticleWindow.document.querySelector('pre code.language-mermaid')).toBeNull();
+      for (const image of publishedArticleWindow.document.querySelectorAll('.article-diagram img')) {
+        diagramCount++;
+        expect(image.getAttribute('alt')).toBeTruthy();
+        expect(fs.existsSync(path.join(distDir, image.getAttribute('src') ?? 'missing'))).toBe(true);
+      }
 
       const contentLinks = Array.from(
         publishedArticleWindow.document.querySelectorAll(
@@ -245,6 +256,7 @@ describe('production configuration sanity checks', () => {
 
       publishedArticleWindow.close();
     }
+    expect(diagramCount).toBe(4);
 
     const rssXml = fs.readFileSync(path.join(distDir, 'rss.xml'), 'utf-8');
     const rssItems = rssXml.match(/<item>[\s\S]*?<\/item>/g) ?? [];

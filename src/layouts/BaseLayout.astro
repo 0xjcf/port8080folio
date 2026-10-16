@@ -1,5 +1,5 @@
 ---
-import mainCss from "../styles/main.css?url";
+import mainCss from "../styles/editorial.css?url";
 
 const {
   title,
@@ -14,7 +14,6 @@ const {
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === "/" ? path === "/" : path.startsWith(href);
-const isHomePage = path === "/";
 
 const site = Astro.site;
 const canonicalUrl =
@@ -57,7 +56,8 @@ const imageUrl =
     {imageUrl ? <meta name="twitter:image" content={imageUrl} /> : null}
     <meta name="twitter:creator" content="@0xjcf" />
     <meta name="author" content="Jose Flores" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="alternate" type="application/rss+xml" title="Jose Flores — Writing" href="/rss.xml" />
+    <meta name="theme-color" content="#f6f3ec" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="preload" href={mainCss} as="style" />
     <link rel="stylesheet" href={mainCss} />
@@ -135,115 +135,19 @@ const imageUrl =
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-nav" aria-label="Primary">
+      <div class="masthead-note">
+        <span>INDEPENDENT NOTES ON SOFTWARE &amp; SYSTEMS</span>
+        <a href="/rss.xml">Follow via RSS <span aria-hidden="true">↗</span></a>
+      </div>
       <div class="site-nav__container">
-        <a class="site-nav__brand" href="/">Jose Flores</a>
+        <a class="site-nav__brand" href="/" aria-label="0xjcf — Jose Flores, home">0xjcf<span class="brand-dot">.</span><span class="brand-signature">A journal by José Flores</span></a>
         <nav class="site-nav__links" aria-label="Main navigation">
-          <a class:list={[isActive("/") && "is-active"]} href="/">Home</a>
-          <a class:list={[isActive("/writing/") && "is-active"]} href="/writing/"
-            >Writing</a
-          >
-          <a
-            class:list={[isActive("/reference-systems/") && "is-active"]}
-            href="/reference-systems/"
-          >
-            The Lab
-          </a>
-          <a
-            class:list={[isActive("/open-source/") && "is-active"]}
-            href="/open-source/">Open Source</a
-          >
-          <a class:list={[isActive("/about/") && "is-active"]} href="/about/"
-            >About</a
-          >
-          <!-- Business site link disabled until site is ready.
-          <a
-            class="site-nav__external"
-            href="https://bluejf.llc"
-            target="_blank"
-            rel="noopener"
-          >
-            Business site (external)
-          </a>
-          -->
+          <a class:list={[isActive('/writing/') && 'is-active']} aria-current={isActive('/writing/') ? 'page' : undefined} href="/writing/">Writing</a>
+          <a class:list={[(isActive('/open-source/') || isActive('/reference-systems/')) && 'is-active']} aria-current={isActive('/open-source/') ? 'page' : undefined} href="/open-source/">Open Source</a>
+          <a class:list={[isActive('/about/') && 'is-active']} aria-current={isActive('/about/') ? 'page' : undefined} href="/about/">About</a>
         </nav>
-        <div class="site-nav__controls">
-          <button
-            class="site-nav__toggle"
-            type="button"
-            aria-label="Open menu"
-            aria-expanded="false"
-          >
-            Menu
-          </button>
-        </div>
+        <div class="site-nav__controls"><a class="rss-link" href="/rss.xml">RSS ↗</a></div>
       </div>
-      <div class="site-nav__mobile" hidden>
-        <a href="/">Home</a>
-        <a href="/writing/">Writing</a>
-        <a href="/reference-systems/">The Lab</a>
-        <a href="/open-source/">Open Source</a>
-        <a href="/about/">About</a>
-        <!-- Business site link disabled until site is ready.
-        <a class="site-nav__external" href="https://bluejf.llc" target="_blank" rel="noopener">
-          Business site (external)
-        </a>
-        -->
-      </div>
-      <script is:inline>
-        (function () {
-          var header = document.querySelector(".site-nav");
-          var btn = header && header.querySelector(".site-nav__toggle");
-          var panel = header && header.querySelector(".site-nav__mobile");
-          if (!btn || !panel) return;
-
-          function setOpen(open) {
-            btn.setAttribute("aria-expanded", open ? "true" : "false");
-            panel.hidden = !open;
-            btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-            document.documentElement.classList.toggle("nav-open", open);
-          }
-
-          setOpen(false);
-
-          // Toggle mobile menu
-          btn.addEventListener("click", function () {
-            var open = btn.getAttribute("aria-expanded") === "true";
-            setOpen(!open);
-          });
-
-          // Close on link click (mobile)
-          panel.querySelectorAll("a").forEach(function (link) {
-            link.addEventListener("click", function () {
-              setOpen(false);
-            });
-          });
-
-          document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") {
-              setOpen(false);
-            }
-          });
-
-          var mediaQuery = window.matchMedia("(min-width: 900px)");
-          function handleViewportChange() {
-            setOpen(false);
-          }
-          if (mediaQuery.addEventListener) {
-            mediaQuery.addEventListener("change", handleViewportChange);
-          } else if (mediaQuery.addListener) {
-            mediaQuery.addListener(handleViewportChange);
-          }
-
-          // Scrolled state for header styling
-          function updateScrolled() {
-            if (!header) return;
-            var scrolled = window.scrollY > 8;
-            header.classList.toggle("is-scrolled", scrolled);
-          }
-          updateScrolled();
-          window.addEventListener("scroll", updateScrolled, { passive: true });
-        })();
-      </script>
     </header>
 
     <slot />
@@ -251,49 +155,16 @@ const imageUrl =
     <footer class="site-footer" aria-label="Footer">
       <div class="site-footer__container">
         <div class="site-footer__brand">
-          <div class="site-footer__name">Jose Flores</div>
-          <div class="site-footer__tagline">
-            Statecharts &amp; Actor Model in TypeScript • Writing • Open Source
-          </div>
+          <div class="site-footer__name">0xjcf<span class="brand-dot">.</span></div>
+          <div class="site-footer__tagline">A journal by Jose Flores.<br />Statecharts &amp; Actor Model in TypeScript • Writing • Open Source</div>
         </div>
         <div class="site-footer__cols">
-          <div class="site-footer__col">
-            <div class="site-footer__title">Explore</div>
-            <a href="/writing/">Writing</a>
-            <a href="/open-source/">Open Source</a>
-            <a href="/about/">About</a>
-          </div>
-          <!-- Business footer column hidden until site is ready. -->
-          <!--
-          <div class="site-footer__col">
-            <div class="site-footer__title">Business</div>
-            <a href="https://bluejf.llc" target="_blank" rel="noopener"
-              >Business site (external)</a
-            >
-          </div>
-          -->
-          <div class="site-footer__col">
-            <div class="site-footer__title">Profiles</div>
-            <a
-              href="https://www.linkedin.com/in/joseflores-io"
-              rel="me noopener"
-              target="_blank">LinkedIn</a
-            >
-            <a href="https://github.com/0xjcf" rel="me noopener" target="_blank"
-              >GitHub</a
-            >
-            <a href="https://www.x.com/0xjcf" rel="me noopener" target="_blank"
-              >X</a
-            >
-          </div>
+          <div class="site-footer__col"><div class="site-footer__title">Read</div><a href="/writing/">All writing</a><a href="/writing/behavior-and-boundaries/">Behavior &amp; Boundaries</a><a href="/rss.xml">RSS feed ↗</a></div>
+          <div class="site-footer__col"><div class="site-footer__title">Explore</div><a href="/open-source/">Open source</a><a href="/reference-systems/">The Lab / Experiments</a><a href="/about/">About Jose</a><a href="/services/">Consulting</a></div>
+          <div class="site-footer__col"><div class="site-footer__title">Elsewhere</div><a href="https://github.com/0xjcf" rel="me noopener noreferrer" target="_blank">GitHub ↗</a><a href="https://www.linkedin.com/in/joseflores-io" rel="me noopener noreferrer" target="_blank">LinkedIn ↗</a><a href="https://x.com/0xjcf" rel="me noopener noreferrer" target="_blank">X ↗</a></div>
         </div>
       </div>
-      <div class="site-footer__bottom">
-        <span
-          >&copy; {new Date().getFullYear()} Jose Flores. All rights reserved.</span
-        >
-        <a href="#top">↑ Top</a>
-      </div>
+      <div class="site-footer__bottom"><span>© {new Date().getFullYear()} Jose Flores. All rights reserved.</span><a href="#top">Back to top ↑</a></div>
     </footer>
   </body>
 </html>

@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { Storage } from 'happy-dom';
 
 const CONTACT_ENDPOINT = 'https://website-forms-production.bluejf-llc.workers.dev/api/contact';
 const SITE_ORIGIN = 'https://0xjcf.github.io';
@@ -35,6 +36,8 @@ describe('progressive enhancement form handler', () => {
     vi.resetModules();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+    // Keep browser storage independent of Node's experimental Web Storage global.
+    Object.defineProperty(window, 'localStorage', { value: new Storage(), configurable: true });
 
     document.head.innerHTML = '';
     document.body.innerHTML = `
@@ -87,7 +90,7 @@ describe('progressive enhancement form handler', () => {
     });
     vi.stubGlobal('fetch', fetchMock);
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
     form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
@@ -113,7 +116,7 @@ describe('progressive enhancement form handler', () => {
     });
     vi.stubGlobal('fetch', fetchMock);
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
     const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
@@ -145,7 +148,7 @@ describe('progressive enhancement form handler', () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
     const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
@@ -173,7 +176,7 @@ describe('progressive enhancement form handler', () => {
     stubMatchMedia();
     vi.stubGlobal('CSS', { supports: vi.fn().mockReturnValue(false) });
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const forms = document.querySelectorAll('form.pe-form');
     const firstFormButton = forms[0].querySelector('button[type="submit"]');
@@ -197,7 +200,7 @@ describe('progressive enhancement form handler', () => {
     stubMatchMedia();
     vi.stubGlobal('CSS', { supports: vi.fn().mockReturnValue(false) });
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     expect(button.disabled).toBe(true);
     expect(button.classList.contains('is-submit-disabled')).toBe(true);
@@ -213,7 +216,7 @@ describe('progressive enhancement form handler', () => {
     `;
 
     stubMatchMedia();
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
     const firstInput = document.getElementById('first') as HTMLInputElement;
@@ -258,7 +261,7 @@ describe('progressive enhancement form handler', () => {
     stubMatchMedia();
     vi.stubGlobal('CSS', { supports: vi.fn().mockReturnValue(false) });
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
     const input = document.getElementById('field-input') as HTMLInputElement;
@@ -283,7 +286,7 @@ describe('progressive enhancement form handler', () => {
     const fetchMock = vi.fn().mockRejectedValue(new TypeError('offline'));
     vi.stubGlobal('fetch', fetchMock);
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
     const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
@@ -302,7 +305,7 @@ describe('progressive enhancement form handler', () => {
     const fetchMock = vi.fn().mockRejectedValue('boom');
     vi.stubGlobal('fetch', fetchMock);
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
 
@@ -335,7 +338,7 @@ describe('progressive enhancement form handler', () => {
     });
     vi.stubGlobal('fetch', fetchMock);
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
     const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
@@ -382,7 +385,7 @@ describe('progressive enhancement form handler', () => {
 
     vi.stubGlobal('fetch', fetchMock);
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
     form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
@@ -414,7 +417,7 @@ describe('progressive enhancement form handler', () => {
 
     vi.stubGlobal('fetch', fetchMock);
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
     form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
@@ -440,7 +443,7 @@ describe('progressive enhancement form handler', () => {
     const fetchMock = vi.fn().mockRejectedValue(new TypeError('fetch failed'));
     vi.stubGlobal('fetch', fetchMock);
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const form = document.querySelector('form.pe-form') as HTMLFormElement;
     const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
@@ -475,7 +478,7 @@ describe('progressive enhancement form handler', () => {
     vi.stubGlobal('CSS', { supports: vi.fn().mockReturnValue(false) });
     window.location.href = `${SITE_BASE}/#contact`;
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const button = document.querySelector('button[type="submit"]') as HTMLButtonElement;
     expect(button.disabled).toBe(true);
@@ -499,7 +502,7 @@ describe('progressive enhancement form handler', () => {
     vi.stubGlobal('CSS', { supports: vi.fn().mockReturnValue(false) });
     window.location.href = `${SITE_BASE}/#about`;
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const aboutSection = document.getElementById('about') as HTMLElement;
     const segPT = document.getElementById('seg-pt') as HTMLInputElement;
@@ -527,7 +530,7 @@ describe('progressive enhancement form handler', () => {
     vi.stubGlobal('CSS', { supports: vi.fn().mockReturnValue(false) });
     window.location.href = `${SITE_BASE}/`;
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     expect(document.body.classList.contains('contact-targeted')).toBe(false);
     window.location.hash = '#contact';
@@ -555,7 +558,7 @@ describe('progressive enhancement form handler', () => {
 
     stubMatchMedia();
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const labels = document.querySelectorAll('.form-tab') as NodeListOf<HTMLLabelElement>;
     const contactLabel = labels[0];
@@ -593,7 +596,7 @@ describe('progressive enhancement form handler', () => {
 
     stubMatchMedia();
 
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const container = document.querySelector('.form-tabs-container') as HTMLElement;
     const labels = container.querySelectorAll('.form-tab') as NodeListOf<HTMLLabelElement>;
@@ -640,7 +643,7 @@ describe('progressive enhancement form handler', () => {
     `;
 
     stubMatchMedia();
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const timestamp = document.querySelector('input[name="timestamp"]') as HTMLInputElement;
     expect(timestamp).toBeTruthy();
@@ -666,7 +669,7 @@ describe('progressive enhancement form handler', () => {
     `;
 
     stubMatchMedia();
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const timestamp = document.querySelector('input[name="timestamp"]') as HTMLInputElement;
     expect(timestamp).toBeTruthy();
@@ -743,7 +746,7 @@ describe('progressive enhancement form handler', () => {
     const scrollIntoViewSpy = vi.spyOn(target, 'scrollIntoView').mockImplementation(() => { });
 
     stubMatchMedia();
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     const stickyCTA = document.querySelector('.services__sticky-cta') as HTMLElement;
     const stickyButton = stickyCTA.querySelector('.button--sticky') as HTMLAnchorElement;
@@ -817,7 +820,7 @@ describe('progressive enhancement form handler', () => {
     vi.spyOn(heroCTA, 'getBoundingClientRect').mockImplementation(() => currentRect);
 
     stubMatchMedia();
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     expect(stickyCTA.classList.contains('is-visible')).toBe(true);
 
@@ -884,7 +887,7 @@ describe('progressive enhancement form handler', () => {
     `;
 
     stubMatchMedia();
-    await import('../src/scripts/pe.js');
+    await import('../public/scripts/pe.js');
 
     expect(readyHandler).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
 

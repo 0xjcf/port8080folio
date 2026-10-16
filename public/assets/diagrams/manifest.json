@@ -1,0 +1,22 @@
+{
+  "86d6e75cb069ddc920b7": {
+    "width": 1405,
+    "height": 144,
+    "alt": "Architecture diagram with: Link, test, or scoped navigation surface; Semantic navigation command; Router actor; Deterministic resolver; Environment effect; Navigation API."
+  },
+  "1023d1fa2f7f586b51fd": {
+    "width": 1387,
+    "height": 102,
+    "alt": "Architecture diagram with: Browser navigation; NavigationPort; Source-owned observer; Router actor; Route resolver."
+  },
+  "2451d69789e06dfe7ae0": {
+    "width": 353,
+    "height": 424,
+    "alt": "Architecture diagram with: Product narrative, desired progress; Interface interaction, click / call / shortcut; Delivery binding, extracts moduleId; Semantic command, startModule(moduleId); Authoritative behavior, accepts or rejects."
+  },
+  "cee0cc5b3d60dab4e409": {
+    "width": 355,
+    "height": 424,
+    "alt": "Architecture diagram with: Caller, button binding / headless test / other interface; Ignite command, startModule(moduleId); XState actor, handles START_MODULE; Ignite projection, snapshot to rendered view."
+  }
+}
