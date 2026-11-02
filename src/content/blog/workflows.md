@@ -123,14 +123,14 @@ sequenceDiagram
   participant User
   participant Shell as Workflow / Shell
   participant Adapter
-  participant Actor
+  participant Act as Actor
 
   User->>Shell: load
-  Shell->>Actor: LOADING
+  Shell->>Act: LOADING
   Shell->>Adapter: fetch
   Adapter-->>Shell: data | error
-  Shell->>Actor: DATA_LOADED | FAILED
-  Actor-->>Shell: derived state
+  Shell->>Act: DATA_LOADED | FAILED
+  Act-->>Shell: derived state
   Shell-->>User: meaning / next step
 ```
 

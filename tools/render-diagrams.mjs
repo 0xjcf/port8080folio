@@ -23,14 +23,19 @@ const manifest = {};
 for (const [key, source] of diagrams) {
   const [result] = await render([source], {
     prefix: `editorial-${key}`,
-    mermaidOptions: {
-      theme: 'base', fontFamily: 'Arial, sans-serif',
+    // mermaid-isomorphic 3 reads mermaidConfig. Mermaid 11 ignores the old
+    // flowchart.htmlLabels flag, and htmlLabels must stay on so <br/> breaks
+    // remain line breaks instead of being flattened into wrapped text.
+    mermaidConfig: {
+      theme: 'base',
+      fontFamily: 'Arial, sans-serif',
+      htmlLabels: true,
       themeVariables: {
         primaryColor: '#eeebe2', primaryTextColor: '#292824', primaryBorderColor: '#b6ad9e',
         lineColor: '#8e7566', secondaryColor: '#ecdfd3', tertiaryColor: '#f6f3ec',
         fontSize: '15px', edgeLabelBackground: '#f6f3ec',
       },
-      flowchart: { htmlLabels: false, padding: 18, nodeSpacing: 35, rankSpacing: 45, curve: 'linear' },
+      flowchart: { padding: 18, nodeSpacing: 35, rankSpacing: 45, curve: 'linear' },
     },
   });
   if (result.status !== 'fulfilled') throw result.reason;
